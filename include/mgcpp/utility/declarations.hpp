@@ -8,10 +8,10 @@ namespace mg
     class gpu_matrix;
 
     template<typename ElemType, size_t Xdim, size_t Ydim>
-    class static_matrix<ElemType, Xdim, Ydim>;
+    class static_matrix;
 
     template<typename ElemType>
-    class dynamic_matrix<ElemType>;
+    class dynamic_matrix;
 
     template<typename ElemType, size_t DeviceId>
     using gmat = gpu_matrix<ElemType, DeviceId>;

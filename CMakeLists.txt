@@ -8,14 +8,34 @@ option(USE_MAGMA "compile mgcpp with magma features" TRUE)
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+
 # cuda dependency
 find_package(CUDA REQUIRED)
-list(APPEND CUDA_NVCC_FLAGS
-    "-gencode arch=compute_30, code=sm_30; -std=c++11")
+
+# Build options
+if(Win32 AND MSVC)
+    set(BUILD_FLAGS
+	"${CMAKE_CXX_FLAGS} /Ox /Wall /arch /MP")
+else()
+    set(BUILD_FLAGS
+	"${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -O3 -Wall -Wextra")
+endif()
+
+string(REPLACE " " " -Xcompiler " BUILD_FLAGS ${BUILD_FLAGS})
+set(NVCC_COMPILER_FLAGS
+    "${NVCC_COMPILER_FLAGS} ${BUILD_FLAGS}")
+
+set(CUDA_NVCC_FLAGS
+    # "-gencode arch=compute_30, code=sm_30;
+    "${CUDA_NVCC_FLAGS} ${NVCC_COMPILER_FLAGS}")
+
+message("build flags = ${CUDA_NVCC_FLAGS}")
 
 # project source files
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
-set(SOURCE_FILES ${SOURCE_DIR}/main.cpp)
+set(SOURCE_FILES
+    # ${SOURCE_DIR}/main.cpp
+    ${SOURCE_DIR}/initialize.cu)
 
 message("[ Source files for ${PROJECT_NAME} ]")
 foreach(SOURCE_FILE ${SOURCE_FILES})
@@ -28,21 +48,6 @@ cuda_add_library(${PROJECT_NAME} STATIC SHARED ${SOURCE_FILES})
 # cuBLAS
 cuda_add_cublas_to_target(${PROJECT_NAME})
 
-# Build options
-if(Win32 AND MSVC)
-    set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} /Ox /Wall /arch /MP")
-else()
-    set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -g -fPIC -Wall -Wextra")
-endif()
-
-message("C++ flags = ${BUILD_FLAGS}")
-
-set_target_properties(${PROJECT_NAME}
-    PROPERTIES
-    COMPILE_FLAGS "${BUILD_FLAGS}"
-    CXX_STANDARD 11)
 
 # Include directories
 target_include_directories(${PROJECT_NAME}

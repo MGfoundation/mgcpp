@@ -2,6 +2,7 @@
 #define _GPU_MATRIX_HPP_
 
 #include <mgcpp/utility/declarations.hpp>
+#include <mgcpp/cuda/initialize.hpp>
 
 namespace mg
 {
