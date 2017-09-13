@@ -14,20 +14,16 @@ find_package(CUDA REQUIRED)
 
 # Build options
 if(Win32 AND MSVC)
-    set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} /Ox /Wall /arch /MP")
+    set(BUILD_FLAGS "/Ox /Wall /arch /MP")
 else()
-    set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++11 -fPIC -O3 -Wall -Wextra")
+    set(BUILD_FLAGS "-std=c++11")
 endif()
 
-string(REPLACE " " " -Xcompiler " BUILD_FLAGS ${BUILD_FLAGS})
-set(NVCC_COMPILER_FLAGS
-    "${NVCC_COMPILER_FLAGS} ${BUILD_FLAGS}")
+# string(REPLACE " " " -Xcompiler " BUILD_FLAGS ${BUILD_FLAGS})
 
 set(CUDA_NVCC_FLAGS
     # "-gencode arch=compute_30, code=sm_30;
-    "${CUDA_NVCC_FLAGS} ${NVCC_COMPILER_FLAGS}")
+    "${CUDA_NVCC_FLAGS} --compiler-options ${BUILD_FLAGS}")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
