@@ -12,18 +12,11 @@ set(CMAKE_MODULE_PATH
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-# Build options
-if(Win32 AND MSVC)
-    set(BUILD_FLAGS "/Ox /Wall /arch /MP")
-else()
-    set(BUILD_FLAGS "-std=c++11")
-endif()
+# set(CUDA_NVCC_FLAGS
+#     # "-gencode arch=compute_30, code=sm_30;
+#     "${CUDA_NVCC_FLAGS} --compiler-options ${BUILD_FLAGS}")
 
-# string(REPLACE " " " -Xcompiler " BUILD_FLAGS ${BUILD_FLAGS})
-
-set(CUDA_NVCC_FLAGS
-    # "-gencode arch=compute_30, code=sm_30;
-    "${CUDA_NVCC_FLAGS} --compiler-options ${BUILD_FLAGS}")
+list(APPEND CUDA_NVCC_FLAGS "-arch=sm_30; -O3")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
@@ -31,7 +24,7 @@ message("build flags = ${CUDA_NVCC_FLAGS}")
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(SOURCE_FILES
     # ${SOURCE_DIR}/main.cpp
-    ${SOURCE_DIR}/initialize.cu)
+    ${SOURCE_DIR}/initialize.c)
 
 message("[ Source files for ${PROJECT_NAME} ]")
 foreach(SOURCE_FILE ${SOURCE_FILES})
