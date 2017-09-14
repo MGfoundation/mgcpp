@@ -41,9 +41,12 @@ add_executable(${PROJECT_NAME} # STATIC SHARED
 
 add_dependencies(${PROJECT_NAME} "${PROJECT_NAME}base")
 
+set(BUILD_FLAGS
+    "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+message("C++ flags = ${BUILD_FLAGS}")
+
 set_target_properties(${PROJECT_NAME}
-    PROPERTIES
-    CXX_STANDARD 17)
+    PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
 
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
@@ -66,7 +69,7 @@ cuda_add_cublas_to_target("${PROJECT_NAME}")
 # target_link_libraries(${PROJECT_NAME}
 #     "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.so")
 target_link_libraries(${PROJECT_NAME}
-    "${PROJECT_SOURCE_DIR}/lib${PROJECT_NAME}base.so")
+    "${PROJECT_NAME}base")
 
 
 # cuBLAS, MAGMA dependency

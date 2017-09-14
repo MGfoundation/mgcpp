@@ -4,7 +4,8 @@
 namespace mgcpp
 {
     template<typename ElemType,
-	typename = std::enable_if<std::is_arithmetic<ElemType>::value>>
+             typename = std::enable_if<
+                 std::is_arithmetic<ElemType>::value>>
     ElemType* cuda_malloc(size_t size)
     {
         void* ptr = nullptr;
@@ -16,5 +17,10 @@ namespace mgcpp
 	// }
 
         return static_cast<ElemType*>(ptr);
+    }
+
+    void some_shit_function()
+    {
+        mgcpp::internal::some_shit();
     }
 }
