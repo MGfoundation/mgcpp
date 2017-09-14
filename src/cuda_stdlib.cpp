@@ -17,10 +17,5 @@ namespace mgcpp
             return static_cast<cuda_error_t>(
                 cudaFree(ptr));
         }
-
-        void some_shit()
-        {
-            (void)"shit";
-        }
     }
 }

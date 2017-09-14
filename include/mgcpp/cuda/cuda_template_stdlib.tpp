@@ -18,9 +18,4 @@ namespace mgcpp
 
         return static_cast<ElemType*>(ptr);
     }
-
-    void some_shit_function()
-    {
-        mgcpp::internal::some_shit();
-    }
 }

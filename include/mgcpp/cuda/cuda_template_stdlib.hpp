@@ -11,8 +11,6 @@ namespace mgcpp
              typename = std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
     ElemType* cuda_malloc(size_t size);
-
-    void some_shit_function();
 }
 
 #include "cuda_template_stdlib.tpp"

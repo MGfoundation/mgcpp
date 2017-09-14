@@ -17,9 +17,6 @@ namespace mgcpp
 
         cuda_error_t cuda_malloc(void* ptr, size_t size);
         cuda_error_t cuda_free(void* ptr);
-
-        void some_shit();
-
     }
 }
 
