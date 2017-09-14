@@ -1,6 +1,5 @@
-#include <type_traits>
-
-#include <mgcpp/internal_cuda/cuda_stdlib.hpp>
+#include <mgcpp/cuda/internal/cuda_stdlib.hpp>
+#include <mgcpp/cuda/cuda_template_stdlib.hpp>
 
 namespace mgcpp
 {
@@ -15,6 +14,7 @@ namespace mgcpp
 	// {
 	//     throw;
 	// }
+
         return static_cast<ElemType*>(ptr);
     }
 }

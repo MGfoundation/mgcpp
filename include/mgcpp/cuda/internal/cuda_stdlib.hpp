@@ -15,8 +15,8 @@ namespace mgcpp
             cuda_error_invalid_device_pointer = 17
         };
 
-        cudaError_t cuda_malloc(void* ptr, size_t size);
-        cudaError_t cuda_free(void* ptr);
+        cuda_error_t cuda_malloc(void* ptr, size_t size);
+        cuda_error_t cuda_free(void* ptr);
     }
 }
 

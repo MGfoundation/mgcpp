@@ -6,6 +6,5 @@
 int main()
 {
     float* ptr = mgcpp::cuda_malloc<float>(5);
-    
     return 0;
 }

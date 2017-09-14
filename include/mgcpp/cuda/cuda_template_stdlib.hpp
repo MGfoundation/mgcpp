@@ -1,6 +1,9 @@
 #ifndef CUDA_TEMPLATE_STDLIB_HPP
 #define CUDA_TEMPLATE_STDLIB_HPP
 
+#include <type_traits>
+#include <cstdlib>
+
 namespace mgcpp
 {
     

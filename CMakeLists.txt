@@ -11,7 +11,7 @@ set(CMAKE_MODULE_PATH
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-list(APPEND CUDA_NVCC_FLAGS "-arch=sm_30; -O3")
+list(APPEND CUDA_NVCC_FLAGS "-arch=sm_52; code=sm_52;-O3")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
@@ -34,12 +34,16 @@ foreach(SOURCE_FILE ${MAIN_SOURCE_FILES})
     message(STATUS "${SOURCE_FILE}")
 endforeach()
 
-cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
+cuda_add_library("${PROJECT_NAME}base" ${BASE_SOURCE_FILES} STATIC)
 
 add_executable(${PROJECT_NAME} # STATIC SHARED 
     ${MAIN_SOURCE_FILES})
 
 add_dependencies(${PROJECT_NAME} "${PROJECT_NAME}base")
+
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+    CXX_STANDARD 17)
 
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
@@ -57,8 +61,12 @@ cuda_add_cublas_to_target("${PROJECT_NAME}")
 
 
 # mgcpp base
+# target_link_libraries(${PROJECT_NAME}
+#     "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.a")
+# target_link_libraries(${PROJECT_NAME}
+#     "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.so")
 target_link_libraries(${PROJECT_NAME}
-    "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.a")
+    "${PROJECT_SOURCE_DIR}/lib${PROJECT_NAME}base.so")
 
 
 # cuBLAS, MAGMA dependency
@@ -76,5 +84,6 @@ endif(USE_MAGMA)
 # install
 install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME}
     RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
-    ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/internal_lib)
+    ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib
+    LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
