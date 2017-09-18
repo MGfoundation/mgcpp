@@ -36,10 +36,7 @@ endforeach()
 
 cuda_add_library("${PROJECT_NAME}base" ${BASE_SOURCE_FILES} STATIC)
 
-add_executable(${PROJECT_NAME} # STATIC SHARED 
-    ${MAIN_SOURCE_FILES})
-
-add_dependencies(${PROJECT_NAME} "${PROJECT_NAME}base")
+add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
 set(BUILD_FLAGS
     "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
@@ -83,9 +80,26 @@ if(USE_MAGMA)
 	${MAGMA_LIBRARY_DIRS})
 endif(USE_MAGMA)
 
+# Tests
+set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+
+set(TEST_SOURCE_FILES
+    ${TEST_DIR}/main.cpp)
+
+message("[ Source files for ${PROJECT_NAME} tests ]")
+foreach(TEST_SOURCE_FILE ${TEST_SOURCE_FILES})
+    message(STATUS "${TEST_SOURCE_FILE}")
+endforeach()
+
+add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
+
+target_include_directories(${PROJECT_NAME}_test
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    ${TEST_DIR}/Catch/include)
 
 # install
-install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME}
+install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME} "${PROJECT_NAME}_test"
     RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
     ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib
     LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib)
