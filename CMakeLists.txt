@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.8)
 project(mgcpp)
 
+# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
+
 # options
 option(USE_MAGMA "compile mgcpp with magma features" TRUE)
+
 
 # cmake modules path
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
 
 # cuda dependency
 find_package(CUDA REQUIRED)
@@ -15,14 +20,16 @@ list(APPEND CUDA_NVCC_FLAGS "-arch=sm_52; code=sm_52;-O3")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
+
 # project source files
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 set(BASE_SOURCE_FILES
-    ${SOURCE_DIR}/cuda_stdlib.cpp)
+    ${SOURCE_DIR}/cuda_stdlib.cpp
+    ${SOURCE_DIR}/cuda_error.cpp)
 
-set(MAIN_SOURCE_FILES
-    ${SOURCE_DIR}/main.cpp)
+set(MAIN_SOURCE_FILES "")
+#${SOURCE_DIR}/)
 
 message("[ Source files for ${PROJECT_NAME}base ]")
 foreach(BASE_SOURCE_FILE ${BASE_SOURCE_FILES})
@@ -45,6 +52,7 @@ message("C++ flags = ${BUILD_FLAGS}")
 set_target_properties(${PROJECT_NAME}
     PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
 
+
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
     PUBLIC
@@ -59,12 +67,6 @@ target_include_directories("${PROJECT_NAME}"
 # cuBLAS
 cuda_add_cublas_to_target("${PROJECT_NAME}")
 
-
-# mgcpp base
-# target_link_libraries(${PROJECT_NAME}
-#     "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.a")
-# target_link_libraries(${PROJECT_NAME}
-#     "${PROJECT_SOURCE_DIR}/lib/libmgcppbase.so")
 target_link_libraries(${PROJECT_NAME}
     "${PROJECT_NAME}base")
 
@@ -84,7 +86,9 @@ endif(USE_MAGMA)
 set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
 set(TEST_SOURCE_FILES
-    ${TEST_DIR}/main.cpp)
+    ${TEST_DIR}/main.cpp
+    ${TEST_DIR}/cuda_stdlib_test.cpp
+    ${TEST_DIR}/cuda_error_test.cpp)
 
 message("[ Source files for ${PROJECT_NAME} tests ]")
 foreach(TEST_SOURCE_FILE ${TEST_SOURCE_FILES})
@@ -97,6 +101,12 @@ target_include_directories(${PROJECT_NAME}_test
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${TEST_DIR}/Catch/include)
+
+target_link_libraries(${PROJECT_NAME}_test
+    ${PROJECT_NAME})
+
+set_target_properties(${PROJECT_NAME}_test
+    PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
 
 # install
 install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME} "${PROJECT_NAME}_test"
