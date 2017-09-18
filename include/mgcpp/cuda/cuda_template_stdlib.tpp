@@ -1,20 +1,40 @@
 #include <mgcpp/cuda/internal/cuda_stdlib.hpp>
+#include <mgcpp/cuda/internal/cuda_error.hpp>
 #include <mgcpp/cuda/cuda_template_stdlib.hpp>
+#include <mgcpp/cuda/cuda_exceptions.hpp>
 
 namespace mgcpp
 {
     template<typename ElemType,
-             typename = std::enable_if<
+             typename std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
     ElemType* cuda_malloc(size_t size)
     {
-        void* ptr = nullptr;
-        internal::cuda_malloc(ptr, size * sizeof(ElemType));
+        using internal::cuda_malloc;
+        using internal::cuda_error_t;
 
-        // if(!ptr)
-	// {
-	//     throw;
-	// }
+        void* ptr = nullptr;
+        cuda_error_t err_code = cuda_malloc(ptr, size * sizeof(ElemType));
+
+        if(err_code != cuda_error_t::cuda_success)
+            throw cuda_bad_alloc(err_code);
+
+        return static_cast<ElemType*>(ptr);
+    }
+
+    template<typename ElemType,
+             typename std::enable_if<
+                 std::is_arithmetic<ElemType>::value>>
+    ElemType* cuda_malloc_nothrow(size_t size) noexcept
+    {
+        using internal::cuda_malloc;
+        using internal::cuda_error_t;
+
+        void* ptr = nullptr;
+        cuda_error_t err_code = cuda_malloc(ptr, size * sizeof(ElemType));
+
+        if(err_code != cuda_error_t::success)
+            return nullptr;
 
         return static_cast<ElemType*>(ptr);
     }
