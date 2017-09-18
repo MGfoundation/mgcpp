@@ -5,7 +5,7 @@ namespace mgcpp
 {
     namespace internal
     {
-        enum class cuda_error_t
+        enum cuda_error_t
         {
             success = 0,
             memory_allocation = 2,
