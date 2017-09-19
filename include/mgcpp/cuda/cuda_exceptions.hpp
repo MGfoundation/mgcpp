@@ -33,7 +33,7 @@ namespace mgcpp
         
         virtual const char* what() const throw()
         { return _msg; }
-    }
+    };
 }
 
 #endif

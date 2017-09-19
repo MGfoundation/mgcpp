@@ -6,7 +6,7 @@
 namespace mgcpp
 {
     template<typename ElemType,
-             typename std::enable_if<
+             typename = std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
     ElemType*
     cuda_malloc(size_t size)
@@ -17,14 +17,15 @@ namespace mgcpp
         void* ptr = nullptr;
         cuda_error_t err_code = cuda_malloc(ptr, size * sizeof(ElemType));
 
-        if(err_code != cuda_error_t::cuda_success)
-            throw cuda_bad_alloc(err_code);
+        if(err_code != cuda_error_t::success)
+            throw cuda_bad_alloc(
+                internal::cuda_error_string(err_code));
 
         return static_cast<ElemType*>(ptr);
     }
 
     template<typename ElemType,
-             typename std::enable_if<
+             typename = std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
     ElemType*
     cuda_malloc_nothrow(size_t size) noexcept
@@ -43,27 +44,28 @@ namespace mgcpp
 
     template<typename ElemType>
     void
-    cuda_free(ElemType ptr)
+    cuda_free(ElemType* ptr)
     {
         using internal::cuda_free;
         using internal::cuda_error_t;
 
         cuda_error_t err_code = cuda_free(ptr);
 
-        if(err_code != cuda_error_t::cuda_success)
-            throw cuda_bad_dealloc(err_code);
+        if(err_code != cuda_error_t::success)
+            throw cuda_bad_dealloc(
+                internal::cuda_error_string(err_code));
     }
 
     template<typename ElemType>
     bool
-    cuda_free(ElemType ptr)
+    cuda_free_nothrow(ElemType* ptr) noexcept
     {
         using internal::cuda_free;
         using internal::cuda_error_t;
 
         cuda_error_t err_code = cuda_free(ptr);
 
-        if(err_code != cuda_error_t::cuda_success)
+        if(err_code != cuda_error_t::success)
             return false;
         return true;
     }

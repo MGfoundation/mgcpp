@@ -8,41 +8,42 @@ TEST_CASE("templated cuda malloc success", "[cuda_malloc]")
 {
     float* ptr = nullptr;
 
-    REQUIRE_NOTHROW([ptr](){float* ptr = cuda_malloc<float>(10)}());
+    REQUIRE_NOTHROW([ptr](){float* ptr = mgcpp::cuda_malloc<float>(10);}());
     REQUIRE(ptr != nullptr);
 
-    cuda_free(ptr);
+    mgcpp::cuda_free(ptr);
 }
 
 TEST_CASE("templated cuda malloc success", "[cuda_malloc][cuda_free]")
 {
     float* ptr = nullptr;
 
-    REQUIRE_NOTHROW([ptr](){float* ptr = cuda_malloc<float>(10)}());
+    REQUIRE_NOTHROW(
+        [ptr](){float* ptr = mgcpp::cuda_malloc<float>(10);}());
     REQUIRE(ptr != nullptr);
 
-    cuda_free(ptr);
+    mgcpp::cuda_free(ptr);
 
-    REQUIRE_NOTHROW(cuda_free(ptr););
+    REQUIRE_NOTHROW(mgcpp::cuda_free(ptr));
 }
 
 TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
 {
     float* ptr = nullptr;
-    ptr = cuda_malloc_nothrow(10);
+    ptr = mgcpp::cuda_malloc_nothrow<float>(10);
     REQUIRE(ptr != nullptr);
 
-    bool free_result = cuda_free_nothrow(ptr);
+    bool free_result = mgcpp::cuda_free_nothrow(ptr);
     REQUIRE(free_result == true);
 }
 
 TEST_CASE("templated cuda malloc nothrow success", "[cuda_malloc][cuda_free]")
 {
     float* ptr = nullptr;
-    ptr = cuda_malloc_nothrow(10);
+    ptr = mgcpp::cuda_malloc_nothrow<float>(10);
     REQUIRE(ptr != nullptr);
 
-    cuda_free(ptr);
+    mgcpp::cuda_free(ptr);
 }
 
 TEST_CASE("templated cuda malloc throws failure", "[cuda_malloc][cuda_free]")
@@ -50,24 +51,31 @@ TEST_CASE("templated cuda malloc throws failure", "[cuda_malloc][cuda_free]")
     float* ptr = nullptr;
 
     REQUIRE_THROWS(
-        [ptr](){float* ptr = cuda_malloc<float>(
-                std::numeric_limits<size_t>::max())}());
-    REQUIRE(ptr != nullptr);
+        [ptr](){
+            float* ptr = mgcpp::cuda_malloc<float>(
+                std::numeric_limits<size_t>::max());
+        }());
+}
 
-    cuda_free(ptr);
+TEST_CASE("templated cuda malloc nothrow failure", "[cuda_malloc][cuda_free]")
+{
+    float* ptr = nullptr;
 
-    REQUIRE_NOTHROW(cuda_free(ptr););
+    ptr = mgcpp::cuda_malloc_nothrow<float>(
+        std::numeric_limits<size_t>::max());
+
+    REQUIRE(ptr == nullptr);
 }
 
 TEST_CASE("templated cuda free throws failure", "[cuda_free]")
 {
     float* ptr = nullptr;
-    REQUIRE_THROWS(cuda_free(ptr));
+    REQUIRE_THROWS(mgcpp::cuda_free(ptr));
 }
 
 TEST_CASE("templated cuda free nothrow failure", "[cuda_free]")
 {
     float* ptr = nullptr;
-    bool result = cuda_free_nothrow(ptr);
+    bool result = mgcpp::cuda_free_nothrow(ptr);
     REQUIRE(result == false);
 }
