@@ -6,6 +6,7 @@ set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
 # options
 option(USE_MAGMA "compile mgcpp with magma features" TRUE)
+option(USE_CUBLAS "compile mgcpp with cublas features" TRUE)
 
 
 # cmake modules path
@@ -65,8 +66,12 @@ target_include_directories("${PROJECT_NAME}"
 
 ## mgcpp dependencies
 # cuBLAS
-cuda_add_cublas_to_target("${PROJECT_NAME}")
+if(USE_CUBLAS)
+    cuda_add_cublas_to_target("${PROJECT_NAME}")
+endif()
 
+
+# mgcpp base
 target_link_libraries(${PROJECT_NAME}
     "${PROJECT_NAME}base")
 
@@ -81,6 +86,7 @@ if(USE_MAGMA)
 	PUBLIC
 	${MAGMA_LIBRARY_DIRS})
 endif(USE_MAGMA)
+
 
 # Tests
 set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
@@ -107,6 +113,7 @@ target_link_libraries(${PROJECT_NAME}_test
 
 set_target_properties(${PROJECT_NAME}_test
     PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
+
 
 # install
 install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME} "${PROJECT_NAME}_test"
