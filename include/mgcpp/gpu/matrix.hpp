@@ -1,5 +1,5 @@
-#ifndef _GPU_MATRIX_HPP_
-#define _GPU_MATRIX_HPP_
+#ifndef _MGCPP_GPU_MATRIX_HPP_
+#define _MGCPP_GPU_MATRIX_HPP_
 
 #include <mgcpp/cpu/fwd.hpp>
 
@@ -12,7 +12,9 @@ namespace mg
         {
         private:
             ElemType* _data;
-            size_t _id;
+            size_t _x_dim;
+            size_t _y_dim;
+            bool _released;
 
         public:
             inline matrix();
@@ -36,6 +38,9 @@ namespace mg
 
             inline ElemType*
             get_data_mutable();
+
+            inline ElemType*
+            release_data();
 
             inline ~matrix();
         };
