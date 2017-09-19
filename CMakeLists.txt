@@ -68,6 +68,9 @@ target_include_directories("${PROJECT_NAME}"
 # cuBLAS
 if(USE_CUBLAS)
     cuda_add_cublas_to_target("${PROJECT_NAME}")
+    message("-- building with cuBLAS")
+else()
+    message("-- Not building with cuBLAS(most features will be restricted)")
 endif()
 
 
@@ -79,12 +82,15 @@ target_link_libraries(${PROJECT_NAME}
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)
     find_package(MAGMA REQUIRED)
+    message("-- Magma found, building with Magma")
     target_include_directories(${PROJECT_NAME}
 	PUBLIC
 	${MAGMA_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME}
 	PUBLIC
 	${MAGMA_LIBRARY_DIRS})
+else()
+    message("-- Not building with Magma (certain features will be restricted)")
 endif(USE_MAGMA)
 
 
