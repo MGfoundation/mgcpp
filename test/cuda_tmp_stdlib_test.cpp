@@ -8,7 +8,7 @@ TEST_CASE("templated cuda malloc success", "[cuda_malloc]")
 {
     float* ptr = nullptr;
 
-    REQUIRE_NOTHROW([ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
+    REQUIRE_NOTHROW([&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
     REQUIRE(ptr != nullptr);
 
     mgcpp::cuda_free(ptr);
@@ -19,7 +19,7 @@ TEST_CASE("templated cuda malloc and free success", "[cuda_malloc][cuda_free]")
     float* ptr = nullptr;
 
     REQUIRE_NOTHROW(
-        [ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
+        [&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
     REQUIRE(ptr != nullptr);
 
     mgcpp::cuda_free(ptr);
