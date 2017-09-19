@@ -120,7 +120,7 @@ target_link_libraries(${PROJECT_NAME}_test
 set(TEST_BUILD_FLAGS
     "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
 
-message("Test C++ flags = ${BUILD_FLAGS}")
+message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}_test
     PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}")
