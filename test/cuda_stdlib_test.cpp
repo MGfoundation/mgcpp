@@ -4,7 +4,7 @@
 
 using mgcpp::internal::cuda_error_t;
 
-TEST_CASE("cuda malloc success", "[cudaMalloc]")
+TEST_CASE("cuda malloc success", "[cuda_malloc]")
 {
     float* ptr = nullptr;
     cuda_error_t result =
@@ -12,9 +12,10 @@ TEST_CASE("cuda malloc success", "[cudaMalloc]")
                                      sizeof(float) * 10);
 
     REQUIRE( result == cuda_error_t::success );
+    mgcpp::internal::cuda_free(ptr);
 }
 
-TEST_CASE("cuda free success", "[cudaFree]")
+TEST_CASE("cuda malloc and free success", "[cuda_malloc][cuda_free]")
 {
     float* ptr = nullptr;
     cuda_error_t malloc_result =
