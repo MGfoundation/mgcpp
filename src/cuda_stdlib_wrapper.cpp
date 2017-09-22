@@ -1,6 +1,6 @@
 #include <cuda_runtime.h>
 
-#include <mgcpp/cuda/internal/cuda_stdlib.hpp>
+#include <mgcpp/cuda/internal/stdlib_wrapper.hpp>
 
 namespace mgcpp
 {

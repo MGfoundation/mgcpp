@@ -1,7 +1,7 @@
-#include <mgcpp/cuda/internal/cuda_stdlib.hpp>
+#include <mgcpp/cuda/internal/stdlib_wrapper.hpp>
 #include <mgcpp/cuda/internal/cuda_error.hpp>
-#include <mgcpp/cuda/cuda_template_stdlib.hpp>
-#include <mgcpp/cuda/cuda_exceptions.hpp>
+#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/exceptions.hpp>
 
 namespace mgcpp
 {

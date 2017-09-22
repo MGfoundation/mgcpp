@@ -24,6 +24,5 @@ namespace mgcpp
     bool cuda_free_nothrow(ElemType* ptr) noexcept;
 }
 
-#include "cuda_template_stdlib.tpp"
-
+#include <mgcpp/cuda/stdlib.tpp>
 #endif

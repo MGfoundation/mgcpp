@@ -26,7 +26,7 @@ message("build flags = ${CUDA_NVCC_FLAGS}")
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 set(BASE_SOURCE_FILES
-    ${SOURCE_DIR}/cuda_stdlib.cpp
+    ${SOURCE_DIR}/cuda_stdlib_wrapper.cpp
     ${SOURCE_DIR}/cuda_error.cpp)
 
 set(MAIN_SOURCE_FILES "")
@@ -100,7 +100,7 @@ set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 set(TEST_SOURCE_FILES
     ${TEST_DIR}/main.cpp
     ${TEST_DIR}/cuda_stdlib_test.cpp
-    ${TEST_DIR}/cuda_tmp_stdlib_test.cpp
+    ${TEST_DIR}/cuda_stdlib_wrapper_test.cpp
     ${TEST_DIR}/cuda_error_test.cpp)
 
 message("[ Source files for ${PROJECT_NAME} tests ]")
