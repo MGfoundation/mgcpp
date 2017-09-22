@@ -1,5 +1,5 @@
-#ifndef _STATUS_WRAPPER_HPP_
-#define _STATUS_WRAPPER_HPP_
+#ifndef _MGCPP_CUDA_STATUS_WRAPPER_HPP_
+#define _MGCPP_CUDA_STATUS_WRAPPER_HPP_
 
 #include <cstdlib>
 
