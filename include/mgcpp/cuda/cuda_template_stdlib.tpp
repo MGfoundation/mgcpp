@@ -5,8 +5,7 @@
 
 namespace mgcpp
 {
-    template<typename ElemType,
-             typename >
+    template<typename ElemType, typename>
     ElemType*
     cuda_malloc(size_t size)
     {
@@ -23,8 +22,7 @@ namespace mgcpp
         return static_cast<ElemType*>(ptr);
     }
 
-    template<typename ElemType,
-             typename>
+    template<typename ElemType, typename>
     ElemType*
     cuda_malloc_nothrow(size_t size) noexcept
     {

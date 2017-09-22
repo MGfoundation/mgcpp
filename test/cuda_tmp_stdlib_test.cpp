@@ -68,13 +68,13 @@ TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
 
 TEST_CASE("templated cuda free throws failure", "[cuda_free]")
 {
-    float* ptr = nullptr;
+    float* ptr = (float*)10u;
     REQUIRE_THROWS(mgcpp::cuda_free(ptr));
 }
 
 TEST_CASE("templated cuda free nothrow failure", "[cuda_free]")
 {
-    float* ptr = nullptr;
+    float* ptr = (float*)10u;
     bool result = mgcpp::cuda_free_nothrow(ptr);
     REQUIRE(result == false);
 }
