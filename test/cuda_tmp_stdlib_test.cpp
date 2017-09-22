@@ -22,8 +22,6 @@ TEST_CASE("templated cuda malloc and free success", "[cuda_malloc][cuda_free]")
         [&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
     REQUIRE(ptr != nullptr);
 
-    mgcpp::cuda_free(ptr);
-
     REQUIRE_NOTHROW(mgcpp::cuda_free(ptr));
 }
 
