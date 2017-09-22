@@ -6,8 +6,7 @@
 namespace mgcpp
 {
     template<typename ElemType,
-             typename = std::enable_if<
-                 std::is_arithmetic<ElemType>::value>>
+             typename >
     ElemType*
     cuda_malloc(size_t size)
     {
@@ -15,7 +14,7 @@ namespace mgcpp
         using internal::cuda_error_t;
 
         void* ptr = nullptr;
-        cuda_error_t err_code = cuda_malloc(ptr, size * sizeof(ElemType));
+        cuda_error_t err_code = cuda_malloc(&ptr, size * sizeof(ElemType));
 
         if(err_code != cuda_error_t::success)
             throw cuda_bad_alloc(
@@ -25,8 +24,7 @@ namespace mgcpp
     }
 
     template<typename ElemType,
-             typename = std::enable_if<
-                 std::is_arithmetic<ElemType>::value>>
+             typename>
     ElemType*
     cuda_malloc_nothrow(size_t size) noexcept
     {
@@ -34,7 +32,7 @@ namespace mgcpp
         using internal::cuda_error_t;
 
         void* ptr = nullptr;
-        cuda_error_t err_code = cuda_malloc(ptr, size * sizeof(ElemType));
+        cuda_error_t err_code = cuda_malloc(&ptr, size * sizeof(ElemType));
 
         if(err_code != cuda_error_t::success)
             return nullptr;

@@ -6,9 +6,9 @@ namespace mgcpp
 {
     internal::cuda_error_t
     internal::
-    cuda_malloc(void* ptr, size_t size)
+    cuda_malloc(void** ptr, size_t size)
     {
-        return static_cast<cuda_error_t>(cudaMalloc(&ptr, size));
+        return static_cast<cuda_error_t>(cudaMalloc(ptr, size));
     }
 
     internal::cuda_error_t

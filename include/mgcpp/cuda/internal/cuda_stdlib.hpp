@@ -8,7 +8,7 @@ namespace mgcpp
 {
     namespace internal
     {
-        cuda_error_t cuda_malloc(void* ptr, size_t size);
+        cuda_error_t cuda_malloc(void** ptr, size_t size);
         cuda_error_t cuda_free(void* ptr);
     }
 }
