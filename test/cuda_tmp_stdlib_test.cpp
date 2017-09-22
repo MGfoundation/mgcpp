@@ -56,15 +56,15 @@ TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
 //         }());
 // }
 
-TEST_CASE("templated cuda malloc nothrow failure", "[cuda_malloc][cuda_free]")
-{
-    float* ptr = nullptr;
+// TEST_CASE("templated cuda malloc nothrow failure", "[cuda_malloc][cuda_free]")
+// {
+//     float* ptr = nullptr;
 
-    ptr = mgcpp::cuda_malloc_nothrow<float>(
-        std::numeric_limits<size_t>::max());
+//     ptr = mgcpp::cuda_malloc_nothrow<float>(
+//         std::numeric_limits<size_t>::max());
 
-    REQUIRE(ptr == nullptr);
-}
+//     REQUIRE(ptr == nullptr);
+// }
 
 TEST_CASE("templated cuda free throws failure", "[cuda_free]")
 {
