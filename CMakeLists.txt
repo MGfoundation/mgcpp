@@ -127,6 +127,7 @@ if(BUILD_TESTING)
 	${GTEST_INCLUDE_DIRS})
 
     target_link_libraries(${PROJECT_NAME}_test
+	${PROJECT_NAME}
 	${GTEST_LIBRARIES})
 
     set(TEST_BUILD_FLAGS
