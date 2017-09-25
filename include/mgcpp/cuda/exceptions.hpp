@@ -1,39 +1,41 @@
 #ifndef _CUDA_EXCEPTIONS_HPP_
 #define _CUDA_EXCEPTIONS_HPP_
 
-#include <exception>
+#include <stdexcept>
 
-namespace mgcpp
-{
-    class cuda_bad_alloc
-        : public std::exception
-    {
-    private:
-        char const* _msg; 
+#ifndef MGCPP_THROW
+#define MGCPP_THROW(EXCEPTION) throw EXCEPTION
+#endif
 
-    public:
-        inline cuda_bad_alloc(char const* msg)
-            : _msg(msg)
-        {}
-        
-        virtual const char* what() const throw()
-        { return _msg; }
-    };
+#ifndef MGCPP_THROW_BAD_ALLOC
+#define MGCPP_THROW_BAD_ALLOC MGCPP_THROW(std::bad_alloc())
+#endif
 
-    class cuda_bad_dealloc
-        : public std::exception
-    {
-    private:
-        char const* _msg; 
+#ifndef MGCPP_THROW_LENGTH_ERROR
+#define MGCPP_THROW_LENGTH_ERROR(MESSAGE) MGCPP_THROW(std::length_error(MESSAGE))
+#endif
 
-    public:
-        inline cuda_bad_dealloc(char const* msg)
-            : _msg(msg)
-        {}
-        
-        virtual const char* what() const throw()
-        { return _msg; }
-    };
-}
+#ifndef MGCPP_THROW_OUT_OF_RANGE
+#define MGCPP_THROW_OUT_OF_RANGE(MESSAGE) MGCPP_THROW(std::out_of_range(MESSAGE))
+#endif
+
+#ifndef MGCPP_THROW_RUNTIME_ERROR
+#define MGCPP_THROW_RUNTIME_ERROR(MESSAGE) MGCPP_THROW(std::runtime_error(MESSAGE))
+#endif
+
+#ifndef MGCPP_THROW_OVERFLOW_ERROR
+#define MGCPP_THROW_OVERFLOW_ERROR(MESSAGE) MGCPP_THROW(std::overflow_error(MESSAGE))
+#endif
+
+#ifndef MGCPP_THROW_RUNTIME_ERROR
+#define MGCPP_THROW_RUNTIME_ERROR(MESSAGE) MGCPP_THROW(std::underflow_error(MESSAGE))
+#endif
+
+#ifndef mgcpp_error_check
+#define mgcpp_error_check(EXP) try{do{EXP;}while(false);}               \
+    catch(std::exception const& e) {                                    \
+        fprintf(stderr,"[mgcpp errror]\nerror: %s\nposition: %s %d",    \
+                e.what(), __FILE__, __LINE__);}
+#endif
 
 #endif
