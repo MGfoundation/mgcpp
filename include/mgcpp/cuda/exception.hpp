@@ -42,12 +42,12 @@
 #endif
 
 #ifndef mgcpp_error_check
-#define mgcpp_error_check(EXP) try{do{EXP;}while(false);}               \
-    catch(std::exception const& e) {                                    \
-        MGCPP_ERROR_MESSAGE_HANDLER(                                    \
-            "[mgcpp errror]\nerror: %s\nposition: %s %d\n",             \
-            e.what(), __FILE__, __LINE__);                              \
-        if(MGCPP_ABORT_ON_ERROR) exit(1);}
+#define mgcpp_error_check(EXP)                                  \
+    do{try{EXP;}catch(std::exception const& e){                 \
+            MGCPP_ERROR_MESSAGE_HANDLER(                        \
+                "[mgcpp errror]\nerror: %s\nposition: %s %d\n", \
+                e.what(), __FILE__, __LINE__);                  \
+            if(MGCPP_ABORT_ON_ERROR) exit(1);}}while(false)
 #endif
 
 #endif
