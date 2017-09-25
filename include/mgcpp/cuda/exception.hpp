@@ -10,7 +10,7 @@
 #ifndef MGCPP_ERROR_MESSAGE_HANDLER
 #include <cstdio>
 #define MGCPP_ERROR_MESSAGE_HANDLER(MESSAGE, ...)   \
-    printf(MESSAGE,__VA_ARGS__)
+    fprintf(stderr,MESSAGE,__VA_ARGS__)
 #endif
 
 #ifndef MGCPP_THROW
