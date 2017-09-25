@@ -14,8 +14,8 @@ TEST(mgcpp_exception, mgcpp_error_check)
     float* ptr = nullptr;
     (void)ptr; // warning suppression
 
-    EXPECT_DEATH({
+    EXPECT_EXIT({
             mgcpp_error_check(
                 ptr = mgcpp::cuda_malloc<float>(free_memory * 2));
-        }, "*.*");
+        }, ::testing::ExitedWithCode(1), "");
 }
