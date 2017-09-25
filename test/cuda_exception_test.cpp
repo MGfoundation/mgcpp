@@ -15,5 +15,5 @@ TEST(mgcpp_exception, mgcpp_error_check)
             float* ptr = nullptr;
             mgcpp_error_check(
                 ptr = mgcpp::cuda_malloc<float>(free_memory * 2));
-        }, "death by mgcpp_error_check");
+        }, "\[cuda_error\]\\nstd::bad_alloc\\n.*\\s\\d*");
 }
