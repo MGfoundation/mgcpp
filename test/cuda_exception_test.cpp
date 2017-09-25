@@ -4,8 +4,8 @@
 #include <mgcpp/cuda/exception.hpp>
 #include <mgcpp/cuda/internal/status_wrapper.hpp>
 
-TEST_CASE("templated cuda malloc throws failure",
-          "[cuda_malloc]")
+TEST_CASE("mgcpp error checker nothrow test",
+          "[mgcpp_error_check]")
 {
     using mgcpp::internal::cuda_mem_get_info;
 
