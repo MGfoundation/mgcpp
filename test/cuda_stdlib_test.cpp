@@ -8,6 +8,7 @@ TEST(cuda_malloc, cuda_malloc_success)
     using mgcpp::internal::cuda_mem_get_info;
 
     float* ptr = nullptr;
+    (void)ptr; // warning suppression
 
     size_t free_memory_before_malloc = 0;
     cuda_mem_get_info(&free_memory_before_malloc, nullptr);
