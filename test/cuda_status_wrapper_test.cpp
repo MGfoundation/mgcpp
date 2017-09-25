@@ -3,9 +3,9 @@
 
 #include <cuda_runtime.h>
 
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
-TEST_CASE("cuda get memory status", "[cudaMemGetInfo]")
+TEST(cuda_status, cuda_mem_get_info)
 {
     using mgcpp::internal::cuda_error_t;
     using mgcpp::internal::cuda_mem_get_info;
@@ -15,7 +15,7 @@ TEST_CASE("cuda get memory status", "[cudaMemGetInfo]")
 
     cudaError_t result = cudaMemGetInfo(&free, &total);
 
-    REQUIRE(result == cudaError_t::cudaSuccess);
+    EXPECT_EQ(result, cudaError_t::cudaSuccess);
 
     size_t free_wrapper = 0;
     size_t total_wrapper = 0;
@@ -23,9 +23,9 @@ TEST_CASE("cuda get memory status", "[cudaMemGetInfo]")
     cuda_error_t result_wrapper =
         cuda_mem_get_info(&free_wrapper, &total_wrapper);
 
-    REQUIRE(
-        static_cast<cuda_error_t>(result) == cuda_error_t::success);
+    EXPECT_EQ(static_cast<cuda_error_t>(result_wrapper),
+              cuda_error_t::success);
 
-    REQUIRE(free_wrapper == free);
-    REQUIRE(total_wrapper == total);
+    EXPECT_EQ(free_wrapper, free);
+    EXPECT_EQ(total_wrapper, total);
 }

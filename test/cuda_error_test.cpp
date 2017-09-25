@@ -1,10 +1,10 @@
 #include <string>
 
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
 #include <mgcpp/cuda/internal/cuda_error.hpp>
 
-TEST_CASE("cuda error message", "[cudaGetErrorString]")
+TEST(cuda_error, cuda_error_string_function)
 {
     using mgcpp::internal::cuda_error_t;
     using mgcpp::internal::cuda_error_string;
@@ -13,6 +13,6 @@ TEST_CASE("cuda error message", "[cudaGetErrorString]")
     auto result = std::string(cuda_error_string(err_code));
     auto answer = std::string("out of memory");
 
-    REQUIRE(result == answer);
+    ASSERT_EQ(result, answer);
 }
 

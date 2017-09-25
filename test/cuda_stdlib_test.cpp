@@ -1,9 +1,9 @@
-#include <catch.hpp>
+#include <gtest/gtest.h>
 
 #include <mgcpp/cuda/stdlib.hpp>
 #include <mgcpp/cuda/internal/status_wrapper.hpp>
 
-TEST_CASE("templated cuda malloc success", "[cuda_malloc]")
+TEST(cuda_malloc, cuda_malloc_success)
 {
     using mgcpp::internal::cuda_mem_get_info;
 
@@ -12,19 +12,18 @@ TEST_CASE("templated cuda malloc success", "[cuda_malloc]")
     size_t free_memory_before_malloc = 0;
     cuda_mem_get_info(&free_memory_before_malloc, nullptr);
 
-    REQUIRE_NOTHROW([&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
-    REQUIRE(ptr != nullptr);
+    EXPECT_NO_THROW({ptr = mgcpp::cuda_malloc<float>(10);});
+    EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
     cuda_mem_get_info(&free_memory_after_malloc, nullptr);
 
-    REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
+    EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
     mgcpp::cuda_free(ptr);
 }
 
-TEST_CASE("templated cuda malloc throws failure",
-          "[cuda_malloc]")
+TEST(cuda_malloc, cuda_malloc_throw_failure)
 {
     using mgcpp::internal::cuda_mem_get_info;
 
@@ -33,12 +32,11 @@ TEST_CASE("templated cuda malloc throws failure",
     size_t free_memory= 0;
     cuda_mem_get_info(&free_memory, nullptr);
 
-    REQUIRE_THROWS([&](){
-            ptr = mgcpp::cuda_malloc<float>(free_memory * 2);}());
+    EXPECT_ANY_THROW(
+        {ptr = mgcpp::cuda_malloc<float>(free_memory * 2);});
 }
 
-TEST_CASE("templated cuda malloc nothrow failure",
-          "[cuda_malloc]")
+TEST(cuda_malloc, cuda_malloc_nothrow_failure)
 {
     using mgcpp::internal::cuda_mem_get_info;
 
@@ -47,16 +45,15 @@ TEST_CASE("templated cuda malloc nothrow failure",
     size_t free_memory= 0;
     cuda_mem_get_info(&free_memory, nullptr);
 
-    REQUIRE_NOTHROW([&](){
+    EXPECT_NO_THROW([&](){
             ptr = mgcpp::cuda_malloc<float>(free_memory * 2,
                                             std::nothrow);
         }());
 
-    REQUIRE(ptr == nullptr);
+    EXPECT_EQ(ptr, nullptr);
 }
 
-TEST_CASE("templated cuda malloc nothrow success",
-          "[cuda_malloc][cuda_free]")
+TEST(cuda_malloc, cuda_malloc_nothrow_success)
 {
     using mgcpp::internal::cuda_mem_get_info;
 
@@ -65,18 +62,17 @@ TEST_CASE("templated cuda malloc nothrow success",
 
     float* ptr = nullptr;
     ptr = mgcpp::cuda_malloc<float>(10, std::nothrow);
-    REQUIRE(ptr != nullptr);
+    EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
     cuda_mem_get_info(&free_memory_after_malloc, nullptr);
 
-    REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
+    EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
     mgcpp::cuda_free(ptr);
 }
 
-TEST_CASE("templated cuda malloc and free success",
-          "[cuda_malloc][cuda_free]")
+TEST(cuda_free, cuda_free_success)
 {
     using mgcpp::internal::cuda_mem_get_info;
 
@@ -85,54 +81,27 @@ TEST_CASE("templated cuda malloc and free success",
 
     float* ptr = nullptr;
 
-    REQUIRE_NOTHROW(
+    EXPECT_NO_THROW(
         [&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
-    REQUIRE(ptr != nullptr);
+    EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
     cuda_mem_get_info(&free_memory_after_malloc, nullptr);
 
-    REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
+    EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
     bool success = mgcpp::cuda_free(ptr);
-    REQUIRE(success == true);
+    EXPECT_EQ(success, true);
 
     size_t free_memory_after_free = 0;
     cuda_mem_get_info(&free_memory_after_free, nullptr);
 
-    REQUIRE(free_memory_after_free == free_memory_before_malloc);
+    EXPECT_EQ(free_memory_after_free, free_memory_before_malloc);
 }
 
-
-TEST_CASE("templated cuda malloc and free nothrow success",
-          "[cuda_malloc]")
-{
-    using mgcpp::internal::cuda_mem_get_info;
-
-    size_t free_memory_before_malloc = 0;
-    cuda_mem_get_info(&free_memory_before_malloc, nullptr);
-
-    float* ptr = nullptr;
-    ptr = mgcpp::cuda_malloc<float>(10, std::nothrow);
-    REQUIRE(ptr != nullptr);
-
-    size_t free_memory_after_malloc = 0;
-    cuda_mem_get_info(&free_memory_after_malloc, nullptr);
-
-    REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
-
-    bool free_result = mgcpp::cuda_free(ptr);
-    REQUIRE(free_result == true);
-
-    size_t free_memory_after_free = 0;
-    cuda_mem_get_info(&free_memory_after_free, nullptr);
-
-    REQUIRE(free_memory_after_free == free_memory_before_malloc);
-}
-
-TEST_CASE("templated cuda free failure", "[cuda_free]")
+TEST(cuda_free, cuda_free_failure)
 {
     float* ptr = (float*)10u;
     bool success = mgcpp::cuda_free(ptr);
-    REQUIRE(success == false);
+    EXPECT_EQ(success, false);
 }

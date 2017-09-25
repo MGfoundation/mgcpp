@@ -5,9 +5,9 @@ project(mgcpp)
 set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
 # options
-option(USE_MAGMA "compile mgcpp with magma features" TRUE)
-option(USE_CUBLAS "compile mgcpp with cublas features" TRUE)
-
+option(USE_MAGMA "compile mgcpp with magma features" ON)
+option(USE_CUBLAS "compile mgcpp with cublas features" ON)
+option(BUILD_TESTING "compile mgcpp with tests" ON)
 
 # cmake modules path
 set(CMAKE_MODULE_PATH
@@ -96,43 +96,53 @@ endif(USE_MAGMA)
 
 
 # Tests
-set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
+if(BUILD_TESTING)
+    enable_testing()
 
-set(TEST_SOURCE_FILES
-    ${TEST_DIR}/main.cpp
-    ${TEST_DIR}/cuda_stdlib_test.cpp
-    ${TEST_DIR}/cuda_status_wrapper_test.cpp
-    ${TEST_DIR}/cuda_stdlib_wrapper_test.cpp
-    ${TEST_DIR}/cuda_exception_test.cpp
-    ${TEST_DIR}/cuda_error_test.cpp)
+    # find gtest dependency
+    find_package(GTest REQUIRED)
 
-message("[ Source files for ${PROJECT_NAME} tests ]")
-foreach(TEST_SOURCE_FILE ${TEST_SOURCE_FILES})
-    message(STATUS "${TEST_SOURCE_FILE}")
-endforeach()
+    # test source files
+    set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
-add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
+    set(TEST_SOURCE_FILES
+	${TEST_DIR}/main.cpp
+	${TEST_DIR}/cuda_stdlib_test.cpp
+	${TEST_DIR}/cuda_status_wrapper_test.cpp
+	${TEST_DIR}/cuda_stdlib_wrapper_test.cpp
+	${TEST_DIR}/cuda_exception_test.cpp
+	${TEST_DIR}/cuda_error_test.cpp)
 
-target_include_directories(${PROJECT_NAME}_test
-    PUBLIC
-    ${PROJECT_SOURCE_DIR}/include
-    ${TEST_DIR}/Catch/include)
+    message("[ Source files for ${PROJECT_NAME} tests ]")
+    foreach(TEST_SOURCE_FILE ${TEST_SOURCE_FILES})
+	message(STATUS "${TEST_SOURCE_FILE}")
+    endforeach()
 
-target_link_libraries(${PROJECT_NAME}_test
-    ${PROJECT_NAME})
+    # add test target
+    add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
 
-set(TEST_BUILD_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
+    target_include_directories(${PROJECT_NAME}_test
+	PUBLIC
+	${PROJECT_SOURCE_DIR}/include
+	${GTEST_INCLUDE_DIRS})
 
-message("Test C++ flags = ${TEST_BUILD_FLAGS}")
+    target_link_libraries(${PROJECT_NAME}_test
+	${GTEST_LIBRARIES})
 
-set_target_properties(${PROJECT_NAME}_test
-    PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}")
+    set(TEST_BUILD_FLAGS
+	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
 
+    message("Test C++ flags = ${TEST_BUILD_FLAGS}")
+
+    set_target_properties(${PROJECT_NAME}_test
+	PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}")
+
+    # ctest
+    add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)
+endif()
 
 # install
 install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME} "${PROJECT_NAME}_test"
     RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
     ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib
     LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib)
-
