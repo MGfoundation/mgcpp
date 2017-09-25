@@ -103,6 +103,7 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/cuda_stdlib_test.cpp
     ${TEST_DIR}/cuda_status_wrapper_test.cpp
     ${TEST_DIR}/cuda_stdlib_wrapper_test.cpp
+    ${TEST_DIR}/cuda_exception_test.cpp
     ${TEST_DIR}/cuda_error_test.cpp)
 
 message("[ Source files for ${PROJECT_NAME} tests ]")

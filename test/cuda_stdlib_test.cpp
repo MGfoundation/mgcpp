@@ -1,7 +1,5 @@
 #include <catch.hpp>
 
-#include <limits>
-
 #include <mgcpp/cuda/stdlib.hpp>
 #include <mgcpp/cuda/internal/status_wrapper.hpp>
 
@@ -96,7 +94,8 @@ TEST_CASE("templated cuda malloc and free success",
 
     REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
 
-    REQUIRE_NOTHROW(mgcpp::cuda_free(ptr));
+    bool success = mgcpp::cuda_free(ptr);
+    REQUIRE(success == true);
 
     size_t free_memory_after_free = 0;
     cuda_mem_get_info(&free_memory_after_free, nullptr);

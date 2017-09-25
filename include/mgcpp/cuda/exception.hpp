@@ -3,6 +3,16 @@
 
 #include <stdexcept>
 
+#ifndef MGCPP_ABORT_ON_ERROR
+#define MGCPP_ABORT_ON_ERROR true
+#endif
+
+#ifndef MGCPP_ERROR_MESSAGE_HANDLER
+#include <cstdio>
+#define MGCPP_ERROR_MESSAGE_HANDLER(MESSAGE, ...)   \
+    printf(MESSAGE,__VA_ARGS__)
+#endif
+
 #ifndef MGCPP_THROW
 #define MGCPP_THROW(EXCEPTION) throw EXCEPTION
 #endif
@@ -34,8 +44,10 @@
 #ifndef mgcpp_error_check
 #define mgcpp_error_check(EXP) try{do{EXP;}while(false);}               \
     catch(std::exception const& e) {                                    \
-        fprintf(stderr,"[mgcpp errror]\nerror: %s\nposition: %s %d",    \
-                e.what(), __FILE__, __LINE__);}
+        MGCPP_ERROR_MESSAGE_HANDLER(                                    \
+            "[mgcpp errror]\nerror: %s\nposition: %s %d\n",             \
+            e.what(), __FILE__, __LINE__);                              \
+        if(MGCPP_ABORT_ON_ERROR) exit(1);}
 #endif
 
 #endif
