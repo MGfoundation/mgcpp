@@ -26,6 +26,20 @@ TEST_CASE("cuda malloc success", "[cuda_malloc]")
     mgcpp::internal::cuda_free(ptr);
 }
 
+TEST_CASE("cuda malloc failure", "[cuda_malloc]")
+{
+    using mgcpp::internal::cuda_mem_get_info;
+    using mgcpp::internal::cuda_malloc;
+
+    size_t free_memory = 0;
+    cuda_mem_get_info(&free_memory, nullptr);
+
+    float* ptr = nullptr;
+    cuda_error_t result = cuda_malloc((void**)&ptr, free_memory * 2);
+
+    REQUIRE( result != cuda_error_t::success );
+}
+
 TEST_CASE("cuda malloc and free success", "[cuda_malloc][cuda_free]")
 {
     using mgcpp::internal::cuda_mem_get_info;
