@@ -16,6 +16,3 @@ TEST_CASE("cuda error message", "[cudaGetErrorString]")
     REQUIRE(result == answer);
 }
 
-
-
-
