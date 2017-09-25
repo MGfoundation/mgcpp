@@ -5,7 +5,7 @@
 
 using mgcpp::internal::cuda_error_t;
 
-TEST(cuda_malloc_wrapper, cuda_malloc_wrapper_success)
+TEST(cudaMalloc_wrapper, cudaMalloc_wrapper_success)
 {
     using mgcpp::internal::cuda_mem_get_info;
     using mgcpp::internal::cuda_malloc;
@@ -26,7 +26,7 @@ TEST(cuda_malloc_wrapper, cuda_malloc_wrapper_success)
     mgcpp::internal::cuda_free(ptr);
 }
 
-TEST(cuda_malloc_wrapper, cuda_malloc_wrapper_failure)
+TEST(cudaMalloc_wrapper, cudaMalloc_wrapper_failure)
 {
     using mgcpp::internal::cuda_mem_get_info;
     using mgcpp::internal::cuda_malloc;
@@ -40,7 +40,7 @@ TEST(cuda_malloc_wrapper, cuda_malloc_wrapper_failure)
     EXPECT_NE( result,  cuda_error_t::success );
 }
 
-TEST(cuda_free, cuda_free_success)
+TEST(cudaFree_wrapper, cudaFree_wrapper_success)
 {
     using mgcpp::internal::cuda_mem_get_info;
     using mgcpp::internal::cuda_malloc;

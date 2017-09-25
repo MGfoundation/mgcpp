@@ -29,6 +29,7 @@ TEST(cuda_malloc, cuda_malloc_throw_failure)
     using mgcpp::internal::cuda_mem_get_info;
 
     float* ptr = nullptr;
+    (void)ptr; // warning suppression
 
     size_t free_memory= 0;
     cuda_mem_get_info(&free_memory, nullptr);
@@ -42,14 +43,16 @@ TEST(cuda_malloc, cuda_malloc_nothrow_failure)
     using mgcpp::internal::cuda_mem_get_info;
 
     float* ptr = nullptr;
+    (void)ptr; // warning suppression
 
     size_t free_memory= 0;
     cuda_mem_get_info(&free_memory, nullptr);
 
-    EXPECT_NO_THROW([&](){
+    EXPECT_NO_THROW(
+        {
             ptr = mgcpp::cuda_malloc<float>(free_memory * 2,
                                             std::nothrow);
-        }());
+        });
 
     EXPECT_EQ(ptr, nullptr);
 }
