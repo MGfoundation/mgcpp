@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include <cstdlib>
+#include <new>
 
 namespace mgcpp
 {
@@ -15,13 +16,11 @@ namespace mgcpp
     template<typename ElemType,
              typename = std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
-    ElemType* cuda_malloc_nothrow(size_t size) noexcept;
+    ElemType* cuda_malloc(size_t size,
+                          std::nothrow_t const& throw_flag) noexcept;
 
     template<typename ElemType>
-    void cuda_free(ElemType* ptr);
-
-    template<typename ElemType>
-    bool cuda_free_nothrow(ElemType* ptr) noexcept;
+    bool cuda_free(ElemType* ptr) noexcept;
 }
 
 #include <mgcpp/cuda/stdlib.tpp>

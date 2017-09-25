@@ -59,7 +59,7 @@ TEST_CASE("templated cuda malloc nothrow success", "[cuda_malloc][cuda_free]")
     cuda_mem_get_info(&free_memory_before_malloc, nullptr);
 
     float* ptr = nullptr;
-    ptr = mgcpp::cuda_malloc_nothrow<float>(10);
+    ptr = mgcpp::cuda_malloc<float>(10, std::nothrow);
     REQUIRE(ptr != nullptr);
 
     size_t free_memory_after_malloc = 0;
@@ -78,7 +78,7 @@ TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
     cuda_mem_get_info(&free_memory_before_malloc, nullptr);
 
     float* ptr = nullptr;
-    ptr = mgcpp::cuda_malloc_nothrow<float>(10);
+    ptr = mgcpp::cuda_malloc<float>(10, std::nothrow);
     REQUIRE(ptr != nullptr);
 
     size_t free_memory_after_malloc = 0;
@@ -86,7 +86,7 @@ TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
 
     REQUIRE(free_memory_before_malloc > free_memory_after_malloc);
 
-    bool free_result = mgcpp::cuda_free_nothrow(ptr);
+    bool free_result = mgcpp::cuda_free(ptr);
     REQUIRE(free_result == true);
 
     size_t free_memory_after_free = 0;
@@ -95,37 +95,9 @@ TEST_CASE("templated cuda malloc and free nothrow success", "[cuda_malloc]")
     REQUIRE(free_memory_after_free == free_memory_before_malloc);
 }
 
-
-// TEST_CASE("templated cuda malloc throws failure", "[cuda_malloc][cuda_free]")
-// {
-//     float* ptr = nullptr;
-
-//     REQUIRE_THROWS(
-//         [ptr](){
-//             float* ptr = mgcpp::cuda_malloc<float>(
-//                 std::numeric_limits<size_t>::max());
-//         }());
-// }
-
-// TEST_CASE("templated cuda malloc nothrow failure", "[cuda_malloc][cuda_free]")
-// {
-//     float* ptr = nullptr;
-
-//     ptr = mgcpp::cuda_malloc_nothrow<float>(
-//         std::numeric_limits<size_t>::max());
-
-//     REQUIRE(ptr == nullptr);
-// }
-
 TEST_CASE("templated cuda free throws failure", "[cuda_free]")
 {
     float* ptr = (float*)10u;
-    REQUIRE_THROWS(mgcpp::cuda_free(ptr));
-}
-
-TEST_CASE("templated cuda free nothrow failure", "[cuda_free]")
-{
-    float* ptr = (float*)10u;
-    bool result = mgcpp::cuda_free_nothrow(ptr);
-    REQUIRE(result == false);
+    bool success = mgcpp::cuda_free(ptr);
+    REQUIRE(success == false);
 }
