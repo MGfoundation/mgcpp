@@ -1,4 +1,26 @@
-* Multi GPU C++
+* mgcpp, A CUDA based C++ Multi GPU Linear Algebra Library
 
-no README yet.
+** Introduction
+   mgcpp is a multi GPU linear algebra library.
+   It is a wrapper for various CUDA libraries in standard C++.
 
+** Libraries
+   These dependencies are optional. 
+   Not including them might result in some featrues not working properly.
+
+   - cuBLAS for various BLAS operations.
+   - cuSPARSE for sparse operations
+   - MAGMA for hight level linear algebra operations.
+   
+** Dependencies
+   - gtest (optional)
+   - cuda (>8.0)
+     
+** TODO
+   1. Finish thread context class for managing threads.
+   2. Support msvc build.
+   3. Add BLAS operations.
+   4. Add sparse matrix
+   5. Add sparse operations.
+   6. Add high level linear algebra operations.
+   7. Add benchmark
