@@ -1,3 +1,9 @@
+
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
@@ -22,6 +28,12 @@ namespace mg
             inline matrix(size_t x_dim, size_t y_dim);
 
             inline matrix(size_t x_dim, size_t y_dim, ElemType init);
+
+            inline matrix(size_t x_dim, size_t y_dim,
+                          std::nothrow_t const& nothrow_flag);
+
+            inline matrix(size_t x_dim, size_t y_dim, ElemType init
+                          std::nothrow_t const& nothrow_flag);
 
             template<size_t Xdim, size_t Ydim>
             inline matrix(dynamic_matrix<ElemType> const& cpu_mat);
