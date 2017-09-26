@@ -7,6 +7,7 @@
 #ifndef _MGCPP_GPU_FORWARD_HPP_
 #define _MGCPP_GPU_FORWARD_HPP_
 
+#include <cstdlib>
 
 namespace mgcpp
 {

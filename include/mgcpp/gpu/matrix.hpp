@@ -7,7 +7,8 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <mgcpp/cpu/fwd.hpp>
+#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/context/thread_context.hpp>
 
 namespace mg
 {
@@ -25,15 +26,17 @@ namespace mg
         public:
             inline matrix();
 
+            inline matrix(thread_context& context);
+
             inline matrix(size_t x_dim, size_t y_dim);
+
+            inline matrix(thread_context& context,
+                          size_t x_dim, size_t y_dim);
 
             inline matrix(size_t x_dim, size_t y_dim, ElemType init);
 
-            inline matrix(size_t x_dim, size_t y_dim,
-                          std::nothrow_t const& nothrow_flag);
-
-            inline matrix(size_t x_dim, size_t y_dim, ElemType init
-                          std::nothrow_t const& nothrow_flag);
+            inline matrix(thread_context& context,
+                          size_t x_dim, size_t y_dim, ElemType init);
 
             template<size_t Xdim, size_t Ydim>
             inline matrix(dynamic_matrix<ElemType> const& cpu_mat);
