@@ -1,4 +1,5 @@
-* mgcpp, A CUDA based C++ Multi GPU Linear Algebra Library
+* mgcpp
+A CUDA based C++ Multi GPU Linear Algebra Library
 
 ** Introduction
    mgcpp is a multi GPU linear algebra library.

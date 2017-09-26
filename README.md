@@ -2,7 +2,7 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. mgcpp, A CUDA based C++ Multi GPU Linear Algebra Library</a>
+<li><a href="#sec-1">1. mgcpp</a>
 <ul>
 <li><a href="#sec-1-1">1.1. Introduction</a></li>
 <li><a href="#sec-1-2">1.2. Libraries</a></li>
@@ -14,7 +14,9 @@
 </div>
 </div>
 
-# mgcpp, A CUDA based C++ Multi GPU Linear Algebra Library<a id="sec-1" name="sec-1"></a>
+# mgcpp<a id="sec-1" name="sec-1"></a>
+
+A CUDA based C++ Multi GPU Linear Algebra Library
 
 ## Introduction<a id="sec-1-1" name="sec-1-1"></a>
 
