@@ -36,8 +36,8 @@ set(BASE_SOURCE_FILES
     ${SOURCE_DIR}/cuda_status_wrapper.cpp
     ${SOURCE_DIR}/cuda_error.cpp)
 
-set(MAIN_SOURCE_FILES "")
-#${SOURCE_DIR}/)
+set(MAIN_SOURCE_FILES 
+    ${SOURCE_DIR}/thread_context.cpp)
 
 message("[ Source files for ${PROJECT_NAME}base ]")
 foreach(BASE_SOURCE_FILE ${BASE_SOURCE_FILES})
