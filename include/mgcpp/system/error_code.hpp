@@ -16,34 +16,20 @@
 
 namespace mgcpp
 {
-
-    enum class error_t
+    enum class status_t
     {
         success = 0
     };
-
-    namespace internal
-    {
-        class mgcpp_error_category :public std::error_category
-        {
-        public:
-            const char*
-            name() const noexcept override;
-
-            std::string
-            message(int ev) const override;
-
-            bool
-            equivalent(std::error_code const& err,
-                       int condition) const noexcept override;
-        };
-    }
 }
+
+std::error_condition
+make_error_condition(mgcpp::status_t err) noexcept;
 
 namespace std
 {
     template <>
-    struct is_error_condition_enum<error_t> : std::true_type {};
+    struct is_error_condition_enum<mgcpp::status_t>
+        : public std::true_type {};
 }
 
 #endif

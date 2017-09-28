@@ -11,20 +11,36 @@
 
 namespace mgcpp
 {
+    class mgcpp_error_category_t
+        :public std::error_category
+    {
+    public:
+        const char*
+        name() const noexcept override;
+
+        std::string
+        message(int ev) const override;
+
+        bool
+        equivalent(std::error_code const& err,
+                   int condition) const noexcept override;
+    } mgcpp_error_category;
+
+
     const char*
-    internal::mgcpp_error_category::
+    mgcpp_error_category_t::
     name() const noexcept
     {
         return "mgcpp";
     }
 
     std::string
-    internal::mgcpp_error_category::
+    mgcpp_error_category_t::
     message(int ev) const
     {
-        switch(static_cast<mgcpp::error_t>(ev))
+        switch(static_cast<mgcpp::status_t>(ev))
         {
-        case error_t::success:
+        case status_t::success:
             return "successfully operated";
             break;
         }
@@ -32,13 +48,13 @@ namespace mgcpp
     }
 
     bool
-    internal::mgcpp_error_category::
+    mgcpp_error_category_t::
     equivalent(std::error_code const& err,
                int condition) const noexcept
     {
-        switch(static_cast<mgcpp::error_t>(condition))
+        switch(static_cast<mgcpp::status_t>(condition))
         {
-        case error_t::success:
+        case status_t::success:
             if(err == cublas_error_t::CUBLAS_STATUS_SUCCESS ||
                err == cuda_error_t::cudaSuccess)
                 return true;
@@ -48,4 +64,10 @@ namespace mgcpp
         }
         return false;
     }
+}
+
+std::error_condition
+make_error_condition(mgcpp::status_t err) noexcept
+{
+    return {static_cast<int>(err), mgcpp::mgcpp_error_category};
 }

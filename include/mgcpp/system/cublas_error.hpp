@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_CUBLAS_ERROR_HPP_
-#define _MGCPP_CUBLAS_ERROR_HPP_
+#ifndef _MGCPP_SYSTEM_CUBLAS_ERROR_HPP_
+#define _MGCPP_SYSTEM_CUBLAS_ERROR_HPP_
 
 #include <cublas_v2.h>
 
@@ -16,21 +16,6 @@
 namespace mgcpp
 {
     typedef cublasStatus_t cublas_error_t;
-
-    namespace internal
-    {
-        class cublas_error_category_t : public std::error_category
-        {
-        public:
-            const char*
-            name() const noexcept override;
-
-            std::string
-            message(int ev) const override;
-        };
-        
-        extern cublas_error_category_t cublas_error_category;
-    }
 }
 
 std::error_code

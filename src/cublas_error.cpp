@@ -8,15 +8,27 @@
 
 namespace mgcpp
 {
+    class cublas_error_category_t
+        : public std::error_category
+    {
+    public:
+        const char*
+        name() const noexcept override;
+
+        std::string
+        message(int ev) const override;
+    } cublas_error_category;
+
+
     const char*
-    internal::cublas_error_category_t::
+    cublas_error_category_t::
     name() const noexcept
     {
         return "cublas";
     }
 
     std::string
-    internal::cublas_error_category_t::
+    cublas_error_category_t::
     message(int ev) const
     {
         switch(static_cast<cublas_error_t>(ev))
@@ -63,13 +75,10 @@ namespace mgcpp
         }
         return "";
     }
-
-    internal::cublas_error_category_t internal::cublas_error_category;
 }
 
 std::error_code
 make_error_code(mgcpp::cublas_error_t err) noexcept
 {
-    return {static_cast<int>(err),
-            mgcpp::internal::cublas_error_category};
+    return {static_cast<int>(err), mgcpp::cublas_error_category};
 }
