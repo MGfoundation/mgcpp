@@ -13,44 +13,28 @@
 namespace mgcpp
 {
     template<typename ElemType, typename>
-    ElemType*
-    cuda_malloc(size_t size)
+    outcome::result<ElemType*>
+    cuda_malloc(size_t size) noexcept
     {
         void* ptr = nullptr;
         std::error_code err_code =
             cudaMalloc(&ptr, size * sizeof(ElemType));
 
         if(err_code != make_error_condition(status_t::success))
-            MGCPP_THROW_BAD_ALLOC;
-
-        return static_cast<ElemType*>(ptr);
-    }
-
-    template<typename ElemType, typename>
-    ElemType*
-    cuda_malloc(size_t size,
-                std::nothrow_t const& nothrow_flag) noexcept
-    {
-        (void)nothrow_flag; // warning suppression
-
-        void* ptr = nullptr;
-        std::error_code err_code =
-            cudaMalloc(&ptr, size * sizeof(ElemType));
-
-        if(err_code != make_error_condition(status_t::success))
-            return nullptr;
+            return err_code;
 
         return static_cast<ElemType*>(ptr);
     }
 
     template<typename ElemType>
-    bool
+    outcome::result<void>
     cuda_free(ElemType* ptr) noexcept
     {
         std::error_code err_code = cudaFree(ptr);
 
         if(err_code != make_error_condition(status_t::success))
-            return false;
-        return true;
+            return err_code;
+
+        return outcome::success();
     }
 }

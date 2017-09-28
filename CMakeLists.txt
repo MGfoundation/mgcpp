@@ -67,12 +67,15 @@ target_include_directories("${PROJECT_NAME}base"
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
 
-target_include_directories("${PROJECT_NAME}"
+target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
 
 
 ## mgcpp dependencies
+
+set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
+
 # cuBLAS
 if(USE_CUBLAS)
     cuda_add_cublas_to_target("${PROJECT_NAME}")
@@ -81,6 +84,10 @@ else()
     message("-- Not building with cuBLAS(most features will be restricted)")
 endif()
 
+# add outcome library
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+    ${THIRD_PARTY_DIR}/outcome/include)
 
 # mgcpp base
 target_link_libraries(${PROJECT_NAME}
