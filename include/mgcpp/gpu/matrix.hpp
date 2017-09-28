@@ -12,13 +12,18 @@
 
 namespace mg
 {
+    enum class storage_order { column_major = 0, row_major}; 
+
     namespace gpu
     {
-        template<typename ElemType, size_t DeviceId>
+        template<typename ElemType,
+                 size_t DeviceId,
+                 storage_order StoreOrder>
         class matrix
         {
         private:
             ElemType* _data;
+            thread_context* _context;
             size_t _row_dim;
             size_t _col_dim;
             bool _released;
@@ -40,6 +45,9 @@ namespace mg
 
             template<size_t Xdim, size_t Ydim>
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
+
+            inline void
+            set_context(thread_context& context) noexcept;
 
             inline cpu::matrix<ElemType>
             copy_to_cpu() const;
