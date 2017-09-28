@@ -10,7 +10,7 @@
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
-namespace mg
+namespace mgcpp
 {
     enum class storage_order { column_major = 0, row_major}; 
 
@@ -18,7 +18,7 @@ namespace mg
     {
         template<typename ElemType,
                  size_t DeviceId,
-                 storage_order StoreOrder>
+                 storage_order StoreOrder = storage_order::row_major>
         class matrix
         {
         private:
@@ -29,21 +29,22 @@ namespace mg
             bool _released;
 
         public:
-            inline matrix();
+            inline matrix() noexcept;
 
-            inline matrix(thread_context& context);
+            inline ~matrix();
 
-            inline matrix(size_t x_dim, size_t y_dim);
+            inline matrix(thread_context& context) noexcept;
 
-            inline matrix(thread_context& context,
-                          size_t x_dim, size_t y_dim);
-
-            inline matrix(size_t x_dim, size_t y_dim, ElemType init);
+            inline matrix(size_t i, size_t j);
 
             inline matrix(thread_context& context,
-                          size_t x_dim, size_t y_dim, ElemType init);
+                          size_t i, size_t j);
 
-            template<size_t Xdim, size_t Ydim>
+            inline matrix(size_t i, size_t j, ElemType init);
+
+            inline matrix(thread_context& context,
+                          size_t i, size_t j, ElemType init);
+
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
 
             inline void
@@ -51,25 +52,28 @@ namespace mg
 
             inline cpu::matrix<ElemType>
             copy_to_cpu() const;
-   
-            inline ElemType const*
-            get_data() const;
 
-            inline ElemType*
-            get_data_mutable();
+            inline ElemType
+            check_value(size_t i, size_t j) const noexcept;
 
-            inline ElemType*
-            release_data();
+            // inline ElemType const*
+            // get_data() const;
+
+            // inline ElemType*
+            // get_data_mutable();
+
+            // inline ElemType*
+            // release_data();
 
             inline size_t
             rows() const noexcept;
 
             inline size_t
             columns() const noexcept;
-
-            inline ~matrix();
         };
     }
 }
+
+#include <mgcpp/gpu/matrix.tpp>
 
 #endif

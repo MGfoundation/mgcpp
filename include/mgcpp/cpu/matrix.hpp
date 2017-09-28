@@ -7,7 +7,7 @@
 #ifndef _MGCPP_CPU_MATRIX_HPP_
 #define _MGCPP_CPU_MATRIX_HPP_
 
-#include <mgcpp/gpu/fwd.hpp>
+#include <mgcpp/gpu/forward.hpp>
 
 namespace mg
 {
@@ -29,13 +29,13 @@ namespace mg
             inline matrix(size_t rows, size_t columns,
                           ElemType init);
 
-            template<size_t DeviceId>
-            inline matrix(
-                gpu::matrix<ElemType, DeviceId> const& gpu_mat);
+            // template<size_t DeviceId>
+            // inline matrix(
+            //     gpu::matrix<ElemType, DeviceId> const& gpu_mat);
 
-            template<size_t DeviceId>
-            inline gpu::matrix<ElemType, DeviceId>
-            copy_to_gpu() const;
+            // template<size_t DeviceId>
+            // inline gpu::matrix<ElemType, DeviceId, >
+            // copy_to_gpu() const;
 
             inline ElemType*
             get_data() const;
