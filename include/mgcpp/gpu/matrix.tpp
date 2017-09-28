@@ -96,7 +96,6 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         else
         {
-            _released = false;
             _data = alloc_result.value();
         }
 
@@ -156,6 +155,8 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     check_value(size_t i, size_t j) const noexcept
     {
+        if(i > _col_dim || j > _row_dim)
+            MGCPP_THROW_OUT_OF_RANGE("index out of range");
         return _data[i * _row_dim + j];
     }
 
