@@ -29,6 +29,6 @@ namespace mgcpp
     {
         if(!_cublas_handle)
             _cublas_handle = create_cublas_handle();
-        return _cublas_handle.value();
+        return *_cublas_handle;
     }
 }

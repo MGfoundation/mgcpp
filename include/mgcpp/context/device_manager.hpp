@@ -19,7 +19,8 @@ namespace mgcpp
         size_t _device_id;
         std::unique_ptr<cublasHandle_t> _cublas_handle;
 
-        cublasHandle_t create_cublas_handle() const;
+        std::unique_ptr<cublasHandle_t>
+        create_cublas_handle() const;
 
     public:
         cublasHandle_t get_cublas();
