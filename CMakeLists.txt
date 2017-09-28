@@ -55,7 +55,7 @@ cuda_add_library("${PROJECT_NAME}base" ${BASE_SOURCE_FILES} STATIC)
 add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
 set(BUILD_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -fPIC -Wall -Wextra")
+    "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
 message("C++ flags = ${BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}
@@ -136,7 +136,7 @@ if(BUILD_TESTING)
 	${GTEST_LIBRARIES})
 
     set(TEST_BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
 
     message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 

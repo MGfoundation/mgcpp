@@ -9,7 +9,7 @@
 
 #include <cublas_v2.h>
 
-#include <optional>
+#include <memory>
 
 namespace mgcpp
 {
@@ -17,7 +17,7 @@ namespace mgcpp
     {
     private:
         size_t _device_id;
-        std::optional<cublasHandle_t> _cublas_handle;
+        std::unique_ptr<cublasHandle_t> _cublas_handle;
 
         cublasHandle_t create_cublas_handle() const;
 
