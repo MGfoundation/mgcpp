@@ -37,6 +37,9 @@ namespace mg
             inline gpu::matrix<ElemType, DeviceId>
             copy_to_gpu() const;
 
+            inline ElemType*
+            get_data() const;
+
             inline size_t
             rows() const noexcept;
 

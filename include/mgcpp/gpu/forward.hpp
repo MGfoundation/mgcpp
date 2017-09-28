@@ -12,10 +12,13 @@
 namespace mgcpp
 {
     enum class allignment;
+    enum class storage_order;
     
     namespace gpu
     {
-        template<typename ElemType, size_t DeviceId>
+        template<typename ElemType,
+                 size_t DeviceId,
+                 storage_order StoreOrder>
         class matrix;
 
         template<typename ElemType,

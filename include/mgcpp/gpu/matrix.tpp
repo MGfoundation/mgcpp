@@ -19,8 +19,8 @@ namespace mg
     matrix()
         : _data(nullptr),
           _context(nullptr),
-          _x_dim(0),
-          _y_dim(0),
+          _row_dim(0),
+          _col_dim(0),
           _released(true) {}
 
     template<typename ElemType,
@@ -30,19 +30,19 @@ namespace mg
     matrix(thread_context& context)
         : _data(nullptr),
           _context(&context),
-          _x_dim(0),
-          _y_dim(0),
+          _row_dim(0),
+          _col_dim(0),
           _released(true) {}
 
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(size_t x_dim, size_t y_dim)
-        :_data(cuda_malloc<ElemType>(x_dim * y_dim)),
+    matrix(size_t row_dim, size_t col_dim)
+        :_data(cuda_malloc<ElemType>(row_dim * col_dim)),
          _context(nullptr),
-         _x_dim(x_dim),
-         _y_dim(y_dim),
+         _row_dim(row_dim),
+         _col_dim(col_dim),
          _released(false) {}
 
     template<typename ElemType,
@@ -50,22 +50,22 @@ namespace mg
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     matrix(thread_context& context,
-           size_t x_dim, size_t y_dim)
-        :_data(cuda_malloc<ElemType>(x_dim * y_dim)),
+           size_t row_dim, size_t col_dim)
+        :_data(cuda_malloc<ElemType>(row_dim * col_dim)),
          _context(&context),
-         _x_dim(x_dim),
-         _y_dim(y_dim),
+         _row_dim(row_dim),
+         _col_dim(col_dim),
          _released(false) {}
 
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(size_t x_dim, size_t y_dim, ElemType init)
-        :_data(cuda_malloc<ElemType>(x_dim * y_dim)),
+    matrix(size_t row_dim, size_t col_dim, ElemType init)
+        :_data(cuda_malloc<ElemType>(row_dim * col_dim)),
          _context(nullptr),
-         _x_dim(x_dim),
-         _y_dim(y_dim),
+         _row_dim(row_dim),
+         _col_dim(col_dim),
          _released(false)
     {
         
@@ -76,11 +76,11 @@ namespace mg
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     matrix(thread_context& context,
-           size_t x_dim, size_t y_dim, ElemType init)
-        :_data(cuda_malloc<ElemType>(x_dim * y_dim)),
+           size_t row_dim, size_t col_dim, ElemType init)
+        :_data(cuda_malloc<ElemType>(row_dim * col_dim)),
          _context(&thread_context),
-         _x_dim(x_dim),
-         _y_dim(y_dim),
+         _row_dim(row_dim),
+         _col_dim(col_dim),
          _released(false)
     {
 
