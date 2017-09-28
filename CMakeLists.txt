@@ -31,13 +31,14 @@ message("build flags = ${CUDA_NVCC_FLAGS}")
 # project source files
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
-set(BASE_SOURCE_FILES
-    ${SOURCE_DIR}/cuda_stdlib_wrapper.cpp
-    ${SOURCE_DIR}/cuda_status_wrapper.cpp
-    ${SOURCE_DIR}/cuda_error.cpp)
+set(BASE_SOURCE_FILES "")
 
 set(MAIN_SOURCE_FILES 
-    ${SOURCE_DIR}/thread_context.cpp)
+    ${SOURCE_DIR}/thread_context.cpp
+    ${SOURCE_DIR}/cublas_error.cpp
+    ${SOURCE_DIR}/cuda_error.cpp
+    ${SOURCE_DIR}/mgcpp_error_code.cpp
+    ${SOURCE_DIR}/device_manager.cpp)
 
 message("[ Source files for ${PROJECT_NAME}base ]")
 foreach(BASE_SOURCE_FILE ${BASE_SOURCE_FILES})
@@ -54,7 +55,7 @@ cuda_add_library("${PROJECT_NAME}base" ${BASE_SOURCE_FILES} STATIC)
 add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
 set(BUILD_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+    "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -fPIC -Wall -Wextra")
 message("C++ flags = ${BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}
@@ -114,8 +115,6 @@ if(BUILD_TESTING)
     set(TEST_SOURCE_FILES
 	${TEST_DIR}/main.cpp
 	${TEST_DIR}/cuda_stdlib_test.cpp
-	${TEST_DIR}/cuda_status_wrapper_test.cpp
-	${TEST_DIR}/cuda_stdlib_wrapper_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp)
 
@@ -137,7 +136,7 @@ if(BUILD_TESTING)
 	${GTEST_LIBRARIES})
 
     set(TEST_BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
 
     message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 

@@ -6,24 +6,23 @@
 
 #include <gtest/gtest.h>
 
+#include <cuda_runtime.h>
+
 #include <mgcpp/cuda/stdlib.hpp>
-#include <mgcpp/cuda/internal/status_wrapper.hpp>
 
 TEST(cuda_malloc, cuda_malloc_success)
 {
-    using mgcpp::internal::cuda_mem_get_info;
-
     float* ptr = nullptr;
     (void)ptr; // warning suppression
 
     size_t free_memory_before_malloc = 0;
-    cuda_mem_get_info(&free_memory_before_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_before_malloc, nullptr);
 
     EXPECT_NO_THROW({ptr = mgcpp::cuda_malloc<float>(10);});
     EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
-    cuda_mem_get_info(&free_memory_after_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_after_malloc, nullptr);
 
     EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
@@ -32,13 +31,11 @@ TEST(cuda_malloc, cuda_malloc_success)
 
 TEST(cuda_malloc, cuda_malloc_throw_failure)
 {
-    using mgcpp::internal::cuda_mem_get_info;
-
     float* ptr = nullptr;
     (void)ptr; // warning suppression
 
     size_t free_memory= 0;
-    cuda_mem_get_info(&free_memory, nullptr);
+    cudaMemGetInfo(&free_memory, nullptr);
 
     EXPECT_ANY_THROW(
         {ptr = mgcpp::cuda_malloc<float>(free_memory * 2);});
@@ -46,13 +43,11 @@ TEST(cuda_malloc, cuda_malloc_throw_failure)
 
 TEST(cuda_malloc, cuda_malloc_nothrow_failure)
 {
-    using mgcpp::internal::cuda_mem_get_info;
-
     float* ptr = nullptr;
     (void)ptr; // warning suppression
 
     size_t free_memory= 0;
-    cuda_mem_get_info(&free_memory, nullptr);
+    cudaMemGetInfo(&free_memory, nullptr);
 
     EXPECT_NO_THROW(
         {
@@ -65,17 +60,15 @@ TEST(cuda_malloc, cuda_malloc_nothrow_failure)
 
 TEST(cuda_malloc, cuda_malloc_nothrow_success)
 {
-    using mgcpp::internal::cuda_mem_get_info;
-
     size_t free_memory_before_malloc = 0;
-    cuda_mem_get_info(&free_memory_before_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_before_malloc, nullptr);
 
     float* ptr = nullptr;
     ptr = mgcpp::cuda_malloc<float>(10, std::nothrow);
     EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
-    cuda_mem_get_info(&free_memory_after_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_after_malloc, nullptr);
 
     EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
@@ -84,19 +77,16 @@ TEST(cuda_malloc, cuda_malloc_nothrow_success)
 
 TEST(cuda_free, cuda_free_success)
 {
-    using mgcpp::internal::cuda_mem_get_info;
-
     size_t free_memory_before_malloc = 0;
-    cuda_mem_get_info(&free_memory_before_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_before_malloc, nullptr);
 
     float* ptr = nullptr;
 
-    EXPECT_NO_THROW(
-        [&ptr](){ptr = mgcpp::cuda_malloc<float>(10);}());
+    EXPECT_NO_THROW({ptr = mgcpp::cuda_malloc<float>(10);});
     EXPECT_NE(ptr, nullptr);
 
     size_t free_memory_after_malloc = 0;
-    cuda_mem_get_info(&free_memory_after_malloc, nullptr);
+    cudaMemGetInfo(&free_memory_after_malloc, nullptr);
 
     EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
@@ -104,7 +94,7 @@ TEST(cuda_free, cuda_free_success)
     EXPECT_EQ(success, true);
 
     size_t free_memory_after_free = 0;
-    cuda_mem_get_info(&free_memory_after_free, nullptr);
+    cudaMemGetInfo(&free_memory_after_free, nullptr);
 
     EXPECT_EQ(free_memory_after_free, free_memory_before_malloc);
 }

@@ -22,6 +22,11 @@
 #define MGCPP_THROW(EXCEPTION) throw EXCEPTION
 #endif
 
+#ifndef MGCPP_THROW_SYSTEM_ERROR
+#define MGCPP_THROW_SYSTEM_ERROR(ERROR_CODE)    \
+    MGCPP_THROW(std::system_error(ERROR_CODE))
+#endif
+
 #ifndef MGCPP_THROW_BAD_ALLOC
 #define MGCPP_THROW_BAD_ALLOC                   \
     MGCPP_THROW(std::bad_alloc())
