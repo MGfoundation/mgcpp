@@ -4,17 +4,32 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cuda/internal/cuda_error.hpp>
+#include <mgcpp/system/cuda_error.hpp>
 
 #include <cuda_runtime.h>
 
 namespace mgcpp
 {
     const char*
-    internal::
-    cuda_error_string(cuda_error_t err)
+    internal::cuda_error_category_t::
+    name() const noexcept 
     {
-        return cudaGetErrorString(
-            static_cast<cudaError_t>(err));
+        return "cuda";
     }
+
+    std::string
+    internal::cuda_error_category_t::
+    message(int ev) const
+    {
+        return cudaGetErrorString(static_cast<cuda_error_t>(ev));
+    }
+
+    internal::cuda_error_category_t internal::cuda_error_category;
+}
+
+std::error_code
+make_error_code(mgcpp::cuda_error_t err) noexcept
+{
+    return {static_cast<int>(err),
+            mgcpp::internal::cuda_error_category};
 }
