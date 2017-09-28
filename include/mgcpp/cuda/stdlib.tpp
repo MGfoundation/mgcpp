@@ -8,7 +8,7 @@
 
 #include <mgcpp/cuda/stdlib.hpp>
 #include <mgcpp/system/error_code.hpp>
-#include <mgcpp/cuda/exception.hpp>
+#include <mgcpp/system/exception.hpp>
 
 namespace mgcpp
 {

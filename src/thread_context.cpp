@@ -9,7 +9,13 @@
 namespace mgcpp
 {
     thread_context::
-    thread_context()
+    thread_context(std::initializer_list<size_t> devices_used)
+    {
+        
+    }
+
+    cublasHandle_t
+    get_cublasHandle() noexcept
     {
         
     }
