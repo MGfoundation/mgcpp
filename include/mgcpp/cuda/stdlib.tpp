@@ -6,8 +6,8 @@
 
 #include <cuda_runtime.h>
 
-#include <mgcpp/system/error_code.hpp>
 #include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/system/error_code.hpp>
 #include <mgcpp/cuda/exception.hpp>
 
 namespace mgcpp
@@ -20,7 +20,7 @@ namespace mgcpp
         std::error_code err_code =
             cudaMalloc(&ptr, size * sizeof(ElemType));
 
-        if(err_code != error_t::success)
+        if(err_code != make_error_condition(status_t::success))
             MGCPP_THROW_BAD_ALLOC;
 
         return static_cast<ElemType*>(ptr);
@@ -37,7 +37,7 @@ namespace mgcpp
         std::error_code err_code =
             cudaMalloc(&ptr, size * sizeof(ElemType));
 
-        if(err_code != error_t::success)
+        if(err_code != make_error_condition(status_t::success))
             return nullptr;
 
         return static_cast<ElemType*>(ptr);
@@ -49,7 +49,7 @@ namespace mgcpp
     {
         std::error_code err_code = cudaFree(ptr);
 
-        if(err_code != error_t::success)
+        if(err_code != make_error_condition(status_t::success))
             return false;
         return true;
     }

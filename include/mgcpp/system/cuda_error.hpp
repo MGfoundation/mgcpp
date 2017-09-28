@@ -7,11 +7,11 @@
 #ifndef _MGCPP_SYSTEM_CUDA_ERROR_HPP_
 #define _MGCPP_SYSTEM_CUDA_ERROR_HPP_
 
+#include <cuda_runtime.h>
+
 #include <system_error>
 #include <type_traits>
 #include <string>
-
-#include <cuda_runtime.h>
 
 namespace mgcpp
 {
