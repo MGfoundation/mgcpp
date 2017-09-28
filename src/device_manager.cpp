@@ -10,17 +10,17 @@
 
 namespace mgcpp
 {
-    cublasHandle_t
+    std::unique_ptr<cublasHandle_t>
     device_manager::
     create_cublas_handle() const
     {
         cublasHandle_t handle; 
         std::error_code status = cublasCreate(&handle);
 
-        if(status != make_error_condition(status_t::success))
-            return handle;
+        // if(status != make_error_condition(status_t::success))
+        //     return handle;
 
-        return handle;
+        return std::make_unique<cublasHandle_t>(handle);
     }
 
     cublasHandle_t
