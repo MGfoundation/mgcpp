@@ -19,10 +19,20 @@ namespace mgcpp
         size_t _device_id;
         std::unique_ptr<cublasHandle_t> _cublas_handle;
 
-        std::unique_ptr<cublasHandle_t>
-        create_cublas_handle() const;
+        std::unique_ptr<cublasHandle_t> create_cublas_handle() const;
 
     public:
+        device_manager() = default;
+
+        device_manager(size_t device_id);
+        
+        device_manager(device_manager&& other) noexcept;
+
+        ~device_manager();
+
+        device_manager&
+        operator=(device_manager&& other) noexcept;
+
         cublasHandle_t get_cublas();
     };
 }
