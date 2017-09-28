@@ -37,4 +37,17 @@ namespace mgcpp
 
         return outcome::success();
     }
+
+    template<typename ElemType>
+    outcome::result<void>
+    cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept
+    {
+        std::error_code err_code =
+            cudaMemset((void*)ptr, value, count);
+
+        if(err_code != make_error_condition(status_t::success))
+            return err_code;
+
+        return outcome::success();
+    }
 }

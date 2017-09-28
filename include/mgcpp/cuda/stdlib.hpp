@@ -22,11 +22,17 @@ namespace mgcpp
     template<typename ElemType,
              typename = std::enable_if<
                  std::is_arithmetic<ElemType>::value>>
-    outcome::result<ElemType*> cuda_malloc(size_t size) noexcept;
+    outcome::result<ElemType*>
+    cuda_malloc(size_t size) noexcept;
 
 
     template<typename ElemType>
-    outcome::result<void> cuda_free(ElemType* ptr) noexcept;
+    outcome::result<void>
+    cuda_free(ElemType* ptr) noexcept;
+
+    template<typename ElemType>
+    outcome::result<void>
+    cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept;
 }
 
 #include <mgcpp/cuda/stdlib.tpp>
