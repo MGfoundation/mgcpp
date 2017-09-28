@@ -4,15 +4,27 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/context/context.hpp>
+#include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
 {
-    template<typename ElemType, size_t DeviceId, typename... Args>
-    gpu::matrix<ElemType, DeviceId>
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder,
+             typename... Args>
+    gpu::matrix<ElemType, DeviceId, StoreOrder>
     thread_context::
     make_gpu_matrix(Args... args) const
     {
-        return gpu::matrix<ElemType, DeviceId>(*this, args...);
+        return gpu::matrix<ElemType,
+                           DeviceId,
+                           StoreOrder>(*this, std::forward(args)...);
+    }
+
+    cublasHandle_t
+    thread_context::
+    get_cublas(size_t device_id) 
+    {
+        return _device_managers[device_id].get_cublas();
     }
 }
