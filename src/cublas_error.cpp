@@ -64,14 +64,6 @@ namespace mgcpp
         case CUBLAS_STATUS_INTERNAL_ERROR:
             return "BLAS_STATUS_INTERNAL_ERROR: An internal cuBLAS operation failed";
             break;
-
-        case CUBLAS_STATUS_NOT_SUPPORTED:
-            return "CUBLAS_STATUS_NOT_SUPPORTED: The functionnality requested is not supported";
-            break;
-
-        case CUBLAS_STATUS_LICENSE_ERROR:
-            return "CUBLAS_STATUS_LICENSE_ERROR: The functionnality requested requires some license and an error was detected when trying to check the current licensing.";
-            break;
         }
         return "";
     }
