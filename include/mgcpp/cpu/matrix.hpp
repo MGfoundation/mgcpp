@@ -18,21 +18,30 @@ namespace mg
         {
         private:
             ElemType* _data; 
+            size_t _x_dim;
+            size_t _y_dim;
         
         public:
             inline matrix();
 
-            inline matrix(size_t x_dim, size_t y_dim);
+            inline matrix(size_t rows, size_t columns);
 
-            inline matrix(size_t x_dim, size_t y_dim,
+            inline matrix(size_t rows, size_t columns,
                           ElemType init);
 
             template<size_t DeviceId>
-            inline matrix(gpu::matrix<ElemType, DeviceId> const& gpu_mat);
+            inline matrix(
+                gpu::matrix<ElemType, DeviceId> const& gpu_mat);
 
             template<size_t DeviceId>
             inline gpu::matrix<ElemType, DeviceId>
             copy_to_gpu() const;
+
+            inline size_t
+            rows() const noexcept;
+
+            inline size_t
+            columns() const noexcept;
         };
     }
 }
