@@ -60,6 +60,8 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
     auto before_memory = before.value().first;
+
+    printf("flag\n");
     
     {
         size_t row_dim = 10;
@@ -67,6 +69,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         float init_val = 10;
         mgcpp::gpu::matrix<float, 0> mat(row_dim, col_dim, init_val);
 
+        printf("flag\n");
         auto after = mgcpp::cuda_mem_get_info();
         EXPECT_TRUE(after);
         auto after_memory = after.value().first;
@@ -78,6 +81,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_EQ(mat._context, nullptr);
         EXPECT_FALSE(mat._released);
 
+        printf("flag\n");
         float* data_ptr = mat._data;
         
         EXPECT_NE(data_ptr, nullptr);
@@ -92,7 +96,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
                         break;
                     }
                 }
-           });
+            });
 
         EXPECT_TRUE(is_equal);
     }
