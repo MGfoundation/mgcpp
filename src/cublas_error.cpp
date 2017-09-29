@@ -61,6 +61,14 @@ namespace mgcpp
             return "CUBLAS_STATUS_EXECUTION_FAILED: The GPU Program failed to execute.";
             break;
 
+        case CUBLAS_STATUS_LICENSE_ERROR:
+            return "CUBLAS_STATUS_LICENSE_ERROR: The cuBlas license is not valid.";
+            break;
+
+        case CUBLAS_STATUS_NOT_SUPPORTED:
+            return "CUBLAS_STATUS_NOT_SUPPORTED: The operation is not supported by cublas.";
+            break;
+
         case CUBLAS_STATUS_INTERNAL_ERROR:
             return "BLAS_STATUS_INTERNAL_ERROR: An internal cuBLAS operation failed";
             break;
