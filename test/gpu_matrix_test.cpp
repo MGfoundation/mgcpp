@@ -80,11 +80,12 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
 
         float* data_ptr = mat._data;
         
+        EXPECT_NE(data_ptr, nullptr);
+
         bool is_equal = true;
         EXPECT_NO_THROW({
                 for(size_t i = 0; i < row_dim * col_dim; ++i)
                 {
-                    printf("i th: %zu", i);
                     if(data_ptr[i] != init_val) 
                     {
                         is_equal = false;
