@@ -47,8 +47,6 @@ namespace mgcpp
 
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
 
-            inline void
-            set_context(thread_context& context) noexcept;
 
             inline cpu::matrix<ElemType>
             copy_to_cpu() const;
