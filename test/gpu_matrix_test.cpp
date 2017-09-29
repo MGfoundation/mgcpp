@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/cuda/memory_management.hpp>
+#include <mgcpp/cuda/stdlib.hpp>
 #define private public
 #include <mgcpp/gpu_matrix.hpp>
 
@@ -78,6 +78,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_FALSE(mat._released);
 
         auto data_ptr = mat._data;
+        
         bool is_equal = true;
         EXPECT_NO_THROW({
                 for(size_t i = 0; i < row_dim * col_dim; ++i)

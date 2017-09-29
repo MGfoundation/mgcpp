@@ -36,7 +36,6 @@ set(BASE_SOURCE_FILES "")
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/thread_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
-    ${SOURCE_DIR}/cuda_memory_management.cpp
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/mgcpp_error_code.cpp
     ${SOURCE_DIR}/device_manager.cpp)

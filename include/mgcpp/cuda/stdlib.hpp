@@ -33,6 +33,12 @@ namespace mgcpp
     template<typename ElemType>
     outcome::result<void>
     cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept;
+
+    using free_mem_t = size_t;
+    using total_mem_t = size_t;
+
+    outcome::result<std::pair<free_mem_t, total_mem_t>>
+    inline cuda_mem_get_info() noexcept;
 }
 
 #include <mgcpp/cuda/stdlib.tpp>
