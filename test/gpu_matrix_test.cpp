@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <algorithm>
+#include <cstdio>
 
 #include <gtest/gtest.h>
 
@@ -83,6 +84,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_NO_THROW({
                 for(size_t i = 0; i < row_dim * col_dim; ++i)
                 {
+                    printf("i th: %zu", i);
                     if(data_ptr[i] != init_val) 
                     {
                         is_equal = false;
