@@ -96,6 +96,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         else
         {
+            _released = false;
             _data = alloc_result.value();
         }
 
