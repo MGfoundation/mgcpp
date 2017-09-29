@@ -77,7 +77,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_EQ(mat._context, nullptr);
         EXPECT_FALSE(mat._released);
 
-        auto data_ptr = mat._data;
+        float* data_ptr = mat._data;
         
         bool is_equal = true;
         EXPECT_NO_THROW({
