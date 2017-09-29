@@ -52,7 +52,7 @@ namespace mgcpp
         else
         {
             _released = false;
-            _data = result;
+            _data = result.value();
         }
     }
 
