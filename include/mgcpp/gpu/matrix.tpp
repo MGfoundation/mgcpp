@@ -95,6 +95,7 @@ namespace mgcpp
          _col_dim(i),
          _released(true)
     {
+        printf("safe matrix\n");
         size_t total_size = i * j;
         auto alloc_result = cuda_malloc<ElemType>(total_size);
         if(!alloc_result)
@@ -105,6 +106,7 @@ namespace mgcpp
             _data = alloc_result.value();
         }
         
+        printf("safe matrix\n");
 
         ElemType* buffer =
             (ElemType*)malloc(sizeof(ElemType) * total_size);
