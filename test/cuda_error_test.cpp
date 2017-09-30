@@ -18,7 +18,7 @@ TEST(cuda_error, cuda_error_string_function)
     std::error_code err_code =
         cuda_error_t::cudaErrorMemoryAllocation;
     auto result = std::string(err_code.message());
-    auto answer = std::string("out of memory");
+    auto answer = std::string("internal cuda error: out of memory");
 
     ASSERT_EQ(result, answer);
 }
