@@ -10,8 +10,6 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
-#include <cstdio>
-
 #include <cstdlib>
 #include <cstring>
 
@@ -110,19 +108,15 @@ namespace mgcpp
             (ElemType*)malloc(sizeof(ElemType) * total_size);
         if(!buffer)
             MGCPP_THROW_BAD_ALLOC;
-        printf("safe matrix\n");
 
         memset(buffer, init, sizeof(ElemType) * total_size);
         
-        printf("safe matrix\n");
         auto memcpy_result =
             cuda_memcpy(_data,
                         buffer,
                         total_size,
                         cuda_memcpy_kind::host_to_device);
-        printf("safe matrix\n");
         free(buffer);
-        printf("safe matrix\n");
         if(!memcpy_result)
         {
             // (void)free_pinned(buffer_result.value());
@@ -292,13 +286,11 @@ namespace mgcpp
         if(i > _col_dim || j > _row_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
-        printf("safe matrix\n");
         ElemType* from = (_data + (i * _row_dim + j));
         ElemType to;
         auto result = cuda_memcpy(
             &to, from, 1, cuda_memcpy_kind::device_to_host);
 
-        printf("safe matrix\n");
         if(!result)
             MGCPP_THROW_SYSTEM_ERROR(result.error());
 
