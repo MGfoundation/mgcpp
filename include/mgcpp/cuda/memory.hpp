@@ -33,6 +33,14 @@ namespace mgcpp
     outcome::result<void>
     cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept;
 
+
+    enum class cuda_memcpy_kind;
+
+    template<typename ElemType>
+    outcome::result<void>
+    cuda_memcpy(ElemType* to, ElemType const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
     using free_mem_t = size_t;
     using total_mem_t = size_t;
 

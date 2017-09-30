@@ -65,4 +65,27 @@ namespace mgcpp
         else
             return std::make_pair(free_memory, total_memory);
     }
+
+    enum class cuda_memcpy_kind
+    {
+        host_to_device = cudaMemcpyKind::cudaMemcpyHostToHost,
+        device_to_host = cudaMemcpyKind::cudaMemcpyDeviceToHost,
+        device_to_device = cudaMemcpyKind::cudaMemcpyDeviceToDevice
+    };
+
+    template<typename ElemType>
+    outcome::result<void>
+    cuda_memcpy(ElemType* to, ElemType const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        std::error_code status =
+            cudaMemcpy((void*)to, (void*)from,
+                       count * sizeof(ElemType),
+                       static_cast<cudaMemcpyKind>(kind));
+
+        if(status != make_error_condition(status_t::success))
+            return status;
+        else
+            return outcome::success();
+    }
 }
