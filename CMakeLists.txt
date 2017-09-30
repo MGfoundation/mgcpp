@@ -4,8 +4,16 @@
 #        (See accompanying file LICENSE or copy at
 # 	        http://www.boost.org/LICENSE_1_0.txt)
 
+
 cmake_minimum_required(VERSION 3.8)
 project(mgcpp)
+
+macro(mgcpp_display_elements MGCPP_DISPLAY_MESSAGE MGCPP_LIST_TO_DISPLAY)
+    message("[ ${MGCPP_DISPLAY_MESSAGE} ]")
+    foreach(_MGCPP_DISPLAY_ELEMENT ${MGCPP_LIST_TO_DISPLAY})
+	message(STATUS ${_MGCPP_DISPLAY_ELEMENT})
+    endforeach()
+endmacro()
 
 # set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
@@ -18,7 +26,6 @@ option(BUILD_TESTING "compile mgcpp with tests" ON)
 # cmake modules path
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-
 
 # cuda dependency
 find_package(CUDA REQUIRED)
@@ -39,23 +46,22 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/mgcpp_error_code.cpp
     ${SOURCE_DIR}/device_manager.cpp)
+mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
+    "${BASE_SOURCE_FILES}")
+mgcpp_display_elements("Source files for ${PROJECT_NAME}"
+    "${MAIN_SOURCE_FILES}")
 
-message("[ Source files for ${PROJECT_NAME}base ]")
-foreach(BASE_SOURCE_FILE ${BASE_SOURCE_FILES})
-    message(STATUS "${BASE_SOURCE_FILE}")
-endforeach()
-
-message("[ Source files for ${PROJECT_NAME} ]")
-foreach(SOURCE_FILE ${MAIN_SOURCE_FILES})
-    message(STATUS "${SOURCE_FILE}")
-endforeach()
-
-cuda_add_library("${PROJECT_NAME}base" ${BASE_SOURCE_FILES} STATIC)
+cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
 
 add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
-set(BUILD_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+if(MSVC)
+    set(BUILD_FLAGS
+	"${CMAKE_CXX_FLAGS} /w3 /Ot /Ox /MP")
+else()
+    set(BUILD_FLAGS
+	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+endif()
 message("C++ flags = ${BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}
@@ -79,9 +85,9 @@ set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 # cuBLAS
 if(USE_CUBLAS)
     cuda_add_cublas_to_target("${PROJECT_NAME}")
-    message("-- building with cuBLAS")
+    message(STATUS "building with cuBLAS")
 else()
-    message("-- Not building with cuBLAS(most features will be restricted)")
+    message(STATUS "Not building with cuBLAS(most features will be restricted)")
 endif()
 
 # add outcome library
@@ -97,7 +103,7 @@ target_link_libraries(${PROJECT_NAME}
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)
     find_package(MAGMA REQUIRED)
-    message("-- Magma found, building with Magma")
+    message(STATUS "Magma found, building with Magma")
     target_include_directories(${PROJECT_NAME}
 	PUBLIC
 	${MAGMA_INCLUDE_DIRS})
@@ -105,7 +111,7 @@ if(USE_MAGMA)
 	PUBLIC
 	${MAGMA_LIBRARY_DIRS})
 else()
-    message("-- Not building with Magma (certain features will be restricted)")
+    message(STATUS "Not building with Magma (certain features will be restricted)")
 endif(USE_MAGMA)
 
 
@@ -125,11 +131,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/gpu_matrix_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp)
-
-    message("[ Source files for ${PROJECT_NAME} tests ]")
-    foreach(TEST_SOURCE_FILE ${TEST_SOURCE_FILES})
-	message(STATUS "${TEST_SOURCE_FILE}")
-    endforeach()
+    mgcpp_display_elements("Source files for ${PROJECT_NAME} tests" ${TEST_SOURCE_FILES})
 
     # add test target
     add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
