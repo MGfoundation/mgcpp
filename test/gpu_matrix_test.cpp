@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <algorithm>
-#include <cstdio>
 
 #include <gtest/gtest.h>
 
@@ -79,33 +78,15 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_NE(mat._data, nullptr);
         EXPECT_FALSE(mat._released);
 
-        printf("safe test\n");
-
-        float buffer[100];
-        memset(buffer, 10, sizeof(float) * 100);
-        for(auto i = 0u;  i < 100; ++i)
+        for(size_t i = 0; i < row_dim; ++i)
         {
-            printf("%f ", buffer[i]);
-        }
-        cudaMemcpy(&mat._data, buffer, 1, cudaMemcpyHostToDevice);
-        float to[100];
-        cudaMemcpy(&to, mat._data, 1, cudaMemcpyDeviceToHost);
+            for(size_t j = 0; j < col_dim; ++j)
+            {
 
-        printf("\n");
-        printf("\n");
-        for(auto i = 0u;  i < 100; ++i)
-        {
-            printf("%f ", to[i]);
+                EXPECT_EQ(mat.check_value(i, j), init_val)
+                    << "index i: " << i << " j: " << j;
+            }
         }
-        // for(size_t i = 0; i < row_dim; ++i)
-        // {
-        //     for(size_t j = 0; j < col_dim; ++j)
-        //     {
-
-        //         EXPECT_EQ(mat.check_value(i, j), init_val)
-        //             << "index i: " << i << " j: " << j;
-        //     }
-        // }
     }
 
     auto last = mgcpp::cuda_mem_get_info();
