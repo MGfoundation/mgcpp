@@ -95,7 +95,6 @@ namespace mgcpp
          _col_dim(i),
          _released(true)
     {
-        printf("safe matrix\n");
         size_t total_size = i * j;
         auto alloc_result = cuda_malloc<ElemType>(total_size);
         if(!alloc_result)
@@ -106,20 +105,22 @@ namespace mgcpp
             _data = alloc_result.value();
         }
         
-        printf("safe matrix\n");
 
         ElemType* buffer =
             (ElemType*)malloc(sizeof(ElemType) * total_size);
         if(!buffer)
             MGCPP_THROW_BAD_ALLOC;
+        printf("safe matrix\n");
 
         memset(buffer, init, sizeof(ElemType) * total_size);
         
+        printf("safe matrix\n");
         auto memcpy_result =
             cuda_memcpy(_data,
                         buffer,
                         total_size,
                         cuda_memcpy_kind::host_to_device);
+        printf("safe matrix\n");
         free(buffer);
         printf("safe matrix\n");
         if(!memcpy_result)
