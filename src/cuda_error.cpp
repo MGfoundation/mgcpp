@@ -32,7 +32,10 @@ namespace mgcpp
     cuda_error_category_t::
     message(int ev) const
     {
-        return cudaGetErrorString(static_cast<cuda_error_t>(ev));
+        return "internal cuda error: "
+            + std::string(
+                cudaGetErrorString(
+                    static_cast<cuda_error_t>(ev)));
     }
 }
 
