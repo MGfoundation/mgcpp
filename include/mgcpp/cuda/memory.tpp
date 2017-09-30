@@ -94,7 +94,7 @@ namespace mgcpp
 
     enum class cuda_memcpy_kind
     {
-        host_to_device = cudaMemcpyKind::cudaMemcpyHostToHost,
+        host_to_device = cudaMemcpyKind::cudaMemcpyHostToDevice,
         device_to_host = cudaMemcpyKind::cudaMemcpyDeviceToHost,
         device_to_device = cudaMemcpyKind::cudaMemcpyDeviceToDevice
     };
