@@ -32,7 +32,7 @@ namespace mgcpp
 
 
     template<typename ElemType>
-    std::error_code
+    outcome::result<void>
     cublas_set_matrix(size_t rows, size_t cols,
                       ElemType const* A, ElemType* B)
     {
