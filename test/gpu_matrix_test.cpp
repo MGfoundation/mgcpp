@@ -65,7 +65,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         size_t row_dim = 10;
         size_t col_dim = 10;
         float init_val = 10;
-        mgcpp::gpu::matrix<float, 0> mat(row_dim, col_dim, init_val);
+        mgcpp::gpu::matrix<float> mat(row_dim, col_dim, init_val);
 
         auto after = mgcpp::cuda_mem_get_info();
         EXPECT_TRUE(after);
@@ -76,18 +76,19 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_EQ(mat.rows(), row_dim);
         EXPECT_EQ(mat.columns(), col_dim);
         EXPECT_EQ(mat._context, nullptr);
+        EXPECT_NE(mat._data, nullptr);
         EXPECT_FALSE(mat._released);
 
-        float* data_ptr = mat._data;
-        EXPECT_NE(data_ptr, nullptr);
-
         bool is_equal = true;
-        for(size_t i = 0; i < row_dim * col_dim; ++i)
+        for(size_t i = 0; i < row_dim; ++i)
         {
-            if(data_ptr[i] != init_val) 
+            for(size_t j = 0; j < col_dim; ++j)
             {
-                is_equal = false;
-                break;
+                if(mat.check_value(i, j) != init_val) 
+                {
+                    is_equal = false;
+                    break;
+                }
             }
         }
 
