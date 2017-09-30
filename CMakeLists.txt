@@ -30,7 +30,7 @@ set(CMAKE_MODULE_PATH
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-list(APPEND CUDA_NVCC_FLAGS "-arch=sm_52; code=sm_52;-O3")
+list(APPEND CUDA_NVCC_FLAGS "-arch=sm_61; code=sm_61;-O3")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
