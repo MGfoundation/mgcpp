@@ -39,11 +39,37 @@ namespace mgcpp
     }
 
     template<typename ElemType>
+    outcome::result<ElemType*>
+    malloc_pinned(size_t count) noexcept
+    {
+        void* ptr = nullptr;
+        std::error_code err_code =
+            cudaMallocHost(&ptr, count * sizeof(ElemType));
+
+        if(err_code != make_error_condition(status_t::success))
+            return err_code;
+
+        return static_cast<ElemType*>(ptr);
+    }
+
+    template<typename ElemType>
+    outcome::result<void>
+    free_pinned(ElemType* ptr) noexcept
+    {
+        std::error_code err_code = cudaFreeHost(ptr);
+
+        if(err_code != make_error_condition(status_t::success))
+            return err_code;
+
+        return outcome::success();
+    }
+
+    template<typename ElemType>
     outcome::result<void>
     cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept
     {
         std::error_code err_code =
-            cudaMemset((void*)ptr, value, count);
+            cudaMemset((void*)ptr, value, sizeof(ElemType)*count);
 
         if(err_code != make_error_condition(status_t::success))
             return err_code;
