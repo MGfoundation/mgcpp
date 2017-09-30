@@ -93,8 +93,8 @@ namespace mgcpp
          _col_dim(i),
          _released(true)
     {
-        auto alloc_result =
-            cuda_malloc<ElemType>(_row_dim * _col_dim);
+        size_t total_size = i * j;
+        auto alloc_result = cuda_malloc<ElemType>(total_size);
         if(!alloc_result)
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         else
@@ -119,7 +119,7 @@ namespace mgcpp
         if(!memcpy_result)
         {
             // (void)free_pinned(buffer_result.value());
-            MGCPP_THROW_SYSTEM_ERROR(buffer_result.error());
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
     }
 
@@ -186,7 +186,7 @@ namespace mgcpp
         if(!memcpy_result)
         {
             // (void)free_pinned(buffer_result.value());
-            MGCPP_THROW_SYSTEM_ERROR(buffer_result.error());
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
     }
 
@@ -246,13 +246,33 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     matrix(cpu::matrix<ElemType> const& cpu_mat)
     {
-        auto rows = cpu_mat.rows();
-        auto cols = cpu_mat.columns();
-        auto alloc_result = cuda_malloc<ElemType>(rows * cols);
-        if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        size_t rows = cpu_mat.rows();
+        size_t cols = cpu_mat.columns();
+        size_t total_size = rows * cols;
+
+        if(_released)
+        {
+            auto alloc_result = cuda_malloc<ElemType>(rows * cols);
+            if(!alloc_result)
+                MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+
+            _data = alloc_result.value();
+            _released = false;
+            _row_dim = cpu_mat.rows();
+            _col_dim = cpu_mat.columns();
+        }
         
-        // cubals_set_matrix(rows, cols, cpu_mat.get_data() ,_data);
+        auto memcpy_result =
+            cuda_memcpy(_data,
+                        cpu_mat.get_data(),
+                        total_size,
+                        cuda_memcpy_kind::host_to_device);
+
+        if(!memcpy_result)
+        {
+            // (void)free_pinned(buffer_result.value());
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
+        }
     }
 
     template<typename ElemType,
