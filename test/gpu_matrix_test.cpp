@@ -79,6 +79,8 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_NE(mat._data, nullptr);
         EXPECT_FALSE(mat._released);
 
+        printf("safe test\n");
+
         for(size_t i = 0; i < row_dim; ++i)
         {
             for(size_t j = 0; j < col_dim; ++j)

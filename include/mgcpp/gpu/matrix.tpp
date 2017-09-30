@@ -10,6 +10,8 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
+#include <cstdio>
+
 #include <cstdlib>
 #include <cstring>
 
@@ -102,6 +104,7 @@ namespace mgcpp
             _released = false;
             _data = alloc_result.value();
         }
+        
 
         ElemType* buffer =
             (ElemType*)malloc(sizeof(ElemType) * total_size);
@@ -116,6 +119,70 @@ namespace mgcpp
                         total_size,
                         cuda_memcpy_kind::host_to_device);
         free(buffer);
+        printf("safe matrix\n");
+        if(!memcpy_result)
+        {
+            // (void)free_pinned(buffer_result.value());
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
+        }
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    matrix(thread_context& context,
+           size_t i, size_t j, ElemType init)
+        :_data(nullptr),
+         _context(&context),
+         _row_dim(j),
+         _col_dim(i),
+         _released(true)
+    {
+        auto alloc_result =
+            cuda_malloc<ElemType>(_row_dim * _col_dim);
+        if(!alloc_result)
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        else
+        {
+            _released = false;
+            _data = alloc_result.value();
+        }
+
+        auto set_result =
+            cuda_memset(_data, init, _row_dim * _col_dim);
+        if(!set_result)
+            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    matrix(cpu::matrix<ElemType> const& cpu_mat)
+    {
+        size_t rows = cpu_mat.rows();
+        size_t cols = cpu_mat.columns();
+        size_t total_size = rows * cols;
+
+        if(_released)
+        {
+            auto alloc_result = cuda_malloc<ElemType>(rows * cols);
+            if(!alloc_result)
+                MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+
+            _data = alloc_result.value();
+            _released = false;
+            _row_dim = cpu_mat.rows();
+            _col_dim = cpu_mat.columns();
+        }
+        
+        auto memcpy_result =
+            cuda_memcpy(_data,
+                        cpu_mat.get_data(),
+                        total_size,
+                        cuda_memcpy_kind::host_to_device);
+
         if(!memcpy_result)
         {
             // (void)free_pinned(buffer_result.value());
@@ -215,69 +282,6 @@ namespace mgcpp
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(thread_context& context,
-           size_t i, size_t j, ElemType init)
-        :_data(nullptr),
-         _context(&context),
-         _row_dim(j),
-         _col_dim(i),
-         _released(true)
-    {
-        auto alloc_result =
-            cuda_malloc<ElemType>(_row_dim * _col_dim);
-        if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-        else
-        {
-            _released = false;
-            _data = alloc_result.value();
-        }
-
-        auto set_result =
-            cuda_memset(_data, init, _row_dim * _col_dim);
-        if(!set_result)
-            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
-    }
-
-    template<typename ElemType,
-             size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(cpu::matrix<ElemType> const& cpu_mat)
-    {
-        size_t rows = cpu_mat.rows();
-        size_t cols = cpu_mat.columns();
-        size_t total_size = rows * cols;
-
-        if(_released)
-        {
-            auto alloc_result = cuda_malloc<ElemType>(rows * cols);
-            if(!alloc_result)
-                MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-
-            _data = alloc_result.value();
-            _released = false;
-            _row_dim = cpu_mat.rows();
-            _col_dim = cpu_mat.columns();
-        }
-        
-        auto memcpy_result =
-            cuda_memcpy(_data,
-                        cpu_mat.get_data(),
-                        total_size,
-                        cuda_memcpy_kind::host_to_device);
-
-        if(!memcpy_result)
-        {
-            // (void)free_pinned(buffer_result.value());
-            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
-        }
-    }
-
-    template<typename ElemType,
-             size_t DeviceId,
-             storage_order StoreOrder>
     ElemType
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     check_value(size_t i, size_t j) const 
@@ -285,11 +289,13 @@ namespace mgcpp
         if(i > _col_dim || j > _row_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
+        printf("safe matrix\n");
         ElemType* from = (_data + (i * _row_dim + j));
         ElemType to;
         auto result = cuda_memcpy(
             &to, from, 1, cuda_memcpy_kind::device_to_host);
 
+        printf("safe matrix\n");
         if(!result)
             MGCPP_THROW_SYSTEM_ERROR(result.error());
 
