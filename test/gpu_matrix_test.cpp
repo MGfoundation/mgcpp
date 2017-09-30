@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/memory.hpp>
 #define private public
 #include <mgcpp/gpu_matrix.hpp>
 

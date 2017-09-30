@@ -6,7 +6,7 @@
 
 #include <cuda_runtime.h>
 
-#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 

@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/memory.hpp>
 
 TEST(cuda_malloc, cuda_malloc_success)
 {

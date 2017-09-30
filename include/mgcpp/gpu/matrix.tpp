@@ -7,7 +7,7 @@
 #include <mgcpp/gpu/matrix.hpp>
 #include <mgcpp/cpu/matrix.hpp>
 #include <mgcpp/system/exception.hpp>
-#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
 namespace mgcpp

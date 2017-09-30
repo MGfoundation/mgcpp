@@ -8,7 +8,7 @@
 
 #include <cuda_runtime.h>
 
-#include <mgcpp/cuda/stdlib.hpp>
+#include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/system/exception.hpp>
 
 TEST(mgcpp_exception, mgcpp_error_check)

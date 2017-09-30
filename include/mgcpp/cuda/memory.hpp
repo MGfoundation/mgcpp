@@ -3,8 +3,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef CUDA_TEMPLATE_STDLIB_HPP
-#define CUDA_TEMPLATE_STDLIB_HPP
+#ifndef MGCPP_CUDA_MEMORY_HPP
+#define MGCPP_CUDA_MEMORY_HPP
 
 #include <outcome.hpp>
 
@@ -25,7 +25,6 @@ namespace mgcpp
     outcome::result<ElemType*>
     cuda_malloc(size_t size) noexcept;
 
-
     template<typename ElemType>
     outcome::result<void>
     cuda_free(ElemType* ptr) noexcept;
@@ -41,5 +40,5 @@ namespace mgcpp
     inline cuda_mem_get_info() noexcept;
 }
 
-#include <mgcpp/cuda/stdlib.tpp>
+#include <mgcpp/cuda/memory.tpp>
 #endif
