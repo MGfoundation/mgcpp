@@ -154,18 +154,19 @@ namespace mgcpp
              storage_order StoreOrder>
     ElemType
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    check_value(size_t i, size_t j) const noexcept
+    check_value(size_t i, size_t j) const 
     {
         if(i > _col_dim || j > _row_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
-        ElemType* from = (_data + (i * _row_dim + j));
 
+        ElemType* from = (_data + (i * _row_dim + j));
         ElemType to;
         auto result = cuda_memcpy(
             from, &to, 1, cuda_memcpy_kind::device_to_host);
 
         if(!result)
-            MGCPP_THROW_SYSTEM_ERROR(result);
+            MGCPP_THROW_SYSTEM_ERROR(result.error());
+
         return to;
     }
 

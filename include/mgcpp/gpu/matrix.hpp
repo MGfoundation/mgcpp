@@ -51,7 +51,7 @@ namespace mgcpp
             copy_to_cpu() const;
 
             inline ElemType
-            check_value(size_t i, size_t j) const noexcept;
+            check_value(size_t i, size_t j) const;
 
             // inline ElemType const*
             // get_data() const;
