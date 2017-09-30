@@ -79,20 +79,14 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_NE(mat._data, nullptr);
         EXPECT_FALSE(mat._released);
 
-        bool is_equal = true;
         for(size_t i = 0; i < row_dim; ++i)
         {
             for(size_t j = 0; j < col_dim; ++j)
             {
-                if(mat.check_value(i, j) != init_val) 
-                {
-                    is_equal = false;
-                    break;
-                }
+                EXPECT_EQ(mat.check_value(i, j), init_val)
+                    << "index i: " << i << " j: " << j << "\n";
             }
         }
-
-        EXPECT_TRUE(is_equal);
     }
 
     auto last = mgcpp::cuda_mem_get_info();
