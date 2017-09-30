@@ -83,6 +83,10 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
 
         float buffer[100];
         memset(buffer, 10, sizeof(float) * 100);
+        for(auto i = 0u;  i < 100; ++i)
+        {
+            printf("%f ", buffer[i]);
+        }
         cudaMemcpy(&mat._data, buffer, 1, cudaMemcpyHostToDevice);
         float to[100];
         cudaMemcpy(&to, mat._data, 1, cudaMemcpyDeviceToHost);
