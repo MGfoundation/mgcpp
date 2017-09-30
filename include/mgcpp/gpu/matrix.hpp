@@ -47,6 +47,15 @@ namespace mgcpp
 
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
 
+            inline void
+            zeros();
+
+            inline void
+            resize(size_t i, size_t j);
+
+            inline void
+            resize(size_t i, size_t j, ElemType init);
+
             inline cpu::matrix<ElemType>
             copy_to_cpu() const;
 
