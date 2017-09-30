@@ -162,7 +162,7 @@ namespace mgcpp
         ElemType* from = (_data + (i * _row_dim + j));
         ElemType to;
         auto result = cuda_memcpy(
-            from, &to, 1, cuda_memcpy_kind::device_to_host);
+            &to, from, 1, cuda_memcpy_kind::device_to_host);
 
         if(!result)
             MGCPP_THROW_SYSTEM_ERROR(result.error());
