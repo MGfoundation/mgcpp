@@ -17,7 +17,7 @@ namespace mgcpp
     namespace gpu
     {
         template<typename ElemType,
-                 size_t DeviceId,
+                 size_t DeviceId = 0,
                  storage_order StoreOrder = storage_order::row_major>
         class matrix
         {
@@ -46,7 +46,6 @@ namespace mgcpp
                           size_t i, size_t j, ElemType init);
 
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
-
 
             inline cpu::matrix<ElemType>
             copy_to_cpu() const;

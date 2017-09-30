@@ -158,7 +158,15 @@ namespace mgcpp
     {
         if(i > _col_dim || j > _row_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
-        return _data[i * _row_dim + j];
+        ElemType* from = (_data + (i * _row_dim + j));
+
+        ElemType to;
+        auto result = cuda_memcpy(
+            from, &to, 1, cuda_memcpy_kind::device_to_host);
+
+        if(!result)
+            MGCPP_THROW_SYSTEM_ERROR(result);
+        return to;
     }
 
     template<typename ElemType,
