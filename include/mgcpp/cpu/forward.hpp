@@ -9,9 +9,12 @@
 
 namespace mgcpp
 {
+    enum class storage_order;
+
     namespace cpu
     {
-        template<typename ElemType>
+        template<typename ElemType,
+                 storage_order StoreOrder>
         class matrix;
     }
 }

@@ -9,25 +9,27 @@
 
 #include <mgcpp/gpu/forward.hpp>
 
-namespace mg
+#include <cstdlib>
+
+namespace mgcpp
 {
     namespace cpu
     {
-        template<typename ElemType>
+        template<typename ElemType,
+                 storage_order StorOrder>
         class matrix
         {
         private:
             ElemType* _data; 
-            size_t _x_dim;
-            size_t _y_dim;
+            size_t _row_dim;
+            size_t _column_dim;
         
         public:
             inline matrix();
 
-            inline matrix(size_t rows, size_t columns);
+            inline matrix(size_t i, size_t j);
 
-            inline matrix(size_t rows, size_t columns,
-                          ElemType init);
+            inline matrix(size_t i, size_t j, ElemType init);
 
             // template<size_t DeviceId>
             // inline matrix(
@@ -37,8 +39,17 @@ namespace mg
             // inline gpu::matrix<ElemType, DeviceId, >
             // copy_to_gpu() const;
 
-            inline ElemType*
+            inline ElemType
+            operator()(size_t i, size_t j) const;
+
+            inline ElemType&
+            operator()(size_t i, size_t j);
+
+            inline ElemType const*
             get_data() const;
+
+            inline ElemType*
+            get_data_mutable() const;
 
             inline size_t
             rows() const noexcept;
