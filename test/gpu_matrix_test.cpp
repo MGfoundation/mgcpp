@@ -126,6 +126,24 @@ TEST(gpu_matrix, matrix_resize)
     EXPECT_EQ(initial_freemem, final_freemem);
 }
 
+TEST(gpu_matrix, matrix_zero_after_allocation)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 5;
+    mgcpp::gpu::matrix<float> mat(row_dim, col_dim);
+    mat.zeros();
+
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+
+            EXPECT_EQ(mat.check_value(i, j), 0)
+                << "index i: " << i << " j: " << j;
+        }
+    }
+}
+
 TEST(gpu_matrix, matrix_resize_init)
 {
     auto initial = mgcpp::cuda_mem_get_info();
