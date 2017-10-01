@@ -268,8 +268,9 @@ namespace mgcpp
         if(_released)
             MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
 
-        auto set_result =
-            cuda_memset(_data, 0, _row_dim * _col_dim);
+        auto set_result = cuda_memset(_data,
+                                      static_cast<ElemType>(0),
+                                      _row_dim * _col_dim);
         if(!set_result)
             MGCPP_THROW_SYSTEM_ERROR(set_result.error());
 
