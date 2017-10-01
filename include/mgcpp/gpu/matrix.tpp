@@ -190,7 +190,7 @@ namespace mgcpp
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
-    void
+    gpu::matrix<ElemType, DeviceId, StoreOrder>&
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     resize(size_t i, size_t j)
     {
@@ -209,12 +209,14 @@ namespace mgcpp
         _released = false;
         _col_dim = i;
         _row_dim = j;
+
+        return *this;
     }
 
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
-    void
+    gpu::matrix<ElemType, DeviceId, StoreOrder>&
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     resize(size_t i, size_t j, ElemType init)
     {
@@ -252,28 +254,26 @@ namespace mgcpp
             // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
+
+        return *this;
     }
 
     template<typename ElemType,
              size_t DeviceId,
              storage_order StoreOrder>
-    void
+    gpu::matrix<ElemType, DeviceId, StoreOrder>&
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     zeros()
     {
         if(_released)
-        {
-            auto alloc_result =
-                cuda_malloc<ElemType>(_row_dim * _col_dim);
-            if(!alloc_result)
-                MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-            _released = false;
-        }
+            MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
 
         auto set_result =
             cuda_memset(_data, 0, _row_dim * _col_dim);
         if(!set_result)
             MGCPP_THROW_SYSTEM_ERROR(set_result.error());
+
+        return *this;
     }
 
     template<typename ElemType,
@@ -321,7 +321,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    ~matrix()
+    ~matrix() noexcept
     {
         if(!_released)
             (void)cuda_free(_data);

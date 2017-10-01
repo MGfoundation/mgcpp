@@ -31,7 +31,7 @@ namespace mgcpp
         public:
             inline matrix() noexcept;
 
-            inline ~matrix();
+            inline ~matrix() noexcept;
 
             inline matrix(thread_context& context) noexcept;
 
@@ -47,13 +47,13 @@ namespace mgcpp
 
             inline matrix(cpu::matrix<ElemType> const& cpu_mat);
 
-            inline void
+            inline matrix<ElemType, DeviceId, StoreOrder>&
             zeros();
 
-            inline void
+            inline matrix<ElemType, DeviceId, StoreOrder>&
             resize(size_t i, size_t j);
 
-            inline void
+            inline matrix<ElemType, DeviceId, StoreOrder>&
             resize(size_t i, size_t j, ElemType init);
 
             inline cpu::matrix<ElemType>
