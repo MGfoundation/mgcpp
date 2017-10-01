@@ -144,6 +144,13 @@ TEST(gpu_matrix, matrix_zero_after_allocation)
     }
 }
 
+TEST(gpu_matrix, matrix_zero_without_allocation_failure)
+{
+    mgcpp::gpu::matrix<float> mat{};
+
+    EXPECT_ANY_THROW(mat.zeros());
+}
+
 TEST(gpu_matrix, matrix_resize_init)
 {
     auto initial = mgcpp::cuda_mem_get_info();
