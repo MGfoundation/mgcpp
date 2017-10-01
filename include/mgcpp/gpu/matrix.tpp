@@ -52,11 +52,9 @@ namespace mgcpp
             cuda_malloc<ElemType>(_row_dim * _col_dim);
         if(!result)
             MGCPP_THROW_SYSTEM_ERROR(result.error());
-        else
-        {
-            _released = false;
-            _data = result.value();
-        }
+
+        _released = false;
+        _data = result.value();
     }
 
     template<typename ElemType,
@@ -75,11 +73,9 @@ namespace mgcpp
             cuda_malloc<ElemType>(_row_dim * _col_dim);
         if(!result)
             MGCPP_THROW_SYSTEM_ERROR(result.error());
-        else
-        {
-            _released = false;
-            _data = result.value();
-        }
+
+        _released = false;
+        _data = result.value();
     }
 
     template<typename ElemType,
@@ -97,12 +93,9 @@ namespace mgcpp
         auto alloc_result = cuda_malloc<ElemType>(total_size);
         if(!alloc_result)
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-        else
-        {
-            _released = false;
-            _data = alloc_result.value();
-        }
-        
+
+        _released = false;
+        _data = alloc_result.value();
 
         ElemType* buffer =
             (ElemType*)malloc(sizeof(ElemType) * total_size);
