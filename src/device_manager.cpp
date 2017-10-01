@@ -38,7 +38,7 @@ namespace mgcpp
         cublasHandle_t handle; 
         std::error_code status = cublasCreate(&handle);
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
 
         return std::make_unique<cublasHandle_t>(handle);

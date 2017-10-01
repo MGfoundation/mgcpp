@@ -20,10 +20,11 @@ namespace mgcpp
     {
         success = 0
     };
+
+    std::error_condition
+    make_error_condition(mgcpp::status_t err) noexcept;
 }
 
-std::error_condition
-make_error_condition(mgcpp::status_t err) noexcept;
 
 namespace std
 {

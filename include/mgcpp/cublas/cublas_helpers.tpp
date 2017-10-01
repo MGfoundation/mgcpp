@@ -24,10 +24,10 @@ namespace mgcpp
             cublasSetMatrix(rows, cols, sizeof(ElemType),
                             A, leading_dim_A, B, leading_dim_B);
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
             return status;
         else
-            return outcome::success();
+        return outcome::success();
     }
 
 

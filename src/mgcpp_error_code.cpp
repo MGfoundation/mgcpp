@@ -64,10 +64,11 @@ namespace mgcpp
         }
         return false;
     }
+
+    std::error_condition
+    make_error_condition(mgcpp::status_t err) noexcept
+    {
+        return {static_cast<int>(err), mgcpp::mgcpp_error_category};
+    }
 }
 
-std::error_condition
-make_error_condition(mgcpp::status_t err) noexcept
-{
-    return {static_cast<int>(err), mgcpp::mgcpp_error_category};
-}

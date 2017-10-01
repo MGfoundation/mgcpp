@@ -20,7 +20,7 @@ namespace mgcpp
         std::error_code err_code =
             cudaMalloc(&ptr, size * sizeof(ElemType));
 
-        if(err_code != make_error_condition(status_t::success))
+        if(err_code != status_t::success)
             return err_code;
 
         return static_cast<ElemType*>(ptr);
@@ -32,7 +32,7 @@ namespace mgcpp
     {
         std::error_code err_code = cudaFree(ptr);
 
-        if(err_code != make_error_condition(status_t::success))
+        if(err_code != status_t::success)
             return err_code;
 
         return outcome::success();
@@ -46,7 +46,7 @@ namespace mgcpp
         std::error_code err_code =
             cudaMallocHost(&ptr, count * sizeof(ElemType));
 
-        if(err_code != make_error_condition(status_t::success))
+        if(err_code != status_t::success)
             return err_code;
 
         return static_cast<ElemType*>(ptr);
@@ -58,7 +58,7 @@ namespace mgcpp
     {
         std::error_code err_code = cudaFreeHost(ptr);
 
-        if(err_code != make_error_condition(status_t::success))
+        if(err_code != status_t::success)
             return err_code;
 
         return outcome::success();
@@ -71,7 +71,7 @@ namespace mgcpp
         std::error_code err_code =
             cudaMemset((void*)ptr, value, sizeof(ElemType)*count);
 
-        if(err_code != make_error_condition(status_t::success))
+        if(err_code != status_t::success)
             return err_code;
 
         return outcome::success();
@@ -86,7 +86,7 @@ namespace mgcpp
         std::error_code status =
             cudaMemGetInfo(&free_memory, &total_memory);
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
             return status;
         else
             return std::make_pair(free_memory, total_memory);
@@ -109,7 +109,7 @@ namespace mgcpp
                        count * sizeof(ElemType),
                        static_cast<cudaMemcpyKind>(kind));
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
             return status;
         else
             return outcome::success();
