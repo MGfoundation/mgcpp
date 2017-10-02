@@ -32,7 +32,7 @@ TEST(gpu_matrix, contextless_dimension_constructor)
     
     {
         size_t row_dim = 10;
-        size_t col_dim = 10;
+        size_t col_dim = 5;
         mgcpp::gpu::matrix<float, 0> mat(row_dim, col_dim);
 
         auto after = mgcpp::cuda_mem_get_info();
@@ -62,7 +62,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
     auto before_memory = before.value().first;
 
     {
-        size_t row_dim = 10;
+        size_t row_dim = 5;
         size_t col_dim = 10;
         float init_val = 7;
         mgcpp::gpu::matrix<float> mat(row_dim, col_dim, init_val);
@@ -129,7 +129,7 @@ TEST(gpu_matrix, matrix_resize)
 TEST(gpu_matrix, matrix_zero_after_allocation)
 {
     size_t row_dim = 5;
-    size_t col_dim = 5;
+    size_t col_dim = 10;
     mgcpp::gpu::matrix<float> mat(row_dim, col_dim);
     mat.zeros();
 
@@ -194,7 +194,7 @@ TEST(gpu_matrix, matrix_resize_init)
 TEST(gpu_matrix, init_from_cpu_matrix)
 {
     size_t row_dim = 5;
-    size_t col_dim = 5;
+    size_t col_dim = 10;
     size_t init_val = 17;
 
     mgcpp::cpu::matrix<float> cpu_mat(row_dim, col_dim, init_val);
