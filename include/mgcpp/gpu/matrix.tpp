@@ -149,7 +149,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(cpu::matrix<ElemType> const& cpu_mat)
+    matrix(cpu::matrix<ElemType, StoreOrder> const& cpu_mat)
     {
         size_t rows = cpu_mat.rows();
         size_t cols = cpu_mat.columns();
@@ -165,6 +165,26 @@ namespace mgcpp
             _released = false;
             _row_dim = cpu_mat.rows();
             _col_dim = cpu_mat.columns();
+        }
+        else
+        {
+            if(rows != _row_dim || cols != _col_dim)
+            {
+                auto free_result = cuda_free(_data);
+                if(!free_result)
+                    MGCPP_THROW_SYSTEM_ERROR(free_result.error());
+                _released = true;
+
+                auto alloc_result =
+                    cuda_malloc<ElemType>(total_size);
+                if(!alloc_result)
+                    MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+
+                _data = alloc_result.value();
+                _released = false;
+                _row_dim = cpu_mat.rows();
+                _col_dim = cpu_mat.columns();
+            }
         }
         
         auto memcpy_result =
