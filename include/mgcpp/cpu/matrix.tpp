@@ -57,6 +57,24 @@ namespace mgcpp
         _data = ptr;
     }
 
+    inline ElemType
+    operator()(size_t i, size_t j) const
+    {
+        if(i > _col_dim || j > _row_dim)
+                MGCPP_THROW_OUT_OF_RANGE("index out of range");
+
+        return _data[i * row_dim + j];
+    }
+
+    inline ElemType&
+    operator()(size_t i, size_t j)
+    {
+        if(i > _col_dim || j > _row_dim)
+            MGCPP_THROW_OUT_OF_RANGE("index out of range");
+
+        return _data[i * row_dim + j];
+    }
+
     template<typename ElemType,
              storage_order StoreOrder>
     inline size_t
