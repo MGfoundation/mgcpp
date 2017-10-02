@@ -7,12 +7,11 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/cpu/matrix.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
 {
-    enum class storage_order { column_major = 0, row_major}; 
 
     namespace gpu
     {

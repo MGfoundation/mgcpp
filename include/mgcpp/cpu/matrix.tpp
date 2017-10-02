@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/cpu/matrix.hpp>
-#include <mgcpp/system/exceptions.hpp>
+#include <mgcpp/system/exception.hpp>
 
 #include <algorithm>
 

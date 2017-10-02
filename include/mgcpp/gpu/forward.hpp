@@ -12,8 +12,8 @@
 namespace mgcpp
 {
     enum class allignment;
-    enum class storage_order;
-    
+    enum class storage_order { column_major = 0, row_major}; 
+
     namespace gpu
     {
         template<typename ElemType,

@@ -7,7 +7,7 @@
 #ifndef _MGCPP_CPU_MATRIX_HPP_
 #define _MGCPP_CPU_MATRIX_HPP_
 
-#include <mgcpp/gpu/matrix.hpp>
+#include <mgcpp/gpu/forward.hpp>
 
 #include <cstdlib>
 
