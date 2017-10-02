@@ -22,10 +22,12 @@ namespace mgcpp
         private:
             ElemType* _data; 
             size_t _row_dim;
-            size_t _column_dim;
+            size_t _col_dim;
         
         public:
-            inline matrix();
+            inline matrix() noexcept;
+
+            inline ~matrix() noexcept;
 
             inline matrix(size_t i, size_t j);
 

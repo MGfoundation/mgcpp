@@ -11,6 +11,7 @@
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
 #include <cstdlib>
+#include <type_traits>
 #include <cstring>
 
 namespace mgcpp
@@ -150,42 +151,20 @@ namespace mgcpp
              storage_order StoreOrder>
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     matrix(cpu::matrix<ElemType, StoreOrder> const& cpu_mat)
+        :_data(nullptr),
+         _context(nullptr),
+         _row_dim(cpu_mat.rows()),
+         _col_dim(cpu_mat.columns()),
+         _released(true)
     {
-        size_t rows = cpu_mat.rows();
-        size_t cols = cpu_mat.columns();
-        size_t total_size = rows * cols;
+        size_t total_size = _row_dim * _col_dim;
 
-        if(_released)
-        {
-            auto alloc_result = cuda_malloc<ElemType>(rows * cols);
-            if(!alloc_result)
-                MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        auto alloc_result = cuda_malloc<ElemType>(total_size);
+        if(!alloc_result)
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        _released = false;
 
-            _data = alloc_result.value();
-            _released = false;
-            _row_dim = cpu_mat.rows();
-            _col_dim = cpu_mat.columns();
-        }
-        else
-        {
-            if(rows != _row_dim || cols != _col_dim)
-            {
-                auto free_result = cuda_free(_data);
-                if(!free_result)
-                    MGCPP_THROW_SYSTEM_ERROR(free_result.error());
-                _released = true;
-
-                auto alloc_result =
-                    cuda_malloc<ElemType>(total_size);
-                if(!alloc_result)
-                    MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-
-                _data = alloc_result.value();
-                _released = false;
-                _row_dim = cpu_mat.rows();
-                _col_dim = cpu_mat.columns();
-            }
-        }
+        _data = alloc_result.value();
         
         auto memcpy_result =
             cuda_memcpy(_data,
@@ -318,7 +297,8 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     columns() const noexcept
     {
-        return _col_dim;
+        return StoreOrder == storage_order::column_major
+            ? _col_dim : _row_dim;
     }
 
     template<typename ElemType,
@@ -328,7 +308,8 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, StoreOrder>::
     rows() const noexcept
     {
-        return _row_dim;
+        return StoreOrder == storage_order::column_major
+            ? _row_dim : _col_dim;
     }
 
     template<typename ElemType,
