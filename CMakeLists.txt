@@ -8,7 +8,9 @@
 cmake_minimum_required(VERSION 3.8)
 project(mgcpp)
 
-macro(mgcpp_display_elements MGCPP_DISPLAY_MESSAGE MGCPP_LIST_TO_DISPLAY)
+macro(mgcpp_display_elements
+	MGCPP_DISPLAY_MESSAGE
+	MGCPP_LIST_TO_DISPLAY)
     message("[ ${MGCPP_DISPLAY_MESSAGE} ]")
     foreach(_MGCPP_DISPLAY_ELEMENT ${MGCPP_LIST_TO_DISPLAY})
 	message(STATUS ${_MGCPP_DISPLAY_ELEMENT})
@@ -21,6 +23,7 @@ set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 # options
 option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_CUBLAS "compile mgcpp with cublas features" ON)
+option(USE_THRUST "compile mgcpp with thrust features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 
 # cmake modules path
@@ -30,15 +33,17 @@ set(CMAKE_MODULE_PATH
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-list(APPEND CUDA_NVCC_FLAGS "-arch=sm_61; code=sm_61;-O3")
+list(APPEND CUDA_NVCC_FLAGS "-arch=sm_61; code=sm_61; -O3")
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
 
 # project source files
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
+set(KERNELS_SOURCE_DIR ${SOURCE_DIR}/kernels)
 
 set(BASE_SOURCE_FILES "")
+# ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/thread_context.cpp
@@ -46,6 +51,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/mgcpp_error_code.cpp
     ${SOURCE_DIR}/device_manager.cpp)
+
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
     "${BASE_SOURCE_FILES}")
 mgcpp_display_elements("Source files for ${PROJECT_NAME}"
@@ -67,7 +73,6 @@ message("C++ flags = ${BUILD_FLAGS}")
 set_target_properties(${PROJECT_NAME}
     PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
 
-
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
     PUBLIC
@@ -76,7 +81,6 @@ target_include_directories("${PROJECT_NAME}base"
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
-
 
 ## mgcpp dependencies
 
@@ -89,6 +93,8 @@ if(USE_CUBLAS)
 else()
     message(STATUS "Not building with cuBLAS(most features will be restricted)")
 endif()
+
+
 
 # add outcome library
 target_include_directories(${PROJECT_NAME}
@@ -114,7 +120,6 @@ else()
     message(STATUS "Not building with Magma (certain features will be restricted)")
 endif(USE_MAGMA)
 
-
 # Tests
 if(BUILD_TESTING)
     enable_testing()
@@ -129,6 +134,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/main.cpp
 	${TEST_DIR}/cuda_stdlib_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
+	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests" ${TEST_SOURCE_FILES})
