@@ -210,8 +210,8 @@ TEST(gpu_matrix, init_from_cpu_matrix)
 
     auto initial = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(initial);
-
     auto initial_freemem = initial.value().first;
+
     {
         mgcpp::gpu::matrix<float> gpu_mat(cpu_mat);
 

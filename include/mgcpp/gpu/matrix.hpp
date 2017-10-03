@@ -62,14 +62,17 @@ namespace mgcpp
             inline ElemType
             check_value(size_t i, size_t j) const;
 
-            // inline ElemType const*
-            // get_data() const;
+            inline ElemType const*
+            get_data() const;
 
-            // inline ElemType*
-            // get_data_mutable();
+            inline ElemType*
+            get_data_mutable();
 
-            // inline ElemType*
-            // release_data();
+            inline thread_context const*
+            get_thread_context() const;
+
+            inline ElemType*
+            release_data();
 
             inline size_t
             rows() const noexcept;

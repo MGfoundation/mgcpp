@@ -153,10 +153,21 @@ namespace mgcpp
     matrix(cpu::matrix<ElemType, StoreOrder> const& cpu_mat)
         :_data(nullptr),
          _context(nullptr),
-         _row_dim(cpu_mat.rows()),
-         _col_dim(cpu_mat.columns()),
+         _row_dim(0),
+         _col_dim(0),
          _released(true)
     {
+        if(StoreOrder == storage_order::row_major)
+        {
+            _row_dim = cpu_mat.columns();
+            _col_dim = cpu_mat.rows();
+        }
+        else
+        {
+            _row_dim = cpu_mat.rows();
+            _col_dim = cpu_mat.columns();
+        }
+
         size_t total_size = _row_dim * _col_dim;
 
         auto alloc_result = cuda_malloc<ElemType>(total_size);
@@ -288,6 +299,47 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(result.error());
 
         return to;
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    inline ElemType const*
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    get_data() const
+    {
+        return _data;
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    inline ElemType*
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    get_data_mutable()
+    {
+        return _data;
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    inline ElemType*
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    release_data()
+    {
+        _released = true;
+        return _data;
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order StoreOrder>
+    inline thread_context const*
+    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    get_thread_context() const
+    {
+        return _context;
     }
 
     template<typename ElemType,
