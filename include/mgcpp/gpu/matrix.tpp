@@ -304,6 +304,7 @@ namespace mgcpp
     template<typename ElemType,
              size_t DeviceId,
              storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>&
     gpu::matrix<ElemType, DeviceId, SO>::
     copy_from_cpu(cpu::matrix<ElemType, SO> const& cpu_mat)
     {
