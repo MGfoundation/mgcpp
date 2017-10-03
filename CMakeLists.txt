@@ -133,6 +133,7 @@ if(BUILD_TESTING)
     set(TEST_SOURCE_FILES
 	${TEST_DIR}/main.cpp
 	${TEST_DIR}/cuda_stdlib_test.cpp
+	${TEST_DIR}/operation_mult_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
