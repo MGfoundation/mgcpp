@@ -13,7 +13,7 @@
 namespace mgcpp
 {
     template<size_t Device>
-    gpu::matrix
+    gpu::matrix<float, Device, row_major>
     mult(gpu::matrix<float, Device, row_major> const& first,
          gpu::matrix<float, Device, row_major> const& second)
     {
@@ -24,9 +24,9 @@ namespace mgcpp
         size_t k = second.columns();
         size_t n = first.columns();
 
-        gpu::matrix<float, Device, row_major> result{};
+        gpu::matrix<float, Device, row_major> result{m, n};
 
-        thread_context* context =  first.get_thread_context();
+        thread_context* context = first.get_thread_context();
         
         std::error_code status =
             cublasSgemm_v2(context->get_cublas(Device),

@@ -14,7 +14,7 @@ namespace mgcpp
     template<typename T,
              size_t Device,
              storage_order SO>
-    gpu::matrix
+    gpu::matrix<T, Device, SO>
     mult(gpu::matrix<T, Device, SO> const& first,
          gpu::matrix<T, Device, SO> const& second);
 
