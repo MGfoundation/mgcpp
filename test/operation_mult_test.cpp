@@ -13,6 +13,7 @@
 
 TEST(operation_mult, row_major_multiplication)
 {
+    printf("safe\n");
     mgcpp::thread_context context{0}; 
 
     mgcpp::cpu::matrix<float> A_init_mat(2, 4, 2);
