@@ -70,8 +70,8 @@ namespace mgcpp
             inline ElemType*
             get_data_mutable();
 
-            inline thread_context const*
-            get_thread_context() const;
+            inline thread_context*
+            get_thread_context() noexcept;
 
             inline ElemType*
             release_data();

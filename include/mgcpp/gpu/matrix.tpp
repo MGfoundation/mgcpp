@@ -334,6 +334,8 @@ namespace mgcpp
             // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
+
+        return *this;
     }
 
     template<typename ElemType,
@@ -401,9 +403,9 @@ namespace mgcpp
     template<typename ElemType,
              size_t DeviceId,
              storage_order SO>
-    inline thread_context const*
+    inline thread_context*
     gpu::matrix<ElemType, DeviceId, SO>::
-    get_thread_context() const
+    get_thread_context() noexcept
     {
         return _context;
     }

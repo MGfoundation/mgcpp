@@ -7,19 +7,19 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/gpu_matrix.hpp>
-#include <mgcpp/operation/mult.hpp>
+#include <mgcpp/operations/mult.hpp>
 
 TEST(operation_mult, row_major_multiplication)
 {
-    mgcpp::thread_context context(); 
+    mgcpp::thread_context context{0}; 
 
-    mgcpp::cpu::matrix A_init_mat(2, 4, 2);
-    mgcpp::cpu::matrix B_init_mat(4, 2, 4);
+    mgcpp::cpu::matrix<float> A_init_mat(2, 4, 2);
+    mgcpp::cpu::matrix<float> B_init_mat(4, 2, 4);
 
-    mgcpp::gpu::matrix A_mat(context, 2, 4);
+    mgcpp::gpu::matrix<float> A_mat(context, 2, 4);
     A_mat.copy_from_host(A_init_mat);
 
-    mgcpp::gpu::matrix B_mat(context, 4, 2);
+    mgcpp::gpu::matrix<float> B_mat(context, 4, 2);
     B_mat.copy_from_host(B_init_mat);
 
     auto C_mat = mgcpp::mult(A_mat, B_mat);

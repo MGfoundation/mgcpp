@@ -8,6 +8,7 @@
 #define _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 
 #include <mgcpp/gpu/matrix.hpp>
+#include <mgcpp/global/storage_order.hpp>
 
 namespace mgcpp
 {
@@ -15,7 +16,7 @@ namespace mgcpp
              size_t Device,
              storage_order SO>
     gpu::matrix<T, Device, SO>
-    mult(gpu::matrix<T, Device, SO> const& first,
+    mult(gpu::matrix<T, Device, SO>& first,
          gpu::matrix<T, Device, SO> const& second);
 
     // template<typename T,
@@ -33,11 +34,11 @@ namespace mgcpp
 
     template<typename T,
              size_t Device,
-             storage_order StorOrder>
+             storage_order SO>
     void
     mult_assign(
-        gpu::matrix<T, Device, StoreOrder>& first,
-        gpu::matrix<T, Device, StoreOrder> const& second);
+        gpu::matrix<T, Device, SO>& first,
+        gpu::matrix<T, Device, SO> const& second);
 
     // template<typename T,
     //          size_t IdFirst, size_t IdSecond,

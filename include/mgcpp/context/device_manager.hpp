@@ -19,7 +19,8 @@ namespace mgcpp
         size_t _device_id;
         std::unique_ptr<cublasHandle_t> _cublas_handle;
 
-        std::unique_ptr<cublasHandle_t> create_cublas_handle() const;
+        std::unique_ptr<cublasHandle_t>
+        create_cublas_handle() const;
 
     public:
         device_manager() = default;
@@ -33,7 +34,8 @@ namespace mgcpp
         device_manager&
         operator=(device_manager&& other) noexcept;
 
-        cublasHandle_t get_cublas();
+        cublasHandle_t
+        get_cublas();
     };
 }
 

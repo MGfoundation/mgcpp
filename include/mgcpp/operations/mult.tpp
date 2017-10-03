@@ -14,7 +14,7 @@ namespace mgcpp
 {
     template<size_t Device>
     gpu::matrix<float, Device, row_major>
-    mult(gpu::matrix<float, Device, row_major> const& first,
+    mult(gpu::matrix<float, Device, row_major>& first,
          gpu::matrix<float, Device, row_major> const& second)
     {
         float const alpha = 1;
@@ -29,14 +29,14 @@ namespace mgcpp
         thread_context* context = first.get_thread_context();
         
         std::error_code status =
-            cublasSgemm_v2(context->get_cublas(Device),
-                           CUBLAS_OP_N, CUBLAS_OP_N,
-                           m, n, k,
-                           &alpha,
-                           second.get_data(), m,
-                           first.get_data(), k,
-                           &beta,
-                           result.get_data());
+            cublasSgemm(context->get_cublas(Device),
+                        CUBLAS_OP_N, CUBLAS_OP_N,
+                        m, n, k,
+                        &alpha,
+                        second.get_data(), m,
+                        first.get_data(), k,
+                        &beta,
+                        result.get_data_mutable(), m);
 
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
