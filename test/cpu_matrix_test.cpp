@@ -56,28 +56,26 @@ TEST(cpu_matrix, non_const_parenthese_operator)
 {
     size_t row_dim = 5;
     size_t col_dim = 10;
-    float init_val = 7;
-    mgcpp::cpu::matrix<float> mat{row_dim, col_dim, init_val};
+    mgcpp::cpu::matrix<float> mat{row_dim, col_dim};
 
-    EXPECT_NO_THROW({
-            mat(3, 7) = 14;
-        });
+    float counter = 0;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < row_dim; ++j)
+        {
+            mat(i, j) = counter;
+            ++counter;
+        }
+    }
 
-    EXPECT_NO_THROW({
-            for(size_t i = 0; i < row_dim; ++i)
-            {
-                for(size_t j = 0; j < col_dim; ++j) 
-                {
-                    if(i == 3 && j == 7)
-                    {
-                        EXPECT_EQ(mat(i, j), 14);
-                    }
-                    else
-                    {
-                        EXPECT_EQ(mat(i, j), init_val);
-                    }
-                }
-            }
-        });
+    counter = 0;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < row_dim; ++j)
+        {
+            EXPECT_NO_THROW({EXPECT_EQ(mat(i, j), counter);});
+            ++counter;
+        }
+    }
 }
 
