@@ -23,8 +23,6 @@ namespace mgcpp
     public:
         thread_context(std::initializer_list<size_t> _devices_used);
 
-        ~thread_context();
-
         template<typename ElemType,
                  size_t DeviceId,
                  storage_order StoreOrder,
@@ -32,7 +30,7 @@ namespace mgcpp
         inline gpu::matrix<ElemType, DeviceId, StoreOrder>
         make_gpu_matrix(Args... args) const;
 
-        inline cublasHandle_t
+        cublasHandle_t
         get_cublas(size_t device_id);
     };
 }

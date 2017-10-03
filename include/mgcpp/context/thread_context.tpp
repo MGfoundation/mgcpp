@@ -20,11 +20,4 @@ namespace mgcpp
                            DeviceId,
                            StoreOrder>(*this, std::forward(args)...);
     }
-
-    cublasHandle_t
-    thread_context::
-    get_cublas(size_t device_id) 
-    {
-        return _device_managers[device_id].get_cublas();
-    }
 }
