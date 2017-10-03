@@ -306,7 +306,7 @@ namespace mgcpp
              storage_order SO>
     gpu::matrix<ElemType, DeviceId, SO>&
     gpu::matrix<ElemType, DeviceId, SO>::
-    copy_from_cpu(cpu::matrix<ElemType, SO> const& cpu_mat)
+    copy_from_host(cpu::matrix<ElemType, SO> const& cpu_mat)
     {
         if(this->columns() != cpu_mat.columns()
            || this->rows() != cpu_mat.rows())
@@ -334,6 +334,37 @@ namespace mgcpp
             // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order SO>
+    cpu::matrix<ElemType, SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
+    copy_to_host() const
+    {
+        size_t total_size = _row_dim * _col_dim;
+
+        ElemType* host_memory =
+            (ElemType*)malloc(total_size * sizeof(ElemType));
+        if(!host_memory)
+            MGCPP_THROW_BAD_ALLOC;
+        
+        auto memcpy_result =
+            cuda_memcpy(host_memory,
+                        _data,
+                        total_size,
+                        cuda_memcpy_kind::device_to_host);
+
+        if(!memcpy_result)
+        {
+            free(host_memory);
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
+        }
+
+        return cpu::matrix<ElemType, SO>(_col_dim,
+                                         _row_dim,
+                                         host_memory);
     }
 
     template<typename ElemType,

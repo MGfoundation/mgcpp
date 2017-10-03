@@ -56,10 +56,10 @@ namespace mgcpp
             resize(size_t i, size_t j, ElemType init);
 
             inline matrix<ElemType, DeviceId, SO>&
-            copy_from_cpu(cpu::matrix<ElemType, SO> const& cpu_mat);
+            copy_from_host(cpu::matrix<ElemType, SO> const& cpu_mat);
 
             inline cpu::matrix<ElemType, SO>
-            copy_to_cpu() const;
+            copy_to_host() const;
 
             inline ElemType
             check_value(size_t i, size_t j) const;
