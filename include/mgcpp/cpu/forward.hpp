@@ -7,10 +7,10 @@
 #ifndef _MGCPP_CPU_FORWARD_HPP_
 #define _MGCPP_CPU_FORWARD_HPP_
 
+#include <mgcpp/global/storage_order.hpp>
+
 namespace mgcpp
 {
-    enum class storage_order;
-
     namespace cpu
     {
         template<typename ElemType,

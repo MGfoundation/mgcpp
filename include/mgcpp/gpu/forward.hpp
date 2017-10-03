@@ -8,11 +8,11 @@
 #define _MGCPP_GPU_FORWARD_HPP_
 
 #include <cstdlib>
+#include <mgcpp/global/storage_order.hpp>
 
 namespace mgcpp
 {
     enum class allignment;
-    enum class storage_order { column_major = 0, row_major}; 
 
     namespace gpu
     {

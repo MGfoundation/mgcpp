@@ -18,8 +18,8 @@ namespace mgcpp
 {
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix() noexcept
     : _data(nullptr),
         _context(nullptr),
@@ -29,8 +29,8 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(thread_context& context) noexcept
         : _data(nullptr),
           _context(&context),
@@ -40,8 +40,8 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(size_t i, size_t j)
         :_data(nullptr),
          _context(nullptr),
@@ -60,8 +60,8 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(thread_context& context,
            size_t i, size_t j)
         :_data(nullptr),
@@ -81,8 +81,8 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(size_t i, size_t j, ElemType init)
         :_data(nullptr),
          _context(nullptr),
@@ -120,8 +120,8 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(thread_context& context,
            size_t i, size_t j, ElemType init)
         :_data(nullptr),
@@ -148,16 +148,16 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
-    matrix(cpu::matrix<ElemType, StoreOrder> const& cpu_mat)
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
+    matrix(cpu::matrix<ElemType, SO> const& cpu_mat)
         :_data(nullptr),
          _context(nullptr),
          _row_dim(0),
          _col_dim(0),
          _released(true)
     {
-        if(StoreOrder == storage_order::row_major)
+        if(SO == row_major)
         {
             _row_dim = cpu_mat.columns();
             _col_dim = cpu_mat.rows();
@@ -192,9 +192,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>&
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>&
+    gpu::matrix<ElemType, DeviceId, SO>::
     resize(size_t i, size_t j)
     {
         if(!_released)
@@ -218,9 +218,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>&
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>&
+    gpu::matrix<ElemType, DeviceId, SO>::
     resize(size_t i, size_t j, ElemType init)
     {
         auto free_result = cuda_free(_data);
@@ -263,9 +263,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>&
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>&
+    gpu::matrix<ElemType, DeviceId, SO>::
     zeros()
     {
         if(_released)
@@ -282,9 +282,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     ElemType
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     check_value(size_t i, size_t j) const 
     {
         if(i > _col_dim || j > _row_dim)
@@ -303,9 +303,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType const*
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     get_data() const
     {
         return _data;
@@ -313,9 +313,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType*
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     get_data_mutable()
     {
         return _data;
@@ -323,9 +323,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType*
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     release_data()
     {
         _released = true;
@@ -334,9 +334,9 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     inline thread_context const*
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     get_thread_context() const
     {
         return _context;
@@ -344,30 +344,28 @@ namespace mgcpp
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     size_t
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     columns() const noexcept
     {
-        return StoreOrder == storage_order::column_major
-            ? _col_dim : _row_dim;
+        return SO == column_major ? _col_dim : _row_dim;
     }
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
+             storage_order SO>
     size_t
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+    gpu::matrix<ElemType, DeviceId, SO>::
     rows() const noexcept
     {
-        return StoreOrder == storage_order::column_major
-            ? _row_dim : _col_dim;
+        return SO == column_major ? _row_dim : _col_dim;
     }
 
     template<typename ElemType,
              size_t DeviceId,
-             storage_order StoreOrder>
-    gpu::matrix<ElemType, DeviceId, StoreOrder>::
+             storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
     ~matrix() noexcept
     {
         if(!_released)

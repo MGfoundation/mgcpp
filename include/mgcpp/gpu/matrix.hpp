@@ -7,17 +7,17 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
 {
-
     namespace gpu
     {
         template<typename ElemType,
                  size_t DeviceId = 0,
-                 storage_order StoreOrder = storage_order::row_major>
+                 storage_order SO = row_major>
         class matrix
         {
         private:
@@ -45,18 +45,18 @@ namespace mgcpp
                           size_t i, size_t j, ElemType init);
 
             inline matrix(
-                cpu::matrix<ElemType, StoreOrder> const& cpu_mat);
+                cpu::matrix<ElemType, SO> const& cpu_mat);
 
-            inline matrix<ElemType, DeviceId, StoreOrder>&
+            inline matrix<ElemType, DeviceId, SO>&
             zeros();
 
-            inline matrix<ElemType, DeviceId, StoreOrder>&
+            inline matrix<ElemType, DeviceId, SO>&
             resize(size_t i, size_t j);
 
-            inline matrix<ElemType, DeviceId, StoreOrder>&
+            inline matrix<ElemType, DeviceId, SO>&
             resize(size_t i, size_t j, ElemType init);
 
-            inline cpu::matrix<ElemType, StoreOrder>
+            inline cpu::matrix<ElemType, SO>
             copy_to_cpu() const;
 
             inline ElemType
@@ -84,5 +84,4 @@ namespace mgcpp
 }
 
 #include <mgcpp/gpu/matrix.tpp>
-
 #endif

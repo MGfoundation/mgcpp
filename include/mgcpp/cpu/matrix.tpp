@@ -12,16 +12,16 @@
 namespace mgcpp
 {
     template<typename ElemType,
-             storage_order StoreOrder>
-    cpu::matrix<ElemType, StoreOrder>::
+             storage_order SO>
+    cpu::matrix<ElemType, SO>::
     matrix() noexcept
     : _data(nullptr),
         _row_dim(0),
         _col_dim(0) {}
 
     template<typename ElemType,
-             storage_order StoreOrder>
-    cpu::matrix<ElemType, StoreOrder>::
+             storage_order SO>
+    cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j)
         : _data(nullptr),
           _row_dim(j),
@@ -38,8 +38,8 @@ namespace mgcpp
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
-    cpu::matrix<ElemType, StoreOrder>::
+             storage_order SO>
+    cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j, ElemType init)
         : _data(nullptr),
           _row_dim(j),
@@ -58,9 +58,9 @@ namespace mgcpp
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     operator()(size_t i, size_t j) const
     {
         if(i > _col_dim || j > _row_dim)
@@ -70,9 +70,9 @@ namespace mgcpp
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType&
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     operator()(size_t i, size_t j)
     {
         if(i > _col_dim || j > _row_dim)
@@ -82,46 +82,44 @@ namespace mgcpp
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline size_t
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     rows() const noexcept
     {
-        return StoreOrder == storage_order::column_major
-            ? _row_dim : _col_dim;
+        return SO == column_major ? _row_dim : _col_dim;
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline size_t
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     columns() const noexcept
     {
-        return StoreOrder == storage_order::column_major
-            ? _col_dim : _row_dim;
+        return SO == column_major ? _col_dim : _row_dim;
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType const*
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     get_data() const
     {
         return _data;
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
+             storage_order SO>
     inline ElemType*
-    cpu::matrix<ElemType, StoreOrder>::
+    cpu::matrix<ElemType, SO>::
     get_data_mutable() const
     {
         return _data;
     }
 
     template<typename ElemType,
-             storage_order StoreOrder>
-    cpu::matrix<ElemType, StoreOrder>::
+             storage_order SO>
+    cpu::matrix<ElemType, SO>::
     ~matrix() noexcept
     {
         (void)free(_data);

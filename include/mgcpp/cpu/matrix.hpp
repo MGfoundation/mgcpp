@@ -8,6 +8,7 @@
 #define _MGCPP_CPU_MATRIX_HPP_
 
 #include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/global/storage_order.hpp>
 
 #include <cstdlib>
 
@@ -16,7 +17,7 @@ namespace mgcpp
     namespace cpu
     {
         template<typename ElemType,
-                 storage_order StoreOrder = storage_order::row_major>
+                 storage_order StoreOrder = row_major>
         class matrix
         {
         private:
