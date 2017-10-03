@@ -44,8 +44,7 @@ namespace mgcpp
             inline matrix(thread_context& context,
                           size_t i, size_t j, ElemType init);
 
-            inline matrix(
-                cpu::matrix<ElemType, SO> const& cpu_mat);
+            inline matrix(cpu::matrix<ElemType, SO> const& cpu_mat);
 
             inline matrix<ElemType, DeviceId, SO>&
             zeros();
@@ -55,6 +54,9 @@ namespace mgcpp
 
             inline matrix<ElemType, DeviceId, SO>&
             resize(size_t i, size_t j, ElemType init);
+
+            inline matrix<ElemType, DeviceId, SO>&
+            copy_from_cpu(cpu::matrix<ElemType, SO> const& cpu_mat);
 
             inline cpu::matrix<ElemType, SO>
             copy_to_cpu() const;

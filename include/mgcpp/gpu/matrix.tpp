@@ -304,6 +304,40 @@ namespace mgcpp
     template<typename ElemType,
              size_t DeviceId,
              storage_order SO>
+    gpu::matrix<ElemType, DeviceId, SO>::
+    copy_from_cpu(cpu::matrix<ElemType, SO> const& cpu_mat)
+    {
+        if(this->columns() != cpu_mat.columns()
+           || this->rows() != cpu_mat.rows())
+        {
+            MGCPP_THROW_RUNTIME_ERROR("dimentions not matching");
+        }
+
+        size_t total_size = _row_dim * _col_dim;
+
+        auto alloc_result = cuda_malloc<ElemType>(total_size);
+        if(!alloc_result)
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        _released = false;
+
+        _data = alloc_result.value();
+        
+        auto memcpy_result =
+            cuda_memcpy(_data,
+                        cpu_mat.get_data(),
+                        total_size,
+                        cuda_memcpy_kind::host_to_device);
+
+        if(!memcpy_result)
+        {
+            // (void)free_pinned(buffer_result.value());
+            MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
+        }
+    }
+
+    template<typename ElemType,
+             size_t DeviceId,
+             storage_order SO>
     inline ElemType const*
     gpu::matrix<ElemType, DeviceId, SO>::
     get_data() const
