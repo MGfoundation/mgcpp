@@ -231,7 +231,7 @@ TEST(gpu_matrix, init_from_cpu_matrix)
     EXPECT_EQ(initial_freemem, final_freemem);
 }
 
-TEST(gpu_matrix, move_from_cpu_matrix)
+TEST(gpu_matrix, copy_from_host_matrix)
 {
     size_t row_dim = 5;
     size_t col_dim = 10;
@@ -249,7 +249,36 @@ TEST(gpu_matrix, move_from_cpu_matrix)
 
     mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
 
-    EXPECT_NO_THROW({gpu_mat.copy_from_cpu(cpu_mat);});
+    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
+                << "index i: " << i << " j: " << j;
+        }
+    }
+}
+
+TEST(gpu_matrix, copy_to_host)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+
+    mgcpp::cpu::matrix<float> cpu_mat(row_dim, col_dim);
+
+    size_t counter = 0;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            cpu_mat(i, j) = counter;
+        }
+    }
+
+    mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
+
+    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
     for(size_t i = 0; i < row_dim; ++i)
     {
         for(size_t j = 0; j < col_dim; ++j)
