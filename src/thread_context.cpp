@@ -10,13 +10,19 @@ namespace mgcpp
 {
     thread_context::
     thread_context(std::initializer_list<size_t> devices_used)
+        : _device_managers()
     {
-        
+        _device_managers.reserve(devices_used.size());
+        for(auto i : devices_used)
+        {
+            _device_managers.emplace(i, device_manager{i});
+        }
     }
-
+    
     cublasHandle_t
-    get_cublasHandle() noexcept
+    thread_context::
+    get_cublas(size_t device_id) 
     {
-        
+        return _device_managers[device_id].get_cublas();
     }
 }
