@@ -34,6 +34,9 @@ namespace mgcpp
 
             inline matrix(size_t i, size_t j, ElemType init);
 
+            inline matrix(size_t i, size_t j,
+                          ElemType* data) noexcept;
+
             // template<size_t DeviceId>
             // inline matrix(
             //     gpu::matrix<ElemType, DeviceId> const& gpu_mat);

@@ -40,6 +40,14 @@ namespace mgcpp
     template<typename ElemType,
              storage_order SO>
     cpu::matrix<ElemType, SO>::
+    matrix(size_t i, size_t j, ElemType* data) noexcept
+        : _data(data),
+          _row_dim(j),
+          _col_dim(i) {}
+
+    template<typename ElemType,
+             storage_order SO>
+    cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j, ElemType init)
         : _data(nullptr),
           _row_dim(j),
