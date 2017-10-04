@@ -48,11 +48,11 @@ set(BASE_SOURCE_FILES "")
 # ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
-    ${SOURCE_DIR}/thread_context.cpp
+    ${SOURCE_DIR}/global_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/mgcpp_error_code.cpp
-    ${SOURCE_DIR}/device_manager.cpp)
+    ${SOURCE_DIR}/thread_context.cpp)
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
     "${BASE_SOURCE_FILES}")

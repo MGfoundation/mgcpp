@@ -14,13 +14,10 @@
 #include <unordered_map>
 
 #include <mgcpp/gpu/forward.hpp>
-#include <mgcpp/context/device_manager.hpp>
+#include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
 {
-    template<typename T, typename U>
-    using hash_table = std::unordered_map<T, U>;
-
     class global_context
     {
     private:
@@ -28,12 +25,12 @@ namespace mgcpp
         hash_table<std::thread::id, thread_context> _thread_ctx;
         hash_table<std::thread::id, int> _context_ref_cnt;
 
-        global_context() noexcept = default;
-
         void
         reference_cnt_incr();
 
     public:
+        global_context() noexcept = default;
+
         global_context(global_context const& other) = delete;
         global_context(global_context&& other) = delete;
         global_context&
