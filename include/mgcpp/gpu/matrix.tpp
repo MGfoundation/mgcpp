@@ -22,7 +22,7 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, SO>::
     matrix() noexcept
     : _data(nullptr),
-        _context(nullptr),
+        _context(&global_context::get_thread_context()),
         _m_dim(0),
         _n_dim(0),
         _released(true) {}
@@ -31,20 +31,9 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     gpu::matrix<ElemType, DeviceId, SO>::
-    matrix(thread_context& context) noexcept
-        : _data(nullptr),
-          _context(&context),
-          _m_dim(0),
-          _n_dim(0),
-          _released(true) {}
-
-    template<typename ElemType,
-             size_t DeviceId,
-             storage_order SO>
-    gpu::matrix<ElemType, DeviceId, SO>::
     matrix(size_t i, size_t j)
         :_data(nullptr),
-         _context(nullptr),
+         _context(&global_context::get_thread_context()),
          _m_dim(i),
          _n_dim(j),
          _released(true)
@@ -58,26 +47,6 @@ namespace mgcpp
         _data = result.value();
     }
 
-    template<typename ElemType,
-             size_t DeviceId,
-             storage_order SO>
-    gpu::matrix<ElemType, DeviceId, SO>::
-    matrix(thread_context& context,
-           size_t i, size_t j)
-        :_data(nullptr),
-         _context(&context),
-         _m_dim(i),
-         _n_dim(j),
-         _released(true)
-    {
-        auto result =
-            cuda_malloc<ElemType>(_m_dim * _n_dim);
-        if(!result)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
-
-        _released = false;
-        _data = result.value();
-    }
 
     template<typename ElemType,
              size_t DeviceId,
@@ -85,7 +54,7 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, SO>::
     matrix(size_t i, size_t j, ElemType init)
         :_data(nullptr),
-         _context(nullptr),
+         _context(&global_context::get_thread_context()),
          _m_dim(i),
          _n_dim(j),
          _released(true)
@@ -118,33 +87,6 @@ namespace mgcpp
         }
     }
 
-    template<typename ElemType,
-             size_t DeviceId,
-             storage_order SO>
-    gpu::matrix<ElemType, DeviceId, SO>::
-    matrix(thread_context& context,
-           size_t i, size_t j, ElemType init)
-        :_data(nullptr),
-         _context(&context),
-         _m_dim(i),
-         _n_dim(j),
-         _released(true)
-    {
-        auto alloc_result =
-            cuda_malloc<ElemType>(_n_dim * _m_dim);
-        if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-        else
-        {
-            _released = false;
-            _data = alloc_result.value();
-        }
-
-        auto set_result =
-            cuda_memset(_data, init, _n_dim * _m_dim);
-        if(!set_result)
-            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
-    }
 
     template<typename ElemType,
              size_t DeviceId,
@@ -152,7 +94,7 @@ namespace mgcpp
     gpu::matrix<ElemType, DeviceId, SO>::
     matrix(cpu::matrix<ElemType, SO> const& cpu_mat)
         :_data(nullptr),
-         _context(nullptr),
+         _context(&global_context::get_thread_context()),
          _m_dim(0),
          _n_dim(0),
          _released(true)
@@ -431,5 +373,6 @@ namespace mgcpp
     {
         if(!_released)
             (void)cuda_free(_data);
+        global_context::reference_cnt_decr();
     }
 }

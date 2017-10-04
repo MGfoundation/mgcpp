@@ -9,6 +9,7 @@
 
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
@@ -32,17 +33,9 @@ namespace mgcpp
 
             inline ~matrix() noexcept;
 
-            inline matrix(thread_context& context) noexcept;
-
             inline matrix(size_t i, size_t j);
 
-            inline matrix(thread_context& context,
-                          size_t i, size_t j);
-
             inline matrix(size_t i, size_t j, ElemType init);
-
-            inline matrix(thread_context& context,
-                          size_t i, size_t j, ElemType init);
 
             inline matrix(cpu::matrix<ElemType, SO> const& cpu_mat);
 

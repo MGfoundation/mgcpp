@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/operations/mult.hpp>
+#include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
@@ -29,11 +30,10 @@ namespace mgcpp
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
-        thread_context* context =
-            const_cast<thread_context*>(first.get_thread_context());
+        thread_context* context = first.get_thread_context();
         
         std::error_code status =
-            cublasSgemm(context->get_cublas(Device),
+            cublasSgemm(context->get_cublas_context(Device),
                         CUBLAS_OP_N, CUBLAS_OP_N,
                         m, n, k,
                         &alpha,
