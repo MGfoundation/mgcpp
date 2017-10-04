@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <algorithm>
+#include <thread>
 
 #include <gtest/gtest.h>
 
@@ -20,7 +21,8 @@ TEST(gpu_matrix, default_constructor)
     EXPECT_EQ(mat._m_dim, 0u);
     EXPECT_EQ(mat._n_dim, 0u);
     EXPECT_EQ(mat._data, nullptr);
-    EXPECT_EQ(mat._context, nullptr);
+    EXPECT_EQ(mat._context, 
+              mgcpp::gpu::matrix<float>()._context);
     EXPECT_TRUE(mat._released);
 }
 
@@ -44,9 +46,9 @@ TEST(gpu_matrix, contextless_dimension_constructor)
         auto [m, n] = mat.shape();
         EXPECT_EQ(m, row_dim);
         EXPECT_EQ(n, col_dim);
-
         EXPECT_NE(mat._data, nullptr);
-        EXPECT_EQ(mat._context, nullptr);
+        EXPECT_EQ(mat._context, 
+                  mgcpp::gpu::matrix<float>()._context);
         EXPECT_FALSE(mat._released);
     }
 
@@ -79,7 +81,8 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_EQ(m, row_dim);
         EXPECT_EQ(n, col_dim);
 
-        EXPECT_EQ(mat._context, nullptr);
+        EXPECT_EQ(mat._context, 
+                  mgcpp::gpu::matrix<float>()._context);
         EXPECT_NE(mat._data, nullptr);
         EXPECT_FALSE(mat._released);
 

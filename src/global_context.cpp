@@ -10,33 +10,28 @@
 
 namespace mgcpp
 {
-    global_context _singl_context;
+    global_context _singl_context{};
 
     thread_context&
-    global_contex::
+    global_context::
     get_thread_context()
     {
         auto this_thread_id = std::this_thread::get_id();
-        auto lck = std::unique_lock<std::mutex>(_mtx);
-        ++_context_ref_cnt[id];
+        auto lck = std::unique_lock<std::mutex>(_singl_context._mtx);
+        ++_singl_context._context_ref_cnt[this_thread_id];
         return _singl_context._thread_ctx[this_thread_id];
     }
 
     void
-    global_contex::
-    reference_cnt_decr(std::thread::id const& id)
+    global_context::
+    reference_cnt_decr()
     {
-        auto lck = std::unique_lock<std::mutex>(_mtx);
-        --_context_ref_cnt[id];
+        auto lck = std::unique_lock<std::mutex>(_singl_context._mtx);
+        auto this_thread_id = std::this_thread::get_id();
+        auto& ref = _singl_context._context_ref_cnt[this_thread_id];
+        --ref;
 
-        if(_context_ref_cnt == 0)
-            _thread_ctx.erase(id);
+        if(ref == 0)
+            _singl_context._thread_ctx.erase(this_thread_id);
     }
-
-    // cublasHandle_t
-    // thread_context::
-    // get_cublas(size_t device_id) 
-    // {
-    //     return _device_managers[device_id].get_cublas();
-    // }
 }
