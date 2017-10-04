@@ -16,13 +16,13 @@ namespace mgcpp
 {
     namespace gpu
     {
-        template<typename ElemType,
+        template<typename T,
                  size_t DeviceId = 0,
                  storage_order SO = row_major>
         class matrix
         {
         private:
-            ElemType* _data;
+            T* _data;
             thread_context* _context;
             size_t _m_dim;
             size_t _n_dim;
@@ -33,40 +33,52 @@ namespace mgcpp
 
             inline ~matrix() noexcept;
 
+            inline
+            matrix(gpu::matrix<T, DeviceId, SO> const& other);
+
+            inline
+            matrix(gpu::matrix<T, DeviceId, SO>&& other) noexcept;
+
+            gpu::matrix<T, DeviceId, SO>&
+            operator=(gpu::matrix<T, DeviceId, SO> const& other);
+
+            gpu::matrix<T, DeviceId, SO>&
+            operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept;
+
             inline matrix(size_t i, size_t j);
 
-            inline matrix(size_t i, size_t j, ElemType init);
+            inline matrix(size_t i, size_t j, T init);
 
-            inline matrix(cpu::matrix<ElemType, SO> const& cpu_mat);
+            inline matrix(cpu::matrix<T, SO> const& cpu_mat);
 
-            inline matrix<ElemType, DeviceId, SO>&
+            inline matrix<T, DeviceId, SO>&
             zeros();
 
-            inline matrix<ElemType, DeviceId, SO>&
+            inline matrix<T, DeviceId, SO>&
             resize(size_t i, size_t j);
 
-            inline matrix<ElemType, DeviceId, SO>&
-            resize(size_t i, size_t j, ElemType init);
+            inline matrix<T, DeviceId, SO>&
+            resize(size_t i, size_t j, T init);
 
-            inline matrix<ElemType, DeviceId, SO>&
-            copy_from_host(cpu::matrix<ElemType, SO> const& cpu_mat);
+            inline matrix<T, DeviceId, SO>&
+            copy_from_host(cpu::matrix<T, SO> const& cpu_mat);
 
-            inline cpu::matrix<ElemType, SO>
+            inline cpu::matrix<T, SO>
             copy_to_host() const;
 
-            inline ElemType
+            inline T
             check_value(size_t i, size_t j) const;
 
-            inline ElemType const*
+            inline T const*
             get_data() const;
 
-            inline ElemType*
+            inline T*
             get_data_mutable();
 
             inline thread_context*
             get_thread_context() const noexcept;
 
-            inline ElemType*
+            inline T*
             release_data();
 
             inline std::pair<size_t, size_t>
