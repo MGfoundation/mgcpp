@@ -14,19 +14,23 @@ namespace mgcpp
 {
     template<size_t Device>
     gpu::matrix<float, Device, row_major>
-    mult(gpu::matrix<float, Device, row_major>& first,
+    mult(gpu::matrix<float, Device, row_major> const& first,
          gpu::matrix<float, Device, row_major> const& second)
     {
         float const alpha = 1;
         float const beta = 0;
 
-        size_t m = second.rows(); // this is right to be flipped
-        size_t k = second.columns();
-        size_t n = first.columns();
+        auto second_shape = second.shape();
+        auto first_shape = first.shape();
+
+        size_t m = second_shape.first;
+        size_t k = second_shape.second;
+        size_t n = first_shape.second;
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
-        thread_context* context = first.get_thread_context();
+        thread_context* context =
+            const_cast<thread_context*>(first.get_thread_context());
         
         std::error_code status =
             cublasSgemm(context->get_cublas(Device),

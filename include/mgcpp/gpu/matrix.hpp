@@ -23,8 +23,8 @@ namespace mgcpp
         private:
             ElemType* _data;
             thread_context* _context;
-            size_t _row_dim;
-            size_t _col_dim;
+            size_t _m_dim;
+            size_t _n_dim;
             bool _released;
 
         public:
@@ -71,16 +71,13 @@ namespace mgcpp
             get_data_mutable();
 
             inline thread_context*
-            get_thread_context() noexcept;
+            get_thread_context() const noexcept;
 
             inline ElemType*
             release_data();
 
-            inline size_t
-            rows() const noexcept;
-
-            inline size_t
-            columns() const noexcept;
+            inline std::pair<size_t, size_t>
+            shape() const noexcept;
         };
     }
 }

@@ -22,8 +22,8 @@ namespace mgcpp
         {
         private:
             ElemType* _data; 
-            size_t _row_dim;
-            size_t _col_dim;
+            size_t _m_dim;
+            size_t _n_dim;
         
         public:
             inline matrix() noexcept;
@@ -57,11 +57,8 @@ namespace mgcpp
             inline ElemType*
             get_data_mutable() const;
 
-            inline size_t
-            rows() const noexcept;
-
-            inline size_t
-            columns() const noexcept;
+            inline std::pair<size_t, size_t>
+            shape() const noexcept;
         };
     }
 }

@@ -16,7 +16,7 @@ namespace mgcpp
              size_t Device,
              storage_order SO>
     gpu::matrix<T, Device, SO>
-    mult(gpu::matrix<T, Device, SO>& first,
+    mult(gpu::matrix<T, Device, SO> const& first,
          gpu::matrix<T, Device, SO> const& second);
 
     // template<typename T,
@@ -36,9 +36,8 @@ namespace mgcpp
              size_t Device,
              storage_order SO>
     void
-    mult_assign(
-        gpu::matrix<T, Device, SO>& first,
-        gpu::matrix<T, Device, SO> const& second);
+    mult_assign(gpu::matrix<T, Device, SO>& first,
+                gpu::matrix<T, Device, SO> const& second);
 
     // template<typename T,
     //          size_t IdFirst, size_t IdSecond,

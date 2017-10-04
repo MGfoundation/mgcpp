@@ -16,16 +16,17 @@ namespace mgcpp
     cpu::matrix<ElemType, SO>::
     matrix() noexcept
     : _data(nullptr),
-        _row_dim(0),
-        _col_dim(0) {}
+        _m_dim(0),
+        _n_dim(0) {}
+
 
     template<typename ElemType,
              storage_order SO>
     cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j)
         : _data(nullptr),
-          _row_dim(j),
-          _col_dim(i)
+          _m_dim(i),
+          _n_dim(j)
     {
         size_t total_size = i * j;
         ElemType* ptr =
@@ -42,16 +43,16 @@ namespace mgcpp
     cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j, ElemType* data) noexcept
         : _data(data),
-          _row_dim(j),
-          _col_dim(i) {}
+          _m_dim(i),
+          _n_dim(j) {}
 
     template<typename ElemType,
              storage_order SO>
     cpu::matrix<ElemType, SO>::
     matrix(size_t i, size_t j, ElemType init)
         : _data(nullptr),
-          _row_dim(j),
-          _col_dim(i)
+          _m_dim(i),
+          _n_dim(j)
     {
         size_t total_size = i * j;
         ElemType* ptr =
@@ -71,10 +72,10 @@ namespace mgcpp
     cpu::matrix<ElemType, SO>::
     operator()(size_t i, size_t j) const
     {
-        if(i > _col_dim || j > _row_dim)
-                MGCPP_THROW_OUT_OF_RANGE("index out of range");
+        if(i > _m_dim || j > _n_dim)
+            MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
-        return _data[i * _row_dim + j];
+        return _data[i * _n_dim + j];
     }
 
     template<typename ElemType,
@@ -83,28 +84,19 @@ namespace mgcpp
     cpu::matrix<ElemType, SO>::
     operator()(size_t i, size_t j)
     {
-        if(i > _col_dim || j > _row_dim)
+        if(i > _m_dim || j > _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
-        return _data[i * _row_dim + j];
+        return _data[i * _n_dim + j];
     }
 
     template<typename ElemType,
              storage_order SO>
-    inline size_t
+    inline std::pair<size_t, size_t> 
     cpu::matrix<ElemType, SO>::
-    rows() const noexcept
+    shape() const noexcept
     {
-        return SO == column_major ? _row_dim : _col_dim;
-    }
-
-    template<typename ElemType,
-             storage_order SO>
-    inline size_t
-    cpu::matrix<ElemType, SO>::
-    columns() const noexcept
-    {
-        return SO == column_major ? _col_dim : _row_dim;
+        return {_m_dim, _n_dim};
     }
 
     template<typename ElemType,
