@@ -11,26 +11,26 @@
 
 namespace mgcpp
 {
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    cpu::matrix<ElemType, SO>::
+    cpu::matrix<T, SO>::
     matrix() noexcept
     : _data(nullptr),
         _m_dim(0),
         _n_dim(0) {}
 
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    cpu::matrix<ElemType, SO>::
+    cpu::matrix<T, SO>::
     matrix(size_t i, size_t j)
         : _data(nullptr),
           _m_dim(i),
           _n_dim(j)
     {
         size_t total_size = i * j;
-        ElemType* ptr =
-            (ElemType*)malloc(sizeof(ElemType) * total_size);
+        T* ptr =
+            (T*)malloc(sizeof(T) * total_size);
 
         if(!ptr)
             MGCPP_THROW_BAD_ALLOC;
@@ -38,25 +38,25 @@ namespace mgcpp
         _data = ptr;
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    cpu::matrix<ElemType, SO>::
-    matrix(size_t i, size_t j, ElemType* data) noexcept
+    cpu::matrix<T, SO>::
+    matrix(size_t i, size_t j, T* data) noexcept
         : _data(data),
           _m_dim(i),
           _n_dim(j) {}
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    cpu::matrix<ElemType, SO>::
-    matrix(size_t i, size_t j, ElemType init)
+    cpu::matrix<T, SO>::
+    matrix(size_t i, size_t j, T init)
         : _data(nullptr),
           _m_dim(i),
           _n_dim(j)
     {
         size_t total_size = i * j;
-        ElemType* ptr =
-            (ElemType*)malloc(sizeof(ElemType) * total_size);
+        T* ptr =
+            (T*)malloc(sizeof(T) * total_size);
 
         if(!ptr)
             MGCPP_THROW_BAD_ALLOC;
@@ -66,10 +66,10 @@ namespace mgcpp
         _data = ptr;
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    inline ElemType
-    cpu::matrix<ElemType, SO>::
+    inline T
+    cpu::matrix<T, SO>::
     operator()(size_t i, size_t j) const
     {
         if(i > _m_dim || j > _n_dim)
@@ -78,10 +78,10 @@ namespace mgcpp
         return _data[i * _n_dim + j];
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    inline ElemType&
-    cpu::matrix<ElemType, SO>::
+    inline T&
+    cpu::matrix<T, SO>::
     operator()(size_t i, size_t j)
     {
         if(i > _m_dim || j > _n_dim)
@@ -90,36 +90,36 @@ namespace mgcpp
         return _data[i * _n_dim + j];
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
     inline std::pair<size_t, size_t> 
-    cpu::matrix<ElemType, SO>::
+    cpu::matrix<T, SO>::
     shape() const noexcept
     {
         return {_m_dim, _n_dim};
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    inline ElemType const*
-    cpu::matrix<ElemType, SO>::
+    inline T const*
+    cpu::matrix<T, SO>::
     get_data() const
     {
         return _data;
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    inline ElemType*
-    cpu::matrix<ElemType, SO>::
+    inline T*
+    cpu::matrix<T, SO>::
     get_data_mutable() const
     {
         return _data;
     }
 
-    template<typename ElemType,
+    template<typename T,
              storage_order SO>
-    cpu::matrix<ElemType, SO>::
+    cpu::matrix<T, SO>::
     ~matrix() noexcept
     {
         (void)free(_data);

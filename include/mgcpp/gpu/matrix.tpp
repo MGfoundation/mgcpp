@@ -61,12 +61,13 @@ namespace mgcpp
         auto alloc_result =
             cuda_malloc<T>(other._m_dim * other._n_dim);
         if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
 
-        cpy_result = cuda_memcpy(alloc_result.value(),
-                                 other._data,
-                             _m_dim * _n_dim,
-                             cuda_memcpy_kind::device_to_device);
+        auto cpy_result =
+            cuda_memcpy(alloc_result.value(),
+                        other._data,
+                        _m_dim * _n_dim,
+                        cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
         {
@@ -102,7 +103,7 @@ namespace mgcpp
     gpu::matrix<T, DeviceId, SO>::
     operator=(gpu::matrix<T, DeviceId, SO> const& other)
     {
-        if(!released)
+        if(!_released)
         {
             auto free_result = cuda_free(_data);
             if(!free_result)
@@ -113,12 +114,13 @@ namespace mgcpp
         auto alloc_result =
             cuda_malloc<T>(other._m_dim * other._n_dim);
         if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
 
-        cpy_result = cuda_memcpy(alloc_result.value(),
-                                 other._data,
-                                 _m_dim * _n_dim,
-                                 cuda_memcpy_kind::device_to_device);
+        auto cpy_result =
+            cuda_memcpy(alloc_result.value(),
+                        other._data,
+                        _m_dim * _n_dim,
+                        cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
         {
@@ -139,7 +141,7 @@ namespace mgcpp
     gpu::matrix<T, DeviceId, SO>::
     operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept
     {
-        if(!released)
+        if(!_released)
             (void)cuda_free(_data);
         _data = other._data;
         _m_dim = other._m_dim;
@@ -200,17 +202,6 @@ namespace mgcpp
          _n_dim(0),
          _released(true)
     {
-        // if(SO == row_major)
-        // {
-        //     _n_dim = cpu_mat.columns();
-        //     _m_dim = cpu_mat.rows();
-        // }
-        // else
-        // {
-        //     _n_dim = cpu_mat.rows();
-        //     _m_dim = cpu_mat.columns();
-        // }
-
         auto shape = cpu_mat.shape();
         _m_dim = shape.first;
         _n_dim = shape.second;

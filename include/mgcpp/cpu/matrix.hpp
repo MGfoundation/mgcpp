@@ -16,12 +16,12 @@ namespace mgcpp
 {
     namespace cpu
     {
-        template<typename ElemType,
+        template<typename T,
                  storage_order StoreOrder = row_major>
         class matrix
         {
         private:
-            ElemType* _data; 
+            T* _data; 
             size_t _m_dim;
             size_t _n_dim;
         
@@ -32,29 +32,29 @@ namespace mgcpp
 
             inline matrix(size_t i, size_t j);
 
-            inline matrix(size_t i, size_t j, ElemType init);
+            inline matrix(size_t i, size_t j, T init);
 
             inline matrix(size_t i, size_t j,
-                          ElemType* data) noexcept;
+                          T* data) noexcept;
 
             // template<size_t DeviceId>
             // inline matrix(
-            //     gpu::matrix<ElemType, DeviceId> const& gpu_mat);
+            //     gpu::matrix<T, DeviceId> const& gpu_mat);
 
             // template<size_t DeviceId>
-            // inline gpu::matrix<ElemType, DeviceId, >
+            // inline gpu::matrix<T, DeviceId, >
             // copy_to_gpu() const;
 
-            inline ElemType
+            inline T
             operator()(size_t i, size_t j) const;
 
-            inline ElemType&
+            inline T&
             operator()(size_t i, size_t j);
 
-            inline ElemType const*
+            inline T const*
             get_data() const;
 
-            inline ElemType*
+            inline T*
             get_data_mutable() const;
 
             inline std::pair<size_t, size_t>
