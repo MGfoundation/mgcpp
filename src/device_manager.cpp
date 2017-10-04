@@ -8,30 +8,16 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
+#include <cstdio>
+
 namespace mgcpp
 {
     device_manager::
-    device_manager(size_t device_id) :_device_id(device_id) {}
+    device_manager(size_t device_id)
+        :_device_id(device_id),
+         _cublas_handle({}) {}
 
-    device_manager::
-    device_manager(device_manager&& other) noexcept
-        : _device_id(other._device_id),
-          _cublas_handle(std::move(other._cublas_handle))
-    {
-        other._cublas_handle = nullptr;
-    }
-
-    device_manager&
-    device_manager::
-    operator=(device_manager&& other) noexcept
-    {
-        _cublas_handle = std::move(other._cublas_handle);
-        _device_id = other._device_id;
-
-        return *this;
-    }
-
-    std::unique_ptr<cublasHandle_t>
+    std::optional<cublasHandle_t>
     device_manager::
     create_cublas_handle() const
     {
@@ -41,7 +27,7 @@ namespace mgcpp
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
 
-        return std::make_unique<cublasHandle_t>(handle);
+        return handle;
     }
 
     cublasHandle_t

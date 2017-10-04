@@ -4,7 +4,6 @@
 #        (See accompanying file LICENSE or copy at
 # 	        http://www.boost.org/LICENSE_1_0.txt)
 
-
 cmake_minimum_required(VERSION 3.8)
 project(mgcpp)
 
@@ -20,15 +19,18 @@ endmacro()
 # set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
+
 # options
 option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_CUBLAS "compile mgcpp with cublas features" ON)
-option(USE_THRUST "compile mgcpp with thrust features" ON)
+option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
+
 
 # cmake modules path
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
 
 # cuda dependency
 find_package(CUDA REQUIRED)
@@ -66,12 +68,13 @@ if(MSVC)
 	"${CMAKE_CXX_FLAGS} /w3 /Ot /Ox /MP")
 else()
     set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++17 -O3 -fPIC -Wall -Wextra")
 endif()
 message("C++ flags = ${BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
+
 
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
@@ -82,8 +85,8 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
 
-## mgcpp dependencies
 
+## mgcpp dependencies
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 
 # cuBLAS
@@ -94,7 +97,11 @@ else()
     message(STATUS "Not building with cuBLAS(most features will be restricted)")
 endif()
 
-
+# cuSPARSE
+if(USE_CUSPARSE)
+    target_link_libraries(${PROJECT_NAME}
+	${CUDA_cusparse_LIBRARIES})
+endif()
 
 # add outcome library
 target_include_directories(${PROJECT_NAME}
@@ -104,7 +111,6 @@ target_include_directories(${PROJECT_NAME}
 # mgcpp base
 target_link_libraries(${PROJECT_NAME}
     "${PROJECT_NAME}base")
-
 
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)
@@ -119,6 +125,7 @@ if(USE_MAGMA)
 else()
     message(STATUS "Not building with Magma (certain features will be restricted)")
 endif(USE_MAGMA)
+
 
 # Tests
 if(BUILD_TESTING)
@@ -153,7 +160,7 @@ if(BUILD_TESTING)
 	${GTEST_LIBRARIES})
 
     set(TEST_BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra")
 
     message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 
