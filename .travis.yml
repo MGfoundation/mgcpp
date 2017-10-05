@@ -54,21 +54,11 @@ matrix:
       env:
         - MATRIX_EVAL="CXX=clang++-5.0 && CC=clang-5.0"
 
-    - os: osx
-      osx_image: xcode8
-      env:
-        - MATRIX_EVAL="brew install gcc-6 && CC=gcc-6 && CXX=g++-6"
-
-    - os: osx
-      osx_image: xcode8
-      env:
-        - MATRIX_EVAL="brew install gcc-7 && CC=gcc-7 && CXX=g++-7"
-          
-install:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then source .travis/cuda_install_osx.sh; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then source .travis/cuda_install_ubuntu.sh; fi
-
+before_install:
   - eval "${MATRIX_EVAL}"
+
+install:
+  - source .travis/cuda_install_ubuntu.sh
 
   - echo "installing cmake"
   - source .travis/cmake_install.sh
