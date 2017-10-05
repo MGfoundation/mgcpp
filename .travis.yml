@@ -1,11 +1,9 @@
 sudo: required
-dist: trusty
 language: cpp
 
 matrix:
   include:
     - env: CXX=g++-6 CC=gcc-6
-      os: linux
       addons:
         apt:
           sources:
@@ -14,7 +12,6 @@ matrix:
             - g++-6
 
     - env: CXX=g++-7 CC=gcc-7
-      os: linux
       addons:
         apt:
           sources:
@@ -23,7 +20,6 @@ matrix:
             - g++-7
 
     - env: CXX=clang++-3.9 CC=clang-3.9
-      os: linux
       addons:
         apt:
           sources:
@@ -33,7 +29,6 @@ matrix:
             - clang-3.9
 
     - env: CXX=clang++-4.0 CC=clang-4.0
-      os: linux
       addons:
         apt:
           sources:
@@ -43,7 +38,6 @@ matrix:
             - clang-4.0
 
     - env: CXX=clang++-5.0 CC=clang-5.0
-      os: linux
       addons:
         apt:
           sources:
