@@ -1,0 +1,83 @@
+sudo: false
+dist: trusty
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - g++-6
+          - gcc-6
+          - cmake
+      env: CXX=g++-6 CC=gcc-6
+
+    - os: linux
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - g++-7
+          - gcc-7
+          - cmake
+      env: CXX=g++-7 CC=gcc-7
+
+    - os: linux
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-3.9
+        packages:
+          - clang-3.9
+          - cmake
+      env: CXX=clang++-3.9 CC=clang-3.9
+
+    - os: linux
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-4.0
+        packages:
+          - clang-4.0
+          - cmake
+      env: CXX=clang++-4.0 CC=clang-4.0
+
+    - os: linux
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+          - llvm-toolchain-trusty-5.0
+        packages:
+          - clang-5.0
+          - cmake
+      env: CXX=clang++-5.0 CC=clang-5.0
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - OSX_EVAL="brew install gcc-6 && CC=gcc-6 && CXX=g++-6"
+
+    - os: osx
+      osx_image: xcode8
+      env:
+        - OSX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
+          
+before_install:
+  - echo "installing CUDA"
+  - source .travis/install_cuda.sh
+
+install:
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then eval "${OSX_EVAL}"; fi
+  - echo ${CC}
+  - echo ${CXX}
+  - ${CXX} --version
+  - cmake --version
+
+script:
+  - git submodule init
+  - git submodule update --recursive
+  - cmake -G "Unix Makefiles"
+  - make install
+  - make test
