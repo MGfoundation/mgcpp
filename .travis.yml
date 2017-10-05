@@ -58,7 +58,7 @@ before_install:
   - eval "${MATRIX_EVAL}"
 
 install:
-  - source .travis/cuda_install_ubuntu.sh
+  - source .travis/cuda_install.sh
 
   - echo "installing cmake"
   - source .travis/cmake_install.sh
@@ -76,6 +76,7 @@ install:
   - ~/cmake-${CMAKE_VER}/bin/cmake --version
 
 script:
+  - cd ~/Red-Portal/mgcpp
   - ~/cmake-${CMAKE_VER}/bin/cmake -G "Unix Makefiles"
   - make install
   - make test
