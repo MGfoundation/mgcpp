@@ -4,7 +4,7 @@ cd googletest
 
 ~/cmake-${CMAKE_VER}/bin/cmake -G "Unix Makefiles"
 
-make -j2 -s
+make -j2 -s > trash.txt
 sudo make install
 
 cd ~/Red-Portal/mgcpp

@@ -7,7 +7,7 @@ cd cmake-3.9.4/
 
 ./bootstrap
 
-make -j2 -s 
+make -j2 > trash.txt
 make install
 
 CMAKE_VER="3.9.4"
