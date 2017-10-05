@@ -7,4 +7,4 @@ cd googletest
 make -j2 -s > trash.txt
 sudo make install
 
-cd ~/Red-Portal/mgcpp
+cd ~/build/Red-Portal/mgcpp

@@ -8,8 +8,8 @@ cd cmake-3.9.4/
 ./bootstrap
 
 make -j2 > trash.txt
-make install
+sudo make install
 
 CMAKE_VER="3.9.4"
 
-cd ~/Red-Portal/mgcpp
+cd ~/build/Red-Portal/mgcpp
