@@ -11,7 +11,8 @@ matrix:
         packages:
           - g++-6
           - gcc-6
-      env: CXX=g++-6 CC=gcc-6
+      env:
+        - MATRIX_EVAL="CXX=g++-6 && CC=gcc-6"
 
     - os: linux
       apt:
@@ -20,7 +21,8 @@ matrix:
         packages:
           - g++-7
           - gcc-7
-      env: CXX=g++-7 CC=gcc-7
+      env:
+        - MATRIX_EVAL="CXX=g++-7 && CC=gcc-7"
 
     - os: linux
       apt:
@@ -29,7 +31,8 @@ matrix:
           - llvm-toolchain-trusty-3.9
         packages:
           - clang-3.9
-      env: CXX=clang++-3.9 CC=clang-3.9
+      env: 
+        - MATRIX_EVAL="CXX=clang++-3.9 && CC=clang-3.9"
 
     - os: linux
       apt:
@@ -38,7 +41,8 @@ matrix:
           - llvm-toolchain-trusty-4.0
         packages:
           - clang-4.0
-      env: CXX=clang++-4.0 CC=clang-4.0
+      env: 
+        - MATRIX_EVAL="CXX=clang++-4.0 && CC=clang-4.0"
 
     - os: linux
       apt:
@@ -47,23 +51,24 @@ matrix:
           - llvm-toolchain-trusty-5.0
         packages:
           - clang-5.0
-      env: CXX=clang++-5.0 CC=clang-5.0
+      env:
+        - MATRIX_EVAL="CXX=clang++-5.0 && CC=clang-5.0"
 
     - os: osx
       osx_image: xcode8
       env:
-        - OSX_EVAL="brew install gcc-6 && CC=gcc-6 && CXX=g++-6"
+        - MATRIX_EVAL="brew install gcc-6 && CC=gcc-6 && CXX=g++-6"
 
     - os: osx
       osx_image: xcode8
       env:
-        - OSX_EVAL="brew install gcc-7 && CC=gcc-7 && CXX=g++-7"
+        - MATRIX_EVAL="brew install gcc-7 && CC=gcc-7 && CXX=g++-7"
           
 install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then source .travis/cuda_install_osx.sh; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then source .travis/cuda_install_ubuntu.sh; fi
 
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then eval "${OSX_EVAL}"; fi
+  - eval "${MATRIX_EVAL}"
 
   - echo "installing cmake"
   - source .travis/cmake_install.sh
