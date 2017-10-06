@@ -24,9 +24,9 @@ TEST(operation_mult, row_major_multiplication)
 
     auto C_mat = mgcpp::mult(A_mat, B_mat);
 
-    auto [m, n] = C_mat.shape();
-    EXPECT_EQ(m, 2);
-    EXPECT_EQ(n, 2);
+    auto shape = C_mat.shape();
+    EXPECT_EQ(shape.first, 2);
+    EXPECT_EQ(shape.second, 2);
 
     printf("safe?\n");
     for(size_t i = 0; i < 2; ++i)
