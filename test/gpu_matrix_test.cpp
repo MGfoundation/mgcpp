@@ -286,7 +286,17 @@ TEST(gpu_matrix, copy_to_host)
 
     mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
 
+    auto initial_mem = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(initial_mem);
+    auto initial_freemem = initial_mem.value().first;
+
     EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+
+    auto aftercpy_mem = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(aftercpy_mem);
+    auto aftercpy_freemem = aftercpy_mem.value().first;
+    EXPECT_EQ(aftercpy_mem, aftercpy_freemem);
+
     for(size_t i = 0; i < row_dim; ++i)
     {
         for(size_t j = 0; j < col_dim; ++j)
