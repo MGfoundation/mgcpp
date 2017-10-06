@@ -19,15 +19,11 @@ TEST(operation_mult, row_major_multiplication)
     mgcpp::gpu::matrix<float> A_mat(2, 4);
     A_mat.copy_from_host(A_init_mat);
 
-    printf("safe?\n");
     mgcpp::gpu::matrix<float> B_mat(4, 2);
-    printf("safe?\n");
     B_mat.copy_from_host(B_init_mat);
 
-    printf("safe?\n");
     auto C_mat = mgcpp::mult(A_mat, B_mat);
 
-    printf("safe?\n");
     auto [m, n] = C_mat.shape();
     EXPECT_EQ(m, 2);
     EXPECT_EQ(n, 2);

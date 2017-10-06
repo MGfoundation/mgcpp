@@ -105,7 +105,7 @@ namespace mgcpp
                 size_t count, cuda_memcpy_kind kind) noexcept
     {
         std::error_code status =
-            cudaMemcpy((void*)to, (void*)from,
+            cudaMemcpy((void*)to, (void const*)from,
                        count * sizeof(ElemType),
                        static_cast<cudaMemcpyKind>(kind));
 
