@@ -286,11 +286,40 @@ TEST(gpu_matrix, copy_to_host)
 
     mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
 
+    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
+                << "index i: " << i << " j: " << j;
+        }
+    }
+}
+
+TEST(gpu_matrix, copy_from_host_multiple_times)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+
+    mgcpp::cpu::matrix<float> cpu_mat_first(row_dim, col_dim);
+
+    size_t counter = 0;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            cpu_mat_first(i, j) = counter;
+        }
+    }
+
+    mgcpp::gpu::matrix<float> gpu_mat_first(row_dim, col_dim);
+
     auto initial_mem = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(initial_mem);
     auto initial_freemem = initial_mem.value().first;
 
-    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+    EXPECT_NO_THROW({gpu_mat_first.copy_from_host(cpu_mat_first);});
 
     auto aftercpy_mem = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(aftercpy_mem);
@@ -301,7 +330,83 @@ TEST(gpu_matrix, copy_to_host)
     {
         for(size_t j = 0; j < col_dim; ++j)
         {
-            EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
+            EXPECT_EQ(gpu_mat_first.check_value(i, j),
+                      cpu_mat_first(i, j))
+                << "index i: " << i << " j: " << j;
+        }
+    }
+
+    row_dim = 4;
+    col_dim = 2;
+
+    mgcpp::cpu::matrix<float> cpu_mat_second(row_dim, col_dim);
+
+    counter = 2;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            cpu_mat_second(i, j) = counter;
+        }
+    }
+
+    mgcpp::gpu::matrix<float> gpu_mat_second(row_dim, col_dim);
+
+    auto initial_mem2 = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(initial_mem);
+    auto initial_freemem2 = initial_mem2.value().first;
+
+    EXPECT_NO_THROW({
+            gpu_mat_second.copy_from_host(cpu_mat_second);});
+
+    auto aftercpy_mem2 = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(aftercpy_mem2);
+    auto aftercpy_freemem2 = aftercpy_mem2.value().first;
+    EXPECT_EQ(initial_freemem2, aftercpy_freemem2);
+
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            EXPECT_EQ(gpu_mat_second.check_value(i, j),
+                      cpu_mat_second(i, j))
+                << "index i: " << i << " j: " << j;
+        }
+    }
+
+    row_dim = 3;
+    col_dim = 3;
+
+    mgcpp::cpu::matrix<float> cpu_mat_third(row_dim, col_dim);
+
+    counter = 3;
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            cpu_mat_third(i, j) = counter;
+        }
+    }
+
+    mgcpp::gpu::matrix<float> gpu_mat_third(row_dim, col_dim);
+
+    auto initial_mem3 = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(initial_mem3);
+    auto initial_freemem3 = initial_mem3.value().first;
+
+    EXPECT_NO_THROW({gpu_mat_third.copy_from_host(cpu_mat_third);});
+
+    auto aftercpy_mem3 = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(aftercpy_mem3);
+    auto aftercpy_freemem3 = aftercpy_mem3.value().first;
+    EXPECT_EQ(initial_freemem3, aftercpy_freemem3);
+
+    for(size_t i = 0; i < row_dim; ++i)
+    {
+        for(size_t j = 0; j < col_dim; ++j)
+        {
+            EXPECT_EQ(gpu_mat_third.check_value(i, j),
+                      cpu_mat_third(i, j))
                 << "index i: " << i << " j: " << j;
         }
     }
