@@ -29,6 +29,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-3.9
           packages:
+            - g++-7
             - clang-3.9
 
     - env: CXX=clang++-4.0 CC=clang-4.0
@@ -38,6 +39,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-4.0
           packages:
+            - g++-7
             - clang-4.0
 
     - env: CXX=clang++-5.0 CC=clang-5.0
@@ -48,6 +50,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-5.0
           packages:
+            - g++-7
             - clang-5.0
 
 before_install:
