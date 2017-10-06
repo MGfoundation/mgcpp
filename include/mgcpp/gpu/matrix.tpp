@@ -75,7 +75,7 @@ namespace mgcpp
         if(!cpy_result)
         {
             cuda_free(cpy_result.value());
-            MGCPP_THROW_SYSTEM_ERROR(_cpy_result.error());
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
         _released = false;
