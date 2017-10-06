@@ -42,7 +42,9 @@ namespace mgcpp
         auto result =
             cuda_malloc<T>(_m_dim * _n_dim);
         if(!result)
+        {
             MGCPP_THROW_SYSTEM_ERROR(result.error());
+        }
 
         _released = false;
         _data = result.value();
@@ -105,8 +107,7 @@ namespace mgcpp
         _released = false;
         _data = alloc_result.value();
 
-        T* buffer =
-            (T*)malloc(sizeof(T) * total_size);
+        T* buffer = (T*)malloc(sizeof(T) * total_size);
         if(!buffer)
         {
             MGCPP_THROW_BAD_ALLOC;
@@ -122,7 +123,6 @@ namespace mgcpp
         free(buffer);
         if(!memcpy_result)
         {
-            // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
     }
