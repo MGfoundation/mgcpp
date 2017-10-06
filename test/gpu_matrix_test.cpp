@@ -295,7 +295,7 @@ TEST(gpu_matrix, copy_to_host)
     auto aftercpy_mem = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(aftercpy_mem);
     auto aftercpy_freemem = aftercpy_mem.value().first;
-    EXPECT_EQ(aftercpy_mem, aftercpy_freemem);
+    EXPECT_EQ(initial_freemem, aftercpy_freemem);
 
     for(size_t i = 0; i < row_dim; ++i)
     {
