@@ -29,7 +29,7 @@ namespace mgcpp
         reference_cnt_incr();
 
     public:
-        global_context() noexcept = default;
+        global_context() = default;
 
         global_context(global_context const& other) = delete;
         global_context(global_context&& other) = delete;
