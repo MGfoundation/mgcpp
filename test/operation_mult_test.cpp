@@ -28,10 +28,9 @@ TEST(operation_mult, row_major_multiplication)
     EXPECT_EQ(shape.first, 2);
     EXPECT_EQ(shape.second, 3);
 
-    printf("safe?\n");
-    for(size_t i = 0; i < 2; ++i)
+    for(size_t i = 0; i < shape.first; ++i)
     {
-        for(size_t j = 0; j < 2; ++j)
+        for(size_t j = 0; j < shape.second; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 32); 
         } 
