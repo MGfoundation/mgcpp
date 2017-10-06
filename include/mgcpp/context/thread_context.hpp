@@ -29,12 +29,14 @@ namespace mgcpp
         
     public:
         thread_context() = default;
-        thread_context(thread_context&& other) noexcept = default;
         thread_context(thread_context const& other) = delete;
         thread_context&
-        operator=(thread_context&& other) noexcept = default;
-        thread_context&
         operator=(thread_context const& other) = delete;
+
+        thread_context(thread_context&& other) noexcept;
+
+        thread_context&
+        operator=(thread_context&& other) noexcept;
 
         cublasHandle_t 
         get_cublas_context(size_t device_id);

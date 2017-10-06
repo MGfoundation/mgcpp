@@ -33,4 +33,18 @@ namespace mgcpp
 
         return *handle;
     }
+
+    thread_context::
+    thread_context(thread_context&& other) noexcept
+        : _cublas_handle(std::move(other._cublas_handle))
+    {}
+
+    thread_context&
+    thread_context::
+    operator=(thread_context&& other) noexcept
+    {
+        _cublas_handle = std::move(other._cublas_handle);
+
+        return *this;
+    }
 }
