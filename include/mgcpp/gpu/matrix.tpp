@@ -11,6 +11,7 @@
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
 #include <cstdlib>
+#include <cstdio>
 #include <type_traits>
 #include <cstring>
 
@@ -355,12 +356,16 @@ namespace mgcpp
         size_t total_size = _m_dim * _n_dim;
 
         auto alloc_result = cuda_malloc<T>(total_size);
+        
+        printf("fuxx...\n");
         if(!alloc_result)
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        printf("fuxx...\n");
         _released = false;
 
         _data = alloc_result.value();
         
+        printf("fuxx...\n");
         auto memcpy_result =
             cuda_memcpy(_data,
                         cpu_mat.get_data(),
@@ -369,6 +374,7 @@ namespace mgcpp
 
         if(!memcpy_result)
         {
+            printf("fuxx...\n");
             // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(memcpy_result.error());
         }
