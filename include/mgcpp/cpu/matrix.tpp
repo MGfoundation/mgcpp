@@ -55,11 +55,12 @@ namespace mgcpp
           _n_dim(j)
     {
         size_t total_size = i * j;
-        T* ptr =
-            (T*)malloc(sizeof(T) * total_size);
+        T* ptr = (T*)malloc(sizeof(T) * total_size);
 
         if(!ptr)
+        {
             MGCPP_THROW_BAD_ALLOC;
+        }
 
         std::fill(ptr, ptr + total_size, init);
         
