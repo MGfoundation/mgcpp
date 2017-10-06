@@ -6,8 +6,6 @@
 
 #include <mgcpp/context/global_context.hpp>
 
-#include <cstdio>
-
 namespace mgcpp
 {
     global_context _singl_context{};
