@@ -1,5 +1,5 @@
 sudo: required
-language: cpp
+language: generic
 
 matrix:
   include:
@@ -64,5 +64,5 @@ install:
 
 script:
   - ~/cmake-${CMAKE_VER}/bin/cmake -G "Unix Makefiles"
+  - make -j2
   - make install
-  - make test
