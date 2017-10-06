@@ -361,20 +361,15 @@ namespace mgcpp
         {
             MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
         }
+        if(_released)
+        {
+            MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
+        }
 
-        size_t total_size = _m_dim * _n_dim;
-
-        // auto alloc_result = cuda_malloc<T>(total_size);
-        // if(!alloc_result)
-        //     MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-
-        // _released = false;
-        // _data = alloc_result.value();
-        
         auto memcpy_result =
             cuda_memcpy(_data,
                         cpu_mat.get_data(),
-                        total_size,
+                        _m_dim * _n_dim,
                         cuda_memcpy_kind::host_to_device);
 
         if(!memcpy_result)
