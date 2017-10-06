@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cstdio>
+#include <cassert>
 
 #include <gtest/gtest.h>
 
@@ -16,10 +17,14 @@ TEST(operation_mult, row_major_multiplication)
     mgcpp::cpu::matrix<float> A_init_mat(2, 4, 2);
     mgcpp::cpu::matrix<float> B_init_mat(4, 2, 4);
 
+    auto b_shape = B_init_mat.shape();
+    assert(b_shape.first * b_shape.second == 8);
+
     mgcpp::gpu::matrix<float> A_mat(2, 4);
     A_mat.copy_from_host(A_init_mat);
 
     mgcpp::gpu::matrix<float> B_mat(4, 2);
+    assert(B_init_mat.shape() == B_mat.shape());
     B_mat.copy_from_host(B_init_mat);
 
     auto C_mat = mgcpp::mult(A_mat, B_mat);
