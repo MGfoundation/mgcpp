@@ -29,8 +29,8 @@ TEST(cpu_matrix, allocating_constructor)
     EXPECT_NE(mat._data, nullptr);
 
     auto shape = mat.shape();
-    EXPECT_EQ(shape.first, 0);
-    EXPECT_EQ(shape.second, 0);
+    EXPECT_EQ(shape.first, row_dim);
+    EXPECT_EQ(shape.second, col_dim);
 }
 
 TEST(cpu_matrix, allocating_initializing_constructor)
@@ -43,8 +43,8 @@ TEST(cpu_matrix, allocating_initializing_constructor)
     EXPECT_NE(mat._data, nullptr);
 
     auto shape = mat.shape();
-    EXPECT_EQ(shape.first, 0);
-    EXPECT_EQ(shape.second, 0);
+    EXPECT_EQ(shape.first, row_dim);
+    EXPECT_EQ(shape.second, col_dim);
 
     EXPECT_NO_THROW(
         {

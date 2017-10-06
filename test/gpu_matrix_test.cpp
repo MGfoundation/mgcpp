@@ -79,8 +79,8 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_GT(before_memory, after_memory);
 
         auto shape = mat.shape();
-        EXPECT_EQ(shape.first, 0);
-        EXPECT_EQ(shape.second, 0);
+        EXPECT_EQ(shape.first, row_dim);
+        EXPECT_EQ(shape.second, col_dim);
 
         EXPECT_EQ(mat._context, 
                   mgcpp::gpu::matrix<float>()._context);
