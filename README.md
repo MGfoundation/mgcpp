@@ -14,7 +14,7 @@
 </div>
 </div>
 
-# mgcpp<a id="sec-1" name="sec-1"></a>
+# mgcpp<a id="sec-1" name="sec-1"></a> [![Build Status](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)](https://travis-ci.org/Red-Portal/mgcpp)
 
 A CUDA based C++ Multi GPU Linear Algebra Library
 
@@ -39,10 +39,10 @@ Not including them might result in some featrues not working properly.
 
 ## TODO <a id="sec-1-4" name="sec-1-4"></a>
 
-1.  Finish thread context class for managing threads.
-2.  Support msvc build.
-3.  Add BLAS operations.
-4.  Add sparse matrix
-5.  Add sparse operations.
-6.  Add high level linear algebra operations.
-7.  Add benchmark
+-   [X] Finish thread context class for managing threads.
+-   [ ] Support msvc build.
+-   [ ] Add BLAS operations.
+-   [ ] Add sparse matrix
+-   [ ] Add sparse operations.
+-   [ ] Add high level linear algebra operations.
+-   [ ] Add benchmark
