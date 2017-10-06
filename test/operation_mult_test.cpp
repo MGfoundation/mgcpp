@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
+#include <iostream>
 
 #include <gtest/gtest.h>
 
@@ -22,8 +23,9 @@ TEST(operation_mult, row_major_multiplication)
     A_mat.copy_from_host(A_init_mat);
 
 
+    
     std::vector<float> check(4*2, 4);
-    EXPECT_TRUE(std::equal(B_init_mat.get_data(), B_init_mat.get_data() + 4*2, check.begin()));
+    std::cout << std::equal(B_init_mat.get_data(), B_init_mat.get_data() + 4*2, check.begin()) << std::endl;
 
     mgcpp::gpu::matrix<float> B_mat(4, 2);
     B_mat.copy_from_host(B_init_mat);
