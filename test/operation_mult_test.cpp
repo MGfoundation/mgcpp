@@ -17,8 +17,7 @@
 TEST(operation_mult, row_major_multiplication)
 {
     mgcpp::cpu::matrix<float> A_init_mat(2, 4, 2);
-    mgcpp::cpu::matrix<float> B_init_mat(4, 2, 4);
-
+    mgcpp::cpu::matrix<float> B_init_mat(4, 3, 4);
 
     std::cout << "good" << std::endl;
     mgcpp::gpu::matrix<float> A_mat(A_init_mat);
@@ -36,7 +35,7 @@ TEST(operation_mult, row_major_multiplication)
 
     auto shape = C_mat.shape();
     EXPECT_EQ(shape.first, 2);
-    EXPECT_EQ(shape.second, 2);
+    EXPECT_EQ(shape.second, 3);
 
     printf("safe?\n");
     for(size_t i = 0; i < 2; ++i)
