@@ -362,7 +362,7 @@ namespace mgcpp
             MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
         }
 
-        // size_t total_size = _m_dim * _n_dim;
+        size_t total_size = _m_dim * _n_dim;
 
         // auto alloc_result = cuda_malloc<T>(total_size);
         // if(!alloc_result)
