@@ -13,9 +13,9 @@ TEST(cpu_matrix, default_constructor)
 {
     mgcpp::cpu::matrix<float> mat{};
 
-    auto [m, n] = mat.shape();
-    EXPECT_EQ(m, 0);
-    EXPECT_EQ(n, 0);
+    auto shape = mat.shape();
+    EXPECT_EQ(shape.first, 0);
+    EXPECT_EQ(shape.second, 0);
 
     EXPECT_EQ(mat._data, nullptr);
 }
@@ -28,9 +28,9 @@ TEST(cpu_matrix, allocating_constructor)
 
     EXPECT_NE(mat._data, nullptr);
 
-    auto [m, n] = mat.shape();
-    EXPECT_EQ(m, row_dim);
-    EXPECT_EQ(n, col_dim);
+    auto shape = mat.shape();
+    EXPECT_EQ(shape.first, 0);
+    EXPECT_EQ(shape.second, 0);
 }
 
 TEST(cpu_matrix, allocating_initializing_constructor)
@@ -42,9 +42,9 @@ TEST(cpu_matrix, allocating_initializing_constructor)
 
     EXPECT_NE(mat._data, nullptr);
 
-    auto [m, n] = mat.shape();
-    EXPECT_EQ(m, row_dim);
-    EXPECT_EQ(n, col_dim);
+    auto shape = mat.shape();
+    EXPECT_EQ(shape.first, 0);
+    EXPECT_EQ(shape.second, 0);
 
     EXPECT_NO_THROW(
         {
