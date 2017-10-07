@@ -25,6 +25,8 @@ namespace mgcpp
         operator bool();
 
         bool check();
+
+        size_t initial_memory() const noexcept;
     };
 }
 

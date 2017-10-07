@@ -66,4 +66,11 @@ namespace mgcpp
 
         return _after_free_memory == _before_free_memory;
     }
+
+    size_t
+    leak_checker::
+    initial_memory() const noexcept
+    {
+        return _before_free_memory;
+    }
 }
