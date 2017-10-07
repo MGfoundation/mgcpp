@@ -10,6 +10,7 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/tools/memory_check.hpp>
 #include <mgcpp/cpu_matrix.hpp>
 #define private public
 #include <mgcpp/gpu_matrix.hpp>
@@ -29,9 +30,10 @@ TEST(gpu_matrix, default_constructor)
 
 TEST(gpu_matrix, contextless_dimension_constructor)
 {
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_memory = before.value().first;
+    auto leak_chk = mgcpp::leak_checker();
+    // auto before = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(before);
+    // auto before_memory = before.value().first;
     
     {
         size_t row_dim = 10;
@@ -42,7 +44,8 @@ TEST(gpu_matrix, contextless_dimension_constructor)
         EXPECT_TRUE(after);
         auto after_memory = after.value().first;
 
-        EXPECT_GT(before_memory, after_memory);
+        // EXPECT_GT(before_memory, after_memory);
+        EXPECT_GT(leak_chk.initial_memory(), after_memory);
 
         auto shape = mat.shape();
         EXPECT_EQ(shape.first, row_dim);
@@ -53,18 +56,20 @@ TEST(gpu_matrix, contextless_dimension_constructor)
         EXPECT_FALSE(mat._released);
     }
 
-    auto last = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(last);
-    auto last_memory = last.value().first;
+    // auto last = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(last);
+    // auto last_memory = last.value().first;
 
-    EXPECT_EQ(before_memory, last_memory);
+    // EXPECT_EQ(before_memory, last_memory);
+    EXPECT_TRUE(leak_chk);
 }
 
 TEST(gpu_matrix, contextless_dimension_initializing_constructor)
 {
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_memory = before.value().first;
+    auto leak_chk = mgcpp::leak_checker();
+    // auto before = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(before);
+    // auto before_memory = before.value().first;
 
     {
         size_t row_dim = 5;
@@ -76,7 +81,9 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         EXPECT_TRUE(after);
         auto after_memory = after.value().first;
 
-        EXPECT_GT(before_memory, after_memory);
+        // EXPECT_GT(before_memory, after_memory);
+        EXPECT_GT(leak_chk.initial_memory(), after_memory);
+        
 
         auto shape = mat.shape();
         EXPECT_EQ(shape.first, row_dim);
@@ -97,18 +104,22 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         }
     }
 
-    auto last = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(last);
-    auto last_memory = last.value().first;
+    // auto last = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(last);
+    // auto last_memory = last.value().first;
 
-    EXPECT_EQ(before_memory, last_memory);
+    // EXPECT_EQ(before_memory, last_memory);
+
+    EXPECT_TRUE(leak_chk);
 }
 
 TEST(gpu_matrix, matrix_resize)
 {
-    auto initial = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(initial);
-    auto initial_freemem = initial.value().first;
+
+    auto leak_chk = mgcpp::leak_checker();
+    // auto initial = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(initial);
+    // auto initial_freemem = initial.value().first;
 
     {
         auto tenbyten = mgcpp::cuda_mem_get_info();
@@ -128,10 +139,11 @@ TEST(gpu_matrix, matrix_resize)
         EXPECT_GT(tenbyten_freemem, kilobykilo_freemem);
     }
 
-    auto finally = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(finally);
-    auto final_freemem = initial.value().first;
-    EXPECT_EQ(initial_freemem, final_freemem);
+    // auto finally = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(finally);
+    // auto final_freemem = initial.value().first;
+    // EXPECT_EQ(initial_freemem, final_freemem);
+    EXPECT_TRUE(leak_chk);
 }
 
 TEST(gpu_matrix, matrix_zero_after_allocation)
@@ -161,9 +173,10 @@ TEST(gpu_matrix, matrix_zero_without_allocation_failure)
 
 TEST(gpu_matrix, matrix_resize_init)
 {
-    auto initial = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(initial);
-    auto initial_freemem = initial.value().first;
+    auto leak_chk = mgcpp::leak_checker();
+    // auto initial = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(initial);
+    // auto initial_freemem = initial.value().first;
 
     {
         auto twobytwo = mgcpp::cuda_mem_get_info();
@@ -193,10 +206,12 @@ TEST(gpu_matrix, matrix_resize_init)
         EXPECT_GT(twobytwo_freemem, fivebyfive_freemem);
     }
 
-    auto finally = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(finally);
-    auto final_freemem = initial.value().first;
-    EXPECT_EQ(initial_freemem, final_freemem);
+    // auto finally = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(finally);
+    // auto final_freemem = initial.value().first;
+    // EXPECT_EQ(initial_freemem, final_freemem);
+
+    EXPECT_TRUE(leak_chk);
 }
 
 TEST(gpu_matrix, init_from_cpu_matrix)
@@ -216,9 +231,10 @@ TEST(gpu_matrix, init_from_cpu_matrix)
         }
     }
 
-    auto initial = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(initial);
-    auto initial_freemem = initial.value().first;
+    auto leak_chk = mgcpp::leak_checker();
+    // auto initial = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(initial);
+    // auto initial_freemem = initial.value().first;
 
     {
         mgcpp::gpu::matrix<float> gpu_mat(cpu_mat);
@@ -233,10 +249,11 @@ TEST(gpu_matrix, init_from_cpu_matrix)
         }
     }
 
-    auto finally = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(finally);
-    auto final_freemem = initial.value().first;
-    EXPECT_EQ(initial_freemem, final_freemem);
+    // auto finally = mgcpp::cuda_mem_get_info();
+    // EXPECT_TRUE(finally);
+    // auto final_freemem = initial.value().first;
+    // EXPECT_EQ(initial_freemem, final_freemem);
+    EXPECT_TRUE(leak_chk);
 }
 
 TEST(gpu_matrix, copy_from_host_matrix)
