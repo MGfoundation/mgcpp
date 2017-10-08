@@ -16,15 +16,27 @@ namespace outcome = OUTCOME_V2_NAMESPACE;
 namespace mgcpp
 {
     template<typename ElemType>
-    outcome::result<void>
+    outcome::result<ElemType*>
     cublas_set_matrix(size_t rows, size_t cols,
-                      ElemType const* A, size_t leading_dim_A,
-                      ElemType* B, size_t leading_dim_B);
+                      ElemType const* from_host, size_t ld_from,
+                      ElemType* to_gpu, size_t ld_to);
 
     template<typename ElemType>
-    outcome::result<void>
+    outcome::result<ElemType*>
     cublas_set_matrix(size_t rows, size_t cols,
-                      ElemType const* A, ElemType* B);
+                      ElemType const* from_host, ElemType* to_gpu);
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_matrix(size_t rows, size_t cols,
+                      ElemType const* from_gpu, size_t ld_from,
+                      ElemType* to_host, size_t ld_to);
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_matrix(size_t rows, size_t cols,
+                      ElemType const* from_gpu, ElemType* to_host);
 }
 
+#include <mgcpp/cublas/cublas_helpers.tpp>
 #endif

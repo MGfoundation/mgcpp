@@ -143,11 +143,13 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cuda_stdlib_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
 	${TEST_DIR}/tools_test.cpp
+	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp
 	${TEST_DIR}/operation_mult_test.cpp)
-    mgcpp_display_elements("Source files for ${PROJECT_NAME} tests" ${TEST_SOURCE_FILES})
+    mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
+	${TEST_SOURCE_FILES})
 
     # add test target
     add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})

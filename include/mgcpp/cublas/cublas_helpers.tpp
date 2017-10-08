@@ -15,34 +15,66 @@ namespace outcome = OUTCOME_V2_NAMESPACE;
 namespace mgcpp
 {
     template<typename ElemType>
-    outcome::result<void>
+    outcome::result<ElemType*>
     cublas_set_matrix(size_t rows, size_t cols,
-                      ElemType const* A, size_t leading_dim_A,
-                      ElemType* B, size_t leading_dim_B)
+                      ElemType const* from_host, size_t ld_from, 
+                      ElemType* to_gpu, size_t ld_to)
     {
         std::error_code status =
             cublasSetMatrix(rows, cols, sizeof(ElemType),
-                            A, leading_dim_A, B, leading_dim_B);
+                            from_host, ld_host, to_gpu, ld_gpu);
 
         if(status != status_t::success)
             return status;
         else
-        return outcome::success();
+            return to_gpu; 
     }
 
 
     template<typename ElemType>
-    outcome::result<void>
+    outcome::result<ElemType*>
     cublas_set_matrix(size_t rows, size_t cols,
-                      ElemType const* A, ElemType* B)
+                      ElemType const* from_host, ElemType* to_gpu)
     {
         std::error_code status =
             cublasSetMatrix(rows, cols, sizeof(ElemType),
-                            A, rows, B, rows);
+                            from_host, rows, to_gpu, rows);
 
         if(status != make_error_condition(status_t::success))
             return status;
         else
-            return outcome::success();
+            return to_gpu;
+    }
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_matrix(size_t rows, size_t cols,
+                      ElemType const* from_gpu, size_t ld_from, 
+                      ElemType* to_host, size_t ld_to)
+    {
+        std::error_code status =
+            cublasGetMatrix(rows, cols, sizeof(ElemType),
+                            from_gpu, ld_gpu, to_host, ld_host);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return to_host; 
+    }
+
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_matrix(size_t rows, size_t cols,
+                      ElemType const* from_gpu, ElemType* to_host)
+    {
+        std::error_code status =
+            cublasGetMatrix(rows, cols, sizeof(ElemType),
+                            from_gpu, rows, to_host, rows);
+
+        if(status != make_error_condition(status_t::success))
+            return status;
+        else
+            return to_host;
     }
 }
