@@ -13,22 +13,22 @@ TEST(leak_check, case_no_leak_bool_operator)
 {
     auto checker = mgcpp::leak_checker();
 
-    EXPECT_TRUE(static_cast<bool>(checker));
+    EXPECT_TRUE(checker);
 }
 
 TEST(leak_check, case_no_leak)
 {
     auto checker = mgcpp::leak_checker();
 
-    EXPECT_TRUE(checker.check());
+    EXPECT_TRUE(checker.cache());
 }
 
 TEST(leak_check, case_no_leak_cached_result)
 {
     auto checker = mgcpp::leak_checker();
 
-    checker.check();
-    EXPECT_TRUE(static_cast<bool>(checker));
+    checker.cache();
+    EXPECT_TRUE(checker);
 }
 
 TEST(leak_check, case_leak_bool_operator)
@@ -38,7 +38,7 @@ TEST(leak_check, case_leak_bool_operator)
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
 
-    EXPECT_FALSE(static_cast<bool>(checker));
+    EXPECT_FALSE(checker);
 
     (void)mgcpp::cuda_free(mem.value());
 }
@@ -50,7 +50,7 @@ TEST(leak_check, case_leak)
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
 
-    EXPECT_FALSE(checker.check());
+    EXPECT_FALSE(checker.cache());
 
     (void)mgcpp::cuda_free(mem.value());
 }
@@ -62,7 +62,7 @@ TEST(leak_check, case_leak_cached_result)
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
 
-    checker.check();
+    checker.cache();
     EXPECT_FALSE(static_cast<bool>(checker));
 
     (void)mgcpp::cuda_free(mem.value());

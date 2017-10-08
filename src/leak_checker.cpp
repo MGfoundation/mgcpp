@@ -16,7 +16,7 @@ namespace mgcpp
         : _device_id(device_id),
           _before_free_memory(0),
           _after_free_memory(0),
-          _sampled(false)
+          _cached(false)
     {
         auto set_result = cuda_set_device(_device_id);
         if(!set_result)
@@ -31,37 +31,28 @@ namespace mgcpp
 
     bool
     leak_checker::
-    check()
+    cache() noexcept
     {
-        auto set_result = cuda_set_device(_device_id);
-        if(!set_result)
-            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
-
+        (void)cuda_set_device(_device_id);
         auto result = cuda_mem_get_info();
-        if(!result)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
 
         _after_free_memory = result.value().first;
-        _sampled = true;
+        _cached = true;
 
         return _after_free_memory == _before_free_memory;
     }
 
     leak_checker::
-    operator bool() 
+    operator bool() const noexcept 
     {
-        if(!_sampled)
+        if(!_cached)
         {
-            auto set_result = cuda_set_device(_device_id);
-            if(!set_result)
-                MGCPP_THROW_SYSTEM_ERROR(set_result.error());
+            (void)cuda_set_device(_device_id);
 
             auto result = cuda_mem_get_info();
-            if(!result)
-                MGCPP_THROW_SYSTEM_ERROR(result.error());
 
-            _after_free_memory = result.value().first;
-            _sampled = true;
+            auto after_free_memory = result.value().first;
+            return after_free_memory == _before_free_memory;
         }
 
         return _after_free_memory == _before_free_memory;

@@ -17,14 +17,14 @@ namespace mgcpp
         size_t _device_id;
         size_t _before_free_memory;
         size_t _after_free_memory;
-        bool _sampled;
+        bool _cached;
 
     public:
         leak_checker(size_t device_id = 0);
 
-        operator bool();
+        operator bool() const noexcept;
 
-        bool check();
+        bool cache() noexcept;
 
         size_t initial_memory() const noexcept;
     };
