@@ -23,7 +23,6 @@ namespace mgcpp
             cublasHandle_t new_handle;
 
             std::error_code status = cublasCreate(&new_handle);
-            cublasSetPointerMode(new_handle, CUBLAS_POINTER_MODE_DEVICE);
 
             if(status != status_t::success)
                 MGCPP_THROW_SYSTEM_ERROR(status);
@@ -34,6 +33,7 @@ namespace mgcpp
                 {
                     std::cout << "destroyed!" << std::endl;
                     cublasDestroy(*handle);
+                    std::cout << "destroyed!" << std::endl;
                 });
         }
 
