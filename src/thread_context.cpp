@@ -29,6 +29,9 @@ namespace mgcpp
                 &new_handle,
                 [](cublasHandle_t* handle)
                 {
+                    std::cout << "safe!" << std::endl;
+                    std::cout << "handle: " << (int*)handle << std::endl;
+                    std::cout << "safe!" << std::endl;
                     cublasDestroy(*handle);
                 });
         }
