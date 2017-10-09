@@ -90,6 +90,47 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     gpu::matrix<T, DeviceId, SO>::
+    matrix(cpu::matrix<T, SO> const& cpu_mat)
+        :_data(nullptr),
+         _context(&global_context::get_thread_context()),
+         _m_dim(0),
+         _n_dim(0),
+         _released(true)
+    {
+        auto shape = cpu_mat.shape();
+        _m_dim = shape.first;
+        _n_dim = shape.second;
+
+        size_t total_size = _m_dim * _n_dim;
+
+        auto alloc_result = cuda_malloc<T>(total_size);
+        if(!alloc_result)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        }
+        _released = false;
+        _data = alloc_result.value();
+        
+        auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
+                                            cpu_mat.get_data(),
+                                            _data);
+        // auto memcpy_result =
+        //     cuda_memcpy(_data,
+        //                 cpu_mat.get_data(),
+        //                 total_size,
+        //                 cuda_memcpy_kind::host_to_device);
+
+        if(!cpy_result)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+    }
+
+
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO>
+    gpu::matrix<T, DeviceId, SO>::
     matrix(size_t i, size_t j, T init)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
@@ -204,46 +245,6 @@ namespace mgcpp
         other._released = true;
 
         return *this;
-    }
-
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(cpu::matrix<T, SO> const& cpu_mat)
-        :_data(nullptr),
-         _context(&global_context::get_thread_context()),
-         _m_dim(0),
-         _n_dim(0),
-         _released(true)
-    {
-        auto shape = cpu_mat.shape();
-        _m_dim = shape.first;
-        _n_dim = shape.second;
-
-        size_t total_size = _m_dim * _n_dim;
-
-        auto alloc_result = cuda_malloc<T>(total_size);
-        if(!alloc_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-        }
-        _released = false;
-        _data = alloc_result.value();
-        
-        auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
-                                            cpu_mat.get_data(),
-                                            _data);
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 cpu_mat.get_data(),
-        //                 total_size,
-        //                 cuda_memcpy_kind::host_to_device);
-
-        if(!cpy_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
     }
 
     template<typename T,
