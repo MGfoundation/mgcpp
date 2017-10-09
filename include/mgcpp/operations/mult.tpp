@@ -32,6 +32,10 @@ namespace mgcpp
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
+        std::cout << "!" << std::endl;
+        std::cout << "handle: " << (int*)result._context << std::endl;
+        std::cout << "!" << std::endl;
+
         thread_context* context = first.get_thread_context();
 
         auto handle = context->get_cublas_context(Device);
@@ -53,6 +57,10 @@ namespace mgcpp
         std::cout << "safe!" << std::endl;
         std::cout << "handle: " << (int*)handle << std::endl;
         std::cout << "safe!" << std::endl;
+
+        std::cout << "!" << std::endl;
+        std::cout << "handle: " << (int*)result._context << std::endl;
+        std::cout << "!" << std::endl;
 
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);

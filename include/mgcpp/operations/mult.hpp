@@ -7,6 +7,7 @@
 #ifndef _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 #define _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 
+#define private public
 #include <mgcpp/gpu/matrix.hpp>
 #include <mgcpp/global/storage_order.hpp>
 

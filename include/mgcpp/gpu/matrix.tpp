@@ -183,7 +183,6 @@ namespace mgcpp
          _n_dim(other._n_dim),
          _released(false)
     {
-        std::cout << "this one???" << std::endl;
         other._released = true;
         other._data = nullptr;
     }
