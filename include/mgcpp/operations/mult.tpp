@@ -26,12 +26,16 @@ namespace mgcpp
         auto second_shape = second.shape();
         auto first_shape = first.shape();
 
-        size_t m = second_shape.first;
-        size_t k = second_shape.second;
-        size_t n = first_shape.second;
+        // size_t m = second_shape.first;
+        // size_t k = second_shape.second;
+        // size_t n = first_shape.second;
 
-        std::cout << "m: " << m << " k: " << k << " n: " << n
-                  << std::endl;
+        // std::cout << "m: " << m << " k: " << k << " n: " << n
+        //           << std::endl;
+
+        size_t m = first_shape.first;
+        size_t k = first_shape.second;
+        size_t n = second_shape.second;
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
