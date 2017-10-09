@@ -9,6 +9,8 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
+#include <iostream>
+
 #include <cublas_v2.h>
 
 namespace mgcpp
@@ -27,6 +29,9 @@ namespace mgcpp
         size_t m = second_shape.first;
         size_t k = second_shape.second;
         size_t n = first_shape.second;
+
+        std::cout << "m: " << m << " k: " << k << " n: " << n
+                  << std::endl;
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
