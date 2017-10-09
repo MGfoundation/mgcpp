@@ -31,7 +31,6 @@ TEST(gpu_matrix, default_constructor)
 TEST(gpu_matrix, contextless_dimension_constructor)
 {
     auto leak_chk = mgcpp::leak_checker();
-    
     {
         size_t row_dim = 10;
         size_t col_dim = 5;
@@ -58,7 +57,6 @@ TEST(gpu_matrix, contextless_dimension_constructor)
 TEST(gpu_matrix, contextless_dimension_initializing_constructor)
 {
     auto leak_chk = mgcpp::leak_checker();
-
     {
         size_t row_dim = 5;
         size_t col_dim = 10;
@@ -70,25 +68,24 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         auto after_memory = after.value().first;
 
         EXPECT_GT(leak_chk.initial_memory(), after_memory);
-        
 
         auto shape = mat.shape();
         EXPECT_EQ(shape.first, row_dim);
         EXPECT_EQ(shape.second, col_dim);
 
-        EXPECT_EQ(mat._context, 
-                  mgcpp::gpu::matrix<float>()._context);
-        EXPECT_NE(mat._data, nullptr);
-        EXPECT_FALSE(mat._released);
+        // EXPECT_EQ(mat._context, 
+        //           mgcpp::gpu::matrix<float>()._context);
+        // EXPECT_NE(mat._data, nullptr);
+        // EXPECT_FALSE(mat._released);
 
-        for(size_t i = 0; i < row_dim; ++i)
-        {
-            for(size_t j = 0; j < col_dim; ++j)
-            {
-                EXPECT_EQ(mat.check_value(i, j), init_val)
-                    << "index i: " << i << " j: " << j;
-            }
-        }
+        // for(size_t i = 0; i < row_dim; ++i)
+        // {
+        //     for(size_t j = 0; j < col_dim; ++j)
+        //     {
+        //         EXPECT_EQ(mat.check_value(i, j), init_val)
+        //             << "index i: " << i << " j: " << j;
+        //     }
+        // }
     }
 
     EXPECT_TRUE(leak_chk);
