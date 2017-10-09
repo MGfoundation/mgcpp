@@ -33,9 +33,15 @@ namespace mgcpp
         gpu::matrix<float, Device, row_major> result{m, n};
 
         thread_context* context = first.get_thread_context();
+
+        auto handle = context->get_cublas_context(Device);
+
+        std::cout << "safe!" << std::endl;
+        std::cout << "handle: " << (int*)handle << std::endl;
+        std::cout << "safe!" << std::endl;
         
         std::error_code status =
-            cublasSgemm(context->get_cublas_context(Device),
+            cublasSgemm(handle,
                         CUBLAS_OP_N, CUBLAS_OP_N,
                         m, n, k,
                         &alpha,
@@ -43,6 +49,10 @@ namespace mgcpp
                         second.get_data(), k,
                         &beta,
                         result.get_data_mutable(), m);
+
+        std::cout << "safe!" << std::endl;
+        std::cout << "handle: " << (int*)handle << std::endl;
+        std::cout << "safe!" << std::endl;
 
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
