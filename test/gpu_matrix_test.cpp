@@ -63,29 +63,29 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
         float init_val = 7;
         mgcpp::gpu::matrix<float> mat(row_dim, col_dim, init_val);
 
-        // auto after = mgcpp::cuda_mem_get_info();
-        // EXPECT_TRUE(after);
-        // auto after_memory = after.value().first;
+        auto after = mgcpp::cuda_mem_get_info();
+        EXPECT_TRUE(after);
+        auto after_memory = after.value().first;
 
-        // EXPECT_GT(leak_chk.initial_memory(), after_memory);
+        EXPECT_GT(leak_chk.initial_memory(), after_memory);
 
-        // auto shape = mat.shape();
-        // EXPECT_EQ(shape.first, row_dim);
-        // EXPECT_EQ(shape.second, col_dim);
+        auto shape = mat.shape();
+        EXPECT_EQ(shape.first, row_dim);
+        EXPECT_EQ(shape.second, col_dim);
 
-        // EXPECT_EQ(mat._context, 
-        //           mgcpp::gpu::matrix<float>()._context);
-        // EXPECT_NE(mat._data, nullptr);
-        // EXPECT_FALSE(mat._released);
+        EXPECT_EQ(mat._context, 
+                  mgcpp::gpu::matrix<float>()._context);
+        EXPECT_NE(mat._data, nullptr);
+        EXPECT_FALSE(mat._released);
 
-        // for(size_t i = 0; i < row_dim; ++i)
-        // {
-        //     for(size_t j = 0; j < col_dim; ++j)
-        //     {
-        //         EXPECT_EQ(mat.check_value(i, j), init_val)
-        //             << "index i: " << i << " j: " << j;
-        //     }
-        // }
+        for(size_t i = 0; i < row_dim; ++i)
+        {
+            for(size_t j = 0; j < col_dim; ++j)
+            {
+                EXPECT_EQ(mat.check_value(i, j), init_val)
+                    << "index i: " << i << " j: " << j;
+            }
+        }
     }
 
     EXPECT_TRUE(leak_chk);

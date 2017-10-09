@@ -54,6 +54,52 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     gpu::matrix<T, DeviceId, SO>::
+    matrix(size_t i, size_t j, T init)
+        :_data(nullptr),
+         _context(&global_context::get_thread_context()),
+         _m_dim(i),
+         _n_dim(j),
+         _released(true)
+    {
+        size_t total_size = _m_dim * _n_dim;
+        auto alloc_result = cuda_malloc<T>(total_size);
+        if(!alloc_result)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        }
+
+        _released = false;
+        _data = alloc_result.value();
+
+        T* buffer = (T*)malloc(sizeof(T) * total_size);
+        if(!buffer)
+        {
+            MGCPP_THROW_BAD_ALLOC;
+        }
+
+        // memset(buffer, init, sizeof(T) * total_size);
+        std::fill(buffer, buffer + total_size, init);
+        
+        // auto memcpy_result =
+        //     cuda_memcpy(_data,
+        //                 buffer,
+        //                 total_size,
+        //                 cuda_memcpy_kind::host_to_device);
+
+        auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
+                                            buffer, _data);
+
+        free(buffer);
+        if(!cpy_result)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO>
+    gpu::matrix<T, DeviceId, SO>::
     matrix(gpu::matrix<T, DeviceId, SO> const& other)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
@@ -120,53 +166,6 @@ namespace mgcpp
         //                 total_size,
         //                 cuda_memcpy_kind::host_to_device);
 
-        if(!cpy_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
-    }
-
-
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(size_t i, size_t j, T init)
-        :_data(nullptr),
-         _context(&global_context::get_thread_context()),
-         _m_dim(i),
-         _n_dim(j),
-         _released(true)
-    {
-        size_t total_size = _m_dim * _n_dim;
-        auto alloc_result = cuda_malloc<T>(total_size);
-        if(!alloc_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-        }
-
-        _released = false;
-        _data = alloc_result.value();
-
-        T* buffer = (T*)malloc(sizeof(T) * total_size);
-        if(!buffer)
-        {
-            MGCPP_THROW_BAD_ALLOC;
-        }
-
-        // memset(buffer, init, sizeof(T) * total_size);
-        std::fill(buffer, buffer + total_size, init);
-        
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 buffer,
-        //                 total_size,
-        //                 cuda_memcpy_kind::host_to_device);
-
-        auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
-                                            buffer, _data);
-
-        free(buffer);
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
