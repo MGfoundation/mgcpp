@@ -47,7 +47,7 @@ namespace mgcpp
                         &alpha,
                         first.get_data(), m,
                         second.get_data(), k,
-                        &beta,
+                        &beta
                         result.get_data_mutable(), m);
 
         std::cout << "safe!" << std::endl;
