@@ -22,7 +22,7 @@ TEST(operation_mult, row_major_multiplication)
     mgcpp::gpu::matrix<float> A_mat(A_init_mat);
     mgcpp::gpu::matrix<float> B_mat(B_init_mat);
 
-    auto C_mat = mgcpp::mult(A_mat, B_mat);
+    // auto C_mat = mgcpp::mult(A_mat, B_mat);
 
     // auto C_mat_host = C_mat.copy_to_host();
     
