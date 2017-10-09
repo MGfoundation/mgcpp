@@ -28,6 +28,7 @@ namespace mgcpp
                 &new_handle,
                 [new_handle](cublasHandle_t* handle)
                 {
+                    (void)handle;
                     cublasDestroy(new_handle);
                 });
         }
