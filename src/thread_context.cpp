@@ -8,6 +8,8 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
+#include <iostream>
+
 namespace mgcpp
 {
     cublasHandle_t 
@@ -17,6 +19,7 @@ namespace mgcpp
         auto& handle = _cublas_handle[device_id];
         if(!handle)
         {
+            std::cout << "created!" << std::endl;
             cublasHandle_t new_handle;
             std::error_code status = cublasCreate(&new_handle);
 
@@ -27,6 +30,7 @@ namespace mgcpp
                 &new_handle,
                 [](cublasHandle_t* handle)
                 {
+                    std::cout << "destroyed!" << std::endl;
                     cublasDestroy(*handle);
                 });
         }
@@ -44,7 +48,6 @@ namespace mgcpp
     operator=(thread_context&& other) noexcept
     {
         _cublas_handle = std::move(other._cublas_handle);
-
         return *this;
     }
 }
