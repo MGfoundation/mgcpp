@@ -22,7 +22,9 @@ namespace mgcpp
             cublasHandle_t new_handle;
 
             std::error_code status = cublasCreate(&new_handle);
+            std::cout << "safe?" << std::endl;
             std::cout << "handle: " << (int*)new_handle;
+            std::cout << "safe?" << std::endl;
 
             if(status != status_t::success)
                 MGCPP_THROW_SYSTEM_ERROR(status);
