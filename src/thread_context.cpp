@@ -23,17 +23,19 @@ namespace mgcpp
 
             std::error_code status = cublasCreate(&new_handle);
             std::cout << "safe?" << std::endl;
-            std::cout << "handle: " << (int*)new_handle;
+            std::cout << "handle: " << (int*)new_handle << std::endl;
             std::cout << "safe?" << std::endl;
 
-            if(status != status_t::success)
+                if(status != status_t::success)
                 MGCPP_THROW_SYSTEM_ERROR(status);
 
             handle = cublas_handle_unique_ptr(
                 &new_handle,
                 [](cublasHandle_t* handle)
                 {
-                    std::cout << "destroying handle: " << (int*)handle;
+                    std::cout << "safe!" << std::endl;
+                    std::cout << "destroying handle: " << (int*)handle<< std::endl;
+                    std::cout << "safe!" << std::endl;
                     cublasDestroy(*handle);
                 });
         }
