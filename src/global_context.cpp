@@ -24,8 +24,8 @@ namespace mgcpp
     global_context::
     reference_cnt_decr()
     {
-        auto lck = std::unique_lock<std::mutex>(_singl_context._mtx);
         auto this_thread_id = std::this_thread::get_id();
+        auto lck = std::unique_lock<std::mutex>(_singl_context._mtx);
         auto& ref = _singl_context._context_ref_cnt[this_thread_id];
         --ref;
 
