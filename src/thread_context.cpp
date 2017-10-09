@@ -22,7 +22,7 @@ namespace mgcpp
             cublasHandle_t new_handle;
 
             std::error_code status = cublasCreate(&new_handle);
-            std::cout << "handle: " << new_handle;
+            std::cout << "handle: " << (int*)new_handle;
 
             if(status != status_t::success)
                 MGCPP_THROW_SYSTEM_ERROR(status);
@@ -31,7 +31,7 @@ namespace mgcpp
                 &new_handle,
                 [](cublasHandle_t* handle)
                 {
-                    std::cout << "destroying handle: " << handle;
+                    std::cout << "destroying handle: " << (int*)handle;
                     cublasDestroy(*handle);
                 });
         }
