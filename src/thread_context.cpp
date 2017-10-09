@@ -17,6 +17,7 @@ namespace mgcpp
     get_cublas_context(size_t device_id) 
     {
         auto& handle = _cublas_handle[device_id];
+
         if(!handle)
         {
             cublasHandle_t new_handle;
@@ -30,11 +31,15 @@ namespace mgcpp
                 [](cublasHandle_t* handle)
                 {
                     std::cout << "safe!" << std::endl;
-                    std::cout << "handle: " << (int*)handle << std::endl;
+                    std::cout << "handle destroy: " << (int*)handle << std::endl;
                     std::cout << "safe!" << std::endl;
                     cublasDestroy(*handle);
                 });
         }
+
+        std::cout << "safe!" << std::endl;
+        std::cout << "handle create: " << (int*)*handle << std::endl;
+        std::cout << "safe!" << std::endl;
 
         return *handle;
     }
