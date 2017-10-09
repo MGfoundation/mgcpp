@@ -69,7 +69,7 @@ if(MSVC)
 	"${CMAKE_CXX_FLAGS} /w3 /Ot /Ox /MP")
 else()
     set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fPIC -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
 endif()
 message("C++ flags = ${BUILD_FLAGS}")
 
@@ -164,7 +164,7 @@ if(BUILD_TESTING)
 	${GTEST_LIBRARIES})
 
     set(TEST_BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -O3 -Wall -Wextra")
+	"${CMAKE_CXX_FLAGS} -std=c++14 -g -Wall -Wextra")
 
     message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 
