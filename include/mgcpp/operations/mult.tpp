@@ -46,8 +46,8 @@ namespace mgcpp
                         CUBLAS_OP_N, CUBLAS_OP_N,
                         m, n, k,
                         &alpha,
-                        second.get_data(), m,
-                        first.get_data(), k,
+                        first.get_data(), m,
+                        second.get_data(), k,
                         &beta,
                         result.get_data_mutable(), m);
 
