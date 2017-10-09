@@ -29,7 +29,7 @@ namespace mgcpp
         auto& ref = _singl_context._context_ref_cnt[this_thread_id];
         --ref;
 
-        if(ref == 0)
+        if(ref <= 0)
             _singl_context._thread_ctx.erase(this_thread_id);
     }
 }
