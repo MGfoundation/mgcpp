@@ -9,8 +9,6 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
-#include <iostream>
-
 #include <cublas_v2.h>
 
 namespace mgcpp
@@ -32,20 +30,10 @@ namespace mgcpp
 
         gpu::matrix<float, Device, row_major> result{m, n};
 
-        std::cout << "!" << std::endl;
-        std::cout << "handle: " << (int*)result._context << std::endl;
-        std::cout << "!" << std::endl;
-
         thread_context* context = first.get_thread_context();
 
-        auto handle = context->get_cublas_context(Device);
-
-        std::cout << "safe!" << std::endl;
-        std::cout << "handle: " << (int*)handle << std::endl;
-        std::cout << "safe!" << std::endl;
-        
         std::error_code status =
-            cublasSgemm(handle,
+            cublasSgemm(context->get_cublas_context(Device),
                         CUBLAS_OP_N, CUBLAS_OP_N,
                         m, n, k,
                         &alpha,
@@ -53,14 +41,6 @@ namespace mgcpp
                         second.get_data(), k,
                         &beta,
                         result.get_data_mutable(), m);
-
-        std::cout << "safe!" << std::endl;
-        std::cout << "handle: " << (int*)handle << std::endl;
-        std::cout << "safe!" << std::endl;
-
-        std::cout << "!" << std::endl;
-        std::cout << "handle: " << (int*)result._context << std::endl;
-        std::cout << "!" << std::endl;
 
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);

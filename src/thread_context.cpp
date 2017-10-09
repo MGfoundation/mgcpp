@@ -8,8 +8,6 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
-#include <iostream>
-
 namespace mgcpp
 {
     cublasHandle_t 
@@ -30,16 +28,9 @@ namespace mgcpp
                 &new_handle,
                 [](cublasHandle_t* handle)
                 {
-                    std::cout << "safe!" << std::endl;
-                    std::cout << "handle destroy: " << (int*)handle << std::endl;
-                    std::cout << "safe!" << std::endl;
                     cublasDestroy(*handle);
                 });
         }
-
-        std::cout << "safe!" << std::endl;
-        std::cout << "handle create: " << (int*)*handle << std::endl;
-        std::cout << "safe!" << std::endl;
 
         return *handle;
     }

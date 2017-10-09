@@ -11,7 +11,6 @@
 
 #include <gtest/gtest.h>
 
-#define private public
 #include <mgcpp/gpu_matrix.hpp>
 #include <mgcpp/operations/mult.hpp>
 
@@ -24,9 +23,6 @@ TEST(operation_mult, row_major_multiplication)
     mgcpp::gpu::matrix<float> B_mat(B_init_mat);
 
     auto C_mat = mgcpp::mult(A_mat, B_mat);
-    std::cout << " good?" << std::endl;
-    std::cout << " host " << (int*)C_mat._context << std::endl;
-    std::cout << " good?" << std::endl;
 
     auto C_mat_host = C_mat.copy_to_host();
     
