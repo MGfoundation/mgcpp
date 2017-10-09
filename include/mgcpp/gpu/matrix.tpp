@@ -113,7 +113,8 @@ namespace mgcpp
             MGCPP_THROW_BAD_ALLOC;
         }
 
-        memset(buffer, init, sizeof(T) * total_size);
+        // memset(buffer, init, sizeof(T) * total_size);
+        std::fill(buffer, buffer + total_size, init);
         
         // auto memcpy_result =
         //     cuda_memcpy(_data,
@@ -228,7 +229,6 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-
         _data = alloc_result.value();
         
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
@@ -263,6 +263,7 @@ namespace mgcpp
 
         auto alloc_result =
             cuda_malloc<T>(_n_dim * _m_dim);
+
         if(!alloc_result)
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         _released = false;
@@ -295,12 +296,12 @@ namespace mgcpp
 
         // auto buffer_result = malloc_pinned<T>(i * j);
 
-        T* buffer =
-            (T*)malloc(sizeof(T) * total_size);
+        T* buffer = (T*)malloc(sizeof(T) * total_size);
         if(!buffer)
             MGCPP_THROW_BAD_ALLOC;
 
-        memset(buffer, init, sizeof(T) * total_size);
+        // memset(buffer, init, sizeof(T) * total_size);
+        std::fill(buffer, buffer + total_size, init);
         
         // auto memcpy_result =
         //     cuda_memcpy(_data,
@@ -402,8 +403,7 @@ namespace mgcpp
     {
         size_t total_size = _m_dim * _n_dim;
 
-        T* host_memory =
-            (T*)malloc(total_size * sizeof(T));
+        T* host_memory = (T*)malloc(total_size * sizeof(T));
         if(!host_memory)
         {
             MGCPP_THROW_BAD_ALLOC;
