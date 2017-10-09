@@ -21,7 +21,9 @@ namespace mgcpp
         {
             std::cout << "created!" << std::endl;
             cublasHandle_t new_handle;
+
             std::error_code status = cublasCreate(&new_handle);
+            cublasSetPointerMode(h, CUBLAS_POINTER_MODE_DEVICE);
 
             if(status != status_t::success)
                 MGCPP_THROW_SYSTEM_ERROR(status);
