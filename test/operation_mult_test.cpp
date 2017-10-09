@@ -32,7 +32,8 @@ TEST(operation_mult, row_major_multiplication)
     {
         for(size_t j = 0; j < shape.second; ++j)
         {
-            EXPECT_EQ(C_mat.check_value(i, j), 32); 
+            EXPECT_EQ(C_mat.check_value(i, j), 32)
+                << "i: " << i << " j: " << j; 
         } 
     }
 }
