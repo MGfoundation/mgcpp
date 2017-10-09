@@ -22,7 +22,7 @@ namespace mgcpp
     {
         std::error_code status =
             cublasSetMatrix(rows, cols, sizeof(ElemType),
-                            from_host, ld_host, to_gpu, ld_gpu);
+                            from_host, ld_from, to_gpu, ld_to);
 
         if(status != status_t::success)
             return status;
@@ -54,7 +54,7 @@ namespace mgcpp
     {
         std::error_code status =
             cublasGetMatrix(rows, cols, sizeof(ElemType),
-                            from_gpu, ld_gpu, to_host, ld_host);
+                            from_gpu, ld_from, to_host, ld_to);
 
         if(status != status_t::success)
             return status;
