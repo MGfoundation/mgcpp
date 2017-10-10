@@ -22,8 +22,8 @@ namespace mgcpp
     {
     private:
         using cublas_handle_unique_ptr =
-            std::unique_ptr<cublasHandle_t,
-                            std::function<void(cublasHandle_t*)>>;
+            std::unique_ptr<cublasContext,
+                            std::function<void(cublasHandle_t)>>;
 
         hash_table<size_t, cublas_handle_unique_ptr> _cublas_handle;
         

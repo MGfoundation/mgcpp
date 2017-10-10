@@ -25,15 +25,14 @@ namespace mgcpp
                 MGCPP_THROW_SYSTEM_ERROR(status);
 
             handle = cublas_handle_unique_ptr(
-                &new_handle,
-                [](cublasHandle_t* handle)
+                new_handle,
+                [](cublasHandle_t handle)
                 {
-                    // (void)handle;
-                    cublasDestroy(*handle);
+                    cublasDestroy(handle);
                 });
         }
 
-        return *handle;
+        return handle.get();
     }
 
     thread_context::

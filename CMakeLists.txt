@@ -148,8 +148,8 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp
 	${TEST_DIR}/global_context_test.cpp
-	${TEST_DIR}/thread_context_test.cpp)
-    # ${TEST_DIR}/operation_mult_test.cpp)
+	${TEST_DIR}/thread_context_test.cpp
+	${TEST_DIR}/operation_mult_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	${TEST_SOURCE_FILES})
 
