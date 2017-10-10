@@ -29,7 +29,7 @@ namespace mgcpp
                 [](cublasHandle_t* handle)
                 {
                     // (void)handle;
-                    cublasDestroy(handle);
+                    cublasDestroy(*handle);
                 });
         }
 
