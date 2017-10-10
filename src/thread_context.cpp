@@ -26,10 +26,10 @@ namespace mgcpp
 
             handle = cublas_handle_unique_ptr(
                 &new_handle,
-                [new_handle](cublasHandle_t* handle)
+                [](cublasHandle_t* handle)
                 {
-                    (void)handle;
-                    cublasDestroy(new_handle);
+                    // (void)handle;
+                    cublasDestroy(handle);
                 });
         }
 
