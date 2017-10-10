@@ -44,6 +44,8 @@ namespace mgcpp
                         &beta,
                         result.get_data_mutable(), m);
 
+        cublasDestroy(handle);
+
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
 
