@@ -12,8 +12,10 @@ TEST(mat_mat_expr_trait, is_same_gpu_matrix_success)
 {
     using FirstMat = mgcpp::gpu::matrix<float>; 
     using SecondMat = mgcpp::gpu::matrix<float>; 
+    bool is_same_gpu_matrix =
+        mgcpp::is_same_gpu_matrix<FirstMat, SecondMat>::value;
 
-    EXPECT_TRUE(is_same_gpu_matrix<FirstMat, SecondMat>::value);
+    EXPECT_TRUE(is_same_gpu_matrix);
 }
 
 TEST(mat_mat_expr_trait, is_same_gpu_matrix_fail)
@@ -21,5 +23,8 @@ TEST(mat_mat_expr_trait, is_same_gpu_matrix_fail)
     using FirstMat = mgcpp::gpu::matrix<float>; 
     using SecondMat = mgcpp::gpu::matrix<double>; 
 
-    EXPECT_FALSE(is_same_gpu_matrix<FirstMat, SecondMat>::value);
+    bool is_same_gpu_matrix =
+        mgcpp::is_same_gpu_matrix<FirstMat, SecondMat>::value;
+
+    EXPECT_FALSE(is_same_gpu_matrix);
 }

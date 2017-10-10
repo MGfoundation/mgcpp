@@ -14,14 +14,14 @@ namespace mgcpp
     struct is_same_gpu_matrix : std::false_type {};
 
     template<typename T, size_t Id, storage_order SO>
-    struct is_same_gpu_matrix<gpu::matrix<T, Id, SO>
+    struct is_same_gpu_matrix<gpu::matrix<T, Id, SO>,
                               gpu::matrix<T, Id, SO>>
         : std::true_type {};
 
     template<typename Lhs, typename Rhs>
     struct assert_same_gpu_matrix
     {
-        using result =
-            std::enable_if<is_same_gpu_matrix<Lhs, Rhs>>::type;
+        using result = typename std::enable_if<
+            is_same_gpu_matrix<Lhs, Rhs>::value>::type;
     };
 }
