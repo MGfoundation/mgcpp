@@ -38,7 +38,7 @@ namespace mgcpp
         thread_context&
         operator=(thread_context&& other) noexcept;
 
-        cublasHandle_t&
+        cublasHandle_t
         get_cublas_context(size_t device_id);
     };
 }
