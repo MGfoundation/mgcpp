@@ -17,8 +17,8 @@ namespace mgcpp
     namespace gpu
     {
         template<typename ElemType,
-                 size_t DeviceId,
-                 storage_order StoreOrder>
+                 size_t DeviceId = 0,
+                 storage_order StoreOrder = row_major>
         class matrix;
 
         template<typename ElemType,

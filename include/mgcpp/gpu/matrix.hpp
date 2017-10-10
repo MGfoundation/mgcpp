@@ -8,6 +8,7 @@
 #define _MGCPP_GPU_MATRIX_HPP_
 
 #include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
@@ -17,8 +18,8 @@ namespace mgcpp
     namespace gpu
     {
         template<typename T,
-                 size_t DeviceId = 0,
-                 storage_order SO = row_major>
+                 size_t DeviceId,
+                 storage_order SO>
         class matrix
         {
         private:
