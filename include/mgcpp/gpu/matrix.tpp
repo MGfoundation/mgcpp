@@ -77,15 +77,7 @@ namespace mgcpp
             MGCPP_THROW_BAD_ALLOC;
         }
 
-        // memset(buffer, init, sizeof(T) * total_size);
         std::fill(buffer, buffer + total_size, init);
-        
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 buffer,
-        //                 total_size,
-        //                 cuda_memcpy_kind::host_to_device);
-
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             buffer, _data);
 
@@ -160,12 +152,6 @@ namespace mgcpp
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             cpu_mat.get_data(),
                                             _data);
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 cpu_mat.get_data(),
-        //                 total_size,
-        //                 cuda_memcpy_kind::host_to_device);
-
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
@@ -294,20 +280,11 @@ namespace mgcpp
         _m_dim = i;
         _n_dim = j;
 
-        // auto buffer_result = malloc_pinned<T>(i * j);
-
         T* buffer = (T*)malloc(sizeof(T) * total_size);
         if(!buffer)
             MGCPP_THROW_BAD_ALLOC;
 
-        // memset(buffer, init, sizeof(T) * total_size);
         std::fill(buffer, buffer + total_size, init);
-        
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 buffer,
-        //                 total_size,
-        //                 cuda_memcpy_kind::host_to_device);
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             buffer, _data);
         free(buffer);
@@ -376,18 +353,12 @@ namespace mgcpp
             MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
         }
 
-        // auto memcpy_result =
-        //     cuda_memcpy(_data,
-        //                 cpu_mat.get_data(),
-        //                 _m_dim * _n_dim,
-        //                 cuda_memcpy_kind::host_to_device);
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             cpu_mat.get_data(),
                                             _data);
 
         if(!cpy_result)
         {
-            // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
@@ -409,12 +380,6 @@ namespace mgcpp
             MGCPP_THROW_BAD_ALLOC;
         }
         
-        // auto memcpy_result =
-        //     cuda_memcpy(host_memory,
-        //                 _data,
-        //                 total_size,
-        //                 cuda_memcpy_kind::device_to_host);
-
         auto cpy_result = cublas_get_matrix(_n_dim, _m_dim,
                                             _data, host_memory);
 
