@@ -32,7 +32,7 @@ namespace mgcpp
 
         thread_context* context = first.get_thread_context();
 
-        auto* handle = context->get_cublas_context(Device);
+        auto& handle = context->get_cublas_context(Device);
 
         std::error_code status =
             cublasSgemm(handle,

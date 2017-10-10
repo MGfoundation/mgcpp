@@ -10,7 +10,7 @@
 
 namespace mgcpp
 {
-    cublasHandle_t 
+    cublasHandle_t&
     thread_context::
     get_cublas_context(size_t device_id) 
     {
