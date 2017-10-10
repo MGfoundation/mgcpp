@@ -140,13 +140,15 @@ if(BUILD_TESTING)
 
     set(TEST_SOURCE_FILES
 	${TEST_DIR}/main.cpp
-	# ${TEST_DIR}/cuda_stdlib_test.cpp
-	# ${TEST_DIR}/gpu_matrix_test.cpp
-	# ${TEST_DIR}/tools_test.cpp
-	# ${TEST_DIR}/cublas_helpers_test.cpp
-	# ${TEST_DIR}/cpu_matrix_test.cpp
-	# ${TEST_DIR}/cuda_exception_test.cpp
-	# ${TEST_DIR}/cuda_error_test.cpp
+	${TEST_DIR}/cuda_stdlib_test.cpp
+	${TEST_DIR}/gpu_matrix_test.cpp
+	${TEST_DIR}/tools_test.cpp
+	${TEST_DIR}/cublas_helpers_test.cpp
+	${TEST_DIR}/cpu_matrix_test.cpp
+	${TEST_DIR}/cuda_exception_test.cpp
+	${TEST_DIR}/cuda_error_test.cpp
+	${TEST_DIR}/global_context_test.cpp
+	${TEST_DIR}/thread_context_test.cpp
 	${TEST_DIR}/operation_mult_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	${TEST_SOURCE_FILES})
@@ -176,7 +178,10 @@ if(BUILD_TESTING)
 endif()
 
 # install
-install(TARGETS "${PROJECT_NAME}base" ${PROJECT_NAME} "${PROJECT_NAME}_test"
+install(TARGETS
+    "${PROJECT_NAME}base"
+    "${PROJECT_NAME}"
+    "${PROJECT_NAME}_test"
     RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
     ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib
     LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib)
