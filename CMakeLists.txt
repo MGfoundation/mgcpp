@@ -141,7 +141,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp
-	${TEST_DIR}/type_traits_test.cpp
+	${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/global_context_test.cpp
 	${TEST_DIR}/thread_context_test.cpp
 	${TEST_DIR}/operation_mult_test.cpp)
