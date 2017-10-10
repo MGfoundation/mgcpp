@@ -6,17 +6,44 @@ A CUDA based C++ Multi GPU Linear Algebra Library
    mgcpp is a multi GPU linear algebra library.
    It is a wrapper for various CUDA libraries in standard C++.
 
-** Libraries
+** Status
+   This library is heavily under development and in pre-alpha state.
+   For contribution, refer to doc/TODO.md or contact me.
+   
+** Build
+   #+NAME: installing
+   #+BEGIN_SRC sh
+git clone --recursive https://github.com/Red-Portal/mgcpp.git
+cmake -G "<Generator>"
+make -j4
+make install
+   #+END_SRC
+   
+   for building without MAGMA or cuSPARSE,
+
+   #+NAME: installing
+   #+BEGIN_SRC sh
+git clone --recursive https://github.com/Red-Portal/mgcpp.git
+cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
+make -j4
+make install
+   #+END_SRC
+
+** Used Libraries
    These dependencies are optional. 
    Not including them might result in some featrues not working properly.
 
-   - cuBLAS for various BLAS operations.
    - cuSPARSE for sparse operations
-   - MAGMA for hight level linear algebra operations.
+   - [[https://github.com/kjbartel/magma][MAGMA]] for hight level linear algebra operations.
    
 ** Dependencies
+   - cmake
+   - gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
+
+   - [[https://github.com/ned14/outcome][outcome]]
+   - cuda (>= 8.0)
+   - cuBLAS
    - gtest (optional)
-   - cuda (>8.0)
      
 ** TODO
    - [X] Finish thread context class for managing threads.
@@ -26,3 +53,16 @@ A CUDA based C++ Multi GPU Linear Algebra Library
    - [ ] Add sparse operations.
    - [ ] Add high level linear algebra operations.
    - [ ] Add benchmark
+     
+** Contact
+   Red-Portal
+   - msca8h@naver.com
+   - msca8h@sogang.ac.kr
+     
+** License
+   Copyright RedPortal 2017.
+
+   Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file LICENSE or copy at
+   http://www.boost.org/LICENSE_1_0.txt)
+

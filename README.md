@@ -5,9 +5,13 @@
 <li><a href="#sec-1">1. mgcpp</a>
 <ul>
 <li><a href="#sec-1-1">1.1. Introduction</a></li>
-<li><a href="#sec-1-2">1.2. Libraries</a></li>
-<li><a href="#sec-1-3">1.3. Dependencies</a></li>
-<li><a href="#sec-1-4">1.4. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#sec-1-2">1.2. Status</a></li>
+<li><a href="#sec-1-3">1.3. Build</a></li>
+<li><a href="#sec-1-4">1.4. Used Libraries</a></li>
+<li><a href="#sec-1-5">1.5. Dependencies</a></li>
+<li><a href="#sec-1-6">1.6. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#sec-1-7">1.7. Contact</a></li>
+<li><a href="#sec-1-8">1.8. License</a></li>
 </ul>
 </li>
 </ul>
@@ -23,21 +27,44 @@ A CUDA based C++ Multi GPU Linear Algebra Library
 mgcpp is a multi GPU linear algebra library.
 It is a wrapper for various CUDA libraries in standard C++.
 
-## Libraries<a id="sec-1-2" name="sec-1-2"></a>
+## Status<a id="sec-1-2" name="sec-1-2"></a>
+
+This library is heavily under development and in pre-alpha state.
+For contribution, refer to doc/TODO.md or contact me.
+
+## Build<a id="sec-1-3" name="sec-1-3"></a>
+
+    git clone --recursive https://github.com/Red-Portal/mgcpp.git
+    cmake -G "<Generator>"
+    make -j4
+    make install
+
+for building without MAGMA or cuSPARSE,
+
+    git clone --recursive https://github.com/Red-Portal/mgcpp.git
+    cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
+    make -j4
+    make install
+
+## Used Libraries<a id="sec-1-4" name="sec-1-4"></a>
 
 These dependencies are optional. 
 Not including them might result in some featrues not working properly.
 
--   cuBLAS for various BLAS operations.
 -   cuSPARSE for sparse operations
--   MAGMA for hight level linear algebra operations.
+-   [MAGMA](https://github.com/kjbartel/magma) for hight level linear algebra operations.
 
-## Dependencies<a id="sec-1-3" name="sec-1-3"></a>
+## Dependencies<a id="sec-1-5" name="sec-1-5"></a>
 
+-   cmake
+-   gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
+
+-   [outcome](https://github.com/ned14/outcome)
+-   cuda (>= 8.0)
+-   cuBLAS
 -   gtest (optional)
--   cuda (>8.0)
 
-## TODO <a id="sec-1-4" name="sec-1-4"></a>
+## TODO <a id="sec-1-6" name="sec-1-6"></a>
 
 -   [X] Finish thread context class for managing threads.
 -   [ ] Support msvc build.
@@ -46,3 +73,17 @@ Not including them might result in some featrues not working properly.
 -   [ ] Add sparse operations.
 -   [ ] Add high level linear algebra operations.
 -   [ ] Add benchmark
+
+## Contact<a id="sec-1-7" name="sec-1-7"></a>
+
+Red-Portal
+-   msca8h@naver.com
+-   msca8h@sogang.ac.kr
+
+## License<a id="sec-1-8" name="sec-1-8"></a>
+
+Copyright RedPortal 2017.
+
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE or copy at
+<http://www.boost.org/LICENSE_1_0.txt>)

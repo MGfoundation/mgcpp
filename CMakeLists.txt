@@ -22,7 +22,6 @@ set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
 # options
 option(USE_MAGMA "compile mgcpp with magma features" ON)
-option(USE_CUBLAS "compile mgcpp with cublas features" ON)
 option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 
@@ -91,12 +90,7 @@ target_include_directories(${PROJECT_NAME}
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 
 # cuBLAS
-if(USE_CUBLAS)
-    cuda_add_cublas_to_target("${PROJECT_NAME}")
-    message(STATUS "building with cuBLAS")
-else()
-    message(STATUS "Not building with cuBLAS(most features will be restricted)")
-endif()
+cuda_add_cublas_to_target("${PROJECT_NAME}")
 
 # cuSPARSE
 if(USE_CUSPARSE)
