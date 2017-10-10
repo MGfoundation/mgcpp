@@ -139,7 +139,7 @@ if(BUILD_TESTING)
     set(TEST_DIR ${PROJECT_SOURCE_DIR}/test)
 
     set(TEST_SOURCE_FILES
-	# ${TEST_DIR}/main.cpp
+	${TEST_DIR}/main.cpp
 	# ${TEST_DIR}/cuda_stdlib_test.cpp
 	# ${TEST_DIR}/gpu_matrix_test.cpp
 	# ${TEST_DIR}/tools_test.cpp
