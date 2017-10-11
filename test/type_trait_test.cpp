@@ -51,12 +51,13 @@ TEST(gpu_matrix_trait, is_gpu_matrix_fail)
 {
     using mat = mgcpp::cpu::matrix<float>;
 
-    bool is_gpu_matrix = mgcpp::is_gpu_matrix<mat>::value;
-    EXPECT_FALSE(is_gpu_matrix);
+    bool gpu_matrix = mgcpp::is_gpu_matrix<mat>::value;
+    EXPECT_FALSE(gpu_matrix);
 
-    bool is_gpu_matrix = mgcpp::is_gpu_matrix<mat&>::value;
-    EXPECT_FALSE(is_gpu_matrix);
+    bool gpu_matrix_ref = mgcpp::is_gpu_matrix<mat&>::value;
+    EXPECT_FALSE(gpu_matrix_ref);
 
-    bool is_gpu_matrix = mgcpp::is_gpu_matrix<mat const&>::value;
-    EXPECT_FALSE(is_gpu_matrix);
+    bool gpu_matrix_const_ref =
+        mgcpp::is_gpu_matrix<mat const&>::value;
+    EXPECT_FALSE(gpu_matrix_const_ref);
 }
