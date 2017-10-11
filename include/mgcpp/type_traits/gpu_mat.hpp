@@ -22,6 +22,6 @@ namespace mgcpp
     {
         using result =
             typename std::enable_if<
-            is_gpu_matrix<std::decay<T>>::value>::type;
+            is_gpu_matrix<std::decay<T>::type>::value>::type;
     };
 }

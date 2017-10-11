@@ -46,11 +46,12 @@ TEST(gpu_matrix_trait, is_gpu_matrix_cv_success)
     bool gpu_matrix = mgcpp::is_gpu_matrix<mat>::value;
     EXPECT_TRUE(gpu_matrix);
 
-    bool gpu_matrix_ref = mgcpp::is_gpu_matrix<mat&>::value;
+    bool gpu_matrix_ref =
+        mgcpp::is_gpu_matrix<std::decay<mat&>::type>::value;
     EXPECT_TRUE(gpu_matrix_ref);
 
     bool gpu_matrix_const_ref =
-        mgcpp::is_gpu_matrix<mat const&>::value;
+        mgcpp::is_gpu_matrix<std::decay<mat const&>::type>::value;
     EXPECT_TRUE(gpu_matrix_const_ref);
 }
 
