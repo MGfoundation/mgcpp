@@ -203,7 +203,7 @@ namespace mgcpp
 
         if(!cpy_result)
         {
-            cuda_free(cpy_result.value());
+            cuda_free(alloc_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
