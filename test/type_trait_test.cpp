@@ -47,11 +47,11 @@ TEST(gpu_matrix_trait, is_gpu_matrix_cv_success)
     EXPECT_TRUE(gpu_matrix);
 
     bool gpu_matrix_ref = mgcpp::is_gpu_matrix<mat&>::value;
-    EXPECT_FALSE(gpu_matrix_ref);
+    EXPECT_TRUE(gpu_matrix_ref);
 
     bool gpu_matrix_const_ref =
         mgcpp::is_gpu_matrix<mat const&>::value;
-    EXPECT_FALSE(gpu_matrix_const_ref);
+    EXPECT_TRUE(gpu_matrix_const_ref);
 }
 
 TEST(gpu_matrix_trait, is_gpu_matrix_fail)
