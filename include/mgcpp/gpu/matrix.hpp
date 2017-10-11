@@ -9,6 +9,7 @@
 
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/gpu/base_matrix.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>

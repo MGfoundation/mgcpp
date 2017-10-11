@@ -18,7 +18,8 @@ namespace mgcpp
         mult_expr(LhsExpr&& lhs, RhsExpr&& rhs);
     };
 
-    template<typename LhsExpr, typename RhsExpr>
+    template<typename Enable,
+             typename LhsExpr, typename RhsExpr>
     inline mult_expr<LhsExpr, RhsExpr>
     operator*(LhsExpr&& lhs, RhsExpr&& rhs);
 }

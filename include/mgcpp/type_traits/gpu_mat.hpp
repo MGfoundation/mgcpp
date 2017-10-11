@@ -17,12 +17,21 @@ namespace mgcpp
     struct is_gpu_matrix<gpu::matrix<T, DeviceId, SO>>
         : std::true_type {};
 
-    template<typename T>
+    template<typename Mat>
     struct assert_gpu_matrix
     {
         using result =
             typename std::enable_if<
             is_gpu_matrix<
-                typename std::decay<T>::type>::value>::type;
+                typename std::decay<Mat>::type>::value>::type;
+    };
+
+    template<typename Mat, typename T>
+    struct assert_gpu_matrix_t
+    {
+        using result =
+            typename std::enable_if<
+            is_gpu_matrix<
+                typename std::decay<Mat>::type>::value, T>::type;
     };
 }

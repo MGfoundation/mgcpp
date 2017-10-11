@@ -4,27 +4,39 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/type_traits/mat_mat_expr.hpp>
+#ifndef _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
+#define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 
-#include <mgcpp/gpu/forward.hpp>
-#include <mgcpp/expressions/expression_base.hpp>
+#include <mgcpp/gpu/matrix.hpp>
+#include <mgcpp/expressions/mult_expr.hpp>
+#include <mgcpp/expressions/base_expr.hpp>
+#include <mgcpp/type_traits/gpu_mat.hpp>
 
 namespace mgcpp
 {
-    template<typename Rhs, typename Lhs>
-    // typename assert_same_gpu_matrix<Rhs, Lhs>::result>
-    struct mat_mat_mult_expr
-        : expression
+    template<typename GpuMat>
+    struct mult_expr<GpuMat, GpuMat> : public expression
     {
-        RhsType& lhs;
-        LhsType& rhs;
+        GpuMat&& _lhs;
+        GpuMat&& _rhs;
 
-        mat_mat_mult_expr(RhsType& lhs, LhsType& rhs);
+        inline mult_expr(GpuMat&& lhs, GpuMat&& rhs) noexcept;
+
+        inline typename std::decay<GpuMat>::type
+        eval();
     };
 
-    template<typename LhsMat, typename RhsMat,
-             typename assert_same_gpu_matrix<RhsMat,
-                                             LhsMat>::result>
-    mat_mat_mult_expr<LhsMat, RhsMat>
-    operator*(LhsMat& lhs,  RhsMat& rhs);
+    template<typename GpuMat>
+    using mat_mat_mult_expr = mult_expr<GpuMat, GpuMat>;
+
+    namespace gpu
+    {
+        template<typename GpuMat, typename =
+                 typename assert_gpu_matrix<GpuMat>::result>
+        inline mat_mat_mult_expr<GpuMat> 
+        operator*(GpuMat&& lhs, GpuMat&& rhs);
+    }
 }
+
+#include <mgcpp/expressions/mat_mat_mult_expr.tpp>
+#endif
