@@ -21,6 +21,7 @@ namespace mgcpp
     struct assert_gpu_matrix
     {
         using result =
-            typename std::enable_if<is_gpu_matrix<T>::value>::type;
+            typename std::enable_if<
+            is_gpu_matrix<std::decay<T>>::value>::type;
     };
 }
