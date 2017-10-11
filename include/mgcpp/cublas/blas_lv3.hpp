@@ -29,4 +29,5 @@ namespace mgcpp
                 T* C, size_t ldc) noexcept;
 }
 
+#include <mgcpp/cublas/blas_lv3.tpp>
 #endif
