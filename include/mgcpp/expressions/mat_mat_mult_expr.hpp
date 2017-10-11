@@ -7,9 +7,10 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 
-#include <mgcpp/gpu/forward.hpp>
-#include <mgcpp/expressions/mult_expr.hpp>
 #include <mgcpp/expressions/base_expr.hpp>
+#include <mgcpp/expressions/mult_expr.hpp>
+#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/gpu_mat.hpp>
 
 namespace mgcpp
@@ -31,8 +32,8 @@ namespace mgcpp
 
     namespace gpu
     {
-        template<typename GpuMat, typename =
-                 typename assert_gpu_matrix<GpuMat>::result>
+        template<typename GpuMat,
+                 MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
         inline mat_mat_mult_expr<GpuMat> 
         operator*(GpuMat&& lhs, GpuMat&& rhs);
     }
