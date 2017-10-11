@@ -32,7 +32,7 @@ namespace mgcpp
 
     inline outcome::result<void>
     cublas_gemm(cublasHandle_t handle,
-                cublasOperation_t trans, cublasOperation_t transb,
+                cublasOperation_t transa, cublasOperation_t transb,
                 size_t m, size_t n, size_t k,
                 double const* alpha,
                 double const* A, size_t lda,
