@@ -16,7 +16,7 @@ namespace mgcpp
     typename std::decay<GpuMat>::type
     eval()
     {
-
+        
     }
 
     template<typename GpuMat,

@@ -10,14 +10,18 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/mat_mat_mult_expr.hpp>
+#include <mgcpp/expressions/mat_trans_expr.hpp>
 
 namespace mgcpp
 {
     template<T>
-    struct is_gpu_expr : std::false_type {};
+    struct is_mat_expr : std::false_type {};
 
     template<typename GpuMat>
-    struct is_gpu_expr<mat_mat_mult_expr<GpuMat>> : std::true_type {};
+    struct is_mat_expr<mat_mat_mult_expr<GpuMat>> : std::true_type {};
+
+    template<typename GpuMat>
+    struct is_mat_expr<mat_trans_expr<GpuMat>> : std::true_type {};
 }
 
 #endif
