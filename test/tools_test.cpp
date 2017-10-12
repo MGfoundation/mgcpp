@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/tools/memory_check.hpp>
+#include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
 
 TEST(leak_check, case_no_leak_bool_operator)
@@ -35,7 +36,7 @@ TEST(leak_check, case_leak_bool_operator)
 {
     auto checker = mgcpp::leak_checker(); 
 
-    (void)cuda_set_device(0);
+    (void)mgcpp::cuda_set_device(0);
 
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
