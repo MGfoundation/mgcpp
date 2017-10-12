@@ -35,6 +35,8 @@ TEST(leak_check, case_leak_bool_operator)
 {
     auto checker = mgcpp::leak_checker(); 
 
+    (void)cuda_set_device(0);
+
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
 
