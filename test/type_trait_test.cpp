@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/cpu/forward.hpp>
-#include <mgcpp/type_traits/mat_mat_expr.hpp>
 #include <mgcpp/type_traits/gpu_mat.hpp>
 
 #include <gtest/gtest.h>

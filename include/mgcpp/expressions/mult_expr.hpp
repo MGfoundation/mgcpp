@@ -12,8 +12,8 @@ namespace mgcpp
     template<typename LhsExpr, typename RhsExpr>
     struct mult_expr
     {
-        RhsExpr&& lhs; 
-        LhsExpr&& rhs;
+        RhsExpr&& _lhs; 
+        LhsExpr&& _rhs;
 
         mult_expr(LhsExpr&& lhs, RhsExpr&& rhs);
     };

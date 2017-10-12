@@ -16,7 +16,8 @@
 namespace mgcpp
 {
     template<typename GpuMat>
-    struct mult_expr<GpuMat, GpuMat> : public expression
+    struct mult_expr<GpuMat, GpuMat>
+        : public expression
     {
         GpuMat&& _lhs;
         GpuMat&& _rhs;
@@ -35,7 +36,7 @@ namespace mgcpp
         template<typename GpuMat,
                  MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
         inline mat_mat_mult_expr<GpuMat> 
-        operator*(GpuMat&& lhs, GpuMat&& rhs);
+        operator*(GpuMat&& lhs, GpuMat&& rhs) noexcept;
     }
 }
 
