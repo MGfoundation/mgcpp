@@ -18,9 +18,9 @@ namespace mgcpp
           _after_free_memory(0),
           _cached(false)
     {
-        auto set_result = cuda_set_device(_device_id);
-        if(!set_result)
-            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
+        // auto set_result = cuda_set_device(_device_id);
+        // if(!set_result)
+        //     MGCPP_THROW_SYSTEM_ERROR(set_result.error());
 
         auto result = cuda_mem_get_info();
         if(!result)
@@ -33,7 +33,7 @@ namespace mgcpp
     leak_checker::
     cache() noexcept
     {
-        (void)cuda_set_device(_device_id);
+        // (void)cuda_set_device(_device_id);
         auto result = cuda_mem_get_info();
 
         _after_free_memory = result.value().first;
@@ -47,7 +47,7 @@ namespace mgcpp
     {
         if(!_cached)
         {
-            (void)cuda_set_device(_device_id);
+            // (void)cuda_set_device(_device_id);
 
             auto result = cuda_mem_get_info();
 
