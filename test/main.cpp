@@ -10,7 +10,5 @@
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
-
-    (void)mgcpp::cuda_set_device(0);
     return RUN_ALL_TESTS();
 }
