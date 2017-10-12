@@ -21,5 +21,5 @@ namespace mgcpp
     cuda_set_device(size_t device_id) noexcept;
 }
 
-#include <mgcpp/cuda/device.tpp>
+#include <mgcpp/cuda/device.ipp>
 #endif
