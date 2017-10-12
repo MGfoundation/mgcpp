@@ -36,16 +36,10 @@ TEST(leak_check, case_leak_bool_operator)
 {
     auto checker = mgcpp::leak_checker(); 
 
-    (void)mgcpp::cuda_set_device(0);
-
     auto mem = mgcpp::cuda_malloc<float>(10);
     EXPECT_TRUE(mem);
 
-    auto result = mgcpp::cuda_mem_get_info();
-    auto after_free_memory = result.value().first;
-    EXPECT_NE(after_free_memory, checker.initial_memory());
     EXPECT_FALSE(checker);
-
     (void)mgcpp::cuda_free(mem.value());
 }
 
