@@ -16,7 +16,6 @@ TEST(mult_expr, row_major_mat_mat_mult)
     matrix A_mat(2, 4, 2);
     matrix B_mat(4, 3, 4);
 
-    // auto mult_expr = mgcpp::operator*(A_mat, B_mat);
     auto mult_expr = A_mat * B_mat;
 
     matrix C_mat; 

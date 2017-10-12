@@ -80,8 +80,8 @@ namespace mgcpp
     outcome::result<std::pair<free_mem_t, total_mem_t>>
     cuda_mem_get_info() noexcept
     {
-        size_t free_memory;
-        size_t total_memory;
+        size_t free_memory = 0;
+        size_t total_memory = 0;
 
         std::error_code status =
             cudaMemGetInfo(&free_memory, &total_memory);
