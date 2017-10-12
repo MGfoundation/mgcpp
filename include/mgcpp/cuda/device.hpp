@@ -13,11 +13,13 @@
 
 #include <cstdlib>
 
+namespace outcome = OUTCOME_V2_NAMESPACE;
+
 namespace mgcpp
 {
-    outcome::result<void>
+    inline outcome::result<void>
     cuda_set_device(size_t device_id) noexcept;
 }
 
-#include <mgcpp/cuda/device.tpp>
+#include <mgcpp/cuda/device.ipp>
 #endif
