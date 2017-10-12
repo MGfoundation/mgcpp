@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/tools/memory_check.hpp>
-#include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
 
 TEST(leak_check, case_no_leak_bool_operator)
@@ -40,6 +39,7 @@ TEST(leak_check, case_leak_bool_operator)
     EXPECT_TRUE(mem);
 
     EXPECT_FALSE(checker);
+
     (void)mgcpp::cuda_free(mem.value());
 }
 
@@ -63,7 +63,7 @@ TEST(leak_check, case_leak_cached_result)
     EXPECT_TRUE(mem);
 
     checker.cache();
-    EXPECT_FALSE(checker);
+    EXPECT_FALSE(static_cast<bool>(checker));
 
     (void)mgcpp::cuda_free(mem.value());
 }
