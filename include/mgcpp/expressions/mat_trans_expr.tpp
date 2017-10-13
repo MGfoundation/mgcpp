@@ -12,8 +12,8 @@ namespace mgcpp
         : _mat(std::forward<GpuMat>(mat)) {}
 
     template<typename GpuMat>
+    typename trans_expr<GpuMat>::result_type
     trans_expr<GpuMat>::
-    typename std::decay<GpuMat>::type
     eval()
     {
         

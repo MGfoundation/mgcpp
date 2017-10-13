@@ -14,11 +14,13 @@ namespace mgcpp
     template<typename GpuMat>
     struct trans_expr<GpuMat>
     {
+        using result_type = typename std::decay<GpuMat>::type;
+
         GpuMat&& _mat;
 
         inline trans_expr(GpuMat&& mat) noexcept;
 
-        inline typename std::decay<GpuMat>::type
+        inline result_type
         eval();
     };
 
