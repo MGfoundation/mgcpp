@@ -10,18 +10,45 @@
 
 namespace mgcpp
 {
-    template<typename T>
+    template<>
     inline outcome::result<void>
     cublas_geam(cublasHandle_t handle,
-                cublasOperation_t transa, cublasOperation_t transb,
-                int m, int n,
-                const float *alpha,
-                const float *A, int lda,
-                const float *beta,
-                const float *B, int ldb,
-                float *C, int ldc) noexcept
+                cublasOperation_t transa,
+                cublasOperation_t transb,
+                size_t m, size_t n,
+                float const* alpha,
+                float const* A, size_t lda,
+                float const* beta,
+                float const* B, size_t ldb,
+                float *C, size_t ldc) noexcept
     {
         std::error_code err = cublasSgeam(handle,
+                                          transa, transb,
+                                          m, n,
+                                          alpha,
+                                          A, lda,
+                                          beta,
+                                          B, ldb,
+                                          C, ldc);
+
+        if(err)
+            return MGCPP_THROW_SYSTEM_ERROR(err);
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_geam(cublasHandle_t handle,
+                cublasOperation_t transa,
+                cublasOperation_t transb,
+                size_t m, size_t n,
+                double const* alpha,
+                double const* A, size_t lda,
+                double const* beta,
+                double const* B, size_t ldb,
+                double* C, size_t ldc) noexcept
+    {
+        std::error_code err = cublasDgeam(handle,
                                           transa, transb,
                                           m, n,
                                           alpha,

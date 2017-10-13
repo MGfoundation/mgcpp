@@ -21,10 +21,12 @@ namespace mgcpp
     inline outcome::result<void>
     cublas_geam(cublasHandle_t handle,
                 cublasOperation_t transa, cublasOperation_t transb,
-                int m, int n,
-                const float *alpha,
-                const float *A, int lda,
-                const float *beta,
-                const float *B, int ldb,
-                float *C, int ldc) noexcept;
+                size_t m, size_t n,
+                const T *alpha,
+                const T *A, size_t lda,
+                const T *beta,
+                const T *B, size_t ldb,
+                T *C, size_t ldc) noexcept;
 }
+
+#endif
