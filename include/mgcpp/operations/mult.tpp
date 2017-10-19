@@ -14,6 +14,7 @@ namespace mgcpp
 {
     template<typename T, size_t Device>
     gpu::matrix<T, Device, row_major>
+    strict::
     mult(gpu::matrix<T, Device, row_major> const& first,
          gpu::matrix<T, Device, row_major> const& second)
     {
