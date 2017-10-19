@@ -20,7 +20,16 @@ namespace mgcpp
     mat_mat_mult_expr<LhsExpr, RhsExpr>::
     eval()
     {
-        return strict::mult(_lhs, _rhs);
+        auto lhs = mgcpp::eval(_lhs);
+        auto rhs = mgcpp::eval(_rhs);
+
+        auto lhs_shape = lhs.shape();
+        auto rhs_shape = rhs.shape();
+
+        if(lhs_shape.second != rhs_shape.first)
+            MGCPP_THROW_LENGTH_ERROR("dimension doesn't match");
+
+        return strict::mult(lhs, rhs);
     }
 
     template<typename LhsExpr, typename RhsExpr>
