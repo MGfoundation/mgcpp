@@ -9,15 +9,28 @@
 
 #include <type_traits>
 
+#include <mgcpp/expressions/expr_result_type.hpp>
 #include <mgcpp/type_traits/gpu_mat.hpp>
 
 namespace mgcpp
 {
-    template<typename T>
-    struct assert_mat_expr 
+    template<typename Head>
+    struct assert_mat_expr
     {
-        using result = typename
-            std::enable_if<is_gpu_matrix<T::result_type>>::type;
+        using result = typename std::enable_if<
+            is_gpu_matrix<
+                typename result_type<Head>::type>::value>::type;
+    };
+
+    template<typename Head1, typename Head2>
+    struct assert_both_mat_expr
+    {
+        using result = typename std::enable_if<
+            is_gpu_matrix<
+                typename result_type<Head1>::type>::value
+            &&  is_gpu_matrix<
+                typename result_type<Head2>::type>::value
+            >::type;
     };
 }
 
