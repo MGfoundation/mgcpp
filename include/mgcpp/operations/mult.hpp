@@ -14,16 +14,10 @@ namespace mgcpp
 {
     namespace strict
     {
-        template<typename T, size_t Device>
-        inline gpu::matrix<T, Device, row_major>
-        mult(gpu::matrix<T, Device, row_major> const& first,
-             gpu::matrix<T, Device, row_major> const& second);
-
-        // template<typename T,
-        //          size_t Device>
-        // gpu::matrix
-        // mult(gpu::matrix<T, Device, storage_order::column_major> const& first,
-        //      gpu::matrix<T, Device, storage_order::column_major> const& second);
+        template<typename T, size_t Device, storage_order SO>
+        inline gpu::matrix<T, Device, SO>
+        mult(gpu::matrix<T, Device, SO> const& first,
+             gpu::matrix<T, Device, SO> const& second);
 
         // template<typename T,
         //          size_t IdFirst, size_t IdSecond,

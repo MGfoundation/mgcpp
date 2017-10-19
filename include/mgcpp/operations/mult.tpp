@@ -12,11 +12,11 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device>
-    gpu::matrix<T, Device, row_major>
+    template<typename T, size_t Device, storage_order SO>
+    gpu::matrix<T, Device, SO>
     strict::
-    mult(gpu::matrix<T, Device, row_major> const& first,
-         gpu::matrix<T, Device, row_major> const& second)
+    mult(gpu::matrix<T, Device, SO> const& first,
+         gpu::matrix<T, Device, SO> const& second)
     {
         T const alpha = 1;
         T const beta = 0;
