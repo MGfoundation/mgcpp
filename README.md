@@ -35,6 +35,7 @@ For contribution, refer to TODO or contact me.
 
 ## Example<a id="sec-1-3" name="sec-1-3"></a>
 
+``` c++
     using namespace mgcpp;
     
     int const device = 0;
@@ -47,6 +48,7 @@ For contribution, refer to TODO or contact me.
     /* or */
     
     auto C = eval(A * B);
+```
 
 The above code invokes the highly optimized cuBLAS library's gemm function.
 All operation are lazely computed using expression templates.
@@ -54,17 +56,21 @@ GPU computation kernels are also called the least possible.
 
 ## Build<a id="sec-1-4" name="sec-1-4"></a>
 
+``` shell
     git clone --recursive https://github.com/Red-Portal/mgcpp.git
     cmake -G "<Generator>"
     make -j4
     make install
+```
 
 for building without MAGMA or cuSPARSE,
 
+``` shell
     git clone --recursive https://github.com/Red-Portal/mgcpp.git
     cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
     make -j4
     make install
+```
 
 ## Used Libraries<a id="sec-1-5" name="sec-1-5"></a>
 
