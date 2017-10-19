@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include <mgcpp/expressions/expr_result_type.hpp>
+#include <mgcpp/expressions/result_type.hpp>
 #include <mgcpp/type_traits/gpu_mat.hpp>
 
 namespace mgcpp

@@ -8,8 +8,9 @@
 #define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 
 #include <mgcpp/expressions/mult_expr.hpp>
-#include <mgcpp/expressions/expr_result_type.hpp>
+#include <mgcpp/expressions/result_type.hpp>
 #include <mgcpp/expressions/mat_expr.hpp>
+#include <mgcpp/expressions/expr_eval.hpp>
 #include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/mat_expr.hpp>
