@@ -12,6 +12,7 @@
 
 #include <mgcpp/gpu_matrix.hpp>
 #include <mgcpp/operations/mult.hpp>
+#include <mgcpp/operations/add.hpp>
 
 TEST(operation_mult, row_major_multiplication)
 {
