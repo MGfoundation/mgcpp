@@ -136,7 +136,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/main.cpp
 	${TEST_DIR}/cuda_stdlib_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
-	${TEST_DIR}/expression_mult_test.cpp
+	${TEST_DIR}/expression_test.cpp
 	# ${TEST_DIR}/tools_test.cpp
 	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
@@ -145,7 +145,7 @@ if(BUILD_TESTING)
 	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/global_context_test.cpp
 	${TEST_DIR}/thread_context_test.cpp
-	${TEST_DIR}/operation_mult_test.cpp)
+	${TEST_DIR}/operation_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	${TEST_SOURCE_FILES})
 
