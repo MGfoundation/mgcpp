@@ -20,7 +20,8 @@ namespace mgcpp
     template<typename T>
     inline outcome::result<void>
     cublas_geam(cublasHandle_t handle,
-                cublasOperation_t transa, cublasOperation_t transb,
+                cublasOperation_t transa,
+                cublasOperation_t transb,
                 size_t m, size_t n,
                 const T *alpha,
                 const T *A, size_t lda,
@@ -29,4 +30,5 @@ namespace mgcpp
                 T *C, size_t ldc) noexcept;
 }
 
+#include <mgcpp/cublas/blaslike_ext.tpp>
 #endif

@@ -32,7 +32,7 @@ namespace mgcpp
                                           C, ldc);
 
         if(err)
-            return MGCPP_THROW_SYSTEM_ERROR(err);
+            return err;
         else
             return outcome::success();
     }
@@ -58,7 +58,7 @@ namespace mgcpp
                                           C, ldc);
 
         if(err)
-            return MGCPP_THROW_SYSTEM_ERROR(err);
+            return err;
         else
             return outcome::success();
     }
