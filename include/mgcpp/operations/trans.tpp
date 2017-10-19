@@ -41,7 +41,7 @@ namespace mgcpp
                                   result.get_data_mutable(), m);
 
         if(!status)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
+            MGCPP_THROW_SYSTEM_ERROR(status.error());
 
         return result;
     }

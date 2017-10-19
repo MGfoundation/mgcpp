@@ -6,6 +6,7 @@
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/cublas/blaslike_ext.hpp>
+#include <mgcpp/system/exception.hpp>
 
 namespace mgcpp
 {
@@ -23,8 +24,8 @@ namespace mgcpp
         auto m = shape.first;
         auto n = shape.second;
 
-        size_t alpha = 1;
-        size_t beta = 1;
+        T const alpha = 1;
+        T const beta = 1;
 
         gpu::matrix<T, Device, SO> result{m, n};
 
@@ -39,7 +40,7 @@ namespace mgcpp
                                   result.get_data_mutable(), m);
 
         if(!status)
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
+            MGCPP_THROW_SYSTEM_ERROR(status.error());
 
         return result;
     }
