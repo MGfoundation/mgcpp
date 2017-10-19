@@ -5,11 +5,32 @@ A CUDA based C++ Multi GPU Linear Algebra Library
 ** Introduction
    mgcpp is a multi GPU linear algebra library.
    It is a wrapper for various CUDA libraries in standard C++.
-
+ 
 ** Status
    This library is heavily under development and in pre-alpha state.
-   For contribution, refer to doc/TODO.md or contact me.
+   For contribution, refer to TODO or contact me.
    
+** Example
+   #+NAME: mult_example 
+   #+BEGIN_SRC cpp
+using namespace mgcpp;
+
+int const device = 0;
+
+gpu::matrix<float, device> A(2, 4, 2);
+gpu::matrix<float, device> B(4, 3, 4);
+
+gpu::matrix<float, device> C = A * B;
+
+/* or */
+
+auto C = eval(A * B);
+   #+END_SRC
+   
+   The above code invokes the highly optimized cuBLAS library's gemm function.
+   All operation are lazely computed using expression templates.
+   GPU computation kernels are also called the least possible.
+
 ** Build
    #+NAME: installing
    #+BEGIN_SRC sh
