@@ -9,26 +9,36 @@
 
 namespace mgcpp
 {
-    template<typename GpuMat>
-    mult_expr<GpuMat, GpuMat>::
-    mult_expr(GpuMat&& lhs, GpuMat&& rhs) noexcept
-        :_lhs(std::forward<GpuMat>(lhs)),
-         _rhs(std::forward<GpuMat>(rhs)) {}
+    template<typename LhsExpr, typename RhsExpr>
+    mat_mat_mult_expr<LhsExpr, RhsExpr>::
+    mat_mat_mult_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
+        :_lhs(std::forward<LhsExpr>(lhs)),
+         _rhs(std::forward<RhsExpr>(rhs)) {}
 
-    template<typename GpuMat>
-    typename std::decay<GpuMat>::type
-    mult_expr<GpuMat, GpuMat>::
+    template<typename LhsExpr, typename RhsExpr>
+    typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
+    mat_mat_mult_expr<LhsExpr, RhsExpr>::
     eval()
     {
-        return mult(_lhs, _rhs);
+        return strict::mult(_lhs, _rhs);
     }
 
-    template<typename GpuMat, typename>
-    mat_mat_mult_expr<GpuMat>
-    gpu::
-    operator*(GpuMat&& lhs,  GpuMat&& rhs)
+    template<typename LhsExpr, typename RhsExpr>
+    inline typename result_type<
+        mat_mat_mult_expr<LhsExpr, RhsExpr>>::type
+    eval(mat_mat_mult_expr<LhsExpr, RhsExpr>&& expr)
     {
-        return mult_expr<GpuMat, GpuMat>(
-            std::forward<GpuMat>(lhs), std::forward<GpuMat>(rhs));
+        expr.eval();
+    }
+
+    template<typename LhsExpr, typename RhsExpr,
+             typename>
+    mat_mat_mult_expr<LhsExpr, RhsExpr> 
+    gpu::
+    operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
+    {
+        return mat_mat_mult_expr<LhsExpr, RhsExpr>(
+            std::forward<LhsExpr>(lhs),
+            std::forward<RhsExpr>(rhs));
     }
 }

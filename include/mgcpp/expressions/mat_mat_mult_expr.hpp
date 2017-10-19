@@ -7,36 +7,52 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 
-#include <mgcpp/expressions/base_expr.hpp>
 #include <mgcpp/expressions/mult_expr.hpp>
+#include <mgcpp/expressions/expr_result_type.hpp>
+#include <mgcpp/expressions/mat_expr.hpp>
 #include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/system/concept.hpp>
-#include <mgcpp/type_traits/gpu_mat.hpp>
+#include <mgcpp/type_traits/mat_expr.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp
 {
-    template<typename GpuMat>
-    struct mult_expr<GpuMat, GpuMat>
-        : public expression
+    template<typename LhsExpr, typename RhsExpr>
+    struct mat_mat_mult_expr
     {
-        GpuMat&& _lhs;
-        GpuMat&& _rhs;
+        using result_type =
+            typename result_type<LhsExpr>::type;
 
-        inline mult_expr(GpuMat&& lhs, GpuMat&& rhs) noexcept;
+        LhsExpr&& _lhs;
+        RhsExpr&& _rhs;
 
-        inline typename std::decay<GpuMat>::type
+        inline mat_mat_mult_expr(LhsExpr&& lhs,
+                                 RhsExpr&& rhs) noexcept;
+
+        inline result_type
         eval();
     };
 
-    template<typename GpuMat>
-    using mat_mat_mult_expr = mult_expr<GpuMat, GpuMat>;
+    template<typename LhsExpr, typename RhsExpr>
+    struct result_type<
+        mat_mat_mult_expr<LhsExpr, RhsExpr>,
+        typename assert_both_mat_expr<LhsExpr, RhsExpr>::type>
+    {
+        using type =
+            typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type;
+    };
+
+    template<typename LhsExpr, typename RhsExpr>
+    inline typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
+    eval(mat_mat_mult_expr<LhsExpr, RhsExpr>& expr);
 
     namespace gpu
     {
-        template<typename GpuMat,
-                 MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
-        inline mat_mat_mult_expr<GpuMat> 
-        operator*(GpuMat&& lhs, GpuMat&& rhs) noexcept;
+        template<typename LhsExpr, typename RhsExpr,
+                 typename = typename
+                 assert_both_mat_expr<LhsExpr, RhsExpr>::result>
+        inline mat_mat_mult_expr<LhsExpr, RhsExpr> 
+        operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
     }
 }
 
