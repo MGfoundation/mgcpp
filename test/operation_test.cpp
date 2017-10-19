@@ -36,3 +36,27 @@ TEST(operation_mult, row_major_multiplication)
         } 
     }
 }
+
+TEST(operation_add , row_major_multiplication)
+{
+    mgcpp::gpu::matrix<float> A_mat(4, 2, 2);
+    mgcpp::gpu::matrix<float> B_mat(4, 2, 4);
+
+    auto C_mat = mgcpp::strict::add(A_mat, B_mat);
+
+    auto C_mat_host = C_mat.copy_to_host();
+    
+    auto shape = C_mat_host.shape();
+    EXPECT_EQ(shape.first, 4);
+    EXPECT_EQ(shape.second, 2);
+
+    for(size_t i = 0; i < shape.first; ++i)
+    {
+        for(size_t j = 0; j < shape.second; ++j)
+        {
+            EXPECT_EQ(C_mat_host(i, j), 6)
+                << "i: " << i << " j: " << j; 
+        } 
+    }
+}
+
