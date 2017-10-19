@@ -28,4 +28,5 @@ namespace mgcpp
     };
 }
 
+#include <mgcpp/expressions/mat_expr.tpp>
 #endif
