@@ -116,6 +116,9 @@ namespace mgcpp
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
+        _released = false;
+        _m_dim = other._m_dim;
+        _n_dim = other._n_dim;
 
         auto cpy_result =
             cuda_memcpy(alloc_result.value(),
@@ -129,10 +132,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        _released = false;
         _data = alloc_result.value();
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
     }
 
     template<typename T,
@@ -162,7 +162,6 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-        _data = alloc_result.value();
         
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             cpu_mat.get_data(),
@@ -171,6 +170,8 @@ namespace mgcpp
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
+
+        _data = alloc_result.value();
     }
 
     template<typename T,
@@ -213,6 +214,9 @@ namespace mgcpp
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
+        _released = false;
+        _m_dim = other._m_dim;
+        _n_dim = other._n_dim;
 
         auto cpy_result =
             cuda_memcpy(alloc_result.value(),
@@ -225,11 +229,9 @@ namespace mgcpp
             cuda_free(alloc_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
-
-        _released = false;
         _data = alloc_result.value();
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
+
+        return *this;
     }
 
     template<typename T,
