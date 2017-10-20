@@ -242,3 +242,134 @@ TEST(gpu_matrix, copy_to_host)
         }
     }
 }
+
+TEST(gpu_matrix, copy_construction)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+    float init = 7;
+
+    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+
+    mgcpp::gpu::matrix<float> copied(original);
+
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            EXPECT_EQ(original.check_value(i, j),
+                      copied.check_value(i, j));
+        }
+    }
+
+    EXPECT_FALSE(original._released);
+    EXPECT_FALSE(copied._released);
+    EXPECT_EQ(original._m_dim, copied._m_dim);
+    EXPECT_EQ(original._n_dim, copied._n_dim);
+}
+
+TEST(gpu_matrix, copy_assign_operator)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+    float init = 7;
+
+    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+    mgcpp::gpu::matrix<float> copied{row_dim * 2, col_dim * 2};
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_freemem = before.value().first;
+
+    copied = original;
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_freemem = after.value().first;
+
+    EXPECT_LT(before_freemem, after_freemem);
+
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            EXPECT_EQ(original.check_value(i, j),
+                      copied.check_value(i, j));
+        }
+    }
+
+    EXPECT_FALSE(original._released);
+    EXPECT_FALSE(copied._released);
+    EXPECT_EQ(original._m_dim, copied._m_dim);
+    EXPECT_EQ(original._n_dim, copied._n_dim);
+}
+
+TEST(gpu_matrix, move_constructor)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+    float init = 7;
+
+    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_freemem = before.value().first;
+
+    mgcpp::gpu::matrix<float> moved(std::move(original));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_freemem = after.value().first;
+
+    EXPECT_EQ(before_freemem, after_freemem);
+
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            EXPECT_EQ(moved.check_value(i, j), 7);
+        }
+    }
+
+    EXPECT_TRUE(original._released);
+    EXPECT_FALSE(moved._released);
+    EXPECT_EQ(moved._m_dim, row_dim);
+    EXPECT_EQ(moved._n_dim, col_dim);
+}
+
+TEST(gpu_matrix, move_assign_operator)
+{
+    size_t row_dim = 5;
+    size_t col_dim = 10;
+    float init = 7;
+
+    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+    mgcpp::gpu::matrix<float> moved(row_dim * 2, col_dim * 2);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_freemem = before.value().first;
+
+
+    moved = std::move(original);
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_freemem = after.value().first;
+
+    EXPECT_LT(before_freemem, after_freemem);
+
+    for(auto i = 0u; i < 5; ++i)
+    {
+        for(auto j = 0u; j < 5; ++j)
+        {
+            EXPECT_EQ(moved.check_value(i, j), 7);
+        }
+    }
+
+    EXPECT_TRUE(original._released);
+    EXPECT_FALSE(moved._released);
+    EXPECT_EQ(moved._m_dim, row_dim);
+    EXPECT_EQ(moved._n_dim, col_dim);
+}
