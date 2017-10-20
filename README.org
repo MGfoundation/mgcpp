@@ -1,5 +1,4 @@
 * mgcpp
-
 A CUDA based C++ Multi GPU Linear Algebra Library
 
 ** Introduction
@@ -12,7 +11,7 @@ A CUDA based C++ Multi GPU Linear Algebra Library
    
 ** Example
    #+NAME: mult_example 
-   #+BEGIN_SRC cpp
+   #+BEGIN_SRC C++
 using namespace mgcpp;
 
 int const device = 0;
@@ -33,7 +32,7 @@ auto C = eval(A * B);
 
 ** Build
    #+NAME: installing
-   #+BEGIN_SRC sh
+   #+BEGIN_SRC shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
 cmake -G "<Generator>"
 make -j4
@@ -43,38 +42,37 @@ make install
    for building without MAGMA or cuSPARSE,
 
    #+NAME: installing
-   #+BEGIN_SRC sh
+   #+BEGIN_SRC shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
 cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
 make -j4
 make install
    #+END_SRC
 
-** Used Libraries
-   These dependencies are optional. 
-   Not including them might result in some featrues not working properly.
-
-   - cuSPARSE for sparse operations
-   - [[https://github.com/kjbartel/magma][MAGMA]] for hight level linear algebra operations.
-   
 ** Dependencies
-   - cmake
-   - gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
-
-   - [[https://github.com/ned14/outcome][outcome]]
-   - cuda (>= 8.0)
-   - cuBLAS
-   - gtest (optional)
+   + cmake
+   + gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
+   + [[https://github.com/ned14/outcome][outcome]]
+   + cuda (>= 8.0)
+   + cuBLAS
+   + [[https://github.com/kjbartel/magma][MAGMA]] (optional)
+   + cuSPARSE (optional)
+   + gtest (optional)
      
 ** TODO
    - [X] Finish thread context class for managing threads.
    - [ ] Support msvc build.
-   - [ ] Add BLAS operations.
-   - [ ] Add sparse matrix
-   - [ ] Add sparse operations.
+   - [ ] Add BLAS lv1 operations.
+   - [ ] Add BLAS lv2 operations.
+   - [ ] Add BLAS lv3 operations.
+   - [ ] Add exprssions for BLAS lv1 operations.
+   - [ ] Add exprssions for BLAS lv2 operations.
+   - [ ] Add exprssions for BLAS lv3 operations.
+   - [ ] Add sparse matrix type
+   - [ ] Add batch type
    - [ ] Add high level linear algebra operations.
    - [ ] Add benchmark
-     
+  
 ** Contact
    Red-Portal
    - msca8h@naver.com
