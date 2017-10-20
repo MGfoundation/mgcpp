@@ -9,10 +9,7 @@
 
 namespace mgcpp
 {
-    enum class allignment
-    {
-        row, column
-    };
+    enum allignment { row, column };
 
 }
 
