@@ -4,6 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <type_traits>
+
 #include <mgcpp/expressions/mat_mat_mult_expr.hpp>
 #include <mgcpp/operations/mult.hpp>
 
@@ -20,10 +22,12 @@ namespace mgcpp
     mat_mat_mult_expr<LhsExpr, RhsExpr>::
     eval()
     {
-        using fist_type = std::decay<LhsExpr::result_type>::type;
-        using second_type = std::decay<RhsExpr::result_type>::type;
+        using first_type =
+            typename mgcpp::result_type<LhsExpr>::type;
+        using second_type =
+            typename mgcpp::result_type<RhsExpr>::type;
 
-        if(!std::is_same<first_type, second_type>)
+        if(!std::is_same<first_type, second_type>::value)
             MGCPP_THROW_RUNTIME_ERROR("type of matrices not equal");
 
         auto lhs = mgcpp::eval(_lhs);
