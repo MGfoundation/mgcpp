@@ -12,9 +12,7 @@
 #include <mgcpp/cublas/cublas_helpers.hpp>
 
 #include <cstdlib>
-#include <cstdio>
 #include <type_traits>
-#include <cstring>
 
 namespace mgcpp
 {
@@ -44,8 +42,7 @@ namespace mgcpp
         if(!set_device_stat)
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
-        auto result =
-            cuda_malloc<T>(_m_dim * _n_dim);
+        auto result = cuda_malloc<T>(_m_dim * _n_dim);
         if(!result)
         {
             MGCPP_THROW_SYSTEM_ERROR(result.error());
