@@ -73,7 +73,7 @@ namespace mgcpp
     cpu::matrix<T, SO>::
     operator()(size_t i, size_t j) const
     {
-        if(i > _m_dim || j > _n_dim)
+        if(i >= _m_dim || j >= _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
         return _data[i * _n_dim + j];
@@ -85,7 +85,7 @@ namespace mgcpp
     cpu::matrix<T, SO>::
     operator()(size_t i, size_t j)
     {
-        if(i > _m_dim || j > _n_dim)
+        if(i >= _m_dim || j >= _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
         return _data[i * _n_dim + j];
