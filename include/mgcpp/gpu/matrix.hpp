@@ -82,10 +82,10 @@ namespace mgcpp
             check_value(size_t i, size_t j) const;
 
             inline T const*
-            get_data() const;
+            get_data() const noexcept;
 
             inline T*
-            get_data_mutable();
+            get_data_mutable() noexcept;
 
             inline thread_context*
             get_thread_context() const noexcept;

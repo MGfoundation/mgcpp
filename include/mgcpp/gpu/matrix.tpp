@@ -352,7 +352,7 @@ namespace mgcpp
     gpu::matrix<T, DeviceId, SO>::
     check_value(size_t i, size_t j) const 
     {
-        if(i > _m_dim || j > _n_dim)
+        if(i >= _m_dim || j >= _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
         T* from = (_data + (i * _n_dim + j));
@@ -428,7 +428,7 @@ namespace mgcpp
              storage_order SO>
     inline T const*
     gpu::matrix<T, DeviceId, SO>::
-    get_data() const
+    get_data() const noexcept
     {
         return _data;
     }
@@ -438,7 +438,7 @@ namespace mgcpp
              storage_order SO>
     inline T*
     gpu::matrix<T, DeviceId, SO>::
-    get_data_mutable()
+    get_data_mutable() noexcept
     {
         return _data;
     }
