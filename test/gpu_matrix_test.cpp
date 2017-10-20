@@ -27,7 +27,7 @@ TEST(gpu_matrix, default_constructor)
     EXPECT_TRUE(mat._released);
 }
 
-TEST(gpu_matrix, contextless_dimension_constructor)
+TEST(gpu_matrix, dimension_constructor)
 {
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
@@ -52,7 +52,7 @@ TEST(gpu_matrix, contextless_dimension_constructor)
     EXPECT_FALSE(mat._released);
 }
 
-TEST(gpu_matrix, contextless_dimension_initializing_constructor)
+TEST(gpu_matrix, dimension_initializing_constructor)
 {
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
