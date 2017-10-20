@@ -20,9 +20,8 @@ TEST(mult_expr, row_major_mat_mat_mult)
 
     matrix C_mat; 
     EXPECT_NO_THROW({C_mat = mult_expr.eval();});
-    auto C_mat_host = C_mat.copy_to_host();
     
-    auto shape = C_mat_host.shape();
+    auto shape = C_mat.shape();
     EXPECT_EQ(shape.first, 2);
     EXPECT_EQ(shape.second, 3);
 
@@ -30,7 +29,7 @@ TEST(mult_expr, row_major_mat_mat_mult)
     {
         for(size_t j = 0; j < shape.second; ++j)
         {
-            EXPECT_EQ(C_mat_host(i, j), 32)
+            EXPECT_EQ(C_mat.check_value(i, j), 32)
                 << "i: " << i << " j: " << j; 
         } 
     }

@@ -32,7 +32,7 @@ namespace mgcpp
 
         thread_context* context = first.get_thread_context();
         auto handle = context->get_cublas_context(Device);
-
+    
         auto status = cublas_gemm(handle,
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
