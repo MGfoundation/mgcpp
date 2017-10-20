@@ -33,7 +33,9 @@ namespace mgcpp
                 new_handle,
                 [device_id](cublasHandle_t handle)
                 {
-                    cuda_set_device(device_id);
+                    auto status = cuda_set_device(device_id);
+                    if(!status)
+                        MGCPP_THROW_SYSTEM_ERROR(status.error());
                     cublasDestroy(handle);
                 });
         }
