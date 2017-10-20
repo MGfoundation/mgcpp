@@ -4,11 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_GPU_VECTOR_HPP_
-#define _MGCPP_GPU_VECTOR_HPP_
-
-#include <mgcpp/gpu/matrix.hpp>
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/gpu/vector.hpp>
+#include <mgcpp/cpu/vector.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
@@ -18,7 +15,6 @@
 
 namespace mgcpp
 {
-    
     template<typename T,
              size_t DeviceId,
              allignment Allign>
