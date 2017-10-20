@@ -20,7 +20,6 @@ namespace mgcpp
         if(!handle)
         {
             auto set_device_stat = cuda_set_device(device_id);
-
             if(!set_device_stat)
                 MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
