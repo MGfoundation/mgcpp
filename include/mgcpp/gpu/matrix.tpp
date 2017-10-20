@@ -84,6 +84,7 @@ namespace mgcpp
         free(buffer);
         if(!cpy_result)
         {
+            (void)cuda_free(_data); 
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
     }
