@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/cuda/device.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
@@ -18,6 +19,11 @@ namespace mgcpp
 
         if(!handle)
         {
+            auto set_device_stat = cuda_set_device(device_id);
+
+            if(!set_device_stat)
+                MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+
             cublasHandle_t new_handle;
 
             std::error_code status = cublasCreate(&new_handle);
