@@ -23,6 +23,7 @@ namespace mgcpp
         if(status != status_t::success)
             MGCPP_THROW_SYSTEM_ERROR(status);
 
+        device_free_memory.clear();
         device_free_memory.reserve(device_number);
 
         for(int i = 0; i < device_number; ++i)

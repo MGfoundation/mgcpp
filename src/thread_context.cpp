@@ -31,8 +31,9 @@ namespace mgcpp
 
             handle = cublas_handle_unique_ptr(
                 new_handle,
-                [](cublasHandle_t handle)
+                [device_id](cublasHandle_t handle)
                 {
+                    cuda_set_device(device_id);
                     cublasDestroy(handle);
                 });
         }
