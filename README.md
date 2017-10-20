@@ -93,7 +93,9 @@ for building without MAGMA or cuSPARSE,
 -   [ ] Add exprssions for BLAS lv1 operations.
 -   [ ] Add exprssions for BLAS lv2 operations.
 -   [ ] Add exprssions for BLAS lv3 operations.
+-   [ ] Add dense vector type
 -   [ ] Add sparse matrix type
+-   [ ] Add sparse vector type
 -   [ ] Add batch type
 -   [ ] Add high level linear algebra operations.
 -   [ ] Add benchmark
