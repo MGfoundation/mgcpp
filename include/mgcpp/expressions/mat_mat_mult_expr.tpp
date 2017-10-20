@@ -20,6 +20,12 @@ namespace mgcpp
     mat_mat_mult_expr<LhsExpr, RhsExpr>::
     eval()
     {
+        using fist_type = std::decay<LhsExpr::result_type>::type;
+        using second_type = std::decay<RhsExpr::result_type>::type;
+
+        if(!std::is_same<first_type, second_type>)
+            MGCPP_THROW_RUNTIME_ERROR("type of matrices not equal");
+
         auto lhs = mgcpp::eval(_lhs);
         auto rhs = mgcpp::eval(_rhs);
 
