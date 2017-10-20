@@ -10,7 +10,6 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/cuda/memory.hpp>
-#include <mgcpp/tools/memory_check.hpp>
 #include <mgcpp/cpu_matrix.hpp>
 #define private public
 #include <mgcpp/gpu_matrix.hpp>
@@ -68,7 +67,7 @@ TEST(gpu_matrix, contextless_dimension_initializing_constructor)
     EXPECT_TRUE( after);
     auto after_memory = after.value().first;
 
-    EXPECT_GT(leak_chk.initial_memory(), after_memory);
+    EXPECT_GT(before_memory, after_memory);
 
     auto shape = mat.shape();
     EXPECT_EQ(shape.first, row_dim);
