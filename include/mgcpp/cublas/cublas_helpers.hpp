@@ -36,6 +36,17 @@ namespace mgcpp
     outcome::result<ElemType*>
     cublas_get_matrix(size_t rows, size_t cols,
                       ElemType const* from_gpu, ElemType* to_host);
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_set_vector(size_t size,
+                      ElemType const* from_host, size_t spacing_host,
+                      ElemType* to_gpu, size_t spacing_gpu);
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_set_vector(size_t size,
+                      ElemType const* from_host, ElemType* to_gpu );
 }
 
 #include <mgcpp/cublas/cublas_helpers.tpp>

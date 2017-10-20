@@ -40,10 +40,10 @@ namespace mgcpp
             cublasSetMatrix(rows, cols, sizeof(ElemType),
                             from_host, rows, to_gpu, rows);
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
             return status;
         else
-            return to_gpu;
+        return to_gpu;
     }
 
     template<typename ElemType>
@@ -72,7 +72,73 @@ namespace mgcpp
             cublasGetMatrix(rows, cols, sizeof(ElemType),
                             from_gpu, rows, to_host, rows);
 
-        if(status != make_error_condition(status_t::success))
+        if(status != status_t::success)
+            return status;
+        else
+            return to_host;
+    }
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_set_vector(size_t size,
+                      ElemType const* from_host, size_t spacing_host,
+                      ElemType* to_gpu, size_t spacing_gpu)
+    {
+        std::error_code status =
+            cublasSetVector(size * sizeof(ElemType),
+                            from_host, spacing_host,
+                            to_gpu, spacing_gpu);
+
+        if(status != status_t::success)
+            return status;
+        else
+        return to_gpu;
+    }
+
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_set_vector(size_t size,
+                      ElemType const* from_host, ElemType* to_gpu )
+    {
+        std::error_code status =
+            cublasSetVector(size * sizeof(ElemType),
+                            from_host, 1, to_gpu, 1);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return to_gpu;
+    }
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_vector(size_t size,
+                      ElemType const* from_gpu, size_t spacing_gpu,
+                      ElemType* to_host, size_t spacing_host)
+    {
+        std::error_code status =
+            cublasGetVector(size * sizeof(ElemType),
+                            from_gpu, spacing_gpu,
+                            to_host, spacing_host);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return to_host;
+    }
+
+
+    template<typename ElemType>
+    outcome::result<ElemType*>
+    cublas_get_vector(size_t size,
+                      ElemType const* from_gpu, ElemType* to_host)
+    {
+        std::error_code status =
+            cublasGetVector(size * sizeof(ElemType),
+                            from_gpu, 1, to_host, 1);
+
+        if(status != status_t::success)
             return status;
         else
             return to_host;
