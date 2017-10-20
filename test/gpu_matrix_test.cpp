@@ -47,8 +47,6 @@ TEST(gpu_matrix, dimension_constructor)
     EXPECT_EQ(shape.first, row_dim);
     EXPECT_EQ(shape.second, col_dim);
     EXPECT_NE(mat._data, nullptr);
-    EXPECT_EQ(mat._context, 
-              mgcpp::gpu::matrix<float>()._context);
     EXPECT_FALSE(mat._released);
 }
 
@@ -64,7 +62,7 @@ TEST(gpu_matrix, dimension_initializing_constructor)
     mgcpp::gpu::matrix<float> mat(row_dim, col_dim, init_val);
 
     auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE( after);
+    EXPECT_TRUE(after);
     auto after_memory = after.value().first;
 
     EXPECT_GT(before_memory, after_memory);
@@ -72,9 +70,6 @@ TEST(gpu_matrix, dimension_initializing_constructor)
     auto shape = mat.shape();
     EXPECT_EQ(shape.first, row_dim);
     EXPECT_EQ(shape.second, col_dim);
-
-    EXPECT_EQ(mat._context, 
-              mgcpp::gpu::matrix<float>()._context);
     EXPECT_NE(mat._data, nullptr);
     EXPECT_FALSE(mat._released);
 
