@@ -7,56 +7,79 @@
 #ifndef _MGCPP_GPU_VECTOR_HPP_
 #define _MGCPP_GPU_VECTOR_HPP_
 
-#include <mgcpp/cpu/fwd.hpp>
+#include <cstdlib>
+
+#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp
 {
     namespace gpu
     {
-        enum class allignment
-        {
-            row, column
-        };
-
-        template<typename ElemType,
-                 allignment Allign,
-                 size_t DeviceId>
+        template<typename T,
+                 size_t DeviceId = 0,
+                 allignment Allign = row>
         class vector
         {
         private:
-            ElemType* _data;
-            size_t _id;
+            T* _data;
+            thread_context* _context;
+            size_t _size;
+            bool _released;
 
         public:
-            inline vector();
+            inline vector() noexcept;
 
-            inline vector(size_t x_dim, size_t y_dim);
+            inline ~vector() noexcept;
 
-            inline vector(size_t x_dim, size_t y_dim, ElemType init);
+            inline vector(size_t size);
 
-            // template<size_t Xdim, size_t Ydim>
-            // inline vector(dynamic_vector<ElemType> const& cpu_mat);
+            inline vector(size_t size, T init);
 
-            // template<size_t Xdim, size_t Ydim>
-            // inline vector(
-            //     static_vector<ElemType, Xdim, Ydim> const& cpu_mat);
+            inline vector(size_t size, T* data);
 
-            // inline dynamic_vector<ElemType>
-            // copy_to_cpu() const;
+            inline
+            vector(gpu::vector<T, DeviceId, Allign> const& other);
 
-            // template<size_t Xdim, size_t Ydim>
-            // inline static_vector<ElemType, Xdim, Ydim>
-            // copy_to_cpu() const;
+            inline
+            vector(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
 
-            inline ElemType const*
-            get_data() const;
+            inline gpu::vector<T, DeviceId, Allign>&
+            operator=(gpu::vector<T, DeviceId, Allign> const& other);
 
-            inline ElemType*
-            get_data_mutable();
+            inline gpu::vector<T, DeviceId, Allign>&
+            operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
 
-            inline ~vector();
+            inline void 
+            copy_from_host(cpu::vector<T, Allign>) const;
+
+            template<size_t Xdim, size_t Ydim>
+            inline cpu::vector<T, Allign>
+            copy_to_host() const;
+
+            inline T
+            check_value(size_t i) const;
+
+            inline T const*
+            get_data() const noexcept;
+
+            inline T*
+            get_data_mutable() noexcept;
+
+            inline T*
+            release_data() noexcept;
+
+            inline thread_context*
+            get_thread_context() const noexcept;
+
+            inline size_t
+            shape() const noexcept;
+
+            inline size_t
+            size() const noexcept;
         }
     }
 }
 
+#include <mgcpp/gpu/vector.tpp>
 #endif
