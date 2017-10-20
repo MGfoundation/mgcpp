@@ -42,7 +42,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         auto result =
             cuda_malloc<T>(_m_dim * _n_dim);
@@ -68,7 +68,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         size_t total_size = _m_dim * _n_dim;
         auto alloc_result = cuda_malloc<T>(total_size);
@@ -111,7 +111,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         auto alloc_result =
             cuda_malloc<T>(other._m_dim * other._n_dim);
@@ -151,7 +151,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         auto shape = cpu_mat.shape();
         _m_dim = shape.first;
@@ -200,7 +200,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         if(!_released)
         {
@@ -263,7 +263,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         if(!_released)
         {
@@ -294,7 +294,7 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat);
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
 
         auto free_result = cuda_free(_data);
         _released = true;
@@ -481,9 +481,7 @@ namespace mgcpp
     gpu::matrix<T, DeviceId, SO>::
     ~matrix() noexcept
     {
-        auto set_device_stat = cuda_set_device(device_id);
-        if(!set_device_stat)
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        (void)cuda_set_device(DeviceId);
 
         if(!_released)
             (void)cuda_free(_data);
