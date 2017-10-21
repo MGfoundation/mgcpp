@@ -4,13 +4,9 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <outcome.hpp>
-
 #include <mgcpp/cublas/cublas_helpers.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
-
-namespace outcome = OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {
@@ -39,7 +35,7 @@ namespace mgcpp
     {
         std::error_code status =
             cublasSetMatrix(rows, cols,
-                            row * cols * sizeof(ElemType),
+                            rows * cols * sizeof(ElemType),
                             from_host, rows, to_gpu, rows);
 
         if(status != status_t::success)
