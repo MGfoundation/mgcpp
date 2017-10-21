@@ -47,6 +47,7 @@ set(BASE_SOURCE_FILES "")
 # ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
+    ${SOURCE_DIR}/init.cpp
     ${SOURCE_DIR}/global_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
@@ -133,18 +134,18 @@ if(BUILD_TESTING)
 
     set(TEST_SOURCE_FILES
 	${TEST_DIR}/main.cpp
-	${TEST_DIR}/cuda_stdlib_test.cpp
-	${TEST_DIR}/gpu_matrix_test.cpp
-	${TEST_DIR}/expression_test.cpp
-	${TEST_DIR}/cublas_helpers_test.cpp
-	${TEST_DIR}/cpu_matrix_test.cpp
-	${TEST_DIR}/cuda_exception_test.cpp
-	${TEST_DIR}/cuda_error_test.cpp
-	#${TEST_DIR}/type_trait_test.cpp
+	${TEST_DIR}/memory_leak_detector.cpp
 	${TEST_DIR}/global_context_test.cpp
 	${TEST_DIR}/thread_context_test.cpp
+	${TEST_DIR}/cuda_exception_test.cpp
+	${TEST_DIR}/cuda_error_test.cpp
+	${TEST_DIR}/cuda_stdlib_test.cpp
+	${TEST_DIR}/cublas_helpers_test.cpp
+	${TEST_DIR}/cpu_matrix_test.cpp
+	${TEST_DIR}/gpu_matrix_test.cpp
+	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/operation_test.cpp
-	${TEST_DIR}/memory_leak_detector.cpp)
+	${TEST_DIR}/expression_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	${TEST_SOURCE_FILES})
 
