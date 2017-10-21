@@ -9,11 +9,10 @@
 
 #include <cstdlib>
 #include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp
 {
-    enum class allignment;
-
     namespace gpu
     {
         template<typename ElemType,
