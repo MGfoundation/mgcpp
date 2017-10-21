@@ -8,12 +8,16 @@
 
 #include <mgcpp/cublas/cublas_helpers.hpp>
 #include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/cuda/device.hpp>
 
 #include <algorithm>
 #include <cstdlib>
 
 TEST(cublas_matrix_memcpy, set_and_get)
 {
+    auto set_device_status = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_status);
+
     size_t row = 4;
     size_t col = 2;
 
@@ -36,7 +40,8 @@ TEST(cublas_matrix_memcpy, set_and_get)
 
     auto get_result =
         mgcpp::cublas_get_matrix(row, col,
-                                 device_ptr.value(), destination);
+                                 device_ptr.value(),
+                                 destination);
     EXPECT_TRUE(get_result);
 
     EXPECT_TRUE(std::equal(ptr, ptr + row * col, destination));
