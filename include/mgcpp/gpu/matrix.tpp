@@ -296,7 +296,7 @@ namespace mgcpp
 
         if(!alloc_result)
         {
-            GCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
         _m_dim = i;
