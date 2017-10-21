@@ -6,14 +6,19 @@
 
 #include <gtest/gtest.h>
 #include <mgcpp/cuda/device.hpp>
+#include <mgcpp/global/init.hpp>
 
 #include "memory_leak_detector.hpp"
 
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
+
     ::testing::UnitTest::GetInstance()
           ->listeners()
           .Append(new mgcpp::memory_leak_detector());
+
+    mgcpp::init(true);
+
     return RUN_ALL_TESTS();
 }
