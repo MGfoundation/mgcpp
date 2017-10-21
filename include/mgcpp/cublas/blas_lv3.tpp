@@ -7,6 +7,8 @@
 #include <mgcpp/cublas/blas_lv3.hpp>
 #include <mgcpp/system/error_code.hpp>
 
+#include <cublas_v2.h>
+
 namespace mgcpp
 {
     inline outcome::result<void>

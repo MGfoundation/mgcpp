@@ -5,8 +5,9 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/cublas/blaslike_ext.hpp>
-
 #include <mgcpp/system/exception.hpp>
+
+#include <cublas_v2.h>
 
 namespace mgcpp
 {

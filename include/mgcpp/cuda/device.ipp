@@ -6,6 +6,8 @@
 
 #include <mgcpp/cuda/device.hpp>
 
+#include <cuda_runtime.h>
+
 namespace mgcpp
 {
     outcome::result<void>

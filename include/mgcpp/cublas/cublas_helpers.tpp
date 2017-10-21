@@ -8,6 +8,8 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
+#include <cublas_v2.h>
+
 namespace mgcpp
 {
     template<typename ElemType>
