@@ -173,7 +173,7 @@ TEST(gpu_matrix, init_from_cpu_matrix)
         }
     }
 
-    mgcpp::gpu::matrix<float> gpu_mat(cpu_mat);
+    // mgcpp::gpu::matrix<float> gpu_mat(cpu_mat);
 
     // for(size_t i = 0; i < row_dim; ++i)
     // {
