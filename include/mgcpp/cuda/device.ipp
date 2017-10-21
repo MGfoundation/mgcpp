@@ -11,7 +11,8 @@ namespace mgcpp
     outcome::result<void>
     cuda_set_device(size_t device_id) noexcept
     {
-        std::error_code err_code = cudaSetDevice(device_id);
+        std::error_code err_code =
+            cudaSetDevice(static_cast<int>(device_id));
 
         if(err_code != status_t::success)
             return err_code;
