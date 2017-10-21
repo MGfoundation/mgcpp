@@ -226,7 +226,7 @@ namespace mgcpp
 
         if(!cpy_result)
         {
-            cuda_free(alloc_result.value());
+            (void)cuda_free(alloc_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
         _data = alloc_result.value();
