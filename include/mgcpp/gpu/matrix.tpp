@@ -40,7 +40,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto result = cuda_malloc<T>(_m_dim * _n_dim);
         if(!result)
@@ -65,7 +67,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         size_t total_size = _m_dim * _n_dim;
         auto alloc_result = cuda_malloc<T>(total_size);
@@ -108,7 +112,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto alloc_result =
             cuda_malloc<T>(other._m_dim * other._n_dim);
@@ -148,7 +154,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto shape = cpu_mat.shape();
         _m_dim = shape.first;
@@ -198,13 +206,17 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         if(!_released)
         {
             auto free_result = cuda_free(_data);
             if(!free_result)
+            {
                 MGCPP_THROW_SYSTEM_ERROR(free_result.error());
+            }
             _released = true;
         }
 
@@ -242,7 +254,10 @@ namespace mgcpp
     operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept
     {
         if(!_released)
+        { 
+            (void)cuda_set_device(DeviceId);
             (void)cuda_free(_data);
+        }
         _data = other._data;
         _m_dim = other._m_dim;
         _n_dim = other._n_dim;
@@ -262,21 +277,27 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         if(!_released)
         {
             auto free_result = cuda_free(_data);
             _released = true;
             if(!free_result)
+            { 
                 MGCPP_THROW_SYSTEM_ERROR(free_result.error());
+            }
         }
 
         auto alloc_result =
             cuda_malloc<T>(_n_dim * _m_dim);
 
         if(!alloc_result)
-            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        {
+            GCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        }
         _released = false;
         _m_dim = i;
         _n_dim = j;
@@ -293,12 +314,16 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto free_result = cuda_free(_data);
         _released = true;
         if(!free_result)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(free_result.error());
+        }
 
         size_t total_size = i * j;
 
@@ -311,7 +336,9 @@ namespace mgcpp
 
         T* buffer = (T*)malloc(sizeof(T) * total_size);
         if(!buffer)
+        {
             MGCPP_THROW_BAD_ALLOC;
+        }
 
         std::fill(buffer, buffer + total_size, init);
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
@@ -319,7 +346,6 @@ namespace mgcpp
         free(buffer);
         if(!cpy_result)
         {
-            // (void)free_pinned(buffer_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
@@ -334,13 +360,23 @@ namespace mgcpp
     zeros()
     {
         if(_released)
+        {
             MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
+        }
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto set_result = cuda_memset(_data,
                                       static_cast<T>(0),
                                       _m_dim * _n_dim);
         if(!set_result)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_result.error());
+        }
 
         return *this;
     }
@@ -353,7 +389,15 @@ namespace mgcpp
     check_value(size_t i, size_t j) const 
     {
         if(i >= _m_dim || j >= _n_dim)
+        { 
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
+        }
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         T* from = (_data + (i * _n_dim + j));
         T to;
@@ -361,7 +405,9 @@ namespace mgcpp
             &to, from, 1, cuda_memcpy_kind::device_to_host);
 
         if(!result)
+        { 
             MGCPP_THROW_SYSTEM_ERROR(result.error());
+        }
 
         return to;
     }
@@ -382,6 +428,12 @@ namespace mgcpp
             MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
         }
 
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }        
+
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             cpu_mat.get_data(),
                                             _data);
@@ -401,6 +453,7 @@ namespace mgcpp
     gpu::matrix<T, DeviceId, SO>::
     copy_to_host() const
     {
+
         size_t total_size = _m_dim * _n_dim;
 
         T* host_memory = (T*)malloc(total_size * sizeof(T));
@@ -408,7 +461,13 @@ namespace mgcpp
         {
             MGCPP_THROW_BAD_ALLOC;
         }
-        
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }        
+
         auto cpy_result = cublas_get_matrix(_n_dim, _m_dim,
                                             _data, host_memory);
 
@@ -418,9 +477,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        return cpu::matrix<T, SO>(_m_dim,
-                                  _n_dim,
-                                  host_memory);
+        return cpu::matrix<T, SO>(_m_dim, _n_dim, host_memory);
     }
 
     template<typename T,
