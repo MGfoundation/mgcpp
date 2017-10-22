@@ -51,7 +51,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/global_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
-    ${SOURCE_DIR}/mgcpp_error_code.cpp
+    ${SOURCE_DIR}/error_code.cpp
     ${SOURCE_DIR}/thread_context.cpp)
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
@@ -139,7 +139,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/thread_context_test.cpp
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp
-	${TEST_DIR}/cuda_stdlib_test.cpp
+	${TEST_DIR}/cuda_memory_test.cpp
 	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
