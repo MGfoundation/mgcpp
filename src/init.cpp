@@ -53,18 +53,18 @@ namespace mgcpp
                     MGCPP_THROW_SYSTEM_ERROR(property_status);
                 }
 
-                std::cout << i << ": " << props.name
-                          << ": " << props.major
-                          << "." << props.minor << '\n';
-                std::cout << "  Global memory: "
+                std::cout << "[ Device " << i << " ]\n";
+                std::cout << "- " <<props.name << ": "
+                          << props.major << "."
+                          << props.minor << '\n';
+                std::cout << "- Global Memory: "
                           << props.totalGlobalMem / mb << "mb\n";
-                std::cout << "  Shared memory: "
+                std::cout << "- Shared Memory: "
                           << props.sharedMemPerBlock / kb << "kb\n";
-                std::cout << "  Constant memory: "
+                std::cout << "- Constant Memory: "
                           << props.totalConstMem / kb << "kb\n"; 
-                std::cout << "  Block registers: "
-                          << props.regsPerBlock
-                          << '\n';
+                std::cout << "- Block Registers: "
+                          << props.regsPerBlock << '\n';
                 std::cout << std::endl;
             }
         }
