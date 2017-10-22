@@ -20,7 +20,6 @@ namespace mgcpp
         : public ::testing::EmptyTestEventListener
     {
         std::vector<size_t> device_free_memory;
-        int device_number;
 
         void OnTestStart(
             ::testing::TestInfo const& test_info) override;

@@ -134,6 +134,7 @@ if(BUILD_TESTING)
 
     set(TEST_SOURCE_FILES
 	${TEST_DIR}/main.cpp
+	${TEST_DIR}/test_policy.cpp
 	${TEST_DIR}/memory_leak_detector.cpp
 	${TEST_DIR}/global_context_test.cpp
 	${TEST_DIR}/thread_context_test.cpp

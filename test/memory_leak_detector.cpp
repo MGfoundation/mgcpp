@@ -10,6 +10,7 @@
 #include <mgcpp/system/exception.hpp>
 
 #include "memory_leak_detector.hpp"
+#include "test_policy.hpp"
 
 namespace mgcpp
 {
@@ -17,18 +18,14 @@ namespace mgcpp
     memory_leak_detector::
     OnTestStart(::testing::TestInfo const& test_info) 
     {
-        (void)test_info;
-
-        std::error_code status = cudaGetDeviceCount(&device_number);
-        if(status != status_t::success)
-            MGCPP_THROW_SYSTEM_ERROR(status);
+        auto device_number = test_policy::get_policy().device_num();
 
         device_free_memory.clear();
         device_free_memory.reserve(device_number);
 
-        for(int i = 0; i < device_number; ++i)
+        for(auto i = 0u; i < device_number; ++i)
         {
-            (void)cuda_set_device(static_cast<size_t>(i));
+            (void)cuda_set_device(i);
 
             auto memstat = cuda_mem_get_info();
             EXPECT_TRUE(memstat)
@@ -46,9 +43,10 @@ namespace mgcpp
     memory_leak_detector::
     OnTestEnd(::testing::TestInfo const& test_info) 
     {
-        for(int i = 0; i < device_number; ++i)
+        auto device_number = test_policy::get_policy().device_num();
+        for(auto i = 0u; i < device_number; ++i)
         {
-            (void)cuda_set_device(static_cast<size_t>(i));
+            (void)cuda_set_device(i);
 
             auto memstat = cuda_mem_get_info();
             
@@ -60,7 +58,7 @@ namespace mgcpp
 
             size_t result_memory = memstat.value().first;
             EXPECT_EQ(result_memory, device_free_memory[i])
-                << "[ memory leak ] detected in test "
+                << "memory leak detected in test "
                 << test_info.name() << '\n'
                 << "for device "
                 << i << '\n'
