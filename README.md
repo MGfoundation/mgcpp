@@ -1,5 +1,4 @@
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
+<div id="table-of-contents"><h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#sec-1">1. mgcpp</a>
@@ -23,13 +22,13 @@ A CUDA based C++ Multi GPU Linear Algebra Library
 
 ## Introduction<a id="sec-1-1" name="sec-1-1"></a>
 
-mgcpp is a multi GPU linear algebra library.
-It is a wrapper for various CUDA libraries in standard C++.
+mgcpp is a multi GPU linear algebra library. <br />
+It is a wrapper for various CUDA libraries in standard C++. <br />
 
 ## Status<a id="sec-1-2" name="sec-1-2"></a>
 
-This library is heavily under development and in pre-alpha state.
-For contribution, refer to TODO or contact me.
+This library is heavily under development and in pre-alpha state. <br />
+For contribution, refer to TODO or contact me. <br />
 
 ## Example<a id="sec-1-3" name="sec-1-3"></a>
 
@@ -49,9 +48,9 @@ For contribution, refer to TODO or contact me.
 ```
 
 
-The above code invokes the highly optimized cuBLAS library's gemm function.
-All operation are lazely computed using expression templates.
-GPU computation kernels are also called the least possible.
+The above code invokes the highly optimized cuBLAS library's gemm function. <br />
+All operation are lazely computed using expression templates. <br />
+GPU computation kernels are also called the least possible. <br />
 
 ## Build<a id="sec-1-4" name="sec-1-4"></a>
 
@@ -108,8 +107,8 @@ Red-Portal
 
 ## License<a id="sec-1-8" name="sec-1-8"></a>
 
-Copyright RedPortal 2017.
+Copyright RedPortal 2017. <br />
 
-Distributed under the Boost Software License, Version 1.0.
-(See accompanying file LICENSE or copy at
+Distributed under the Boost Software License, Version 1.0. <br />
+(See accompanying file LICENSE or copy at 
 <http://www.boost.org/LICENSE_1_0.txt>)
