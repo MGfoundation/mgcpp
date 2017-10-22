@@ -38,17 +38,6 @@ namespace mgcpp
 
             inline matrix(size_t i, size_t j, T init);
 
-            inline matrix(size_t i, size_t j,
-                          T* data,
-                          storage_order data_SO = SO); //need implementation
-
-            inline matrix(size_t i, size_t j,
-                          T** data,
-                          storage_order data_SO = SO); //need implementation
-
-            template<typename U, size_t Rows, size_t Cols>
-            inline matrix(U  const array[Rows][Cols]); //need implementation
-
             inline matrix(cpu::matrix<T, SO> const& cpu_mat);
 
             inline
