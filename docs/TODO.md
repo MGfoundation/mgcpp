@@ -17,5 +17,5 @@ since matrix has a method called 'shape' which returns std::pair. <br />
 -   [ ] __add tests for column major storage order__ <br />
 
 ## BLAS lv1
--   [ ] add sum array
+-   [ ] __add sum array operation__
 This can be done by computing the dot product with a 1-initialized vector
