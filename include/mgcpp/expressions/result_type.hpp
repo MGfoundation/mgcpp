@@ -13,9 +13,7 @@
 namespace mgcpp
 {
     template<typename T, typename = mgcpp::void_t<>>
-    struct result_type
-    {
-    };
+    struct result_type {};
 }
 
 #endif

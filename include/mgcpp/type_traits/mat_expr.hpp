@@ -19,7 +19,11 @@ namespace mgcpp
     {
         using result = typename std::enable_if<
             is_gpu_matrix<
-                typename result_type<Head>::type>::value>::type;
+                typename result_type<
+                    typename std::decay<Head>::type
+                    >::type
+                >::value>
+            ::type;
     };
 
     template<typename Head1, typename Head2>
