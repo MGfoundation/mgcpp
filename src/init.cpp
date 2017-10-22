@@ -20,7 +20,9 @@ namespace mgcpp
     {
         auto cuda_status = cuda_set_device(0);
         if(!cuda_status)
+        {
             MGCPP_THROW_SYSTEM_ERROR(cuda_status.error());
+        }
 
         if(print_system_info)
         {
@@ -33,8 +35,10 @@ namespace mgcpp
             int devCount;
             std::error_code device_count_status
                 = cudaGetDeviceCount(&devCount);
-            if(!device_count_status)
+            if(device_count_status != status_t::success)
+            {
                 MGCPP_THROW_SYSTEM_ERROR(device_count_status);
+            }
 
             std::cout << "Found "<< devCount
                       << " CUDA devices" << '\n' <<std::endl;
@@ -45,7 +49,9 @@ namespace mgcpp
                 std::error_code property_status =
                     cudaGetDeviceProperties(&props, i);
                 if(!property_status)
+                {
                     MGCPP_THROW_SYSTEM_ERROR(property_status);
+                }
 
                 std::cout << i << ": " << props.name
                           << ": " << props.major
