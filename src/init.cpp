@@ -48,7 +48,7 @@ namespace mgcpp
                 cudaDeviceProp props;
                 std::error_code property_status =
                     cudaGetDeviceProperties(&props, i);
-                if(!property_status)
+                if(property_status != status_t::success)
                 {
                     MGCPP_THROW_SYSTEM_ERROR(property_status);
                 }
