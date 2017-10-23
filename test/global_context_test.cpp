@@ -1,4 +1,5 @@
 
+
 //          Copyright RedPortal 2017 - 2017.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE or copy at
@@ -16,6 +17,9 @@ TEST(global_context, request_context_from_same_thread)
     auto* context_two = &mgcpp::global_context::get_thread_context();
 
     EXPECT_EQ(context_one, context_two);
+
+    mgcpp::global_context::reference_cnt_decr();
+    mgcpp::global_context::reference_cnt_decr();
 }
 
 TEST(global_context, request_context_from_different_thread)
@@ -24,13 +28,16 @@ TEST(global_context, request_context_from_different_thread)
 
     mgcpp::thread_context* context_two;
     auto thread = std::thread(
-        [&context_two]()
+        [&context_two, &context_one]()
         {
             context_two =
             &mgcpp::global_context::get_thread_context();
+
+            EXPECT_NE(context_one, context_two);
+
+            mgcpp::global_context::reference_cnt_decr();
         });
 
     thread.join();
-
-    EXPECT_NE(context_one, context_two);
+    mgcpp::global_context::reference_cnt_decr();
 }
