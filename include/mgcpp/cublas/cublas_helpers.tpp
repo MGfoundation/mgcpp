@@ -19,8 +19,7 @@ namespace mgcpp
                       ElemType* to_gpu, size_t ld_to)
     {
         std::error_code status =
-            cublasSetMatrix(rows, cols,
-                            rows * cols * sizeof(ElemType),
+            cublasSetMatrix(rows, cols, sizeof(ElemType),
                             from_host, ld_from, to_gpu, ld_to);
 
         if(status != status_t::success)
@@ -36,14 +35,13 @@ namespace mgcpp
                       ElemType const* from_host, ElemType* to_gpu)
     {
         std::error_code status =
-            cublasSetMatrix(rows, cols,
-                            rows * cols * sizeof(ElemType),
+            cublasSetMatrix(rows, cols, sizeof(ElemType),
                             from_host, rows, to_gpu, rows);
 
         if(status != status_t::success)
             return status;
         else
-        return to_gpu;
+            return to_gpu;
     }
 
     template<typename ElemType>
@@ -69,8 +67,7 @@ namespace mgcpp
                       ElemType const* from_gpu, ElemType* to_host)
     {
         std::error_code status =
-            cublasGetMatrix(rows, cols,
-                            rows * cols * sizeof(ElemType),
+            cublasGetMatrix(rows, cols, sizeof(ElemType),
                             from_gpu, rows, to_host, rows);
 
         if(status != status_t::success)
@@ -86,7 +83,7 @@ namespace mgcpp
                       ElemType* to_gpu, size_t spacing_gpu)
     {
         std::error_code status =
-            cublasSetVector(size * sizeof(ElemType),
+            cublasSetVector(size, sizeof(ElemType),
                             from_host, spacing_host,
                             to_gpu, spacing_gpu);
 
@@ -103,7 +100,7 @@ namespace mgcpp
                       ElemType const* from_host, ElemType* to_gpu )
     {
         std::error_code status =
-            cublasSetVector(size * sizeof(ElemType),
+            cublasSetVector(size, sizeof(ElemType),
                             from_host, 1, to_gpu, 1);
 
         if(status != status_t::success)
@@ -119,7 +116,7 @@ namespace mgcpp
                       ElemType* to_host, size_t spacing_host)
     {
         std::error_code status =
-            cublasGetVector(size * sizeof(ElemType),
+            cublasGetVector(size, sizeof(ElemType),
                             from_gpu, spacing_gpu,
                             to_host, spacing_host);
 
@@ -136,7 +133,7 @@ namespace mgcpp
                       ElemType const* from_gpu, ElemType* to_host)
     {
         std::error_code status =
-            cublasGetVector(size * sizeof(ElemType),
+            cublasGetVector(size, sizeof(ElemType),
                             from_gpu, 1, to_host, 1);
 
         if(status != status_t::success)
