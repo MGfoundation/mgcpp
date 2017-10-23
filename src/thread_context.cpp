@@ -21,13 +21,17 @@ namespace mgcpp
         {
             auto set_device_stat = cuda_set_device(device_id);
             if(!set_device_stat)
+            {
                 MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+            }
 
             cublasHandle_t new_handle;
 
             std::error_code status = cublasCreate(&new_handle);
             if(status != status_t::success)
+            {
                 MGCPP_THROW_SYSTEM_ERROR(status);
+            }
 
             handle = cublas_handle_unique_ptr(
                 new_handle,
@@ -35,8 +39,16 @@ namespace mgcpp
                 {
                     auto status = cuda_set_device(device_id);
                     if(!status)
+                    {
                         MGCPP_THROW_SYSTEM_ERROR(status.error());
+                    }
+                    std::error_code destroy_status =
                     cublasDestroy(handle);
+
+                    if(destroy_status != status_t::success)
+                    {
+                        MGCPP_THROW_SYSTEM_ERROR(destroy_status);
+                    }
                 });
         }
 
