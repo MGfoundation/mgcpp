@@ -6,6 +6,8 @@
 
 #include <mgcpp/system/cublas_error.hpp>
 
+#include <cuda_runtime.h>
+
 namespace mgcpp
 {
     class cublas_error_category_t
@@ -61,10 +63,6 @@ namespace mgcpp
             return "CUBLAS_STATUS_EXECUTION_FAILED: The GPU Program failed to execute.";
             break;
 
-        case CUBLAS_STATUS_LICENSE_ERROR:
-            return "CUBLAS_STATUS_LICENSE_ERROR: The cuBlas license is not valid.";
-            break;
-
         case CUBLAS_STATUS_NOT_SUPPORTED:
             return "CUBLAS_STATUS_NOT_SUPPORTED: The operation is not supported by cublas.";
             break;
@@ -72,6 +70,13 @@ namespace mgcpp
         case CUBLAS_STATUS_INTERNAL_ERROR:
             return "BLAS_STATUS_INTERNAL_ERROR: An internal cuBLAS operation failed";
             break;
+
+#if CUDART_VERSION >= 6500
+        case CUBLAS_STATUS_LICENSE_ERROR:
+            return "CUBLAS_STATUS_LICENSE_ERROR: The cuBlas license is not valid.";
+            break;
+#endif
+
         }
         return "";
     }
