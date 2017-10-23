@@ -34,7 +34,7 @@ TEST(cublas_matrix_memcpy, set_and_get)
     auto set_result =
         mgcpp::cublas_set_matrix(row, col,
                                  ptr, device_ptr.value());
-    EXPECT_TRUE(set_result);
+    EXPECT_TRUE(set_result) << set_result.error().message();
 
     float* destination = (float*)malloc(sizeof(float) * row * col);
 
@@ -42,7 +42,7 @@ TEST(cublas_matrix_memcpy, set_and_get)
         mgcpp::cublas_get_matrix(row, col,
                                  device_ptr.value(),
                                  destination);
-    EXPECT_TRUE(get_result);
+    EXPECT_TRUE(get_result) << get_result.error().message();
 
     EXPECT_TRUE(std::equal(ptr, ptr + row * col, destination));
 
