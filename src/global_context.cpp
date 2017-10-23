@@ -26,8 +26,7 @@ namespace mgcpp
     {
         auto this_thread_id = std::this_thread::get_id();
         auto lck = std::unique_lock<std::mutex>(_singl_context._mtx);
-        auto& ref = _singl_context._context_ref_cnt[this_thread_id];
-        --ref;
+        auto ref = --_singl_context._context_ref_cnt[this_thread_id];
 
         if(ref <= 0)
             _singl_context._thread_ctx.erase(this_thread_id);

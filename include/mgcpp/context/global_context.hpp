@@ -43,8 +43,6 @@ namespace mgcpp
 
         static void
         reference_cnt_decr();
-        // cublasHandle_t
-        // get_cublas(size_t device_id);
 
         static thread_context&
         get_thread_context();
