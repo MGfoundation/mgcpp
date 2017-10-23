@@ -18,6 +18,9 @@ namespace mgcpp
     memory_leak_detector::
     OnTestStart(::testing::TestInfo const& test_info) 
     {
+        if(!test_policy::get_policy().detect_memory_leak())
+            return;
+
         auto device_number = test_policy::get_policy().device_num();
 
         device_free_memory.clear();
@@ -43,6 +46,9 @@ namespace mgcpp
     memory_leak_detector::
     OnTestEnd(::testing::TestInfo const& test_info) 
     {
+        if(!test_policy::get_policy().detect_memory_leak())
+            return;
+
         auto device_number = test_policy::get_policy().device_num();
         for(auto i = 0u; i < device_number; ++i)
         {

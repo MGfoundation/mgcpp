@@ -29,6 +29,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(status);
 
         _device_num = static_cast<size_t>(device_number);
+        _detect_memory_leak = false;
     }
 
     size_t
@@ -36,6 +37,13 @@ namespace mgcpp
     device_num() const noexcept
     {
         return _device_num;
+    }
+
+    bool
+    test_policy::
+    detect_memory_leak() const noexcept
+    {
+        return _detect_memory_leak; 
     }
 }
 

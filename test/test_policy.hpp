@@ -14,6 +14,7 @@ namespace mgcpp
         test_policy();
         
         size_t _device_num;
+        bool _detect_memory_leak;
 
     public:
         static test_policy&
@@ -21,6 +22,9 @@ namespace mgcpp
 
         size_t
         device_num() const noexcept;
+
+        bool
+        detect_memory_leak() const noexcept;
     };
 }
 
