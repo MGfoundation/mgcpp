@@ -275,7 +275,7 @@ TEST(gpu_matrix, copy_assign_operator)
     float init = 7;
 
     mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
-    mgcpp::gpu::matrix<float> copied{row_dim * 2, col_dim * 2};
+    mgcpp::gpu::matrix<float> copied(row_dim * 3, col_dim * 3);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
