@@ -172,7 +172,7 @@ namespace mgcpp
         
         auto cpy_result = cublas_set_matrix(_n_dim, _m_dim,
                                             cpu_mat.get_data(),
-                                            _data);
+                                            _alloc_result.value());
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
