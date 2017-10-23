@@ -351,7 +351,6 @@ TEST(gpu_matrix, move_assign_operator)
     EXPECT_TRUE(before);
     auto before_freemem = before.value().first;
 
-
     moved = std::move(original);
 
     auto after = mgcpp::cuda_mem_get_info();

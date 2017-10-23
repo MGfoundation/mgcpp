@@ -256,13 +256,15 @@ namespace mgcpp
         { 
             (void)cuda_set_device(DeviceId);
             (void)cuda_free(_data);
+            _released = true;
         }
         _data = other._data;
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
-
+        _released = false;
         other._data = nullptr;
         other._released = true;
+
+        _m_dim = other._m_dim;
+        _n_dim = other._n_dim;
 
         return *this;
     }
