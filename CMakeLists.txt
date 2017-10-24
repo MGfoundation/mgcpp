@@ -143,7 +143,9 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cuda_memory_test.cpp
 	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
+	${TEST_DIR}/cpu_vector_test.cpp
 	${TEST_DIR}/gpu_matrix_test.cpp
+	${TEST_DIR}/gpu_vector_test.cpp
 	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/operation_test.cpp
 	${TEST_DIR}/expression_test.cpp)

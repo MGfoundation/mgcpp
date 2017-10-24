@@ -59,4 +59,3 @@ TEST(operation_add , row_major_addition)
         } 
     }
 }
-
