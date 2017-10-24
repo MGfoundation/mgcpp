@@ -7,6 +7,8 @@
 #include <mgcpp/gpu/vector.hpp>
 #include <mgcpp/cpu/vector.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/context/global_context.hpp>
+#include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cublas/cublas_helpers.hpp>
@@ -110,12 +112,12 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-        _size = other._size();
+        _size = other._size;
 
         auto cpy_result =
             cuda_memcpy(alloc_result.value(),
                         other._data,
-                        size,
+                        _size,
                         cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
@@ -177,7 +179,7 @@ namespace mgcpp
 
         if(!cpy_result)
         {
-            cuda_free(alloc_result.value());
+            (void)cuda_free(alloc_result.value());
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
@@ -195,8 +197,7 @@ namespace mgcpp
         if(!_released)
             (void)cuda_free(_data);
         _data = other._data;
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
+        _size = other._size;
 
         other._data = nullptr;
         other._released = true;
@@ -217,14 +218,16 @@ namespace mgcpp
             MGCPP_THROW_BAD_ALLOC;
         }
         
-        auto cpy_result = cublas_get_vector(_size, _data, host_memory);
+        auto cpy_result = cublas_get_vector(_size,
+                                            _data,
+                                            host_memory);
         if(!cpy_result)
         {
             free(host_memory);
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        return cpu::matrix<T, SO>(_size, host_memory);
+        return cpu::vector<T, Allign>(_size, host_memory);
     }
 
     template<typename T,
@@ -232,9 +235,9 @@ namespace mgcpp
              allignment Allign>
     void
     gpu::vector<T, DeviceId, Allign>::
-    copy_from_host(cpu::vector<T, Allign> const& host) const
+    copy_from_host(cpu::vector<T, Allign> const& host) 
     {
-        if(this->shape() != cpu_mat.shape())
+        if(this->shape() != host.shape())
         {
             MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
         }
@@ -244,7 +247,7 @@ namespace mgcpp
         }
 
         auto cpy_result = cublas_set_vector(_size,
-                                            cpu_mat.get_data(),
+                                            host.get_data(),
                                             _data);
 
         if(!cpy_result)
@@ -320,8 +323,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
     size_t
+    gpu::vector<T, DeviceId, Allign>::
     shape() const noexcept
     {
         return _size;
@@ -330,8 +333,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
     size_t
+    gpu::vector<T, DeviceId, Allign>::
     size() const noexcept
     {
         return _size;

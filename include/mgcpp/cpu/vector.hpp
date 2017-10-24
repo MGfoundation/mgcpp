@@ -11,6 +11,7 @@
 
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
+#include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp
 {
@@ -53,7 +54,7 @@ namespace mgcpp
             get_data() const;
 
             inline T*
-            get_data_mutable() const;
+            get_data_mutable() noexcept;
 
             inline size_t
             shape() const noexcept;

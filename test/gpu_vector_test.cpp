@@ -12,7 +12,7 @@
 
 TEST(gpu_vector, default_constructor)
 {
-    mgcpp::gpu::vector<float> vec();
+    mgcpp::gpu::vector<float> vec{};
 
     auto shape = vec.shape();
     EXPECT_EQ(shape, 0);
@@ -20,19 +20,6 @@ TEST(gpu_vector, default_constructor)
     EXPECT_EQ(vec._context, 
               mgcpp::gpu::vector<float>()._context);
     EXPECT_TRUE(vec._released);
-}
-
-TEST(gpu_vector, size_constructor)
-{
-    size_t size = 10;
-    mgcpp::gpu::vector<float> vec(size);
-
-    auto shape = vec.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(vec._data, nullptr);
-    EXPECT_EQ(vec._context, 
-              mgcpp::gpu::vector<float>()._context);
-    EXPECT_FALSE(vec._released);
 }
 
 TEST(gpu_vector, size_constructor)
@@ -131,7 +118,7 @@ TEST(gpu_vector, move_constructor)
     EXPECT_EQ(shape, 10);
     EXPECT_NE(moved._data, nullptr);
     EXPECT_EQ(moved._context, 
-              mgcpp::gpu::vecrix<float>()._context);
+              mgcpp::gpu::vector<float>()._context);
     EXPECT_FALSE(moved._released);
 
     for(auto i = 0u; i < size; ++i)

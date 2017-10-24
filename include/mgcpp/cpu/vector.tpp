@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/cpu/vector.hpp>
+#include <mgcpp/system/exception.hpp>
 
 namespace mgcpp
 {
@@ -18,14 +19,16 @@ namespace mgcpp
     template<typename T,
              allignment Allign>
     cpu::vector<T, Allign>::
-    vector(size_t size) noexcept
+    vector(size_t size) 
         : _data(nullptr),
           _size(size)
     {
         T* ptr = (T*)malloc(sizeof(T) * _size);
 
         if(!ptr)
+        {
             MGCPP_THROW_BAD_ALLOC;
+        }
         
         _data = ptr;
     }
@@ -54,7 +57,7 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     vector(size_t size, T* data) noexcept
         : _data(data),
-          _size(i) {}
+          _size(size) {}
 
 
     template<typename T,
@@ -64,7 +67,9 @@ namespace mgcpp
     operator[](size_t i) const
     {
         if(i >= _size)
+        {
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
+        }
 
         return _data[i];
     }
@@ -76,7 +81,9 @@ namespace mgcpp
     operator[](size_t i)
     {
         if(i >= _size)
+        {
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
+        }
 
         return _data[i];
     }
@@ -94,7 +101,7 @@ namespace mgcpp
              allignment Allign>
     T*
     cpu::vector<T, Allign>::
-    get_data_mutable() const
+    get_data_mutable() noexcept
     {
         return _data;
     }
@@ -105,7 +112,7 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     shape() const noexcept
     {
-        return _shape; 
+        return _size; 
     }
 
     template<typename T,
@@ -114,7 +121,7 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     size() const noexcept
     {
-        return _shape; 
+        return _size; 
     }
 
     template<typename T,

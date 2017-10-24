@@ -10,6 +10,7 @@
 #include <cstdlib>
 
 #include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp
@@ -17,8 +18,8 @@ namespace mgcpp
     namespace gpu
     {
         template<typename T,
-                 size_t DeviceId = 0,
-                 allignment Allign = row>
+                 size_t DeviceId,
+                 allignment Allign>
         class vector
         {
         private:
@@ -49,9 +50,8 @@ namespace mgcpp
             operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
 
             inline void 
-            copy_from_host(cpu::vector<T, Allign>) const;
+            copy_from_host(cpu::vector<T, Allign> const& host);
 
-            template<size_t Xdim, size_t Ydim>
             inline cpu::vector<T, Allign>
             copy_to_host() const;
 
@@ -75,7 +75,7 @@ namespace mgcpp
 
             inline size_t
             size() const noexcept;
-        }
+        };
     }
 }
 

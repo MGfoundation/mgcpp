@@ -21,8 +21,8 @@ namespace mgcpp
         class matrix;
 
         template<typename ElemType,
-                 allignment Allign,
-                 size_t DeviceId>
+                 size_t DeviceId = 0,
+                 allignment Allign = row>
         class vector;
     }
 }
