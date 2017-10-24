@@ -9,6 +9,8 @@
 
 #include <gtest/gtest.h>
 
+#define ERROR_CHECK_EXCEPTION true
+
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cpu_matrix.hpp>
 #define private public

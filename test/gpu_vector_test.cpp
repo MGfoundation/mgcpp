@@ -6,6 +6,8 @@
 
 #include <gtest/gtest.h>
 
+#define ERROR_CHECK_EXCEPTION true
+
 #include <mgcpp/cpu/vector.hpp>
 #define private public
 #include <mgcpp/gpu/vector.hpp>

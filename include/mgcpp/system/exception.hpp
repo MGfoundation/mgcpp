@@ -18,6 +18,23 @@
     fprintf(stderr, MESSAGE, __VA_ARGS__)
 #endif
 
+#ifndef mgcpp_error_check
+#define mgcpp_error_check(EXP)                              \
+    do{try{EXP;}catch(std::exception const& e){             \
+            MGCPP_ERROR_MESSAGE_HANDLER(                    \
+                "[mgcpp errror] %s in %s line %d\n",        \
+                e.what(), __FILE__, __LINE__);              \
+            if(MGCPP_ABORT_ON_ERROR) exit(1);}}while(false)
+#endif
+
+#ifdef ERROR_CHECK_EXCEPTION
+#define MGCPP_THROW(EXCEPTION)                                  \
+    do{ MGCPP_ERROR_MESSAGE_HANDLER(                            \
+            "[mgcpp errror] %s in %s line %d\n",                \
+            EXCEPTION.what(), __FILE__, __LINE__);              \
+        throw EXCEPTION; }while(false)
+#endif
+
 #ifndef MGCPP_THROW
 #define MGCPP_THROW(EXCEPTION) throw EXCEPTION
 #endif
@@ -52,18 +69,9 @@
     MGCPP_THROW(std::overflow_error(MESSAGE))
 #endif
 
-#ifndef MGCPP_THROW_RUNTIME_ERROR
-#define MGCPP_THROW_RUNTIME_ERROR(MESSAGE)      \
+#ifndef MGCPP_THROW_UNDERFLOW_ERROR
+#define MGCPP_THROW_UNDERFLOW_ERROR(MESSAGE)    \
     MGCPP_THROW(std::underflow_error(MESSAGE))
-#endif
-
-#ifndef mgcpp_error_check
-#define mgcpp_error_check(EXP)                  \
-    do{try{EXP;}catch(std::exception const& e){ \
-            MGCPP_ERROR_MESSAGE_HANDLER(        \
-                "[mgcpp errror]\n%s\n%s %d\n",  \
-                e.what(), __FILE__, __LINE__);  \
-            if(MGCPP_ABORT_ON_ERROR) exit(1);}}while(false)
 #endif
 
 #endif
