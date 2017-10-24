@@ -14,7 +14,7 @@
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/add.hpp>
 
-TEST(operation_mult, row_major_multiplication)
+TEST(mat_mat_operation, row_major_multiplication)
 {
     mgcpp::gpu::matrix<float> A_mat(2, 4, 2);
     mgcpp::gpu::matrix<float> B_mat(4, 3, 4);
@@ -37,7 +37,7 @@ TEST(operation_mult, row_major_multiplication)
     }
 }
 
-TEST(operation_add , row_major_addition)
+TEST(mat_mat_operation , row_major_addition)
 {
     mgcpp::gpu::matrix<float> A_mat(4, 2, 2);
     mgcpp::gpu::matrix<float> B_mat(4, 2, 4);
