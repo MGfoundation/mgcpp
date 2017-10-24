@@ -17,7 +17,7 @@ namespace mgcpp
         T
         sum(gpu::vector<T, DeviceId, Allign> const& vec)
         {
-            
+            T result;
         }
     }
 }
