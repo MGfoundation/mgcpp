@@ -39,7 +39,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto result = cuda_malloc<T>(_size);
         if(!result)
@@ -64,7 +66,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         auto result = cuda_malloc<T>(_size);
         if(!result)
@@ -156,7 +160,9 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         if(!_released)
         {
@@ -198,7 +204,10 @@ namespace mgcpp
     operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept
     {
         if(!_released)
+        {
+            (void)cuda_set_device(DeviceId);
             (void)cuda_free(_data);
+        }
         _data = other._data;
         _size = other._size;
 
@@ -216,6 +225,12 @@ namespace mgcpp
     gpu::vector<T, DeviceId, Allign>::
     copy_to_host() const
     {
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
+
         T* host_memory = (T*)malloc(_size * sizeof(T));
         if(!host_memory)
         {
@@ -250,6 +265,12 @@ namespace mgcpp
             MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
         }
 
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
+
         auto cpy_result = cublas_set_vector(_size,
                                             host.get_data(),
                                             _data);
@@ -271,6 +292,12 @@ namespace mgcpp
     {
         if(i >= _size)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
         T* from = (_data + i);
         T to;
