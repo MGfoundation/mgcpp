@@ -21,6 +21,13 @@ namespace mgcpp
                T const* x, size_t incx,
                T const* y, size_t incy,
                T* result) noexcept;
+
+    template<typename T>
+    inline outcome::result<void>
+    cublas_axpy(cublasHandle_t handle, size_t n,
+                T const* alpha,
+                T const* x, size_t incx,
+                T* y, size_t incy) noexcept;
 }
 
 #include <mgcpp/cublas/blas_lv1.tpp>

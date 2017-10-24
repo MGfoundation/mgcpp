@@ -44,4 +44,18 @@ namespace mgcpp
 
         return result;
     }
+
+    inline gpu::vector<float, Device, Allign>
+    add(gpu::vector<float, Device, Allign> const& first,
+        gpu::vector<float, Device, Allign> const& second)
+    {
+        cublas_axpy();
+    }
+
+    inline gpu::vector<double, Device, Allign>
+    add(gpu::vector<double, Device, Allign> const& first,
+        gpu::vector<double, Device, Allign> const& second)
+    {
+        cublas_axpy();
+    }
 }

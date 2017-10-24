@@ -41,4 +41,40 @@ namespace mgcpp
         else
             return outcome::success();
     }
+
+
+    inline outcome::result<void>
+    cublas_axpy(cublasHandle_t handle, size_t n,
+                float const* alpha,
+                float const* x, size_t incx,
+                float* y, size_t incy) noexcept
+    {
+        std::error_code status = cublasSaxpy(handle, n,
+                                             alpha,
+                                             x, incx,
+                                             y, incy); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_axpy(cublasHandle_t handle, size_t n,
+                double const* alpha,
+                double const* x, size_t incx,
+                double* y, size_t incy) noexcept
+    {
+        
+        std::error_code status = cublasDaxpy(handle, n,
+                                             alpha,
+                                             x, incx,
+                                             y, incy); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
 }
