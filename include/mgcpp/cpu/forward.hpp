@@ -14,11 +14,11 @@ namespace mgcpp
 {
     namespace cpu
     {
-        template<typename ElemType,
+        template<typename T,
                  storage_order SO = row_major>
         class matrix;
 
-        template<typename ElemType,
+        template<typename T,
                  allignment Allign = row>
         class vector;
     }
