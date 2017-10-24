@@ -11,6 +11,7 @@
 
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp

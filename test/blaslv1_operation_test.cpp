@@ -15,5 +15,8 @@ TEST(vec_vec_operation, vec_sum)
     float init_val = 3;
     mgcpp::gpu::vector<float> vec(size, init_val);
 
+    float result = 0;
+    EXPECT_NO_THROW({result = mgcpp::strict::sum(vec);});
 
+    EXPECT_EQ(result, static_cast<float>(size) * init_val);
 }
