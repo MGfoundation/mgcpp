@@ -17,7 +17,7 @@ namespace mgcpp
     {
         template<typename ElemType,
                  size_t DeviceId = 0,
-                 storage_order StoreOrder = row_major>
+                 storage_order SO = row_major>
         class matrix;
 
         template<typename ElemType,

@@ -18,7 +18,7 @@ namespace mgcpp
     namespace cpu
     {
         template<typename T,
-                 storage_order StoreOrder>
+                 storage_order SO>
         class matrix
         {
         private:

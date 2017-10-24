@@ -15,7 +15,7 @@ namespace mgcpp
     namespace cpu
     {
         template<typename ElemType,
-                 storage_order StoreOrder = row_major>
+                 storage_order SO = row_major>
         class matrix;
 
         template<typename ElemType,
