@@ -45,17 +45,11 @@ namespace mgcpp
         return result;
     }
 
-    inline gpu::vector<float, Device, Allign>
-    add(gpu::vector<float, Device, Allign> const& first,
-        gpu::vector<float, Device, Allign> const& second)
+    template<typename T, size_t Device, alligment Allign>
+    inline gpu::vector<T, Device, Allign>
+    add(gpu::vector<T, Device, Allign> const& first,
+        gpu::vector<T, Device, Allign> const& second)
     {
-        cublas_axpy();
-    }
-
-    inline gpu::vector<double, Device, Allign>
-    add(gpu::vector<double, Device, Allign> const& first,
-        gpu::vector<double, Device, Allign> const& second)
-    {
-        cublas_axpy();
+        //cublas_axpy();
     }
 }
