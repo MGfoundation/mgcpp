@@ -36,8 +36,6 @@ namespace mgcpp
 
             inline vector(size_t size, T init);
 
-            inline vector(size_t size, T* data);
-
             inline
             vector(gpu::vector<T, DeviceId, Allign> const& other);
 

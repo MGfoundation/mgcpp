@@ -94,16 +94,6 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     gpu::vector<T, DeviceId, Allign>::
-    vector(size_t size, T* data)
-    {
-        
-    }
-
-    
-    template<typename T,
-             size_t DeviceId,
-             allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
     vector(gpu::vector<T, DeviceId, Allign> const& other)
         : _data(nullptr),
           _context(&global_context::get_thread_context()),
