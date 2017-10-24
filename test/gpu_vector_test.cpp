@@ -198,5 +198,5 @@ TEST(gpu_vector, move_assign_operator)
     auto ori_shape = original.shape();
     EXPECT_EQ(ori_shape, 0);
     EXPECT_EQ(original._data, nullptr);
-    EXPECT_TRUE(moved._released);
+    EXPECT_TRUE(original._released);
 }
