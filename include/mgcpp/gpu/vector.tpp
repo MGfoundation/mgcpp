@@ -104,9 +104,11 @@ namespace mgcpp
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
+        {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
-        auto alloc_result = cuda_malloc<T>(_size);
+        auto alloc_result = cuda_malloc<T>(other._size);
         if(!alloc_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
