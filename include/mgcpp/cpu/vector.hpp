@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_GPU_VECTOR_HPP_
-#define _MGCPP_GPU_VECTOR_HPP_
+#ifndef _MGCPP_CPU_VECTOR_HPP_
+#define _MGCPP_CPU_VECTOR_HPP_
 
 #include <cstdlib>
 
