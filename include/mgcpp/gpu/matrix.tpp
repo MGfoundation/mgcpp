@@ -194,6 +194,8 @@ namespace mgcpp
     {
         other._released = true;
         other._data = nullptr;
+        other._m_dim = 0;
+        other._n_dim = 0;
     }
 
     template<typename T,
@@ -265,6 +267,8 @@ namespace mgcpp
 
         _m_dim = other._m_dim;
         _n_dim = other._n_dim;
+        other._m_dim = 0;
+        other._n_dim = 0;
 
         return *this;
     }

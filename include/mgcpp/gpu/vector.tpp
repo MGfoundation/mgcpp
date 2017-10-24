@@ -141,6 +141,7 @@ namespace mgcpp
          _released(false)
     {
         other._released = true;
+        other._size = 0;
         other._data = nullptr;
     }
 
@@ -199,6 +200,7 @@ namespace mgcpp
         _data = other._data;
         _size = other._size;
 
+        other._size = 0;
         other._data = nullptr;
         other._released = true;
 
