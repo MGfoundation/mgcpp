@@ -40,7 +40,7 @@ TEST(gpu_vector, size_constructor)
 TEST(gpu_vector, initializing_constructor)
 {
     size_t size = 10;
-    size_t init_val = 7;
+    float init_val = 7;
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
