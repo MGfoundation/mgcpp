@@ -150,7 +150,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/operation_test.cpp
 	${TEST_DIR}/expression_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
-	${TEST_SOURCE_FILES})
+	"${TEST_SOURCE_FILES}")
 
     # add test target
     add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
