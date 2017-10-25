@@ -54,7 +54,7 @@ namespace mgcpp
         if(!test_policy::get_policy().detect_memory_leak())
             return;
 
-        if(test_info.name() == std::string("thread_context"))
+        if(test_info.test_case_name() == std::string("thread_context"))
             return;
 
         auto device_number = test_policy::get_policy().device_num();

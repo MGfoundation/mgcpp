@@ -29,11 +29,11 @@ TEST(thread_context, request_cublas_handle_different_device)
     {
         auto* context = &mgcpp::global_context::get_thread_context();
 
-    auto cublas_context_one = context->get_cublas_context(0);
-    auto cublas_context_two = context->get_cublas_context(1);
+        auto cublas_context_one = context->get_cublas_context(0);
+        auto cublas_context_two = context->get_cublas_context(1);
 
-    EXPECT_NE(cublas_context_one, cublas_context_two);
+        EXPECT_NE(cublas_context_one, cublas_context_two);
 
-    mgcpp::global_context::reference_cnt_decr();
+        mgcpp::global_context::reference_cnt_decr();
     }
 }
