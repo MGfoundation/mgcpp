@@ -45,7 +45,7 @@ namespace mgcpp
         return result;
     }
 
-    template<typename T, size_t Device, alligment Allign>
+    template<typename T, size_t Device, allignment Allign>
     inline gpu::vector<T, Device, Allign>
     add(gpu::vector<T, Device, Allign> const& first,
         gpu::vector<T, Device, Allign> const& second)
