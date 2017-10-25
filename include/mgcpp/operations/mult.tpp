@@ -8,6 +8,7 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/cublas/blas_lv1.hpp>
 #include <mgcpp/cublas/blas_lv3.hpp>
 
 namespace mgcpp
@@ -30,7 +31,7 @@ namespace mgcpp
 
         gpu::matrix<T, Device, row_major> result{m, n};
 
-        thread_context* context = first.get_thread_context();
+        auto* context = first.get_thread_context();
         auto handle = context->get_cublas_context(Device);
     
         auto status = cublas_gemm(handle,
@@ -44,6 +45,31 @@ namespace mgcpp
 
         if(!status)
             MGCPP_THROW_SYSTEM_ERROR(status.error());
+
+        return result;
+    }
+    
+    template<typename T, size_t Device, allignment Allign>
+    gpu::vector<T, Device, Allign>
+    strict::
+    mult(T scalar,
+         gpu::vector<T, Device, Allign> const& vec)
+    {
+        auto* context = vec.get_thread_context();
+        auto handle = context->get_cublas_context(Device);
+        auto size = vec.shape();
+
+        gpu::vector<T, Device, Allign> result(size);
+        result.zero();
+
+        auto status = cublas_axpy(handle, size
+                                  &scalar,
+                                  vec.get_data(), 1,
+                                  result.get_data_mutable(), 1);
+        if(!status)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(status.error());
+        }
 
         return result;
     }
