@@ -77,4 +77,34 @@ namespace mgcpp
         else
             return outcome::success();
     }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                float const* alpha,
+                float* vec, size_t incvec) noexcept
+    {
+        std::error_code status = cublasSscal(handle, n,
+                                             alpha,
+                                            vec, incvec); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                double const* alpha,
+                double* vec, size_t incvec) noexcept
+    {
+        std::error_code status = cublasDscal(handle, n,
+                                             alpha,
+                                            vec, incvec); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
 }

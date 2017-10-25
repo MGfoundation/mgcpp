@@ -21,6 +21,11 @@ namespace mgcpp
 
         template<typename T, size_t Device, allignment Allign>
         inline gpu::vector<T, Device, Allign>
+        mult(gpu::vector<T, Device, Allign> const& first,
+             gpu::vector<T, Device, Allign> const& second);
+
+        template<typename T, size_t Device, allignment Allign>
+        inline gpu::vector<T, Device, Allign>
         mult(T scalar,
              gpu::vector<T, Device, Allign> const& vec);
 

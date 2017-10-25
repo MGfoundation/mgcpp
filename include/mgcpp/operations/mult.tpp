@@ -59,12 +59,10 @@ namespace mgcpp
         auto handle = context->get_cublas_context(Device);
         auto size = vec.shape();
 
-        gpu::vector<T, Device, Allign> result(size);
-        result.zero();
+        gpu::vector<T, Device, Allign> result(vec);
 
-        auto status = cublas_axpy(handle, size,
+        auto status = cublas_scal(handle, size,
                                   &scalar,
-                                  vec.get_data(), 1,
                                   result.get_data_mutable(), 1);
         if(!status)
         {

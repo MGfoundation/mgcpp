@@ -28,6 +28,12 @@ namespace mgcpp
                 T const* alpha,
                 T const* x, size_t incx,
                 T* y, size_t incy) noexcept;
+
+    template<typename T>
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                T const* alpha,
+                T* vec, size_t incvec) noexcept;
 }
 
 #include <mgcpp/cublas/blas_lv1.tpp>
