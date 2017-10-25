@@ -11,7 +11,6 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
-#include <mgcpp/cublas/cublas_helpers.hpp>
 
 #include <algorithm>
 
@@ -86,7 +85,10 @@ namespace mgcpp
         }
 
         std::fill(buffer, buffer + _size, init);
-        auto cpy_result = cublas_set_vector(_size, buffer, _data);
+
+        auto cpy_result =
+            cuda_memcpy(_data, buffer, _size,
+                        cuda_memcpy_kind::host_to_device);
 
         free(buffer);
         if(!cpy_result)
@@ -266,9 +268,9 @@ namespace mgcpp
                 MGCPP_THROW_BAD_ALLOC;
             }
         
-            auto cpy_result = cublas_get_vector(_size,
-                                                _data,
-                                                host_memory);
+            auto cpy_result =
+                cuda_memcpy(host_memory, _data, _size,
+                            cuda_memcpy_kind::device_to_host);
             if(!cpy_result)
             {
                 free(host_memory);
@@ -300,10 +302,9 @@ namespace mgcpp
                 MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
             }
 
-            auto cpy_result = cublas_set_vector(_size,
-                                                host.get_data(),
-                                                _data);
-
+            auto cpy_result =
+                cuda_memcpy(_data, host.get_data(), _size,
+                            cuda_memcpy_kind::host_to_device);
             if(!cpy_result)
             {
                 MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
