@@ -362,7 +362,7 @@ namespace mgcpp
              storage_order SO>
     gpu::matrix<T, DeviceId, SO>&
     gpu::matrix<T, DeviceId, SO>::
-    zeros()
+    zero()
     {
         if(_released)
         {

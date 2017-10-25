@@ -109,7 +109,7 @@ TEST(gpu_matrix, matrix_zero_after_allocation)
     size_t row_dim = 5;
     size_t col_dim = 10;
     mgcpp::gpu::matrix<float> mat(row_dim, col_dim);
-    mat.zeros();
+    mat.zero();
 
     for(size_t i = 0; i < row_dim; ++i)
     {
@@ -126,7 +126,7 @@ TEST(gpu_matrix, matrix_zero_without_allocation_failure)
 {
     mgcpp::gpu::matrix<float> mat{};
 
-    EXPECT_ANY_THROW(mat.zeros());
+    EXPECT_ANY_THROW(mat.zero());
 }
 
 TEST(gpu_matrix, matrix_resize_init)

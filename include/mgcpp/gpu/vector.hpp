@@ -50,6 +50,9 @@ namespace mgcpp
             inline gpu::vector<T, DeviceId, Allign>&
             operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
 
+            inline gpu::vector<T, DeviceId, Allign>&
+            zero();
+
             inline void 
             copy_from_host(cpu::vector<T, Allign> const& host);
 

@@ -53,7 +53,7 @@ namespace mgcpp
             operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept;
 
             inline matrix<T, DeviceId, SO>&
-            zeros();
+            zero();
 
             inline matrix<T, DeviceId, SO>&
             resize(size_t i, size_t j);
