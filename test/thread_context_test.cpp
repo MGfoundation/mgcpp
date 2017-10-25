@@ -11,7 +11,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(thead_context, request_cublas_handle)
+TEST(thread_context, request_cublas_handle)
 {
     auto* context = &mgcpp::global_context::get_thread_context();
 
@@ -23,7 +23,7 @@ TEST(thead_context, request_cublas_handle)
     mgcpp::global_context::reference_cnt_decr();
 }
 
-TEST(thead_context, request_cublas_handle_different_device)
+TEST(thread_context, request_cublas_handle_different_device)
 {
     if(mgcpp::test_policy::get_policy().device_num() >= 2)
     {
