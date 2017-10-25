@@ -57,7 +57,6 @@ namespace mgcpp
         auto handle = thread_context->get_cublas_context(Device);
 
         T const alpha = 1;
-
         auto size = first.shape();
 
         auto status = cublas_axpy(handle, size,
