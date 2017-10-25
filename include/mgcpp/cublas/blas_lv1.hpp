@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_CUBLAS_BLAS_LV3_HPP_
-#define _MGCPP_CUBLAS_BLAS_LV3_HPP_
+#ifndef _MGCPP_CUBLAS_BLAS_LV1_HPP_
+#define _MGCPP_CUBLAS_BLAS_LV1_HPP_
 
 #include <cstdlib>
 
