@@ -46,10 +46,29 @@ namespace mgcpp
     }
 
     template<typename T, size_t Device, allignment Allign>
-    inline gpu::vector<T, Device, Allign>
+    gpu::vector<T, Device, Allign>
+    strict::
     add(gpu::vector<T, Device, Allign> const& first,
         gpu::vector<T, Device, Allign> const& second)
     {
-        //cublas_axpy();
+        gpu::vector<T, Device, Allign> result(second);
+
+        auto* thread_context = first.get_thread_context();
+        auto handle = thread_context->get_cublas_context(Device);
+
+        T const alpha = 1;
+
+        auto size = first.shape();
+
+        auto status = cublas_axpy(handle, size,
+                                  &alpha,
+                                  first.get_data(), 1,
+                                  result.get_data_mutable(), 1);
+        if(!status)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(status.error());
+        }
+
+        return result;
     }
 }
