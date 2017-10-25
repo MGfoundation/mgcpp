@@ -75,9 +75,7 @@ namespace mgcpp
                 << "memory leak detected in test "
                 << test_info.name() << '\n'
                 << "for device "
-                << i << '\n'
-                << "in test "
-                << test_info.name();
+                << i << '\n';
         }
     }
 }
