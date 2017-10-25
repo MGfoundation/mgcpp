@@ -47,16 +47,22 @@ namespace mgcpp
             // copy_to_gpu() const;
 
             inline T
-            operator()(size_t i, size_t j) const;
+            operator()(size_t i, size_t j) const noexcept;
 
             inline T&
-            operator()(size_t i, size_t j);
+            operator()(size_t i, size_t j) noexcept;
+
+            inline T
+            at(size_t i, size_t j) const;
+
+            inline T&
+            at(size_t i, size_t j);
 
             inline T const*
-            get_data() const;
+            data() const;
 
             inline T*
-            get_data_mutable() const;
+            data_mutable() const;
 
             inline std::pair<size_t, size_t>
             shape() const noexcept;

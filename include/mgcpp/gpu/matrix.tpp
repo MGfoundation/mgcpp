@@ -446,7 +446,7 @@ namespace mgcpp
         }        
 
         auto cpy_result =
-            cuda_memcpy(_data, cpu_mat.get_data(),
+            cuda_memcpy(_data, cpu_mat.data(),
                         _n_dim * _m_dim,
                         cuda_memcpy_kind::host_to_device);
         if(!cpy_result)

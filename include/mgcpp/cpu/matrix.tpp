@@ -71,7 +71,7 @@ namespace mgcpp
              storage_order SO>
     inline T
     cpu::matrix<T, SO>::
-    operator()(size_t i, size_t j) const
+    at(size_t i, size_t j) const
     {
         if(i >= _m_dim || j >= _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
@@ -83,11 +83,29 @@ namespace mgcpp
              storage_order SO>
     inline T&
     cpu::matrix<T, SO>::
-    operator()(size_t i, size_t j)
+    at(size_t i, size_t j) 
     {
         if(i >= _m_dim || j >= _n_dim)
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
 
+        return _data[i * _n_dim + j];
+    }
+
+    template<typename T,
+             storage_order SO>
+    inline T
+    cpu::matrix<T, SO>::
+    operator()(size_t i, size_t j) const noexcept
+    {
+        return _data[i * _n_dim + j];
+    }
+
+    template<typename T,
+             storage_order SO>
+    inline T&
+    cpu::matrix<T, SO>::
+    operator()(size_t i, size_t j) noexcept
+    {
         return _data[i * _n_dim + j];
     }
 
@@ -104,7 +122,7 @@ namespace mgcpp
              storage_order SO>
     inline T const*
     cpu::matrix<T, SO>::
-    get_data() const
+    data() const
     {
         return _data;
     }
@@ -113,7 +131,7 @@ namespace mgcpp
              storage_order SO>
     inline T*
     cpu::matrix<T, SO>::
-    get_data_mutable() const
+    data_mutable() const
     {
         return _data;
     }

@@ -14,21 +14,23 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     vector() noexcept
     : _data(nullptr),
-        _size(0) {}
+        _size(0),
+        _released(true) {}
     
     template<typename T,
              allignment Allign>
     cpu::vector<T, Allign>::
     vector(size_t size) 
         : _data(nullptr),
-          _size(size)
+          _size(size),
+          _released(true)
     {
         T* ptr = (T*)malloc(sizeof(T) * _size);
-
         if(!ptr)
         {
             MGCPP_THROW_BAD_ALLOC;
         }
+        _released = false;
         
         _data = ptr;
     }
@@ -38,14 +40,15 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     vector(size_t size, T init)
         : _data(nullptr),
-          _size(size)
+          _size(size),
+          _released(true)
     {
         T* ptr = (T*)malloc(sizeof(T) * _size);
-
         if(!ptr)
         {
             MGCPP_THROW_BAD_ALLOC;
         }
+        _released = false;
 
         std::fill(ptr, ptr + _size, init);
         
@@ -57,14 +60,62 @@ namespace mgcpp
     cpu::vector<T, Allign>::
     vector(size_t size, T* data) noexcept
         : _data(data),
-          _size(size) {}
+          _size(size), 
+          _released(false) {}
 
+    template<typename T,
+             allignment Allign>
+    cpu::vector<T, Allign>::
+    vector(cpu::vector<T, Allign> const& other)
+        : _data(nullptr),
+          _size(0), 
+          _released(true) 
+    {
+
+    }
+
+    template<typename T,
+             allignment Allign>
+    cpu::vector<T, Allign>::
+    vector(std::initializer_list<T> const& array) noexcept
+    {
+        
+    }
+
+    template<typename T,
+             allignment Allign>
+    cpu::vector<T, Allign>::
+    vector(cpu::vector<T, Allign>&& other) noexcept
+        : _data(nullptr),
+          _size(0), 
+          _released(true) 
+    {
+            
+    }
+
+    template<typename T,
+             allignment Allign>
+    cpu::vector<T, Allign>&
+    cpu::vector<T, Allign>::
+    operator=(cpu::vector<T, Allign> const& other)
+    {
+        
+    }
+
+    template<typename T,
+             allignment Allign>
+    cpu::vector<T, Allign>&
+    cpu::vector<T, Allign>::
+    operator=(cpu::vector<T, Allign>&& other) noexcept
+    {
+        
+    }
 
     template<typename T,
              allignment Allign>
     T
     cpu::vector<T, Allign>::
-    operator[](size_t i) const
+    at(size_t i) const
     {
         if(i >= _size)
         {
@@ -78,7 +129,7 @@ namespace mgcpp
              allignment Allign>
     T&
     cpu::vector<T, Allign>::
-    operator[](size_t i)
+    at(size_t i)
     {
         if(i >= _size)
         {
@@ -90,9 +141,27 @@ namespace mgcpp
 
     template<typename T,
              allignment Allign>
+    T
+    cpu::vector<T, Allign>::
+    operator[](size_t i) const noexcept
+    {
+        return _data[i];
+    }
+
+    template<typename T,
+             allignment Allign>
+    T&
+    cpu::vector<T, Allign>::
+    operator[](size_t i) noexcept
+    {
+        return _data[i];
+    }
+
+    template<typename T,
+             allignment Allign>
     T const*
     cpu::vector<T, Allign>::
-    get_data() const
+    data() const
     {
         return _data; 
     }
@@ -101,7 +170,7 @@ namespace mgcpp
              allignment Allign>
     T*
     cpu::vector<T, Allign>::
-    get_data_mutable() noexcept
+    data_mutable() noexcept
     {
         return _data;
     }
@@ -126,9 +195,21 @@ namespace mgcpp
 
     template<typename T,
              allignment Allign>
+    T*
+    cpu::vector<T, Allign>::
+    released_data()
+    {
+        _released= true;
+        return _data;
+    }
+
+
+    template<typename T,
+             allignment Allign>
     cpu::vector<T, Allign>::
     ~vector() noexcept
     {
-        (void)free(_data);
+        if(!_released)
+            (void)free(_data);
     }
 }

@@ -8,6 +8,7 @@
 #define _MGCPP_CPU_VECTOR_HPP_
 
 #include <cstdlib>
+#include <initializer_list>
 
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
@@ -24,6 +25,7 @@ namespace mgcpp
         private:
             T* _data; 
             size_t _size;
+            bool _released;
         
         public:
             inline vector() noexcept;
@@ -36,6 +38,18 @@ namespace mgcpp
 
             inline vector(size_t size, T* data) noexcept;
 
+            inline vector(std::initializer_list<T> const& array) noexcept;
+
+            inline vector(cpu::vector<T, Allign> const& other);
+
+            inline vector(cpu::vector<T, Allign>&& other) noexcept;
+
+            inline cpu::vector<T, Allign>&
+            operator=(cpu::vector<T, Allign> const& other);
+
+            inline vector<T, Allign>&
+            operator=(cpu::vector<T, Allign>&& other) noexcept;
+
             // template<size_t DeviceId>
             // inline vector(
             //     gpu::vector<T, DeviceId> const& gpu_mat);
@@ -45,16 +59,25 @@ namespace mgcpp
             // copy_to_gpu() const;
 
             inline T
-            operator[](size_t i) const;
+            operator[](size_t i) const noexcept;
 
             inline T&
-            operator[](size_t i);
+            operator[](size_t i) noexcept;
+
+            inline T
+            at(size_t i) const;
+
+            inline T&
+            at(size_t i);
 
             inline T const*
-            get_data() const;
+            data() const;
 
             inline T*
-            get_data_mutable() noexcept;
+            released_data();
+
+            inline T*
+            data_mutable() noexcept;
 
             inline size_t
             shape() const noexcept;
