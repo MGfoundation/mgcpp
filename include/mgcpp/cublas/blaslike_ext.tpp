@@ -6,6 +6,7 @@
 
 #include <mgcpp/cublas/blaslike_ext.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/error_code.hpp>
 
 #include <cublas_v2.h>
 
