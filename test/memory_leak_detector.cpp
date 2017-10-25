@@ -20,6 +20,8 @@ namespace mgcpp
     memory_leak_detector::
     OnTestStart(::testing::TestInfo const& test_info) 
     {
+        (void)cuda_set_device(0);
+
         if(!test_policy::get_policy().detect_memory_leak())
             return;
 
@@ -51,6 +53,8 @@ namespace mgcpp
     memory_leak_detector::
     OnTestEnd(::testing::TestInfo const& test_info) 
     {
+        (void)cuda_set_device(0);
+
         if(!test_policy::get_policy().detect_memory_leak())
             return;
 
