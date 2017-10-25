@@ -498,7 +498,7 @@ namespace mgcpp
              storage_order SO>
     inline T const*
     gpu::matrix<T, DeviceId, SO>::
-    get_data() const noexcept
+    data() const noexcept
     {
         return _data;
     }
@@ -508,7 +508,7 @@ namespace mgcpp
              storage_order SO>
     inline T*
     gpu::matrix<T, DeviceId, SO>::
-    get_data_mutable() noexcept
+    data_mutable() noexcept
     {
         return _data;
     }
@@ -529,7 +529,7 @@ namespace mgcpp
              storage_order SO>
     inline thread_context*
     gpu::matrix<T, DeviceId, SO>::
-    get_thread_context() const noexcept
+    context() const noexcept
     {
         return _context;
     }

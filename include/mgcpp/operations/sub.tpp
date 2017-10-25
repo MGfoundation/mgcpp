@@ -18,7 +18,7 @@ namespace mgcpp
     {
         gpu::vector<T, Device, Allign> result(first);
 
-        auto* thread_context = first.get_thread_context();
+        auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);
 
         T const alpha = -1;
@@ -27,8 +27,8 @@ namespace mgcpp
 
         auto status = cublas_axpy(handle, size,
                                   &alpha,
-                                  second.get_data(), 1,
-                                  result.get_data_mutable(), 1);
+                                  second.data(), 1,
+                                  result.data_mutable(), 1);
         if(!status)
         {
             MGCPP_THROW_SYSTEM_ERROR(status.error());

@@ -16,7 +16,7 @@ namespace mgcpp
     add(gpu::matrix<T, Device, SO> const& first,
         gpu::matrix<T, Device, SO> const& second)
     {
-        auto* thread_context = first.get_thread_context();
+        auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);
 
         auto shape = first.shape();
@@ -34,10 +34,10 @@ namespace mgcpp
                                   CUBLAS_OP_N,
                                   m, n,
                                   &alpha,
-                                  first.get_data(), m,
+                                  first.data(), m,
                                   &beta,
-                                  second.get_data(), m,
-                                  result.get_data_mutable(), m);
+                                  second.data(), m,
+                                  result.data_mutable(), m);
 
         if(!status)
             MGCPP_THROW_SYSTEM_ERROR(status.error());
@@ -53,7 +53,7 @@ namespace mgcpp
     {
         gpu::vector<T, Device, Allign> result(second);
 
-        auto* thread_context = first.get_thread_context();
+        auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);
 
         T const alpha = 1;
@@ -61,8 +61,8 @@ namespace mgcpp
 
         auto status = cublas_axpy(handle, size,
                                   &alpha,
-                                  first.get_data(), 1,
-                                  result.get_data_mutable(), 1);
+                                  first.data(), 1,
+                                  result.data_mutable(), 1);
         if(!status)
         {
             MGCPP_THROW_SYSTEM_ERROR(status.error());

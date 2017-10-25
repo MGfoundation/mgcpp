@@ -359,7 +359,7 @@ namespace mgcpp
              allignment Allign>
     inline thread_context*
     gpu::vector<T, DeviceId, Allign>::
-    get_thread_context() const noexcept
+    context() const noexcept
     {
         return _context;
     }
@@ -369,7 +369,7 @@ namespace mgcpp
              allignment Allign>
     T const*
     gpu::vector<T, DeviceId, Allign>::
-    get_data() const noexcept
+    data() const noexcept
     {
         return _data;
     }
@@ -379,7 +379,7 @@ namespace mgcpp
              allignment Allign>
     T*
     gpu::vector<T, DeviceId, Allign>::
-    get_data_mutable() noexcept
+    data_mutable() noexcept
     {
         return _data;
     }

@@ -56,12 +56,12 @@ namespace mgcpp
                 MGCPP_THROW_SYSTEM_ERROR(memcpy_status.error());
             }
 
-            auto* context = vec.get_thread_context();
+            auto* context = vec.context();
             auto handle = context->get_cublas_context(DeviceId);
             
             auto status = cublas_dot(handle, size,
                                      temp.value(), 1,
-                                     vec.get_data(), 1,
+                                     vec.data(), 1,
                                      &result);
 
             free(buffer);
