@@ -9,6 +9,8 @@
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
 
+#include <string>
+
 #include "memory_leak_detector.hpp"
 #include "test_policy.hpp"
 
@@ -19,6 +21,9 @@ namespace mgcpp
     OnTestStart(::testing::TestInfo const& test_info) 
     {
         if(!test_policy::get_policy().detect_memory_leak())
+            return;
+
+        if(test_info.name() == std::string("thread_context"))
             return;
 
         auto device_number = test_policy::get_policy().device_num();
@@ -47,6 +52,9 @@ namespace mgcpp
     OnTestEnd(::testing::TestInfo const& test_info) 
     {
         if(!test_policy::get_policy().detect_memory_leak())
+            return;
+
+        if(test_info.name() == std::string("thread_context"))
             return;
 
         auto device_number = test_policy::get_policy().device_num();

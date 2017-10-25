@@ -29,7 +29,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(status);
 
         _device_num = static_cast<size_t>(device_number);
-        _detect_memory_leak = false;
+        _detect_memory_leak = true;
     }
 
     size_t
