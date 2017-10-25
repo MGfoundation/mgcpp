@@ -170,7 +170,9 @@ namespace mgcpp
         {
             auto free_result = cuda_free(_data);
             if(!free_result)
+            {
                 MGCPP_THROW_SYSTEM_ERROR(free_result.error());
+            }
             _released = true;
         }
 
@@ -211,6 +213,7 @@ namespace mgcpp
             (void)cuda_free(_data);
         }
         _data = other._data;
+        _released = false;
         _size = other._size;
 
         other._size = 0;
@@ -252,150 +255,150 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-            cpu::vector<T, Allign> 
-            gpu::vector<T, DeviceId, Allign>::
-            copy_to_host() const
+    cpu::vector<T, Allign> 
+    gpu::vector<T, DeviceId, Allign>::
+    copy_to_host() const
+    {
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
         {
-            auto set_device_stat = cuda_set_device(DeviceId);
-            if(!set_device_stat)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-            }
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }
 
-            T* host_memory = (T*)malloc(_size * sizeof(T));
-            if(!host_memory)
-            {
-                MGCPP_THROW_BAD_ALLOC;
-            }
+        T* host_memory = (T*)malloc(_size * sizeof(T));
+        if(!host_memory)
+        {
+            MGCPP_THROW_BAD_ALLOC;
+        }
         
-            auto cpy_result =
-                cuda_memcpy(host_memory, _data, _size,
-                            cuda_memcpy_kind::device_to_host);
-            if(!cpy_result)
-            {
-                free(host_memory);
-                MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-            }
-
-            return cpu::vector<T, Allign>(_size, host_memory);
-        }
-
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            void
-            gpu::vector<T, DeviceId, Allign>::
-            copy_from_host(cpu::vector<T, Allign> const& host) 
+        auto cpy_result =
+            cuda_memcpy(host_memory, _data, _size,
+                        cuda_memcpy_kind::device_to_host);
+        if(!cpy_result)
         {
-            if(this->shape() != host.shape())
-            {
-                MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
-            }
-            if(_released)
-            {
-                MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
-            }
-
-            auto set_device_stat = cuda_set_device(DeviceId);
-            if(!set_device_stat)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-            }
-
-            auto cpy_result =
-                cuda_memcpy(_data, host.get_data(), _size,
-                            cuda_memcpy_kind::host_to_device);
-            if(!cpy_result)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-            }
-
-            return *this;
+            free(host_memory);
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            T
-            gpu::vector<T, DeviceId, Allign>::
-            check_value(size_t i) const
+        return cpu::vector<T, Allign>(_size, host_memory);
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    void
+    gpu::vector<T, DeviceId, Allign>::
+    copy_from_host(cpu::vector<T, Allign> const& host) 
+    {
+        if(this->shape() != host.shape())
         {
-            if(i >= _size)
-                MGCPP_THROW_OUT_OF_RANGE("index out of range");
-
-            auto set_device_stat = cuda_set_device(DeviceId);
-            if(!set_device_stat)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-            }
-
-            T* from = (_data + i);
-            T to;
-            auto result = cuda_memcpy(
-                &to, from, 1, cuda_memcpy_kind::device_to_host);
-
-            if(!result)
-                MGCPP_THROW_SYSTEM_ERROR(result.error());
-
-            return to;
+            MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
         }
-
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            inline T*
-            gpu::vector<T, DeviceId, Allign>::
-            release_data() noexcept
+        if(_released)
         {
-            _released = true;
-            return _data;
+            MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
         }
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            inline thread_context*
-            gpu::vector<T, DeviceId, Allign>::
-            get_thread_context() const noexcept
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
         {
-            return _context;
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            T const*
-            gpu::vector<T, DeviceId, Allign>::
-            get_data() const noexcept
+        auto cpy_result =
+            cuda_memcpy(_data, host.get_data(), _size,
+                        cuda_memcpy_kind::host_to_device);
+        if(!cpy_result)
         {
-            return _data;
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            T*
-            gpu::vector<T, DeviceId, Allign>::
-            get_data_mutable() noexcept
+        return *this;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    T
+    gpu::vector<T, DeviceId, Allign>::
+    check_value(size_t i) const
+    {
+        if(i >= _size)
+            MGCPP_THROW_OUT_OF_RANGE("index out of range");
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
         {
-            return _data;
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            size_t
-            gpu::vector<T, DeviceId, Allign>::
-            shape() const noexcept
-        {
-            return _size;
-        }
+        T* from = (_data + i);
+        T to;
+        auto result = cuda_memcpy(
+            &to, from, 1, cuda_memcpy_kind::device_to_host);
 
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-            size_t
-            gpu::vector<T, DeviceId, Allign>::
+        if(!result)
+            MGCPP_THROW_SYSTEM_ERROR(result.error());
+
+        return to;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    inline T*
+    gpu::vector<T, DeviceId, Allign>::
+    release_data() noexcept
+    {
+        _released = true;
+        return _data;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    inline thread_context*
+    gpu::vector<T, DeviceId, Allign>::
+    get_thread_context() const noexcept
+    {
+        return _context;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    T const*
+    gpu::vector<T, DeviceId, Allign>::
+    get_data() const noexcept
+    {
+        return _data;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    T*
+    gpu::vector<T, DeviceId, Allign>::
+    get_data_mutable() noexcept
+    {
+        return _data;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    size_t
+    gpu::vector<T, DeviceId, Allign>::
+    shape() const noexcept
+    {
+        return _size;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    size_t
+    gpu::vector<T, DeviceId, Allign>::
     size() const noexcept
     {
         return _size;
