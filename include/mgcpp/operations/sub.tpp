@@ -18,6 +18,9 @@ namespace mgcpp
     sub(device_vector<T, Device, Allign> const& first,
         device_vector<T, Device, Allign> const& second)
     {
+        MGCPP_ASSERT(first.shape() == second.shape(),
+                     "vector dimensions didn't match");
+
         device_vector<T, Device, Allign> result(first);
 
         auto* thread_context = first.context();

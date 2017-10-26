@@ -10,6 +10,7 @@
 #include <mgcpp/device/vector.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/assert.hpp>
 
 namespace mgcpp
 {
@@ -19,6 +20,9 @@ namespace mgcpp
     add(device_matrix<T, Device, SO> const& first,
         device_matrix<T, Device, SO> const& second)
     {
+        MGCPP_ASSERT(first.shape() == second.shape(),
+                     "matrix dimensions didn't match");
+
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);
 
@@ -54,6 +58,9 @@ namespace mgcpp
     add(device_vector<T, Device, Allign> const& first,
         device_vector<T, Device, Allign> const& second)
     {
+        MGCPP_ASSERT(first.shape() == second.shape(),
+                     "vecotr size didn't match");
+
         device_vector<T, Device, Allign> result(second);
 
         auto* thread_context = first.context();

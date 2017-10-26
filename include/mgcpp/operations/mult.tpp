@@ -10,8 +10,8 @@
 #include <mgcpp/device/matrix.hpp>
 #include <mgcpp/device/vector.hpp>
 #include <mgcpp/operations/mult.hpp>
-#include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/assert.hpp>
 
 namespace mgcpp
 {
@@ -21,6 +21,10 @@ namespace mgcpp
     mult(device_matrix<T, Device, SO> const& first,
          device_matrix<T, Device, SO> const& second)
     {
+        MGCPP_ASSERT(
+            first.shape().second == second.shape().first,
+            "matrix dimensions didn't match");
+
         T const alpha = 1;
         T const beta = 0;
 
