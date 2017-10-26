@@ -13,14 +13,10 @@
 
 namespace mgcpp
 {
-    template<typename T,
-             size_t DeviceId = 0,
-             storage_order SO = row_major>
+    template<typename T, size_t DeviceId, storage_order SO>
     class device_matrix;
 
-    template<typename T,
-             size_t DeviceId = 0,
-             allignment Allign = row>
+    template<typename T, size_t DeviceId, allignment Allign>
     class device_vector;
 }
 

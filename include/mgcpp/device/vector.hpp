@@ -17,8 +17,8 @@
 namespace mgcpp
 {
     template<typename T,
-             size_t DeviceId,
-             allignment Allign>
+             size_t DeviceId = 0,
+             allignment Allign = row>
     class device_vector
     {
     private:

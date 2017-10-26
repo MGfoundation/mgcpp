@@ -16,8 +16,8 @@
 namespace mgcpp
 {
     template<typename T,
-             size_t DeviceId,
-             storage_order SO>
+             size_t DeviceId = 0,
+             storage_order SO = row_major>
     class device_matrix
     {
     private:
@@ -35,6 +35,8 @@ namespace mgcpp
         inline device_matrix(size_t i, size_t j);
 
         inline device_matrix(size_t i, size_t j, T init);
+        
+        inline device_matrix(size_t i, size_t j, T* init);
 
         inline device_matrix(cpu::matrix<T, SO> const& cpu_mat);
 
