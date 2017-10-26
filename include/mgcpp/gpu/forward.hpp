@@ -13,18 +13,15 @@
 
 namespace mgcpp
 {
-    namespace gpu
-    {
-        template<typename T,
-                 size_t DeviceId = 0,
-                 storage_order SO = row_major>
-        class matrix;
+    template<typename T,
+             size_t DeviceId = 0,
+             storage_order SO = row_major>
+    class device_matrix;
 
-        template<typename T,
-                 size_t DeviceId = 0,
-                 allignment Allign = row>
-        class vector;
-    }
+    template<typename T,
+             size_t DeviceId = 0,
+             allignment Allign = row>
+    class device_vector;
 }
 
 #endif

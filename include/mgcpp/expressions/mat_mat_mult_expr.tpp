@@ -53,7 +53,6 @@ namespace mgcpp
     template<typename LhsExpr, typename RhsExpr,
              typename>
     mat_mat_mult_expr<LhsExpr, RhsExpr> 
-    gpu::
     operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
     {
         return mat_mat_mult_expr<LhsExpr, RhsExpr>(

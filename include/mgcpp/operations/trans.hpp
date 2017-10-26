@@ -16,8 +16,8 @@ namespace mgcpp
         template<typename T,
                  size_t Device,
                  storage_order SO>
-        gpu::matrix<T, Device, SO>
-        trans(gpu::matrix<T, Device, SO> const& mat);
+        device_matrix<T, Device, SO>
+        trans(device_matrix<T, Device, SO> const& mat);
     }
 }
 

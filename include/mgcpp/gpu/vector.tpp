@@ -19,8 +19,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    vector() noexcept
+    device_vector<T, DeviceId, Allign>::
+    device_vector() noexcept
     : _data(nullptr),
         _context(&global_context::get_thread_context()),
         _size(0),
@@ -29,8 +29,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    vector(size_t size)
+    device_vector<T, DeviceId, Allign>::
+    device_vector(size_t size)
         : _data(nullptr),
           _context(&global_context::get_thread_context()),
           _size(size),
@@ -56,8 +56,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    vector(size_t size, T init)
+    device_vector<T, DeviceId, Allign>::
+    device_vector(size_t size, T init)
         : _data(nullptr),
           _context(&global_context::get_thread_context()),
           _size(size),
@@ -101,8 +101,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    vector(gpu::vector<T, DeviceId, Allign> const& other)
+    device_vector<T, DeviceId, Allign>::
+    device_vector(device_vector<T, DeviceId, Allign> const& other)
         : _data(nullptr),
           _context(&global_context::get_thread_context()),
           _size(0),
@@ -141,8 +141,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    vector(gpu::vector<T, DeviceId, Allign>&& other) noexcept
+    device_vector<T, DeviceId, Allign>::
+    device_vector(device_vector<T, DeviceId, Allign>&& other) noexcept
         :_data(other._data),
          _context(&global_context::get_thread_context()),
          _size(other._size),
@@ -156,9 +156,9 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>&
-    gpu::vector<T, DeviceId, Allign>::
-    operator=(gpu::vector<T, DeviceId, Allign> const& other)
+    device_vector<T, DeviceId, Allign>&
+    device_vector<T, DeviceId, Allign>::
+    operator=(device_vector<T, DeviceId, Allign> const& other)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
@@ -203,9 +203,9 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>&
-    gpu::vector<T, DeviceId, Allign>::
-    operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept
+    device_vector<T, DeviceId, Allign>&
+    device_vector<T, DeviceId, Allign>::
+    operator=(device_vector<T, DeviceId, Allign>&& other) noexcept
     {
         if(!_released)
         {
@@ -226,8 +226,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>&
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>&
+    device_vector<T, DeviceId, Allign>::
     zero()
     {
         if(_released)
@@ -256,7 +256,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     cpu::vector<T, Allign> 
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     copy_to_host() const
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -287,7 +287,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     void
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     copy_from_host(cpu::vector<T, Allign> const& host) 
     {
         if(this->shape() != host.shape())
@@ -320,7 +320,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     T
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     check_value(size_t i) const
     {
         if(i >= _size)
@@ -347,7 +347,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     inline T*
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     release_data() noexcept
     {
         _released = true;
@@ -358,7 +358,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     inline thread_context*
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     context() const noexcept
     {
         return _context;
@@ -368,7 +368,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     T const*
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     data() const noexcept
     {
         return _data;
@@ -378,7 +378,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     T*
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     data_mutable() noexcept
     {
         return _data;
@@ -388,7 +388,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     size_t
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     shape() const noexcept
     {
         return _size;
@@ -398,7 +398,7 @@ namespace mgcpp
              size_t DeviceId,
              allignment Allign>
     size_t
-    gpu::vector<T, DeviceId, Allign>::
+    device_vector<T, DeviceId, Allign>::
     size() const noexcept
     {
         return _size;
@@ -407,8 +407,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    gpu::vector<T, DeviceId, Allign>::
-    ~vector() noexcept
+    device_vector<T, DeviceId, Allign>::
+    ~device_vector() noexcept
     {
         (void)cuda_set_device(DeviceId);
 

@@ -11,10 +11,10 @@
 namespace mgcpp
 {
     template<typename T, size_t Device, storage_order SO>
-    gpu::matrix<T, Device, SO>
+    device_matrix<T, Device, SO>
     strict::
-    add(gpu::matrix<T, Device, SO> const& first,
-        gpu::matrix<T, Device, SO> const& second)
+    add(device_matrix<T, Device, SO> const& first,
+        device_matrix<T, Device, SO> const& second)
     {
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);
@@ -27,7 +27,7 @@ namespace mgcpp
         T const alpha = 1;
         T const beta = 1;
 
-        gpu::matrix<T, Device, SO> result{m, n};
+        device_matrix<T, Device, SO> result{m, n};
 
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,
@@ -46,12 +46,12 @@ namespace mgcpp
     }
 
     template<typename T, size_t Device, allignment Allign>
-    gpu::vector<T, Device, Allign>
+    device_vector<T, Device, Allign>
     strict::
-    add(gpu::vector<T, Device, Allign> const& first,
-        gpu::vector<T, Device, Allign> const& second)
+    add(device_vector<T, Device, Allign> const& first,
+        device_vector<T, Device, Allign> const& second)
     {
-        gpu::vector<T, Device, Allign> result(second);
+        device_vector<T, Device, Allign> result(second);
 
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);

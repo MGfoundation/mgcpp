@@ -14,14 +14,14 @@ namespace mgcpp
     namespace strict
     {
         template<typename T, size_t Device, storage_order SO>
-        inline gpu::matrix<T, Device, SO>
-        add(gpu::matrix<T, Device, SO> const& first,
-            gpu::matrix<T, Device, SO> const& second);
+        inline device_matrix<T, Device, SO>
+        add(device_matrix<T, Device, SO> const& first,
+            device_matrix<T, Device, SO> const& second);
 
         template<typename T, size_t Device, allignment Allign>
-        inline gpu::vector<T, Device, Allign>
-        add(gpu::vector<T, Device, Allign> const& first,
-            gpu::vector<T, Device, Allign> const& second);
+        inline device_vector<T, Device, Allign>
+        add(device_vector<T, Device, Allign> const& first,
+            device_vector<T, Device, Allign> const& second);
     }
 }
 

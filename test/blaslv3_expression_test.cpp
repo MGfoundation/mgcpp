@@ -11,7 +11,7 @@
 
 TEST(mult_expr, row_major_mat_mat_mult)
 {
-    using matrix = mgcpp::gpu::matrix<float>;
+    using matrix = mgcpp::device_matrix<float>;
 
     matrix A_mat(2, 4, 2);
     matrix B_mat(4, 3, 4);

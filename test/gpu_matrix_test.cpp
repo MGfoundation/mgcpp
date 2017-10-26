@@ -18,14 +18,14 @@
 
 TEST(gpu_matrix, default_constructor)
 {
-    mgcpp::gpu::matrix<float, 0> mat;
+    mgcpp::device_matrix<float, 0> mat;
 
     auto shape = mat.shape();
     EXPECT_EQ(shape.first, 0);
     EXPECT_EQ(shape.second, 0);
     EXPECT_EQ(mat._data, nullptr);
     EXPECT_EQ(mat._context, 
-              mgcpp::gpu::matrix<float>()._context);
+              mgcpp::device_matrix<float>()._context);
     EXPECT_TRUE(mat._released);
 }
 
@@ -37,7 +37,7 @@ TEST(gpu_matrix, dimension_constructor)
 
     size_t row_dim = 10;
     size_t col_dim = 5;
-    mgcpp::gpu::matrix<float, 0> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float, 0> mat(row_dim, col_dim);
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE( after);
@@ -61,7 +61,7 @@ TEST(gpu_matrix, dimension_initializing_constructor)
     size_t row_dim = 5;
     size_t col_dim = 10;
     float init_val = 7;
-    mgcpp::gpu::matrix<float> mat(row_dim, col_dim, init_val);
+    mgcpp::device_matrix<float> mat(row_dim, col_dim, init_val);
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -93,7 +93,7 @@ TEST(gpu_matrix, matrix_resize)
 
     size_t row_dim = 10;
     size_t col_dim = 10;
-    mgcpp::gpu::matrix<float> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> mat(row_dim, col_dim);
 
     mat.resize(100, 100);
 
@@ -108,7 +108,7 @@ TEST(gpu_matrix, matrix_zero_after_allocation)
 {
     size_t row_dim = 5;
     size_t col_dim = 10;
-    mgcpp::gpu::matrix<float> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> mat(row_dim, col_dim);
     mat.zero();
 
     for(size_t i = 0; i < row_dim; ++i)
@@ -124,7 +124,7 @@ TEST(gpu_matrix, matrix_zero_after_allocation)
 
 TEST(gpu_matrix, matrix_zero_without_allocation_failure)
 {
-    mgcpp::gpu::matrix<float> mat{};
+    mgcpp::device_matrix<float> mat{};
 
     EXPECT_ANY_THROW(mat.zero());
 }
@@ -135,7 +135,7 @@ TEST(gpu_matrix, matrix_resize_init)
     EXPECT_TRUE(twobytwo);
     auto twobytwo_freemem = twobytwo.value().first;
 
-    mgcpp::gpu::matrix<float> mat(2, 2);
+    mgcpp::device_matrix<float> mat(2, 2);
 
     size_t row_dim = 5;
     size_t col_dim = 5;
@@ -175,7 +175,7 @@ TEST(gpu_matrix, init_from_cpu_matrix)
         }
     }
 
-    mgcpp::gpu::matrix<float> gpu_mat(cpu_mat);
+    mgcpp::device_matrix<float> gpu_mat(cpu_mat);
 
     for(size_t i = 0; i < row_dim; ++i)
     {
@@ -203,7 +203,7 @@ TEST(gpu_matrix, copy_from_host_matrix)
         }
     }
 
-    mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
     EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
     for(size_t i = 0; i < row_dim; ++i)
@@ -232,7 +232,7 @@ TEST(gpu_matrix, copy_to_host)
         }
     }
 
-    mgcpp::gpu::matrix<float> gpu_mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
     EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
     for(size_t i = 0; i < row_dim; ++i)
@@ -251,9 +251,9 @@ TEST(gpu_matrix, copy_construction)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
 
-    mgcpp::gpu::matrix<float> copied(original);
+    mgcpp::device_matrix<float> copied(original);
 
     for(auto i = 0u; i < 5; ++i)
     {
@@ -276,8 +276,8 @@ TEST(gpu_matrix, copy_assign_operator)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
-    mgcpp::gpu::matrix<float> copied(row_dim * 3, col_dim * 3);
+    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> copied(row_dim * 3, col_dim * 3);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
@@ -312,13 +312,13 @@ TEST(gpu_matrix, move_constructor)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
     auto before_freemem = before.value().first;
 
-    mgcpp::gpu::matrix<float> moved(std::move(original));
+    mgcpp::device_matrix<float> moved(std::move(original));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -346,8 +346,8 @@ TEST(gpu_matrix, move_assign_operator)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::gpu::matrix<float> original(row_dim, col_dim, init);
-    mgcpp::gpu::matrix<float> moved(row_dim * 2, col_dim * 2);
+    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> moved(row_dim * 2, col_dim * 2);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);

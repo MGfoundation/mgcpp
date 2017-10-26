@@ -16,7 +16,7 @@ TEST(vec_vec_operation, vec_sum)
 {
     size_t size = 10;
     float init_val = 3;
-    mgcpp::gpu::vector<float> vec(size, init_val);
+    mgcpp::device_vector<float> vec(size, init_val);
 
     float result = 0;
     EXPECT_NO_THROW({result = mgcpp::strict::sum(vec);});
@@ -28,12 +28,12 @@ TEST(vec_vec_operation, vec_add)
 {
     size_t size = 5;
     float first_init_val = 3;
-    mgcpp::gpu::vector<float> first(size, first_init_val);
+    mgcpp::device_vector<float> first(size, first_init_val);
 
     float second_init_val = 4;
-    mgcpp::gpu::vector<float> second(size, second_init_val);
+    mgcpp::device_vector<float> second(size, second_init_val);
 
-    mgcpp::gpu::vector<float> result{};
+    mgcpp::device_vector<float> result{};
     EXPECT_NO_THROW({result = mgcpp::strict::add(first, second);});
 
     for(auto i = 0u; i < size; ++i)
@@ -47,12 +47,12 @@ TEST(vec_vec_operation, vec_sub)
 {
     size_t size = 5;
     float first_init_val = 4;
-    mgcpp::gpu::vector<float> first(size, first_init_val);
+    mgcpp::device_vector<float> first(size, first_init_val);
 
     float second_init_val = 3;
-    mgcpp::gpu::vector<float> second(size, second_init_val);
+    mgcpp::device_vector<float> second(size, second_init_val);
 
-    mgcpp::gpu::vector<float> result{};
+    mgcpp::device_vector<float> result{};
     EXPECT_NO_THROW({result = mgcpp::strict::sub(first, second);});
 
     for(auto i = 0u; i < size; ++i)
@@ -66,11 +66,11 @@ TEST(vec_operation, vec_scalar_mult)
 {
     size_t size = 5;
     float init_val = 3;
-    mgcpp::gpu::vector<float> vec(size, init_val);
+    mgcpp::device_vector<float> vec(size, init_val);
 
     float scalar = 4;
 
-    mgcpp::gpu::vector<float> result{};
+    mgcpp::device_vector<float> result{};
     EXPECT_NO_THROW({
             result = mgcpp::strict::mult(scalar, vec);
         });

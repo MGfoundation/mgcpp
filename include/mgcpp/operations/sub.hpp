@@ -7,14 +7,16 @@
 #ifndef _MGCPP_OPERATIONS_SUBSTRACTION_HPP_
 #define _MGCPP_OPERATIONS_SUBSTRACTION_HPP_
 
+#include <mgcpp/gpu/vector.hpp>
+
 namespace mgcpp
 {
     namespace strict
     {
         template<typename T, size_t Device, allignment Allign>
-        inline gpu::vector<T, Device, Allign>
-        sub(gpu::vector<T, Device, Allign> const& first,
-            gpu::vector<T, Device, Allign> const& second);
+        inline device_vector<T, Device, Allign>
+        sub(device_vector<T, Device, Allign> const& first,
+            device_vector<T, Device, Allign> const& second);
     }
 }
 

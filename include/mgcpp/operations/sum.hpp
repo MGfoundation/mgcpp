@@ -17,7 +17,7 @@ namespace mgcpp
                  size_t DeviceId,
                  allignment Allign>
         inline T
-        sum(gpu::vector<T, DeviceId, Allign> const& vec);
+        sum(device_vector<T, DeviceId, Allign> const& vec);
     }
 }
 

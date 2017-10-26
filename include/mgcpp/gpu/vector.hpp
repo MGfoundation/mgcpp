@@ -16,71 +16,68 @@
 
 namespace mgcpp
 {
-    namespace gpu
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign>
+    class device_vector
     {
-        template<typename T,
-                 size_t DeviceId,
-                 allignment Allign>
-        class vector
-        {
-        private:
-            T* _data;
-            thread_context* _context;
-            size_t _size;
-            bool _released;
+    private:
+        T* _data;
+        thread_context* _context;
+        size_t _size;
+        bool _released;
 
-        public:
-            inline vector() noexcept;
+    public:
+        inline device_vector() noexcept;
 
-            inline ~vector() noexcept;
+        inline ~device_vector() noexcept;
 
-            inline vector(size_t size);
+        inline device_vector(size_t size);
 
-            inline vector(size_t size, T init);
+        inline device_vector(size_t size, T init);
 
-            inline
-            vector(gpu::vector<T, DeviceId, Allign> const& other);
+        inline
+        device_vector(device_vector<T, DeviceId, Allign> const& other);
 
-            inline
-            vector(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
+        inline
+        device_vector(device_vector<T, DeviceId, Allign>&& other) noexcept;
 
-            inline gpu::vector<T, DeviceId, Allign>&
-            operator=(gpu::vector<T, DeviceId, Allign> const& other);
+        inline device_vector<T, DeviceId, Allign>&
+        operator=(device_vector<T, DeviceId, Allign> const& other);
 
-            inline gpu::vector<T, DeviceId, Allign>&
-            operator=(gpu::vector<T, DeviceId, Allign>&& other) noexcept;
+        inline device_vector<T, DeviceId, Allign>&
+        operator=(device_vector<T, DeviceId, Allign>&& other) noexcept;
 
-            inline gpu::vector<T, DeviceId, Allign>&
-            zero();
+        inline device_vector<T, DeviceId, Allign>&
+        zero();
 
-            inline void 
-            copy_from_host(cpu::vector<T, Allign> const& host);
+        inline void 
+        copy_from_host(cpu::vector<T, Allign> const& host);
 
-            inline cpu::vector<T, Allign>
-            copy_to_host() const;
+        inline cpu::vector<T, Allign>
+        copy_to_host() const;
 
-            inline T
-            check_value(size_t i) const;
+        inline T
+        check_value(size_t i) const;
 
-            inline T const*
-            data() const noexcept;
+        inline T const*
+        data() const noexcept;
 
-            inline T*
-            data_mutable() noexcept;
+        inline T*
+        data_mutable() noexcept;
 
-            inline T*
-            release_data() noexcept;
+        inline T*
+        release_data() noexcept;
 
-            inline thread_context*
-            context() const noexcept;
+        inline thread_context*
+        context() const noexcept;
 
-            inline size_t
-            shape() const noexcept;
+        inline size_t
+        shape() const noexcept;
 
-            inline size_t
-            size() const noexcept;
-        };
-    }
+        inline size_t
+        size() const noexcept;
+    };
 }
 
 #include <mgcpp/gpu/vector.tpp>

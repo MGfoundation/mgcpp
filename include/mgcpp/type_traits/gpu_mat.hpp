@@ -17,7 +17,7 @@ namespace mgcpp
     struct is_gpu_matrix : std::false_type {};
 
     template<typename T, size_t DeviceId, storage_order SO>
-    struct is_gpu_matrix<gpu::matrix<T, DeviceId, SO>>
+    struct is_gpu_matrix<mgcpp::device_matrix<T, DeviceId, SO>>
         : std::true_type {};
 
     template<typename Mat>

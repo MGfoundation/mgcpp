@@ -18,8 +18,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix() noexcept
+    device_matrix<T, DeviceId, SO>::
+    device_matrix() noexcept
     : _data(nullptr),
         _context(&global_context::get_thread_context()),
         _m_dim(0),
@@ -29,8 +29,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(size_t i, size_t j)
+    device_matrix<T, DeviceId, SO>::
+    device_matrix(size_t i, size_t j)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
          _m_dim(i),
@@ -56,8 +56,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(size_t i, size_t j, T init)
+    device_matrix<T, DeviceId, SO>::
+    device_matrix(size_t i, size_t j, T init)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
          _m_dim(i),
@@ -103,8 +103,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(gpu::matrix<T, DeviceId, SO> const& other)
+    device_matrix<T, DeviceId, SO>::
+    device_matrix(device_matrix<T, DeviceId, SO> const& other)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
          _m_dim(0),
@@ -145,8 +145,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(cpu::matrix<T, SO> const& cpu_mat)
+    device_matrix<T, DeviceId, SO>::
+    device_matrix(cpu::matrix<T, SO> const& cpu_mat)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
          _m_dim(0),
@@ -173,7 +173,7 @@ namespace mgcpp
         _released = false;
         
         auto cpy_result =
-            cuda_memcpy(alloc_result.value(), cpu_mat.get_data(),
+            cuda_memcpy(alloc_result.value(), cpu_mat.data(),
                         _n_dim * _m_dim,
                         cuda_memcpy_kind::host_to_device);
         if(!cpy_result)
@@ -187,8 +187,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    matrix(gpu::matrix<T, DeviceId, SO>&& other) noexcept
+    device_matrix<T, DeviceId, SO>::
+    device_matrix(device_matrix<T, DeviceId, SO>&& other) noexcept
         :_data(other._data),
          _context(&global_context::get_thread_context()),
          _m_dim(other._m_dim),
@@ -204,9 +204,9 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
-    operator=(gpu::matrix<T, DeviceId, SO> const& other)
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
+    operator=(device_matrix<T, DeviceId, SO> const& other)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
@@ -253,9 +253,9 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
-    operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
+    operator=(device_matrix<T, DeviceId, SO>&& other) noexcept
     {
         if(!_released)
         { 
@@ -279,8 +279,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
     resize(size_t i, size_t j)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -316,8 +316,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
     resize(size_t i, size_t j, T init)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -366,8 +366,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
     zero()
     {
         if(_released)
@@ -396,7 +396,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     T
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     check_value(size_t i, size_t j) const 
     {
         if(i >= _m_dim || j >= _n_dim)
@@ -426,8 +426,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>&
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>&
+    device_matrix<T, DeviceId, SO>::
     copy_from_host(cpu::matrix<T, SO> const& cpu_mat)
     {
         if(this->shape() != cpu_mat.shape())
@@ -461,7 +461,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     cpu::matrix<T, SO>
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     copy_to_host() const
     {
 
@@ -497,7 +497,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     inline T const*
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     data() const noexcept
     {
         return _data;
@@ -507,7 +507,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     inline T*
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     data_mutable() noexcept
     {
         return _data;
@@ -517,7 +517,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     inline T*
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     release_data()
     {
         _released = true;
@@ -528,7 +528,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     inline thread_context*
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     context() const noexcept
     {
         return _context;
@@ -538,7 +538,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     std::pair<size_t, size_t>
-    gpu::matrix<T, DeviceId, SO>::
+    device_matrix<T, DeviceId, SO>::
     shape() const noexcept
     {
         return {_m_dim, _n_dim};
@@ -547,8 +547,8 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    gpu::matrix<T, DeviceId, SO>::
-    ~matrix() noexcept
+    device_matrix<T, DeviceId, SO>::
+    ~device_matrix() noexcept
     {
         (void)cuda_set_device(DeviceId);
 

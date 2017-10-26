@@ -15,77 +15,74 @@
 
 namespace mgcpp
 {
-    namespace gpu
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO>
+    class device_matrix
     {
-        template<typename T,
-                 size_t DeviceId,
-                 storage_order SO>
-        class matrix
-        {
-        private:
-            T* _data;
-            thread_context* _context;
-            size_t _m_dim;
-            size_t _n_dim;
-            bool _released;
+    private:
+        T* _data;
+        thread_context* _context;
+        size_t _m_dim;
+        size_t _n_dim;
+        bool _released;
 
-        public:
-            inline matrix() noexcept;
+    public:
+        inline device_matrix() noexcept;
 
-            inline ~matrix() noexcept;
+        inline ~device_matrix() noexcept;
 
-            inline matrix(size_t i, size_t j);
+        inline device_matrix(size_t i, size_t j);
 
-            inline matrix(size_t i, size_t j, T init);
+        inline device_matrix(size_t i, size_t j, T init);
 
-            inline matrix(cpu::matrix<T, SO> const& cpu_mat);
+        inline device_matrix(cpu::matrix<T, SO> const& cpu_mat);
 
-            inline
-            matrix(gpu::matrix<T, DeviceId, SO> const& other);
+        inline
+        device_matrix(device_matrix<T, DeviceId, SO> const& other);
 
-            inline
-            matrix(gpu::matrix<T, DeviceId, SO>&& other) noexcept;
+        inline
+        device_matrix(device_matrix<T, DeviceId, SO>&& other) noexcept;
 
-            gpu::matrix<T, DeviceId, SO>&
-            operator=(gpu::matrix<T, DeviceId, SO> const& other);
+        device_matrix<T, DeviceId, SO>&
+        operator=(device_matrix<T, DeviceId, SO> const& other);
 
-            gpu::matrix<T, DeviceId, SO>&
-            operator=(gpu::matrix<T, DeviceId, SO>&& other) noexcept;
+        device_matrix<T, DeviceId, SO>&
+        operator=(device_matrix<T, DeviceId, SO>&& other) noexcept;
 
-            inline matrix<T, DeviceId, SO>&
-            zero();
+        inline device_matrix<T, DeviceId, SO>&
+        zero();
 
-            inline matrix<T, DeviceId, SO>&
-            resize(size_t i, size_t j);
+        inline device_matrix<T, DeviceId, SO>&
+        resize(size_t i, size_t j);
 
-            inline matrix<T, DeviceId, SO>&
-            resize(size_t i, size_t j, T init);
+        inline device_matrix<T, DeviceId, SO>&
+        resize(size_t i, size_t j, T init);
 
-            inline matrix<T, DeviceId, SO>&
-            copy_from_host(cpu::matrix<T, SO> const& cpu_mat);
+        inline device_matrix<T, DeviceId, SO>&
+        copy_from_host(cpu::matrix<T, SO> const& cpu_mat);
 
-            inline cpu::matrix<T, SO>
-            copy_to_host() const;
+        inline cpu::matrix<T, SO>
+        copy_to_host() const;
 
-            inline T
-            check_value(size_t i, size_t j) const;
+        inline T
+        check_value(size_t i, size_t j) const;
 
-            inline T const*
-            data() const noexcept;
+        inline T const*
+        data() const noexcept;
 
-            inline T*
-            data_mutable() noexcept;
+        inline T*
+        data_mutable() noexcept;
 
-            inline thread_context*
-            context() const noexcept;
+        inline thread_context*
+        context() const noexcept;
 
-            inline T*
-            release_data();
+        inline T*
+        release_data();
 
-            inline std::pair<size_t, size_t>
-            shape() const noexcept;
-        };
-    }
+        inline std::pair<size_t, size_t>
+        shape() const noexcept;
+    };
 }
 
 #include <mgcpp/gpu/matrix.tpp>

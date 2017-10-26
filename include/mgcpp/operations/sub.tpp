@@ -11,12 +11,12 @@
 namespace mgcpp
 {
     template<typename T, size_t Device, allignment Allign>
-    gpu::vector<T, Device, Allign>
+    device_vector<T, Device, Allign>
     strict::
-    sub(gpu::vector<T, Device, Allign> const& first,
-        gpu::vector<T, Device, Allign> const& second)
+    sub(device_vector<T, Device, Allign> const& first,
+        device_vector<T, Device, Allign> const& second)
     {
-        gpu::vector<T, Device, Allign> result(first);
+        device_vector<T, Device, Allign> result(first);
 
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);

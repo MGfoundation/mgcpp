@@ -14,10 +14,10 @@
 namespace mgcpp
 {
     template<typename T, size_t Device, storage_order SO>
-    gpu::matrix<T, Device, SO>
+    device_matrix<T, Device, SO>
     strict::
-    mult(gpu::matrix<T, Device, SO> const& first,
-         gpu::matrix<T, Device, SO> const& second)
+    mult(device_matrix<T, Device, SO> const& first,
+         device_matrix<T, Device, SO> const& second)
     {
         T const alpha = 1;
         T const beta = 0;
@@ -29,7 +29,7 @@ namespace mgcpp
         size_t k = first_shape.second;
         size_t n = second_shape.second;
 
-        gpu::matrix<T, Device, row_major> result{m, n};
+        device_matrix<T, Device, row_major> result{m, n};
 
         auto* context = first.context();
         auto handle = context->get_cublas_context(Device);
@@ -50,16 +50,16 @@ namespace mgcpp
     }
     
     template<typename T, size_t Device, allignment Allign>
-    gpu::vector<T, Device, Allign>
+    device_vector<T, Device, Allign>
     strict::
     mult(T scalar,
-         gpu::vector<T, Device, Allign> const& vec)
+         device_vector<T, Device, Allign> const& vec)
     {
         auto* context = vec.context();
         auto handle = context->get_cublas_context(Device);
         auto size = vec.shape();
 
-        gpu::vector<T, Device, Allign> result(vec);
+        device_vector<T, Device, Allign> result(vec);
 
         auto status = cublas_scal(handle, size,
                                   &scalar,

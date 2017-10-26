@@ -21,7 +21,7 @@ namespace mgcpp
                  size_t DeviceId,
                  allignment Allign>
         T
-        sum(gpu::vector<T, DeviceId, Allign> const& vec)
+        sum(device_vector<T, DeviceId, Allign> const& vec)
         {
             auto set_device_status = cuda_set_device(DeviceId);
             if(!set_device_status)

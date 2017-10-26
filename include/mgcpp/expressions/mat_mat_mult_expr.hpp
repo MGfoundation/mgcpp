@@ -46,14 +46,11 @@ namespace mgcpp
     inline typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
     eval(mat_mat_mult_expr<LhsExpr, RhsExpr>& expr);
 
-    namespace gpu
-    {
-        template<typename LhsExpr, typename RhsExpr,
-                 typename = typename
-                 assert_both_mat_expr<LhsExpr, RhsExpr>::result>
-        inline mat_mat_mult_expr<LhsExpr, RhsExpr> 
-        operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
-    }
+    template<typename LhsExpr, typename RhsExpr,
+             typename = typename
+             assert_both_mat_expr<LhsExpr, RhsExpr>::result>
+    inline mat_mat_mult_expr<LhsExpr, RhsExpr> 
+    operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 }
 
 #include <mgcpp/expressions/mat_mat_mult_expr.tpp>
