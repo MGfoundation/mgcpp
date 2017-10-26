@@ -1,4 +1,5 @@
-* mgcpp [[https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master][https://travis-ci.org/Red-Portal/mgcpp]]
+* mgcpp
+[[https://travis-ci.org/Red-Portal/mgcpp][https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master]]
 C++ Multi GPU Math Library Based on CUDA
 
 ** Introduction

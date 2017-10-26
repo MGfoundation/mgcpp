@@ -1,36 +1,35 @@
-- [mgcpp [https://travis-ci.org/Red-Portal/mgcpp](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)](#org9bc6c9e)
-  - [Introduction](#org17c8cf8)
-  - [Status](#org36e6ba8)
-  - [Example](#org4ee4471)
-  - [Build](#org66354a2)
-  - [Dependencies](#org580f735)
-  - [TODO](#orgfeabbd6)
-  - [Contact](#org8b8c218)
-  - [License](#orgbfe08a3)
+- [mgcpp](#org8251436)
+  - [Introduction](#org9dd78d2)
+  - [Status](#orga023001)
+  - [Example](#orga8a25a1)
+  - [Build](#org0bb6aa9)
+  - [Dependencies](#orgd700710)
+  - [TODO](#org6fefac1)
+  - [Contact](#orgb25347e)
+  - [License](#org9d65126)
 
 
-<a id="org9bc6c9e"></a>
+<a id="org8251436"></a>
 
-# mgcpp [https://travis-ci.org/Red-Portal/mgcpp](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)
-
+# mgcpp [![Build Status](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)](https://travis-ci.org/Red-Portal/mgcpp)
 C++ Multi GPU Math Library Based on CUDA
 
 
-<a id="org17c8cf8"></a>
+<a id="org9dd78d2"></a>
 
 ## Introduction
 
 mgcpp is a multi GPU linear algebra library. It is a wrapper for various CUDA libraries in standard C++.
 
 
-<a id="org36e6ba8"></a>
+<a id="orga023001"></a>
 
 ## Status
 
 This library is heavily under development and in pre-alpha state. For contribution, please refer to TODO or contact me.
 
 
-<a id="org4ee4471"></a>
+<a id="orga8a25a1"></a>
 
 ## Example
 
@@ -49,7 +48,7 @@ auto C = mgcpp::eval(A * B);
 The above code invokes cuBLAS's gemm function. All operations are lazely computed and graph optimized using C++ expression templates.
 
 
-<a id="org66354a2"></a>
+<a id="org0bb6aa9"></a>
 
 ## Build
 
@@ -70,7 +69,7 @@ make install
 ```
 
 
-<a id="org580f735"></a>
+<a id="orgd700710"></a>
 
 ## Dependencies
 
@@ -84,7 +83,7 @@ make install
 -   gtest (optional)
 
 
-<a id="orgfeabbd6"></a>
+<a id="org6fefac1"></a>
 
 ## TODO 
 
@@ -104,7 +103,7 @@ make install
 -   [ ] Add benchmark
 
 
-<a id="org8b8c218"></a>
+<a id="orgb25347e"></a>
 
 ## Contact
 
@@ -114,7 +113,7 @@ Red-Portal
 -   msca8h@sogang.ac.kr
 
 
-<a id="orgbfe08a3"></a>
+<a id="org9d65126"></a>
 
 ## License
 
