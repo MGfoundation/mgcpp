@@ -1,6 +1,5 @@
 - [mgcpp](#org8251436)
   - [Introduction](#org9dd78d2)
-  - [Status](#orga023001)
   - [Example](#orga8a25a1)
   - [Build](#org0bb6aa9)
   - [Dependencies](#orgd700710)
@@ -19,14 +18,11 @@ C++ Multi GPU Math Library Based on CUDA
 
 ## Introduction
 
-mgcpp is a multi GPU linear algebra library. It is a wrapper for various CUDA libraries in standard C++.
+mgcpp is a GPGPU math library. Using various CUDA libraries as backends, <br />
+it provides an optimized, standard C++ interface, abstracted C++ math library. <br />
 
-
-<a id="orga023001"></a>
-
-## Status
-
-This library is heavily under development and in pre-alpha state. For contribution, please refer to TODO or contact me.
+This library is heavily under development and in pre-alpha state.<br />
+For contribution, please refer to TODO or contact me.
 
 
 <a id="orga8a25a1"></a>
@@ -108,7 +104,6 @@ make install
 ## Contact
 
 Red-Portal
-
 -   msca8h@naver.com
 -   msca8h@sogang.ac.kr
 
@@ -119,4 +114,5 @@ Red-Portal
 
 Copyright RedPortal 2017.
 
-Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE or copy at <http://www.boost.org/LICENSE_1_0.txt>)
+Distributed under the Boost Software License, Version 1.0. <br />
+(See accompanying file LICENSE or copy at <http://www.boost.org/LICENSE_1_0.txt>)
