@@ -35,7 +35,7 @@ For contribution, please refer to TODO or contact me.
 #define GPU 0
 
 mgcpp::device_matrix<float, GPU> A(4, 3, 2);
-mgcpp::device_matrix<float, GPU> A(3, 2, 2);
+mgcpp::device_matrix<float, GPU> B(3, 2, 2);
 
 auto C = mgcpp::eval(A * B);
 
