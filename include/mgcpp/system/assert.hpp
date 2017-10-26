@@ -12,6 +12,7 @@ namespace mgcpp
     inline bool
     ASSERT_MESSAGE(char const* message)
     {
+        (void)message;
         return false;
     }
 }
