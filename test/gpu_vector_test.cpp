@@ -8,8 +8,8 @@
 
 #define ERROR_CHECK_EXCEPTION true
 
-#include <mgcpp/host/vector.hpp>
 #define private public
+#include <mgcpp/host/vector.hpp>
 #include <mgcpp/device/vector.hpp>
 
 TEST(gpu_vector, default_constructor)

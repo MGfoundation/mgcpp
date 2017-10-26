@@ -42,6 +42,9 @@ namespace mgcpp
         inline
         device_vector(device_vector<T, DeviceId, Allign>&& other) noexcept;
 
+        inline
+        device_vector(host_vector<T, Allign> const& other);
+
         inline device_vector<T, DeviceId, Allign>&
         operator=(device_vector<T, DeviceId, Allign> const& other);
 
@@ -49,10 +52,10 @@ namespace mgcpp
         operator=(device_vector<T, DeviceId, Allign>&& other) noexcept;
 
         inline device_vector<T, DeviceId, Allign>&
-        zero();
+        operator=(host_vector<T, Allign> const& other); 
 
-        inline void 
-        copy_from_host(host_vector<T, Allign> const& host);
+        inline device_vector<T, DeviceId, Allign>&
+        zero();
 
         inline host_vector<T, Allign>
         copy_to_host() const;

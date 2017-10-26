@@ -11,6 +11,7 @@
 #include <initializer_list>
 
 #include <mgcpp/host/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
@@ -42,19 +43,23 @@ namespace mgcpp
 
         inline host_vector(host_vector<T, Allign>&& other) noexcept;
 
+        template<size_t DeviceId>
+        inline
+        host_vector(device_vector<T, DeviceId, Allign> const& gpu_mat);
+
         inline host_vector<T, Allign>&
         operator=(host_vector<T, Allign> const& other);
 
         inline host_vector<T, Allign>&
         operator=(host_vector<T, Allign>&& other) noexcept;
 
-        // template<size_t DeviceId>
-        // inline vector(
-        //     gpu::vector<T, DeviceId> const& gpu_mat);
+        template<size_t DeviceId>
+        inline host_vector<T, Allign>&
+        operator=(device_vector<T, DeviceId, Allign> const& gpu_mat);
 
-        // template<size_t DeviceId>
-        // inline gpu::vector<T, DeviceId, >
-        // copy_to_gpu() const;
+        template<size_t DeviceId>
+        inline device_vector<T, DeviceId, Allign>
+        copy_to_gpu() const;
 
         inline T
         operator[](size_t i) const noexcept;
@@ -62,26 +67,26 @@ namespace mgcpp
         inline T&
         operator[](size_t i) noexcept;
 
-        inline T
-        at(size_t i) const;
+    inline T
+    at(size_t i) const;
 
-        inline T&
-        at(size_t i);
+    inline T&
+    at(size_t i);
 
-        inline T const*
-        data() const;
+    inline T const*
+    data() const;
 
-        inline T*
-        released_data();
+    inline T*
+    released_data();
 
-        inline T*
-        data_mutable() noexcept;
+    inline T*
+    data_mutable() noexcept;
 
-        inline size_t
-        shape() const noexcept;
+    inline size_t
+    shape() const noexcept;
 
-        inline size_t
-        size() const noexcept;
+    inline size_t
+    size() const noexcept;
     };
 }
 
