@@ -352,6 +352,43 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
+                storage_order SO>
+    host_matrix<T, SO>
+    device_matrix<T, DeviceId, SO>::
+    copy_to_host() const
+    {
+        size_t total_size = _shape.first * _shape.second;
+
+        T* host_memory = (T*)malloc(total_size * sizeof(T));
+        if(!host_memory)
+        {
+            MGCPP_THROW_BAD_ALLOC;
+        }
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
+        }        
+
+        auto cpy_result =
+            cuda_memcpy(host_memory, _data,
+                        total_size,
+                        cuda_memcpy_kind::device_to_host);
+
+        if(!cpy_result)
+        {
+            free(host_memory);
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+
+        return host_matrix<T, SO>(_shape.first,
+                                  _shape.second,
+                                  host_memory);
+    }
+
+    template<typename T,
+             size_t DeviceId,
              storage_order SO>
     device_matrix<T, DeviceId, SO>&
     device_matrix<T, DeviceId, SO>::
@@ -417,68 +454,41 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO>::
     operator=(host_matrix<T, SO> const& cpu_mat)
     {
-        if(this->shape() != cpu_mat.shape())
-        {
-            MGCPP_THROW_RUNTIME_ERROR("dimensions not matching");
-        }
-        if(_released)
-        {
-            MGCPP_THROW_RUNTIME_ERROR("memory not allocated");
-        }
-
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-        {
+        { 
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }        
+        }
 
+        if(!_released)
+        {
+            (void)cuda_free(_data); 
+            _released = true;
+        }
+
+        auto shape = cpu_mat.shape();
+        _shape.first = shape.first;
+        _shape.second = shape.second;
+
+        size_t total_size = _shape.first * _shape.second;
+
+        auto alloc_result = cuda_malloc<T>(total_size);
+        if(!alloc_result)
+        {
+            MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
+        }
+        _released = false;
+        
         auto cpy_result =
-            cuda_memcpy(_data, cpu_mat.data(),
-                        _shape.first * _shape.second,
+            cuda_memcpy(alloc_result.value(),
+                        cpu_mat.data(),
+                        total_size,
                         cuda_memcpy_kind::host_to_device);
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
-
         return *this;
-    }
-
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO>
-    host_matrix<T, SO>
-    device_matrix<T, DeviceId, SO>::
-    copy_to_host() const
-    {
-        size_t total_size = _shape.first * _shape.second;
-
-        T* host_memory = (T*)malloc(total_size * sizeof(T));
-        if(!host_memory)
-        {
-            MGCPP_THROW_BAD_ALLOC;
-        }
-
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }        
-
-        auto cpy_result =
-            cuda_memcpy(host_memory, _data,
-                        total_size,
-                        cuda_memcpy_kind::device_to_host);
-
-        if(!cpy_result)
-        {
-            free(host_memory);
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
-
-        return host_matrix<T, SO>(_shape.first,
-                                  _shape.second,
-                                  host_memory);
     }
 
     template<typename T,
