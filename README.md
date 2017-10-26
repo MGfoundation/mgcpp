@@ -33,14 +33,12 @@ For contribution, refer to TODO or contact me. <br />
 ## Example<a id="sec-1-3" name="sec-1-3"></a>
 
 ``` c++
-    using namespace mgcpp;
+    #define GPU 0
+
+    mgcpp::device_matrix<float, GPU> A(2, 4, 2);
+    mgcpp::device_matrix<float, GPU> B(4, 3, 4);
     
-    int const device = 0;
-    
-    gpu::matrix<float, device> A(2, 4, 2);
-    gpu::matrix<float, device> B(4, 3, 4);
-    
-    gpu::matrix<float, device> C = A * B;
+    mgcpp::device_matrix<float, GPU> C = A * B;
     
     /* or */
     
@@ -49,8 +47,7 @@ For contribution, refer to TODO or contact me. <br />
 
 
 The above code invokes the highly optimized cuBLAS library's gemm function. <br />
-All operation are lazely computed using expression templates. <br />
-GPU computation kernels are also called the least possible. <br />
+All operation are lazely computed and graph-optimized using expression templates. <br />
 
 ## Build<a id="sec-1-4" name="sec-1-4"></a>
 
