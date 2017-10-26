@@ -9,7 +9,7 @@
 
 #include <cstdlib>
 
-#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/host/forward.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/global/allignment.hpp>
@@ -52,9 +52,9 @@ namespace mgcpp
         zero();
 
         inline void 
-        copy_from_host(cpu::vector<T, Allign> const& host);
+        copy_from_host(host_vector<T, Allign> const& host);
 
-        inline cpu::vector<T, Allign>
+        inline host_vector<T, Allign>
         copy_to_host() const;
 
         inline T

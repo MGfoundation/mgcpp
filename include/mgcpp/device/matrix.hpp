@@ -7,7 +7,7 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <mgcpp/cpu/forward.hpp>
+#include <mgcpp/host/forward.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/context/global_context.hpp>
@@ -38,7 +38,7 @@ namespace mgcpp
         
         inline device_matrix(size_t i, size_t j, T* init);
 
-        inline device_matrix(cpu::matrix<T, SO> const& cpu_mat);
+        inline device_matrix(host_matrix<T, SO> const& cpu_mat);
 
         inline
         device_matrix(device_matrix<T, DeviceId, SO> const& other);
@@ -62,9 +62,9 @@ namespace mgcpp
         resize(size_t i, size_t j, T init);
 
         inline device_matrix<T, DeviceId, SO>&
-        copy_from_host(cpu::matrix<T, SO> const& cpu_mat);
+        copy_from_host(host_matrix<T, SO> const& cpu_mat);
 
-        inline cpu::matrix<T, SO>
+        inline host_matrix<T, SO>
         copy_to_host() const;
 
         inline T

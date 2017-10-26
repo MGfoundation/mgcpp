@@ -8,7 +8,7 @@
 
 #define ERROR_CHECK_EXCEPTION true
 
-#include <mgcpp/cpu/vector.hpp>
+#include <mgcpp/host/vector.hpp>
 #define private public
 #include <mgcpp/device/vector.hpp>
 

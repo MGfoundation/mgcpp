@@ -12,7 +12,7 @@
 #define ERROR_CHECK_EXCEPTION true
 
 #include <mgcpp/cuda/memory.hpp>
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/host/matrix.hpp>
 #define private public
 #include <mgcpp/device/matrix.hpp>
 
@@ -164,7 +164,7 @@ TEST(gpu_matrix, init_from_cpu_matrix)
     size_t col_dim = 10;
     size_t init_val = 17;
 
-    mgcpp::cpu::matrix<float> cpu_mat(row_dim, col_dim, init_val);
+    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim, init_val);
 
     for(size_t i = 0; i < row_dim; ++i)
     {
@@ -192,7 +192,7 @@ TEST(gpu_matrix, copy_from_host_matrix)
     size_t row_dim = 5;
     size_t col_dim = 10;
 
-    mgcpp::cpu::matrix<float> cpu_mat(row_dim, col_dim);
+    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
 
     size_t counter = 0;
     for(size_t i = 0; i < row_dim; ++i)
@@ -221,7 +221,7 @@ TEST(gpu_matrix, copy_to_host)
     size_t row_dim = 5;
     size_t col_dim = 10;
 
-    mgcpp::cpu::matrix<float> cpu_mat(row_dim, col_dim);
+    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
 
     size_t counter = 0;
     for(size_t i = 0; i < row_dim; ++i)

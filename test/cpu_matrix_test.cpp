@@ -7,11 +7,11 @@
 #include <gtest/gtest.h>
 
 #define private public
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/host/matrix.hpp>
 
 TEST(cpu_matrix, default_constructor)
 {
-    mgcpp::cpu::matrix<float> mat{};
+    mgcpp::host_matrix<float> mat{};
 
     auto shape = mat.shape();
     EXPECT_EQ(shape.first, 0);
@@ -24,7 +24,7 @@ TEST(cpu_matrix, allocating_constructor)
 {
     size_t row_dim = 5;
     size_t col_dim = 10;
-    mgcpp::cpu::matrix<float> mat{row_dim, col_dim};
+    mgcpp::host_matrix<float> mat{row_dim, col_dim};
 
     EXPECT_NE(mat._data, nullptr);
 
@@ -38,7 +38,7 @@ TEST(cpu_matrix, allocating_initializing_constructor)
     size_t row_dim = 5;
     size_t col_dim = 10;
     float init_val = 7;
-    mgcpp::cpu::matrix<float> mat{row_dim, col_dim, init_val};
+    mgcpp::host_matrix<float> mat{row_dim, col_dim, init_val};
 
     EXPECT_NE(mat._data, nullptr);
 
@@ -62,7 +62,7 @@ TEST(cpu_matrix, non_const_parenthese_operator)
 {
     size_t row_dim = 5;
     size_t col_dim = 10;
-    mgcpp::cpu::matrix<float> mat{row_dim, col_dim};
+    mgcpp::host_matrix<float> mat{row_dim, col_dim};
 
     float counter = 0;
     for(size_t i = 0; i < row_dim; ++i)

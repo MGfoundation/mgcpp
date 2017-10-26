@@ -6,7 +6,7 @@
 
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/cpu/vector.hpp>
+#include <mgcpp/host/vector.hpp>
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/device/vector.hpp>
@@ -255,7 +255,7 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              allignment Allign>
-    cpu::vector<T, Allign> 
+    host_vector<T, Allign> 
     device_vector<T, DeviceId, Allign>::
     copy_to_host() const
     {
@@ -280,7 +280,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        return cpu::vector<T, Allign>(_size, host_memory);
+        return host_vector<T, Allign>(_size, host_memory);
     }
 
     template<typename T,
@@ -288,7 +288,7 @@ namespace mgcpp
              allignment Allign>
     void
     device_vector<T, DeviceId, Allign>::
-    copy_from_host(cpu::vector<T, Allign> const& host) 
+    copy_from_host(host_vector<T, Allign> const& host) 
     {
         if(this->shape() != host.shape())
         {

@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/device/matrix.hpp>
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/host/matrix.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
@@ -146,7 +146,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO>
     device_matrix<T, DeviceId, SO>::
-    device_matrix(cpu::matrix<T, SO> const& cpu_mat)
+    device_matrix(host_matrix<T, SO> const& cpu_mat)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
          _m_dim(0),
@@ -428,7 +428,7 @@ namespace mgcpp
              storage_order SO>
     device_matrix<T, DeviceId, SO>&
     device_matrix<T, DeviceId, SO>::
-    copy_from_host(cpu::matrix<T, SO> const& cpu_mat)
+    copy_from_host(host_matrix<T, SO> const& cpu_mat)
     {
         if(this->shape() != cpu_mat.shape())
         {
@@ -460,7 +460,7 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    cpu::matrix<T, SO>
+    host_matrix<T, SO>
     device_matrix<T, DeviceId, SO>::
     copy_to_host() const
     {
@@ -490,7 +490,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        return cpu::matrix<T, SO>(_m_dim, _n_dim, host_memory);
+        return host_matrix<T, SO>(_m_dim, _n_dim, host_memory);
     }
 
     template<typename T,

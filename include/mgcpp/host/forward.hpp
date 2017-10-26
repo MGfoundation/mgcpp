@@ -12,16 +12,13 @@
 
 namespace mgcpp
 {
-    namespace cpu
-    {
-        template<typename T,
-                 storage_order SO = row_major>
-        class matrix;
+    template<typename T,
+             storage_order SO = row_major>
+    class host_matrix;
 
-        template<typename T,
-                 allignment Allign = row>
-        class vector;
-    }
+    template<typename T,
+             allignment Allign = row>
+    class host_vector;
 }
 
 #endif

@@ -4,7 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cpu/matrix.hpp>
+#include <mgcpp/host/matrix.hpp>
 #include <mgcpp/system/exception.hpp>
 
 #include <algorithm>
@@ -13,8 +13,8 @@ namespace mgcpp
 {
     template<typename T,
              storage_order SO>
-    cpu::matrix<T, SO>::
-    matrix() noexcept
+    host_matrix<T, SO>::
+    host_matrix() noexcept
     : _data(nullptr),
         _m_dim(0),
         _n_dim(0) {}
@@ -22,8 +22,8 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    cpu::matrix<T, SO>::
-    matrix(size_t i, size_t j)
+    host_matrix<T, SO>::
+    host_matrix(size_t i, size_t j)
         : _data(nullptr),
           _m_dim(i),
           _n_dim(j)
@@ -40,16 +40,16 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    cpu::matrix<T, SO>::
-    matrix(size_t i, size_t j, T* data) noexcept
+    host_matrix<T, SO>::
+    host_matrix(size_t i, size_t j, T* data) noexcept
         : _data(data),
           _m_dim(i),
           _n_dim(j) {}
 
     template<typename T,
              storage_order SO>
-    cpu::matrix<T, SO>::
-    matrix(size_t i, size_t j, T init)
+    host_matrix<T, SO>::
+    host_matrix(size_t i, size_t j, T init)
         : _data(nullptr),
           _m_dim(i),
           _n_dim(j)
@@ -70,7 +70,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     at(size_t i, size_t j) const
     {
         if(i >= _m_dim || j >= _n_dim)
@@ -82,7 +82,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T&
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     at(size_t i, size_t j) 
     {
         if(i >= _m_dim || j >= _n_dim)
@@ -94,7 +94,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     operator()(size_t i, size_t j) const noexcept
     {
         return _data[i * _n_dim + j];
@@ -103,7 +103,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T&
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     operator()(size_t i, size_t j) noexcept
     {
         return _data[i * _n_dim + j];
@@ -112,7 +112,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline std::pair<size_t, size_t> 
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     shape() const noexcept
     {
         return {_m_dim, _n_dim};
@@ -121,7 +121,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T const*
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     data() const
     {
         return _data;
@@ -130,7 +130,7 @@ namespace mgcpp
     template<typename T,
              storage_order SO>
     inline T*
-    cpu::matrix<T, SO>::
+    host_matrix<T, SO>::
     data_mutable() const
     {
         return _data;
@@ -138,8 +138,8 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    cpu::matrix<T, SO>::
-    ~matrix() noexcept
+    host_matrix<T, SO>::
+    ~host_matrix() noexcept
     {
         (void)free(_data);
     }
