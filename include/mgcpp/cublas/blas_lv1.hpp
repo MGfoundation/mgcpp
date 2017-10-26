@@ -11,6 +11,8 @@
 
 #include <outcome.hpp>
 
+#include <cublas_v2.h>
+
 namespace outcome = OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp

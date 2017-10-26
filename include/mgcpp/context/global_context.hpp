@@ -13,7 +13,6 @@
 #include <mutex>
 #include <unordered_map>
 
-#include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
 namespace mgcpp

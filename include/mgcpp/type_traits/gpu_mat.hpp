@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 
 namespace mgcpp
 {

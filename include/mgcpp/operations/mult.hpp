@@ -7,8 +7,7 @@
 #ifndef _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 #define _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 
-#include <mgcpp/gpu/matrix.hpp>
-#include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/device/forward.hpp>
 
 namespace mgcpp
 {

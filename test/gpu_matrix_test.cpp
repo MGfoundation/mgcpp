@@ -14,7 +14,7 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cpu_matrix.hpp>
 #define private public
-#include <mgcpp/gpu_matrix.hpp>
+#include <mgcpp/device/matrix.hpp>
 
 TEST(gpu_matrix, default_constructor)
 {

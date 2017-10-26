@@ -7,10 +7,10 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
 
+#include <mgcpp/device/forward.hpp>
 #include <mgcpp/expressions/expr_eval.hpp>
 #include <mgcpp/expressions/mat_expr.hpp>
 #include <mgcpp/expressions/result_type.hpp>
-#include <mgcpp/gpu/forward.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/mat_expr.hpp>
 #include <mgcpp/type_traits/type_traits.hpp>

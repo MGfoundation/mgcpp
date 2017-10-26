@@ -4,13 +4,13 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/gpu/vector.hpp>
-#include <mgcpp/cpu/vector.hpp>
-#include <mgcpp/system/exception.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/cpu/vector.hpp>
 #include <mgcpp/cuda/device.hpp>
+#include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/device/vector.hpp>
+#include <mgcpp/system/exception.hpp>
 
 #include <algorithm>
 

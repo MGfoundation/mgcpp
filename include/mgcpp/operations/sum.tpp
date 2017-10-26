@@ -7,10 +7,11 @@
 #include <cstdlib>
 #include <algorithm>
 
-#include <mgcpp/gpu/vector.hpp>
 #include <mgcpp/cublas/blas_lv1.hpp>
-#include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
+#include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/device/matrix.hpp>
+#include <mgcpp/device/vector.hpp>
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp

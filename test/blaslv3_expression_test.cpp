@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/gpu_matrix.hpp>
+#include <mgcpp/device/matrix.hpp>
 #include <mgcpp/expressions/mat_mat_mult_expr.hpp>
 
 TEST(mult_expr, row_major_mat_mat_mult)

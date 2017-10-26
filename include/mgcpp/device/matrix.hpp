@@ -8,7 +8,7 @@
 #define _MGCPP_GPU_MATRIX_HPP_
 
 #include <mgcpp/cpu/forward.hpp>
-#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
@@ -85,5 +85,5 @@ namespace mgcpp
     };
 }
 
-#include <mgcpp/gpu/matrix.tpp>
+#include <mgcpp/device/matrix.tpp>
 #endif

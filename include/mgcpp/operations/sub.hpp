@@ -7,7 +7,7 @@
 #ifndef _MGCPP_OPERATIONS_SUBSTRACTION_HPP_
 #define _MGCPP_OPERATIONS_SUBSTRACTION_HPP_
 
-#include <mgcpp/gpu/vector.hpp>
+#include <mgcpp/device/forward.hpp>
 
 namespace mgcpp
 {

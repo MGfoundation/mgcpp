@@ -4,7 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/gpu/matrix.hpp>
+#include <mgcpp/device/matrix.hpp>
 #include <mgcpp/cpu/matrix.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/cuda/memory.hpp>

@@ -10,7 +10,7 @@
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/operations/mult.hpp>
-#include <mgcpp/gpu/vector.hpp>
+#include <mgcpp/device/vector.hpp>
 
 TEST(vec_vec_operation, vec_sum)
 {

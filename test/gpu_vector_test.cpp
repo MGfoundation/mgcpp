@@ -10,7 +10,7 @@
 
 #include <mgcpp/cpu/vector.hpp>
 #define private public
-#include <mgcpp/gpu/vector.hpp>
+#include <mgcpp/device/vector.hpp>
 
 TEST(gpu_vector, default_constructor)
 {

@@ -7,7 +7,7 @@
 #ifndef _MGCPP_CPU_MATRIX_HPP_
 #define _MGCPP_CPU_MATRIX_HPP_
 
-#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 #include <mgcpp/cpu/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
 

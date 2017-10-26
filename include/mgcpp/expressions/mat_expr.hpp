@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/gpu_mat.hpp>
 #include <mgcpp/expressions/result_type.hpp>

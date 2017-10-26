@@ -43,7 +43,7 @@ namespace mgcpp
     }
 
     template<typename LhsExpr, typename RhsExpr>
-    inline typename result_type<
+    typename result_type<
         mat_mat_mult_expr<LhsExpr, RhsExpr>>::type
     eval(mat_mat_mult_expr<LhsExpr, RhsExpr>&& expr)
     {

@@ -10,7 +10,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/gpu_matrix.hpp>
+#include <mgcpp/device/matrix.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/add.hpp>
 

@@ -7,7 +7,7 @@
 #ifndef _MGCPP_OPERATIONS_SUM_HPP_
 #define _MGCPP_OPERATIONS_SUM_HPP_
 
-#include <mgcpp/gpu/forward.hpp>
+#include <mgcpp/device/forward.hpp>
 
 namespace mgcpp
 {
