@@ -144,7 +144,7 @@ namespace mgcpp
     device_matrix(host_matrix<T, SO> const& cpu_mat)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
-         _shape(cpu_mat._shape),
+         _shape(cpu_mat.shape()),
          _released(true)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
