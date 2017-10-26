@@ -12,7 +12,7 @@
 #define ERROR_CHECK_EXCEPTION true
 
 #include <mgcpp/cuda/memory.hpp>
-#include <mgcpp/cpu_matrix.hpp>
+#include <mgcpp/cpu/matrix.hpp>
 #define private public
 #include <mgcpp/device/matrix.hpp>
 

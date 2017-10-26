@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 
 #define private public
-#include <mgcpp/cpu_matrix.hpp>
+#include <mgcpp/cpu/matrix.hpp>
 
 TEST(cpu_matrix, default_constructor)
 {
