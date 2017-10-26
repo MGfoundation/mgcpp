@@ -205,7 +205,7 @@ TEST(gpu_matrix, copy_from_host_matrix)
 
     mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
-    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+    EXPECT_NO_THROW({gpu_mat = cpu_mat;});
     for(size_t i = 0; i < row_dim; ++i)
     {
         for(size_t j = 0; j < col_dim; ++j)
@@ -234,7 +234,7 @@ TEST(gpu_matrix, copy_to_host)
 
     mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
-    EXPECT_NO_THROW({gpu_mat.copy_from_host(cpu_mat);});
+    EXPECT_NO_THROW({gpu_mat = cpu_mat;});
     for(size_t i = 0; i < row_dim; ++i)
     {
         for(size_t j = 0; j < col_dim; ++j)

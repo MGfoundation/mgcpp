@@ -10,6 +10,7 @@
 #include <mgcpp/host/forward.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/global/shape.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 
@@ -23,6 +24,7 @@ namespace mgcpp
     private:
         T* _data;
         thread_context* _context;
+        matrix_shape _shape;
         size_t _m_dim;
         size_t _n_dim;
         bool _released;
@@ -36,7 +38,7 @@ namespace mgcpp
 
         inline device_matrix(size_t i, size_t j, T init);
         
-        inline device_matrix(size_t i, size_t j, T* init);
+        inline device_matrix(size_t i, size_t j, T const* data);
 
         inline device_matrix(host_matrix<T, SO> const& cpu_mat);
 
@@ -62,9 +64,9 @@ namespace mgcpp
         resize(size_t i, size_t j, T init);
 
         inline device_matrix<T, DeviceId, SO>&
-        copy_from_host(host_matrix<T, SO> const& cpu_mat);
+        operator=(host_matrix<T, SO> const& cpu_mat);
 
-        inline host_matrix<T, SO>
+        inline host_matrix<T, SO>  
         copy_to_host() const;
 
         inline T
@@ -82,7 +84,7 @@ namespace mgcpp
         inline T*
         release_data();
 
-        inline std::pair<size_t, size_t>
+        inline matrix_shape const&
         shape() const noexcept;
     };
 }

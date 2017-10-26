@@ -22,8 +22,7 @@ namespace mgcpp
     device_matrix() noexcept
     : _data(nullptr),
         _context(&global_context::get_thread_context()),
-        _m_dim(0),
-        _n_dim(0),
+        _shape(0, 0),
         _released(true) {}
 
     template<typename T,
@@ -33,8 +32,7 @@ namespace mgcpp
     device_matrix(size_t i, size_t j)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
-         _m_dim(i),
-         _n_dim(j),
+         _shape(i, j),
          _released(true)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -43,7 +41,8 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        auto result = cuda_malloc<T>(_m_dim * _n_dim);
+        auto result =
+            cuda_malloc<T>(_shape.first * _shape.second);
         if(!result)
         {
             MGCPP_THROW_SYSTEM_ERROR(result.error());
@@ -60,8 +59,7 @@ namespace mgcpp
     device_matrix(size_t i, size_t j, T init)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
-         _m_dim(i),
-         _n_dim(j),
+         _shape(i, j),
          _released(true)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -70,7 +68,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        size_t total_size = _m_dim * _n_dim;
+        size_t total_size = _shape.first * _shape.second;
         auto alloc_result = cuda_malloc<T>(total_size);
         if(!alloc_result)
         {
@@ -89,7 +87,7 @@ namespace mgcpp
 
         auto cpy_result =
             cuda_memcpy(_data, buffer,
-                        _n_dim * _m_dim,
+                        _shape.first * _shape.second,
                         cuda_memcpy_kind::host_to_device);
 
         free(buffer);
@@ -107,8 +105,7 @@ namespace mgcpp
     device_matrix(device_matrix<T, DeviceId, SO> const& other)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
-         _m_dim(0),
-         _n_dim(0),
+         _shape(),
          _released(true)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -117,20 +114,19 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        auto alloc_result =
-            cuda_malloc<T>(other._m_dim * other._n_dim);
+        auto total_size = other._shape.first * other._shape.second;
+        auto alloc_result = cuda_malloc<T>(total_size);
         if(!alloc_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
+        _shape = other._shape;
 
         auto cpy_result =
             cuda_memcpy(alloc_result.value(),
                         other._data,
-                        _m_dim * _n_dim,
+                        _shape.first * _shape.second,
                         cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
@@ -149,8 +145,7 @@ namespace mgcpp
     device_matrix(host_matrix<T, SO> const& cpu_mat)
         :_data(nullptr),
          _context(&global_context::get_thread_context()),
-         _m_dim(0),
-         _n_dim(0),
+         _shape(),
          _released(true)
     {
         auto set_device_stat = cuda_set_device(DeviceId);
@@ -160,10 +155,10 @@ namespace mgcpp
         }
 
         auto shape = cpu_mat.shape();
-        _m_dim = shape.first;
-        _n_dim = shape.second;
+        _shape.first = shape.first;
+        _shape.second = shape.second;
 
-        size_t total_size = _m_dim * _n_dim;
+        size_t total_size = _shape.first * _shape.second;
 
         auto alloc_result = cuda_malloc<T>(total_size);
         if(!alloc_result)
@@ -173,8 +168,9 @@ namespace mgcpp
         _released = false;
         
         auto cpy_result =
-            cuda_memcpy(alloc_result.value(), cpu_mat.data(),
-                        _n_dim * _m_dim,
+            cuda_memcpy(alloc_result.value(),
+                        cpu_mat.data(),
+                        total_size,
                         cuda_memcpy_kind::host_to_device);
         if(!cpy_result)
         {
@@ -191,14 +187,11 @@ namespace mgcpp
     device_matrix(device_matrix<T, DeviceId, SO>&& other) noexcept
         :_data(other._data),
          _context(&global_context::get_thread_context()),
-         _m_dim(other._m_dim),
-         _n_dim(other._n_dim),
+         _shape(std::move(other._shape)),
          _released(false)
     {
         other._released = true;
         other._data = nullptr;
-        other._m_dim = 0;
-        other._n_dim = 0;
     }
 
     template<typename T,
@@ -224,20 +217,19 @@ namespace mgcpp
             _released = true;
         }
 
-        auto alloc_result =
-            cuda_malloc<T>(other._m_dim * other._n_dim);
+        auto total_size = other._shape.first * other._shape.second;
+        auto alloc_result = cuda_malloc<T>(total_size);
         if(!alloc_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
+        _shape = other._shape;
 
         auto cpy_result =
             cuda_memcpy(alloc_result.value(),
                         other._data,
-                        _m_dim * _n_dim,
+                        total_size,
                         cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
@@ -268,10 +260,7 @@ namespace mgcpp
         other._data = nullptr;
         other._released = true;
 
-        _m_dim = other._m_dim;
-        _n_dim = other._n_dim;
-        other._m_dim = 0;
-        other._n_dim = 0;
+        _shape = std::move(other._shape);
 
         return *this;
     }
@@ -300,15 +289,14 @@ namespace mgcpp
         }
 
         auto alloc_result =
-            cuda_malloc<T>(_n_dim * _m_dim);
+            cuda_malloc<T>(i * j);
 
         if(!alloc_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         }
         _released = false;
-        _m_dim = i;
-        _n_dim = j;
+        _shape = std::make_pair(i, j);
 
         return *this;
     }
@@ -339,8 +327,7 @@ namespace mgcpp
         if(!alloc_result)
             MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
         _released = false;
-        _m_dim = i;
-        _n_dim = j;
+        _shape = std::make_pair(i, j);
 
         T* buffer = (T*)malloc(sizeof(T) * total_size);
         if(!buffer)
@@ -352,7 +339,7 @@ namespace mgcpp
 
         auto cpy_result =
             cuda_memcpy(_data, buffer,
-                        _n_dim * _m_dim,
+                        _shape.first * _shape.second,
                         cuda_memcpy_kind::host_to_device);
         free(buffer);
         if(!cpy_result)
@@ -381,9 +368,9 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        auto set_result = cuda_memset(_data,
-                                      static_cast<T>(0),
-                                      _m_dim * _n_dim);
+        auto set_result
+            = cuda_memset(_data, static_cast<T>(0),
+                          _shape.first * _shape.second);
         if(!set_result)
         { 
             MGCPP_THROW_SYSTEM_ERROR(set_result.error());
@@ -399,7 +386,7 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO>::
     check_value(size_t i, size_t j) const 
     {
-        if(i >= _m_dim || j >= _n_dim)
+        if(i >= _shape.first || j >= _shape.second)
         { 
             MGCPP_THROW_OUT_OF_RANGE("index out of range");
         }
@@ -410,7 +397,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        T* from = (_data + (i * _n_dim + j));
+        T* from = (_data + (i * _shape.second + j));
         T to;
         auto result = cuda_memcpy(
             &to, from, 1, cuda_memcpy_kind::device_to_host);
@@ -428,7 +415,7 @@ namespace mgcpp
              storage_order SO>
     device_matrix<T, DeviceId, SO>&
     device_matrix<T, DeviceId, SO>::
-    copy_from_host(host_matrix<T, SO> const& cpu_mat)
+    operator=(host_matrix<T, SO> const& cpu_mat)
     {
         if(this->shape() != cpu_mat.shape())
         {
@@ -447,7 +434,7 @@ namespace mgcpp
 
         auto cpy_result =
             cuda_memcpy(_data, cpu_mat.data(),
-                        _n_dim * _m_dim,
+                        _shape.first * _shape.second,
                         cuda_memcpy_kind::host_to_device);
         if(!cpy_result)
         {
@@ -464,8 +451,7 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO>::
     copy_to_host() const
     {
-
-        size_t total_size = _m_dim * _n_dim;
+        size_t total_size = _shape.first * _shape.second;
 
         T* host_memory = (T*)malloc(total_size * sizeof(T));
         if(!host_memory)
@@ -481,7 +467,7 @@ namespace mgcpp
 
         auto cpy_result =
             cuda_memcpy(host_memory, _data,
-                        _n_dim * _m_dim,
+                        total_size,
                         cuda_memcpy_kind::device_to_host);
 
         if(!cpy_result)
@@ -490,7 +476,9 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
 
-        return host_matrix<T, SO>(_m_dim, _n_dim, host_memory);
+        return host_matrix<T, SO>(_shape.first,
+                                  _shape.second,
+                                  host_memory);
     }
 
     template<typename T,
@@ -537,11 +525,11 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              storage_order SO>
-    std::pair<size_t, size_t>
+    matrix_shape const&
     device_matrix<T, DeviceId, SO>::
     shape() const noexcept
     {
-        return {_m_dim, _n_dim};
+        return _shape;
     }
 
     template<typename T,
