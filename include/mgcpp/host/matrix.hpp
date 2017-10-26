@@ -21,6 +21,7 @@ namespace mgcpp
     {
     private:
         T* _data; 
+        bool _released;
         size_t _m_dim;
         size_t _n_dim;
         
@@ -33,16 +34,31 @@ namespace mgcpp
 
         inline host_matrix(size_t i, size_t j, T init);
 
-        inline host_matrix(size_t i, size_t j,
-                           T* data) noexcept;
+        inline host_matrix(size_t i, size_t j, T* data) noexcept;
 
-        // template<size_t DeviceId>
-        // inline matrix(
-        //     gpu::matrix<T, DeviceId> const& gpu_mat);
+        inline
+        host_matrix(host_matrix<T, SO> const& gpu_mat);
 
-        // template<size_t DeviceId>
-        // inline gpu::matrix<T, DeviceId, >
-        // copy_to_gpu() const;
+        inline
+        host_matrix(host_matrix<T, SO>&& gpu_mat) noexcept;
+
+        template<size_t DeviceId>
+        inline
+        host_matrix(device_matrix<T, DeviceId, SO> const& gpu_mat);
+
+        inline host_matrix<T, SO>&
+        operator=(host_matrix<T, SO> const& other);
+
+        inline host_matrix<T, SO>&
+        operator=(host_matrix<T, SO>&& other) noexcept;
+
+        template<size_t DeviceId>
+        inline host_matrix<T, SO>&
+        operator=(device_matrix<T, DeviceId, SO> const& gpu_mat);
+
+        template<size_t DeviceId> 
+        inline device_matrix<T, DeviceId, SO>
+        copy_to_device() const;
 
         inline T
         operator()(size_t i, size_t j) const noexcept;
@@ -57,10 +73,13 @@ namespace mgcpp
         at(size_t i, size_t j);
 
         inline T const*
-        data() const;
+        data() const noexcept;
 
         inline T*
-        data_mutable() const;
+        data_mutable() noexcept;
+
+        inline T*
+        release_data() noexcept;
 
         inline std::pair<size_t, size_t>
         shape() const noexcept;
