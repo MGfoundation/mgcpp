@@ -1,5 +1,5 @@
-* mgcpp
-A CUDA based C++ Multi GPU Linear Algebra Library
+* mgcpp [[https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master][https://travis-ci.org/Red-Portal/mgcpp]]
+C++ Multi GPU Math Library Based on CUDA
 
 ** Introduction
    mgcpp is a multi GPU linear algebra library.
@@ -7,28 +7,24 @@ A CUDA based C++ Multi GPU Linear Algebra Library
  
 ** Status
    This library is heavily under development and in pre-alpha state.
-   For contribution, refer to TODO or contact me.
+   For contribution, please refer to TODO or contact me.
    
 ** Example
    #+NAME: mult_example 
    #+BEGIN_SRC C++
-using namespace mgcpp;
+#include <mgcpp/mgcpp.hpp>
 
-int const device = 0;
+#define GPU 0
 
-gpu::matrix<float, device> A(2, 4, 2);
-gpu::matrix<float, device> B(4, 3, 4);
+mgcpp::device_matrix<float, GPU> A(4, 3, 2);
+mgcpp::device_matrix<float, GPU> A(3, 2, 2);
 
-gpu::matrix<float, device> C = A * B;
+auto C = mgcpp::eval(A * B);
 
-/* or */
-
-auto C = eval(A * B);
    #+END_SRC
    
-   The above code invokes the highly optimized cuBLAS library's gemm function.
-   All operation are lazely computed using expression templates.
-   GPU computation kernels are also called the least possible.
+   The above code invokes cuBLAS's gemm function. 
+   All operations are lazely computed and graph optimized using C++ expression templates.
 
 ** Build
    #+NAME: installing
@@ -59,7 +55,7 @@ make install
    + cuSPARSE (optional)
    + gtest (optional)
      
-** TODO
+** TODO 
    - [X] Finish thread context class for managing threads.
    - [ ] Support msvc build.
    - [ ] Add BLAS lv1 operations.

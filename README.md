@@ -1,74 +1,78 @@
-<div id="table-of-contents"><h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#sec-1">1. mgcpp</a>
-<ul>
-<li><a href="#sec-1-1">1.1. Introduction</a></li>
-<li><a href="#sec-1-2">1.2. Status</a></li>
-<li><a href="#sec-1-3">1.3. Example</a></li>
-<li><a href="#sec-1-4">1.4. Build</a></li>
-<li><a href="#sec-1-5">1.5. Dependencies</a></li>
-<li><a href="#sec-1-6">1.6. <span class="todo TODO">TODO</span> </a></li>
-<li><a href="#sec-1-7">1.7. Contact</a></li>
-<li><a href="#sec-1-8">1.8. License</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
+- [mgcpp [https://travis-ci.org/Red-Portal/mgcpp](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)](#org9bc6c9e)
+  - [Introduction](#org17c8cf8)
+  - [Status](#org36e6ba8)
+  - [Example](#org4ee4471)
+  - [Build](#org66354a2)
+  - [Dependencies](#org580f735)
+  - [TODO](#orgfeabbd6)
+  - [Contact](#org8b8c218)
+  - [License](#orgbfe08a3)
 
-# mgcpp<a id="sec-1" name="sec-1"></a> [![Build Status](<https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master>)](<https://travis-ci.org/Red-Portal/mgcpp>)
-A CUDA based C++ Multi GPU Linear Algebra Library
 
-## Introduction<a id="sec-1-1" name="sec-1-1"></a>
+<a id="org9bc6c9e"></a>
 
-mgcpp is a multi GPU linear algebra library. <br />
-It is a wrapper for various CUDA libraries in standard C++. <br />
+# mgcpp [https://travis-ci.org/Red-Portal/mgcpp](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)
 
-## Status<a id="sec-1-2" name="sec-1-2"></a>
+C++ Multi GPU Math Library Based on CUDA
 
-This library is heavily under development and in pre-alpha state. <br />
-For contribution, refer to TODO or contact me. <br />
 
-## Example<a id="sec-1-3" name="sec-1-3"></a>
+<a id="org17c8cf8"></a>
 
-``` c++
-    #define GPU 0
+## Introduction
 
-    mgcpp::device_matrix<float, GPU> A(2, 4, 2);
-    mgcpp::device_matrix<float, GPU> B(4, 3, 4);
-    
-    mgcpp::device_matrix<float, GPU> C = A * B;
-    
-    /* or */
-    
-    auto C = eval(A * B);
+mgcpp is a multi GPU linear algebra library. It is a wrapper for various CUDA libraries in standard C++.
+
+
+<a id="org36e6ba8"></a>
+
+## Status
+
+This library is heavily under development and in pre-alpha state. For contribution, please refer to TODO or contact me.
+
+
+<a id="org4ee4471"></a>
+
+## Example
+
+```C++
+#include <mgcpp/mgcpp.hpp>
+
+#define GPU 0
+
+mgcpp::device_matrix<float, GPU> A(4, 3, 2);
+mgcpp::device_matrix<float, GPU> A(3, 2, 2);
+
+auto C = mgcpp::eval(A * B);
+
 ```
 
+The above code invokes cuBLAS's gemm function. All operations are lazely computed and graph optimized using C++ expression templates.
 
-The above code invokes the highly optimized cuBLAS library's gemm function. <br />
-All operation are lazely computed and graph-optimized using expression templates. <br />
 
-## Build<a id="sec-1-4" name="sec-1-4"></a>
+<a id="org66354a2"></a>
 
-``` shell
-    git clone --recursive https://github.com/Red-Portal/mgcpp.git
-    cmake -G "<Generator>"
-    make -j4
-    make install
+## Build
+
+```shell
+git clone --recursive https://github.com/Red-Portal/mgcpp.git
+cmake -G "<Generator>"
+make -j4
+make install
 ```
-
 
 for building without MAGMA or cuSPARSE,
 
-``` shell
-    git clone --recursive https://github.com/Red-Portal/mgcpp.git
-    cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
-    make -j4
-    make install
-``` 
+```shell
+git clone --recursive https://github.com/Red-Portal/mgcpp.git
+cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
+make -j4
+make install
+```
 
-## Dependencies<a id="sec-1-5" name="sec-1-5"></a>
+
+<a id="org580f735"></a>
+
+## Dependencies
 
 -   cmake
 -   gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
@@ -79,7 +83,10 @@ for building without MAGMA or cuSPARSE,
 -   cuSPARSE (optional)
 -   gtest (optional)
 
-## TODO <a id="sec-1-6" name="sec-1-6"></a>
+
+<a id="orgfeabbd6"></a>
+
+## TODO 
 
 -   [X] Finish thread context class for managing threads.
 -   [ ] Support msvc build.
@@ -96,16 +103,21 @@ for building without MAGMA or cuSPARSE,
 -   [ ] Add high level linear algebra operations.
 -   [ ] Add benchmark
 
-## Contact<a id="sec-1-7" name="sec-1-7"></a>
+
+<a id="org8b8c218"></a>
+
+## Contact
 
 Red-Portal
+
 -   msca8h@naver.com
 -   msca8h@sogang.ac.kr
 
-## License<a id="sec-1-8" name="sec-1-8"></a>
 
-Copyright RedPortal 2017. <br />
+<a id="orgbfe08a3"></a>
 
-Distributed under the Boost Software License, Version 1.0. <br />
-(See accompanying file LICENSE or copy at 
-<http://www.boost.org/LICENSE_1_0.txt>)
+## License
+
+Copyright RedPortal 2017.
+
+Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE or copy at <http://www.boost.org/LICENSE_1_0.txt>)
