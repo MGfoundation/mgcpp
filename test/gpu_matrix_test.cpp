@@ -26,7 +26,6 @@ TEST(gpu_matrix, default_constructor)
     EXPECT_EQ(mat._data, nullptr);
     EXPECT_EQ(mat._context, 
               mgcpp::device_matrix<float>()._context);
-    EXPECT_TRUE(mat._released);
 }
 
 TEST(gpu_matrix, dimension_constructor)
@@ -49,7 +48,6 @@ TEST(gpu_matrix, dimension_constructor)
     EXPECT_EQ(shape.first, row_dim);
     EXPECT_EQ(shape.second, col_dim);
     EXPECT_NE(mat._data, nullptr);
-    EXPECT_FALSE(mat._released);
 }
 
 TEST(gpu_matrix, dimension_initializing_constructor)
@@ -73,7 +71,6 @@ TEST(gpu_matrix, dimension_initializing_constructor)
     EXPECT_EQ(shape.first, row_dim);
     EXPECT_EQ(shape.second, col_dim);
     EXPECT_NE(mat._data, nullptr);
-    EXPECT_FALSE(mat._released);
 
     for(size_t i = 0; i < row_dim; ++i)
     {
@@ -264,8 +261,6 @@ TEST(gpu_matrix, copy_construction)
         }
     }
 
-    EXPECT_FALSE(original._released);
-    EXPECT_FALSE(copied._released);
     EXPECT_EQ(original._shape, copied._shape);
 }
 
@@ -299,8 +294,6 @@ TEST(gpu_matrix, copy_assign_operator)
         }
     }
 
-    EXPECT_FALSE(original._released);
-    EXPECT_FALSE(copied._released);
     EXPECT_EQ(original._shape, copied._shape);
 }
 
@@ -332,8 +325,7 @@ TEST(gpu_matrix, move_constructor)
         }
     }
 
-    EXPECT_TRUE(original._released);
-    EXPECT_FALSE(moved._released);
+    EXPECT_TRUE(original._data == nullptr);
     EXPECT_EQ(moved._shape.first, row_dim);
     EXPECT_EQ(moved._shape.second, col_dim);
 }
@@ -367,8 +359,7 @@ TEST(gpu_matrix, move_assign_operator)
         }
     }
 
-    EXPECT_TRUE(original._released);
-    EXPECT_FALSE(moved._released);
+    EXPECT_TRUE(original._data == nullptr);
     EXPECT_EQ(moved._shape.first, row_dim);
     EXPECT_EQ(moved._shape.second, col_dim);
 }

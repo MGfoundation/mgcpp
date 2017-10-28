@@ -7,27 +7,26 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <mgcpp/host/forward.hpp>
-#include <mgcpp/device/forward.hpp>
-#include <mgcpp/global/storage_order.hpp>
-#include <mgcpp/global/shape.hpp>
+#include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/device/forward.hpp>
+#include <mgcpp/global/shape.hpp>
+#include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/host/forward.hpp>
 
 namespace mgcpp
 {
     template<typename T,
              size_t DeviceId = 0,
-             storage_order SO = row_major>
-    class device_matrix
+             storage_order SO = row_major,
+             typename Alloc = mgcpp::default_allocator<T>>
+    class device_matrix : public mgcpp::default_allocator<T>
     {
     private:
-        T* _data;
         thread_context* _context;
         matrix_shape _shape;
-        size_t _m_dim;
-        size_t _n_dim;
-        bool _released;
+        T* _data;
 
     public:
         inline device_matrix() noexcept;
@@ -40,33 +39,34 @@ namespace mgcpp
         
         inline device_matrix(size_t i, size_t j, T const* data);
 
-        inline device_matrix(host_matrix<T, SO> const& cpu_mat);
+        inline
+        device_matrix(mgcpp::host_matrix<T, SO> const& cpu_mat);
 
         inline
-        device_matrix(device_matrix<T, DeviceId, SO> const& other);
+        device_matrix(mgcpp::device_matrix<T, DeviceId, SO, Alloc> const& other);
 
         inline
-        device_matrix(device_matrix<T, DeviceId, SO>&& other) noexcept;
+        device_matrix(mgcpp::device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
 
-        device_matrix<T, DeviceId, SO>&
-        operator=(device_matrix<T, DeviceId, SO> const& other);
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(mgcpp::device_matrix<T, DeviceId, SO, Alloc> const& other);
 
-        device_matrix<T, DeviceId, SO>&
-        operator=(device_matrix<T, DeviceId, SO>&& other) noexcept;
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(mgcpp::device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
 
-        inline device_matrix<T, DeviceId, SO>&
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
         zero();
 
-        inline device_matrix<T, DeviceId, SO>&
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j);
 
-        inline device_matrix<T, DeviceId, SO>&
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j, T init);
 
-        inline device_matrix<T, DeviceId, SO>&
-        operator=(host_matrix<T, SO> const& cpu_mat);
+        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(mgcpp::host_matrix<T, SO> const& cpu_mat);
 
-        inline host_matrix<T, SO>  
+        inline mgcpp::host_matrix<T, SO>  
         copy_to_host() const;
 
         inline T
@@ -78,13 +78,13 @@ namespace mgcpp
         inline T*
         data_mutable() noexcept;
 
-        inline thread_context*
+        inline mgcpp::thread_context*
         context() const noexcept;
 
         inline T*
-        release_data();
+        release_data() noexcept;
 
-        inline matrix_shape const&
+        inline mgcpp::matrix_shape const&
         shape() const noexcept;
     };
 }

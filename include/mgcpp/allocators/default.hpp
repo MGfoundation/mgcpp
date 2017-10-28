@@ -12,7 +12,7 @@
 namespace mgcpp
 {
     template<typename T>
-    class default_allocator
+    struct default_allocator
     {
         using value_type = T; 
 

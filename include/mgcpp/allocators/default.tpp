@@ -13,7 +13,7 @@ namespace mgcpp
 {
     template<typename T>
     T* 
-    default_allocator::
+    default_allocator<T>::
     allocate(size_t n) const
     {
         auto ptr = cuda_malloc<T>(n);
@@ -26,7 +26,7 @@ namespace mgcpp
 
     template<typename T>
     T* 
-    default_allocator::
+    default_allocator<T>::
     allocate(size_t n, size_t device_id) const
     {
         auto set_device_stat = cuda_set_device(device_id);
@@ -45,11 +45,11 @@ namespace mgcpp
     
     template<typename T>
     void 
-    default_allocator::
+    default_allocator<T>::
     deallocate(T* p) const
     {
-        auto free_stat = cuda_free<T>(n);
-        if(!ptr)
+        auto free_stat = cuda_free<T>(p);
+        if(!p)
         {
             MGCPP_THROW_SYSTEM_ERROR(free_stat.error());
         }
@@ -57,7 +57,7 @@ namespace mgcpp
 
     template<typename T>
     void 
-    default_allocator::
+    default_allocator<T>::
     deallocate(T* p, size_t device_id) const
     {
         auto set_device_stat = cuda_set_device(device_id);
@@ -67,7 +67,7 @@ namespace mgcpp
         }
 
         auto free_stat = cuda_free<T>(p);
-        if(!ptr)
+        if(!p)
         {
             MGCPP_THROW_SYSTEM_ERROR(free_stat.error());
         }
@@ -75,10 +75,9 @@ namespace mgcpp
 
     template<typename T>
     void
-    default_allocator::
+    default_allocator<T>::
     copy_from_host(T* device, T const* host, size_t n) const
     {
-        
         auto cpy_stat =
             cuda_memcpy(device, host, n,
                         cuda_memcpy_kind::host_to_device);
@@ -90,7 +89,7 @@ namespace mgcpp
 
     template<typename T>
     void
-    default_allocator::
+    default_allocator<T>::
     copy_from_host(T* device, T const* host, size_t n,
                    size_t device_id) const
     {
@@ -111,7 +110,7 @@ namespace mgcpp
 
     template<typename T>
     void
-    default_allocator::
+    default_allocator<T>::
     copy_to_host(T* host, T const* device, size_t n) const
     {
         auto cpy_stat =
@@ -125,7 +124,7 @@ namespace mgcpp
 
     template<typename T>
     void
-    default_allocator::
+    default_allocator<T>::
     copy_to_host(T* host, T const* device, size_t n,
                  size_t device_id) const
     {

@@ -113,7 +113,6 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    template<size_t DeviceId>
     host_matrix<T, SO>::
     host_matrix(std::initializer_list<
                 std::initializer_list<T>> const& list) noexcept
@@ -125,31 +124,30 @@ namespace mgcpp
                               return first.size() < second.size(); 
                           }))
     {
-        size_t total_size = other._m_dim * other._n_dim;
+        size_t total_size = _m_dim * _n_dim;
 
         T* ptr = (T*)malloc(sizeof(T) * total_size);
         if(!ptr)
         {
             MGCPP_THROW_BAD_ALLOC;
         }
-
+        size_t i = 0;
         for( const auto& row: list)
         {
             std::fill(std::copy(row.begin(),
                                 row.end(),
                                 _data + i * _n_dim),
-                      _data + (i + 1)* _n_dim , T);
+                      _data + (i + 1)* _n_dim , T());
             ++i;
         }
-        _data = host_memory;
         _released = false;
     }
 
     template<typename T,
              storage_order SO>
-    template<size_t DeviceId>
+    template<size_t DeviceId, typename Alloc>
     host_matrix<T, SO>::
-    host_matrix(device_matrix<T, DeviceId, SO> const& gpu_mat)
+    host_matrix(device_matrix<T, DeviceId, SO, Alloc> const& gpu_mat)
         : _data(nullptr),
           _released(true),
           _m_dim(0),
@@ -238,10 +236,10 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    template<size_t DeviceId>
+    template<size_t DeviceId, typename Alloc>
     host_matrix<T, SO>&
     host_matrix<T, SO>::
-    operator=(device_matrix<T, DeviceId, SO> const& other)
+    operator=(device_matrix<T, DeviceId, SO, Alloc> const& other)
     {
         if(!_released) 
         {
@@ -283,8 +281,8 @@ namespace mgcpp
 
     template<typename T,
              storage_order SO>
-    template<size_t DeviceId>
-    device_matrix<T, DeviceId, SO>
+    template<size_t DeviceId, typename Alloc>
+    device_matrix<T, DeviceId, SO, Alloc>
     host_matrix<T, SO>::
     copy_to_device() const
     {
@@ -297,7 +295,7 @@ namespace mgcpp
         size_t total_size = _m_dim * _n_dim;
 
         auto matrix =
-            device_matrix<T, DeviceId, SO>(_m_dim, _n_dim);
+            device_matrix<T, DeviceId, SO, Alloc>(_m_dim, _n_dim);
         
         auto cpy_result =
             cuda_memcpy(matrix.data_mutable(),

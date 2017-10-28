@@ -141,6 +141,7 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cuda_exception_test.cpp
 	${TEST_DIR}/cuda_error_test.cpp
 	${TEST_DIR}/cuda_memory_test.cpp
+	${TEST_DIR}/device_allocators_test.cpp
 	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/cpu_matrix_test.cpp
 	${TEST_DIR}/cpu_vector_test.cpp

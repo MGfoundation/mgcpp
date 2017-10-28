@@ -47,9 +47,9 @@ namespace mgcpp
         host_matrix(std::initializer_list<
                     std::initializer_list<T>> const& gpu_mat) noexcept;
 
-        template<size_t DeviceId>
+        template<size_t DeviceId, typename Alloc>
         inline
-        host_matrix(device_matrix<T, DeviceId, SO> const& gpu_mat);
+        host_matrix(device_matrix<T, DeviceId, SO, Alloc> const& gpu_mat);
 
         inline host_matrix<T, SO>&
         operator=(host_matrix<T, SO> const& other);
@@ -57,12 +57,12 @@ namespace mgcpp
         inline host_matrix<T, SO>&
         operator=(host_matrix<T, SO>&& other) noexcept;
 
-        template<size_t DeviceId>
+        template<size_t DeviceId, typename Alloc>
         inline host_matrix<T, SO>&
-        operator=(device_matrix<T, DeviceId, SO> const& gpu_mat);
+        operator=(device_matrix<T, DeviceId, SO, Alloc> const& gpu_mat);
 
-        template<size_t DeviceId> 
-        inline device_matrix<T, DeviceId, SO>
+        template<size_t DeviceId, typename Alloc> 
+        inline device_matrix<T, DeviceId, SO, Alloc>
         copy_to_device() const;
 
         inline T

@@ -10,5 +10,4 @@
 
 TEST(default_allocator, allocation)
 {
-    auto alloc =  mgcpp::default_allocator();
 }
