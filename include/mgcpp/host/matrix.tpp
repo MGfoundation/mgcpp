@@ -115,6 +115,40 @@ namespace mgcpp
              storage_order SO>
     template<size_t DeviceId>
     host_matrix<T, SO>::
+    host_matrix(std::initializer_list<
+                std::initializer_list<T>> const& list) noexcept
+        : _data(nullptr),
+          _released(true),
+          _m_dim(list.size()),
+          _n_dim(std::max(list.begin(), list.end(),
+                          [](auto const& first, auto const& second){
+                              return first.size() < second.size(); 
+                          }))
+    {
+        size_t total_size = other._m_dim * other._n_dim;
+
+        T* ptr = (T*)malloc(sizeof(T) * total_size);
+        if(!ptr)
+        {
+            MGCPP_THROW_BAD_ALLOC;
+        }
+
+        for( const auto& row: list)
+        {
+            std::fill(std::copy(row.begin(),
+                                row.end(),
+                                _data + i * _n_dim),
+                      _data + (i + 1)* _n_dim , T);
+            ++i;
+        }
+        _data = host_memory;
+        _released = false;
+    }
+
+    template<typename T,
+             storage_order SO>
+    template<size_t DeviceId>
+    host_matrix<T, SO>::
     host_matrix(device_matrix<T, DeviceId, SO> const& gpu_mat)
         : _data(nullptr),
           _released(true),

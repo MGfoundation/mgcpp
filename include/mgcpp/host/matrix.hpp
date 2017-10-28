@@ -12,6 +12,7 @@
 #include <mgcpp/global/storage_order.hpp>
 
 #include <cstdlib>
+#include <initializer_list>
 
 namespace mgcpp
 {
@@ -41,6 +42,10 @@ namespace mgcpp
 
         inline
         host_matrix(host_matrix<T, SO>&& gpu_mat) noexcept;
+
+        inline
+        host_matrix(std::initializer_list<
+                    std::initializer_list<T>> const& gpu_mat) noexcept;
 
         template<size_t DeviceId>
         inline
