@@ -450,7 +450,7 @@ namespace mgcpp
     device_vector<T, DeviceId, Allign, Alloc>::
     ~device_vector() noexcept
     {
-        if(!_data)
+        if(_data)
             try{
                 device_deallocate(_data, _capacity);
             }catch(...){};
