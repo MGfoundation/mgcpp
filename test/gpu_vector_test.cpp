@@ -112,8 +112,6 @@ TEST(gpu_vector, move_constructor)
 
     EXPECT_EQ(before_memory, after_memory);
 
-    auto shape = moved.shape();
-    EXPECT_EQ(shape, 10);
     EXPECT_NE(moved._data, nullptr);
     EXPECT_EQ(moved._context, 
               mgcpp::device_vector<float>()._context);
