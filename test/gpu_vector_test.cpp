@@ -123,7 +123,6 @@ TEST(gpu_vector, move_constructor)
         EXPECT_EQ(moved.check_value(i), init_val);
     }
 
-    auto ori_shape = original.shape();
     EXPECT_EQ(original._data, nullptr);
 }
 
@@ -188,6 +187,5 @@ TEST(gpu_vector, move_assign_operator)
         EXPECT_EQ(moved.check_value(i), init_val);
     }
 
-    auto ori_shape = original.shape();
     EXPECT_EQ(original._data, nullptr);
 }
