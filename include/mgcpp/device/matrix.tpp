@@ -132,7 +132,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        if(!_data)
+        if(_data)
         {
             Alloc::deallocate(_data);
             _data = nullptr;
@@ -190,7 +190,7 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        if(!_data)
+        if(_data)
         {
             Alloc::deallocate(_data);
             _data = nullptr;
@@ -216,12 +216,14 @@ namespace mgcpp
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
         }
 
-        Alloc::deallocate(_data);
-        _data= nullptr;
+        if(_data)
+        {
+            Alloc::deallocate(_data);
+            _data = nullptr;
+        }
 
         size_t total_size = i * j;
         _data = Alloc::allocate(total_size);
-
         _shape = std::make_pair(i, j);
 
         T* buffer = (T*)malloc(sizeof(T) * total_size);
