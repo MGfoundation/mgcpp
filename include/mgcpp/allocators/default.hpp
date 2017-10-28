@@ -8,29 +8,19 @@
 #define _MGCPP_ALLOCATORS_DEFAULT_HPP_
 
 #include <cstdlib>
+#include <memory>
 
 namespace mgcpp
 {
     template<typename T>
-    struct default_allocator
+    struct default_allocator : std::allocator<T>
     {
-        using value_type = T; 
-
-        inline T* allocate(size_t n) const;
-        inline T* allocate(size_t n,
-                           size_t device_id) const;
-
-        inline void deallocate(T* p) const;
-        inline void deallocate(T* p,
-                               size_t device_id) const;
-
-        inline void copy_from_host(T* device, T const* host, size_t n) const;
-        inline void copy_from_host(T* device, T const* host, size_t n,
-                                   size_t device_id) const;
-
-        inline void copy_to_host(T* host, T const* device, size_t n) const;
-        inline void copy_to_host(T* host, T const* device, size_t n,
-                                 size_t device_id) const;
+        inline T* device_allocate(size_t n, size_t device_id) const;
+        inline void device_deallocate(T* p, size_t device_id) const;
+        inline void copy_from_host(T* device, T const* host,
+                                   size_t n, size_t device_id) const;
+        inline void copy_to_host(T* host, T const* device,
+                                 size_t n, size_t device_id) const;
     };
 }
 

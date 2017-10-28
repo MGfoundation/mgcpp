@@ -23,6 +23,14 @@ namespace mgcpp
              typename Alloc = mgcpp::default_allocator<T>>
     class device_matrix : public mgcpp::default_allocator<T>
     {
+        using Alloc::device_allocate;
+        using Alloc::device_deallocate;
+        using Alloc::copy_to_host;
+        using Alloc::copy_from_host;
+
+        typedef T value_type;
+        typedef value_type* pointer;
+
     private:
         thread_context* _context;
         matrix_shape _shape;
@@ -40,34 +48,34 @@ namespace mgcpp
         inline device_matrix(size_t i, size_t j, T const* data);
 
         inline
-        device_matrix(mgcpp::host_matrix<T, SO> const& cpu_mat);
+        device_matrix(host_matrix<T, SO> const& cpu_mat);
 
         inline
-        device_matrix(mgcpp::device_matrix<T, DeviceId, SO, Alloc> const& other);
+        device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other);
 
         inline
-        device_matrix(mgcpp::device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
+        device_matrix(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(mgcpp::device_matrix<T, DeviceId, SO, Alloc> const& other);
+        inline device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(device_matrix<T, DeviceId, SO, Alloc> const& other);
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(mgcpp::device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
+        inline device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        inline device_matrix<T, DeviceId, SO, Alloc>&
         zero();
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        inline device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j);
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
+        inline device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j, T init);
 
-        inline mgcpp::device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(mgcpp::host_matrix<T, SO> const& cpu_mat);
+        inline device_matrix<T, DeviceId, SO, Alloc>&
+        operator=(host_matrix<T, SO> const& cpu_mat);
 
-        inline mgcpp::host_matrix<T, SO>  
-        copy_to_host() const;
+        inline host_matrix<T, SO>  
+        copy_to_host();
 
         inline T
         check_value(size_t i, size_t j) const;
@@ -78,13 +86,13 @@ namespace mgcpp
         inline T*
         data_mutable() noexcept;
 
-        inline mgcpp::thread_context*
+        inline thread_context*
         context() const noexcept;
 
         inline T*
         release_data() noexcept;
 
-        inline mgcpp::matrix_shape const&
+        inline matrix_shape const&
         shape() const noexcept;
     };
 }

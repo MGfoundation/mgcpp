@@ -33,7 +33,7 @@ namespace mgcpp
     device_matrix(size_t i, size_t j)
         :_context(&global_context::get_thread_context()),
          _shape(i, j),
-         _data(Alloc::allocate(_shape.first * _shape.second, DeviceId))
+         _data(device_allocate(_shape.first * _shape.second, DeviceId))
     {}
 
     template<typename T,
@@ -44,27 +44,22 @@ namespace mgcpp
     device_matrix(size_t i, size_t j, T init)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
-          _data(Alloc::allocate(_shape.first * _shape.second, DeviceId))
+          _data(device_allocate(_shape.first * _shape.second, DeviceId))
     {
-        auto total_size = _shape.first * _shape.second;
-        T* buffer = (T*)malloc(sizeof(T) * total_size);
-        if(!buffer)
-        {
-            MGCPP_THROW_BAD_ALLOC;
-        }
+        size_t total_size = _shape.first * _shape.second;
 
+        pointer buffer = Alloc::allocate(total_size);
         std::fill(buffer, buffer + total_size, init);
 
         try
         {
-            Alloc::copy_from_host(_data, buffer,
-                                  total_size, DeviceId);
-            free(buffer);
+            copy_from_host(_data, buffer, total_size, DeviceId);
+            Alloc::deallocate(buffer, total_size);
         }
         catch(std::system_error const& err)
         {
-            free(buffer);
-            (void)cuda_free(_data); 
+            Alloc::deallocate(buffer, total_size);
+            device_deallocate(_data, DeviceId);
             MGCPP_THROW_SYSTEM_ERROR(err);
         }
     }
@@ -77,17 +72,15 @@ namespace mgcpp
     device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
-         _data(Alloc::allocate(_shape.first * _shape.second, DeviceId))
+         _data(device_allocate(_shape.first * _shape.second, DeviceId))
     {
-        auto cpy_result =
-            cuda_memcpy(_data,
-                        other._data,
-                        _shape.first * _shape.second,
-                        cuda_memcpy_kind::device_to_device);
+        auto cpy_result = cuda_memcpy(_data, other._data,
+                                      _shape.first * _shape.second,
+                                      cuda_memcpy_kind::device_to_device);
 
         if(!cpy_result)
         {
-            Alloc::deallocate(_data);
+            device_deallocate(_data, DeviceId);
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
     }
@@ -100,9 +93,9 @@ namespace mgcpp
     device_matrix(host_matrix<T, SO> const& cpu_mat)
         : _context(&global_context::get_thread_context()),
           _shape(cpu_mat.shape()),
-          _data(Alloc::allocate(_shape.first * _shape.second, DeviceId))
+          _data(device_allocate(_shape.first * _shape.second, DeviceId))
     {
-        Alloc::copy_from_host(_data, cpu_mat.data(), DeviceId);
+        copy_from_host(_data, cpu_mat.data(), DeviceId);
     }
 
     template<typename T,
@@ -126,27 +119,18 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     operator=(device_matrix<T, DeviceId, SO, Alloc> const& other)
     {
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        { 
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
-
         if(_data)
         {
-            Alloc::deallocate(_data);
+            device_deallocate(_data, DeviceId);
             _data = nullptr;
         }
 
         auto total_size = other._shape.first * other._shape.second;
-        _data = Alloc::allocate(total_size);
+        _data = device_allocate(total_size, DeviceId);
         _shape = other._shape;
 
-        auto cpy_result =
-            cuda_memcpy(_data,
-                        other._data,
-                        total_size,
-                        cuda_memcpy_kind::device_to_device);
+        auto cpy_result = cuda_memcpy(_data, other._data, total_size,
+                                      cuda_memcpy_kind::device_to_device);
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
@@ -163,10 +147,9 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     operator=(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept
     {
-        if(!_data)
+        if(_data)
         { 
-            (void)cuda_set_device(DeviceId);
-            (void)cuda_free(_data);
+            try {device_deallocate(_data, DeviceId);}catch(...){};
             _data = nullptr;
         }
         _data = other._data;
@@ -184,19 +167,13 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     resize(size_t i, size_t j)
     {
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        { 
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
-
         if(_data)
         {
-            Alloc::deallocate(_data);
+            device_deallocate(_data, DeviceId);
             _data = nullptr;
         }
 
-        _data = Alloc::allocate(i * j);
+        _data = device_allocate(i * j, DeviceId);
         _shape = std::make_pair(i, j);
 
         return *this;
@@ -210,38 +187,27 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     resize(size_t i, size_t j, T init)
     {
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        { 
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
-
         if(_data)
         {
-            Alloc::deallocate(_data);
+            device_deallocate(_data, DeviceId);
             _data = nullptr;
         }
 
         size_t total_size = i * j;
-        _data = Alloc::allocate(total_size);
+        _data = device_allocate(total_size, DeviceId);
         _shape = std::make_pair(i, j);
 
-        T* buffer = (T*)malloc(sizeof(T) * total_size);
-        if(!buffer)
-        {
-            MGCPP_THROW_BAD_ALLOC;
-        }
-
+        pointer buffer = Alloc::allocate(total_size);
         std::fill(buffer, buffer + total_size, init);
 
         try
-        { Alloc::copy_from_host(_data, buffer, total_size); }
+        { copy_from_host(_data, buffer, total_size, DeviceId); }
         catch(std::system_error const& err)
         {
-            free(buffer);
+            Alloc::deallocate(buffer, total_size);
             throw err;
         }
-        return *this;
+         return *this;
     }
 
     template<typename T,
@@ -250,35 +216,22 @@ namespace mgcpp
              typename Alloc>
     host_matrix<T, SO>
     device_matrix<T, DeviceId, SO, Alloc>::
-    copy_to_host() const
+    copy_to_host() 
     {
         size_t total_size = _shape.first * _shape.second;
-
-        T* host_memory = (T*)malloc(total_size * sizeof(T));
-        if(!host_memory)
-        {
-            MGCPP_THROW_BAD_ALLOC;
-        }
-
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }        
+        pointer buffer = Alloc::allocate(total_size);
 
         try
-        {
-            Alloc::copy_to_host(host_memory, _data, total_size);
-        }
+        { copy_to_host(buffer, _data, total_size, DeviceId); }
         catch(std::system_error const& err)
         {
-            free(host_memory);
+            Alloc::deallocate(buffer, total_size);
             throw err;
         }
 
         return host_matrix<T, SO>(_shape.first,
                                   _shape.second,
-                                  host_memory);
+                                  buffer);
     }
 
     template<typename T,
@@ -351,15 +304,9 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     operator=(host_matrix<T, SO> const& cpu_mat)
     {
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        { 
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
-
         if(!_data)
         {
-            Alloc::deallocate(_data);
+            device_deallocate(_data, DeviceId);
             _data = nullptr;
         }
 
@@ -367,10 +314,9 @@ namespace mgcpp
         _shape.first = shape.first;
         _shape.second = shape.second;
 
-
         auto total_size = _shape.first * _shape.second;
-        auto _data = Alloc::allocate(total_size);
-        Alloc::copy_from_host(_data, cpu_mat.data(), total_size);
+        auto _data = device_allocate(total_size, DeviceId);
+        copy_from_host(_data, cpu_mat.data(), total_size, DeviceId);
         
         return *this;
     }
