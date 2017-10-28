@@ -12,15 +12,27 @@
 
 namespace mgcpp
 {
-    template<typename T>
+    template<typename T, size_t DeviceId>
     struct default_allocator : std::allocator<T>
     {
-        inline T* device_allocate(size_t n, size_t device_id) const;
-        inline void device_deallocate(T* p, size_t device_id) const;
-        inline void copy_from_host(T* device, T const* host,
-                                   size_t n, size_t device_id) const;
-        inline void copy_to_host(T* host, T const* device,
-                                 size_t n, size_t device_id) const;
+        typedef std::allocator<T> Alloc;
+        typedef std::allocator_traits<Alloc> _alloc_tr;
+
+        Alloc _alloc;
+
+        inline T* allocator(size_t n) const;
+
+        inline void allocator(T* p, size_t n) const;
+
+        inline T* device_allocate(size_t n) const;
+
+        inline void device_deallocate(T* p, size_t n) const;
+
+        inline void
+        copy_from_host(T* device, T const* host, size_t n) const;
+
+        inline void
+        copy_to_host(T* host, T const* device, size_t n) const;
     };
 }
 

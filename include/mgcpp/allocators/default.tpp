@@ -11,12 +11,24 @@
 
 namespace mgcpp
 {
-    template<typename T>
+    template<typename T, size_t DeviceId>
+    T*
+    default_allocator<T, DeviceId>::
+    allocator(size_t n) const
+    { return _alloc_tr::allocate(_alloc, n); }
+
+    template<typename T, size_t DeviceId>
+    void
+    default_allocator<T, DeviceId>::
+    allocator(T* p, size_t n) const
+    { return _alloc_tr::deallocate(_alloc, p, n); }
+
+    template<typename T, size_t DeviceId>
     T* 
-    default_allocator<T>::
-    device_allocate(size_t n, size_t device_id) const
+    default_allocator<T, DeviceId>::
+    device_allocate(size_t n) const
     {
-        auto set_device_stat = cuda_set_device(device_id);
+        auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
         {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
@@ -30,12 +42,13 @@ namespace mgcpp
         return ptr.value();
     }
 
-    template<typename T>
+    template<typename T, size_t DeviceId>
     void 
-    default_allocator<T>::
-    device_deallocate(T* p, size_t device_id) const
+    default_allocator<T, DeviceId>::
+    device_deallocate(T* p, size_t n) const
     {
-        auto set_device_stat = cuda_set_device(device_id);
+        (void)n;
+        auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
         {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
@@ -48,13 +61,12 @@ namespace mgcpp
         }
     }
 
-    template<typename T>
+    template<typename T, size_t DeviceId>
     void
-    default_allocator<T>::
-    copy_from_host(T* device, T const* host, size_t n,
-                   size_t device_id) const
+    default_allocator<T, DeviceId>::
+    copy_from_host(T* device, T const* host, size_t n) const
     {
-        auto set_device_stat = cuda_set_device(device_id);
+        auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
         {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
@@ -69,13 +81,12 @@ namespace mgcpp
         }
     }
 
-    template<typename T>
+    template<typename T, size_t DeviceId>
     void
-    default_allocator<T>::
-    copy_to_host(T* host, T const* device, size_t n,
-                 size_t device_id) const
+    default_allocator<T, DeviceId>::
+    copy_to_host(T* host, T const* device, size_t n) const
     {
-        auto set_device_stat = cuda_set_device(device_id);
+        auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
         {
             MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());

@@ -7,6 +7,8 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
+#include <memory>
+
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
@@ -20,16 +22,15 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId = 0,
              storage_order SO = row_major,
-             typename Alloc = mgcpp::default_allocator<T>>
-    class device_matrix : public mgcpp::default_allocator<T>
+             typename Alloc = mgcpp::default_allocator<T, DeviceId>>
+    class device_matrix : public Alloc
     {
+        using Alloc::allocate;
+        using Alloc::deallocate;
         using Alloc::device_allocate;
         using Alloc::device_deallocate;
         using Alloc::copy_to_host;
         using Alloc::copy_from_host;
-
-        typedef T value_type;
-        typedef value_type* pointer;
 
     private:
         thread_context* _context;
