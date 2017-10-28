@@ -155,92 +155,92 @@ TEST(gpu_matrix, matrix_resize_init)
     EXPECT_GT(twobytwo_freemem, fivebyfive_freemem);
 }
 
-TEST(gpu_matrix, init_from_cpu_matrix)
-{
-    size_t row_dim = 5;
-    size_t col_dim = 10;
-    size_t init_val = 17;
+// TEST(gpu_matrix, init_from_cpu_matrix)
+// {
+//     size_t row_dim = 5;
+//     size_t col_dim = 10;
+//     size_t init_val = 17;
 
-    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim, init_val);
+//     mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim, init_val);
 
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            EXPECT_EQ(cpu_mat(i, j), init_val)
-                << "index i: " << i << " j: " << j;
-        }
-    }
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             EXPECT_EQ(cpu_mat(i, j), init_val)
+//                 << "index i: " << i << " j: " << j;
+//         }
+//     }
 
-    mgcpp::device_matrix<float> gpu_mat(cpu_mat);
+//     mgcpp::device_matrix<float> gpu_mat(cpu_mat);
 
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            EXPECT_EQ(gpu_mat.check_value(i, j), init_val)
-                << "index i: " << i << " j: " << j;
-        }
-    }
-}
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             EXPECT_EQ(gpu_mat.check_value(i, j), init_val)
+//                 << "index i: " << i << " j: " << j;
+//         }
+//     }
+// }
 
-TEST(gpu_matrix, copy_from_host_matrix)
-{
-    size_t row_dim = 5;
-    size_t col_dim = 10;
+// TEST(gpu_matrix, copy_from_host_matrix)
+// {
+//     size_t row_dim = 5;
+//     size_t col_dim = 10;
 
-    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
+//     mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
 
-    size_t counter = 0;
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            cpu_mat(i, j) = counter;
-        }
-    }
+//     size_t counter = 0;
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             cpu_mat(i, j) = counter;
+//         }
+//     }
 
-    mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
+//     mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
-    EXPECT_NO_THROW({gpu_mat = cpu_mat;});
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
-                << "index i: " << i << " j: " << j;
-        }
-    }
-}
+//     EXPECT_NO_THROW({gpu_mat = cpu_mat;});
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
+//                 << "index i: " << i << " j: " << j;
+//         }
+//     }
+// }
 
-TEST(gpu_matrix, copy_to_host)
-{
-    size_t row_dim = 5;
-    size_t col_dim = 10;
+// TEST(gpu_matrix, copy_to_host)
+// {
+//     size_t row_dim = 5;
+//     size_t col_dim = 10;
 
-    mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
+//     mgcpp::host_matrix<float> cpu_mat(row_dim, col_dim);
 
-    size_t counter = 0;
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            cpu_mat(i, j) = counter;
-        }
-    }
+//     size_t counter = 0;
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             cpu_mat(i, j) = counter;
+//         }
+//     }
 
-    mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
+//     mgcpp::device_matrix<float> gpu_mat(row_dim, col_dim);
 
-    EXPECT_NO_THROW({gpu_mat = cpu_mat;});
-    for(size_t i = 0; i < row_dim; ++i)
-    {
-        for(size_t j = 0; j < col_dim; ++j)
-        {
-            EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
-                << "index i: " << i << " j: " << j;
-        }
-    }
-}
+//     EXPECT_NO_THROW({gpu_mat = cpu_mat;});
+//     for(size_t i = 0; i < row_dim; ++i)
+//     {
+//         for(size_t j = 0; j < col_dim; ++j)
+//         {
+//             EXPECT_EQ(gpu_mat.check_value(i, j), cpu_mat(i, j))
+//                 << "index i: " << i << " j: " << j;
+//         }
+//     }
+// }
 
 TEST(gpu_matrix, copy_construction)
 {
