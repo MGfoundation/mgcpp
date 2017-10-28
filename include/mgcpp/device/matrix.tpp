@@ -191,13 +191,13 @@ namespace mgcpp
             device_deallocate(_data, _capacity);
             _data = device_allocate(other_size); 
             _capacity = other_size;
-            _shape = other._shape;
         }
-
         auto cpy_result = cuda_memcpy(_data,
                                       other._data,
                                       other_size,
                                       cuda_memcpy_kind::device_to_device);
+        _shape = other._shape;
+
         if(!cpy_result)
         {
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());

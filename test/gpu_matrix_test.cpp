@@ -285,9 +285,9 @@ TEST(gpu_matrix, copy_assign_operator)
 
     EXPECT_LT(before_freemem, after_freemem);
 
-    for(auto i = 0u; i < 5; ++i)
+    for(auto i = 0u; i < row_dim; ++i)
     {
-        for(auto j = 0u; j < 5; ++j)
+        for(auto j = 0u; j < col_dim; ++j)
         {
             EXPECT_EQ(original.check_value(i, j),
                       copied.check_value(i, j));
