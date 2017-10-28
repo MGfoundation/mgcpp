@@ -45,23 +45,23 @@ namespace mgcpp
         inline
         host_vector(std::initializer_list<T> const& array) noexcept;
 
-        template<size_t DeviceId>
-        inline
-        host_vector(device_vector<T, DeviceId, Allign> const& gpu_mat);
+        // template<size_t DeviceId>
+        // inline
+        // host_vector(device_vector<T, DeviceId, Allign> const& other); 
 
-        inline host_vector<T, Allign>&
-        operator=(host_vector<T, Allign> const& other);
+        // inline host_vector<T, Allign>&
+        // operator=(host_vector<T, Allign> const& other);
 
-        inline host_vector<T, Allign>&
-        operator=(host_vector<T, Allign>&& other) noexcept;
+        // inline host_vector<T, Allign>&
+        // operator=(host_vector<T, Allign>&& other) noexcept;
 
-        template<size_t DeviceId>
-        inline host_vector<T, Allign>&
-        operator=(device_vector<T, DeviceId, Allign> const& gpu_mat);
+        // template<size_t DeviceId>
+        // inline host_vector<T, Allign>&
+        // operator=(device_vector<T, DeviceId, Allign, Alloc> const& other);
 
-        template<size_t DeviceId>
-        inline device_vector<T, DeviceId, Allign>
-        copy_to_gpu() const;
+        // // template<size_t DeviceId>
+        // // inline device_vector<T, DeviceId, Allign>
+        // copy_to_gpu() const;
 
         inline T
         operator[](size_t i) const noexcept;

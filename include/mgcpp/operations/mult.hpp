@@ -13,20 +13,20 @@ namespace mgcpp
 {
     namespace strict
     {
-        template<typename T, size_t Device, storage_order SO>
-        inline device_matrix<T, Device, SO>
-        mult(device_matrix<T, Device, SO> const& first,
-             device_matrix<T, Device, SO> const& second);
+        template<typename T, size_t Device, storage_order SO, typename Alloc>
+        inline device_matrix<T, Device, SO, Alloc>
+        mult(device_matrix<T, Device, SO, Alloc> const& first,
+             device_matrix<T, Device, SO, Alloc> const& second);
 
-        template<typename T, size_t Device, allignment Allign>
-        inline device_vector<T, Device, Allign>
-        mult(device_vector<T, Device, Allign> const& first,
-             device_vector<T, Device, Allign> const& second);
+        template<typename T, size_t Device, allignment Allign, typename Alloc>
+        inline device_vector<T, Device, Allign, Alloc>
+        mult(device_vector<T, Device, Allign, Alloc> const& first,
+             device_vector<T, Device, Allign, Alloc> const& second);
 
-        template<typename T, size_t Device, allignment Allign>
-        inline device_vector<T, Device, Allign>
+        template<typename T, size_t Device, allignment Allign, typename Alloc>
+        inline device_vector<T, Device, Allign, Alloc>
         mult(T scalar,
-             device_vector<T, Device, Allign> const& vec);
+             device_vector<T, Device, Allign, Alloc> const& vec);
 
 
         // template<typename T, size_t Device, storage_order SO>

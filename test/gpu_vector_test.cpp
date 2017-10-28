@@ -9,7 +9,7 @@
 #define ERROR_CHECK_EXCEPTION true
 
 #define private public
-#include <mgcpp/host/vector.hpp>
+//#include <mgcpp/host/vector.hpp>
 #include <mgcpp/device/vector.hpp>
 
 TEST(gpu_vector, default_constructor)
@@ -21,7 +21,6 @@ TEST(gpu_vector, default_constructor)
     EXPECT_EQ(vec._data, nullptr);
     EXPECT_EQ(vec._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_TRUE(vec._released);
 }
 
 TEST(gpu_vector, size_constructor)
@@ -34,7 +33,6 @@ TEST(gpu_vector, size_constructor)
     EXPECT_NE(vec._data, nullptr);
     EXPECT_EQ(vec._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(vec._released);
 }
 
 TEST(gpu_vector, initializing_constructor)
@@ -59,7 +57,6 @@ TEST(gpu_vector, initializing_constructor)
     EXPECT_NE(vec._data, nullptr);
     EXPECT_EQ(vec._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(vec._released);
 
     for(auto i = 0u; i < size; ++i)
     {
@@ -90,7 +87,6 @@ TEST(gpu_vector, cpy_constructor)
     EXPECT_NE(copied._data, nullptr);
     EXPECT_EQ(copied._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(copied._released);
 
     for(auto i = 0u; i < size; ++i)
     {
@@ -121,7 +117,6 @@ TEST(gpu_vector, move_constructor)
     EXPECT_NE(moved._data, nullptr);
     EXPECT_EQ(moved._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(moved._released);
 
     for(auto i = 0u; i < size; ++i)
     {
@@ -131,7 +126,6 @@ TEST(gpu_vector, move_constructor)
     auto ori_shape = original.shape();
     EXPECT_EQ(ori_shape, 0);
     EXPECT_EQ(original._data, nullptr);
-    EXPECT_TRUE(original._released);
 }
 
 TEST(gpu_vector, cpy_assign_operator)
@@ -158,7 +152,6 @@ TEST(gpu_vector, cpy_assign_operator)
     EXPECT_NE(copied._data, nullptr);
     EXPECT_EQ(copied._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(copied._released);
 
     for(auto i = 0u; i < size; ++i)
     {
@@ -190,7 +183,6 @@ TEST(gpu_vector, move_assign_operator)
     EXPECT_NE(moved._data, nullptr);
     EXPECT_EQ(moved._context, 
               mgcpp::device_vector<float>()._context);
-    EXPECT_FALSE(moved._released);
 
     for(auto i = 0u; i < size; ++i)
     {
@@ -200,5 +192,4 @@ TEST(gpu_vector, move_assign_operator)
     auto ori_shape = original.shape();
     EXPECT_EQ(ori_shape, 0);
     EXPECT_EQ(original._data, nullptr);
-    EXPECT_TRUE(original._released);
 }

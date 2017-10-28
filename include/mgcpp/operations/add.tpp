@@ -14,11 +14,11 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device, storage_order SO>
-    device_matrix<T, Device, SO>
+    template<typename T, size_t Device, storage_order SO, typename Alloc>
+    device_matrix<T, Device, SO, Alloc>
     strict::
-    add(device_matrix<T, Device, SO> const& first,
-        device_matrix<T, Device, SO> const& second)
+    add(device_matrix<T, Device, SO, Alloc> const& first,
+        device_matrix<T, Device, SO, Alloc> const& second)
     {
         MGCPP_ASSERT(first.shape() == second.shape(),
                      "matrix dimensions didn't match");
@@ -34,7 +34,7 @@ namespace mgcpp
         T const alpha = 1;
         T const beta = 1;
 
-        device_matrix<T, Device, SO> result{m, n};
+        device_matrix<T, Device, SO, Alloc> result{m, n};
 
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,
@@ -52,16 +52,16 @@ namespace mgcpp
         return result;
     }
 
-    template<typename T, size_t Device, allignment Allign>
-    device_vector<T, Device, Allign>
+    template<typename T, size_t Device, allignment Allign, typename Alloc>
+    device_vector<T, Device, Allign, Alloc>
     strict::
-    add(device_vector<T, Device, Allign> const& first,
-        device_vector<T, Device, Allign> const& second)
+    add(device_vector<T, Device, Allign, Alloc> const& first,
+        device_vector<T, Device, Allign, Alloc> const& second)
     {
         MGCPP_ASSERT(first.shape() == second.shape(),
                      "vecotr size didn't match");
 
-        device_vector<T, Device, Allign> result(second);
+        device_vector<T, Device, Allign, Alloc> result(second);
 
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);

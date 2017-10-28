@@ -20,9 +20,10 @@ namespace mgcpp
     {
         template<typename T,
                  size_t DeviceId,
-                 allignment Allign>
+                 allignment Allign,
+                 typename Alloc>
         T
-        sum(device_vector<T, DeviceId, Allign> const& vec)
+        sum(device_vector<T, DeviceId, Allign, Alloc> const& vec)
         {
             auto set_device_status = cuda_set_device(DeviceId);
             if(!set_device_status)

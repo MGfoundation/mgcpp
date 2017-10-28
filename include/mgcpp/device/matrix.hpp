@@ -7,14 +7,15 @@
 #ifndef _MGCPP_GPU_MATRIX_HPP_
 #define _MGCPP_GPU_MATRIX_HPP_
 
-#include <memory>
-
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/host/forward.hpp>
+
+#include <cstdlib>
+#include <initializer_list>
 
 namespace mgcpp
 {
@@ -35,17 +36,27 @@ namespace mgcpp
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
         T* _data;
+        size_t _capacity;
 
     public:
-        inline device_matrix() noexcept;
+        inline
+        device_matrix() noexcept;
 
-        inline ~device_matrix() noexcept;
+        inline
+        ~device_matrix() noexcept;
 
-        inline device_matrix(size_t i, size_t j);
+        inline
+        device_matrix(size_t i, size_t j);
 
-        inline device_matrix(size_t i, size_t j, T init);
+        inline
+        device_matrix(size_t i, size_t j, T init);
         
-        inline device_matrix(size_t i, size_t j, T const* data);
+        inline
+        device_matrix(size_t i, size_t j, T const* data);
+
+        inline
+        device_matrix(
+            std::initializer_list<std::initializer_list<T>> const& array);
 
         inline
         device_matrix(host_matrix<T, SO> const& cpu_mat);
@@ -71,8 +82,11 @@ namespace mgcpp
         inline device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j, T init);
 
-        inline device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(host_matrix<T, SO> const& cpu_mat);
+        // void
+        // shrink_to_fit();
+
+        // inline device_matrix<T, DeviceId, SO, Alloc>&
+        // operator=(host_matrix<T, SO> const& cpu_mat);
 
         inline host_matrix<T, SO>  
         copy_to_host();
@@ -85,6 +99,9 @@ namespace mgcpp
 
         inline T*
         data_mutable() noexcept;
+
+        inline size_t
+        capacity() const noexcept;
 
         inline thread_context*
         context() const noexcept;

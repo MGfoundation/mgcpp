@@ -15,11 +15,11 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device, storage_order SO>
-    device_matrix<T, Device, SO>
+    template<typename T, size_t Device, storage_order SO, typename Alloc>
+    device_matrix<T, Device, SO, Alloc>
     strict::
-    mult(device_matrix<T, Device, SO> const& first,
-         device_matrix<T, Device, SO> const& second)
+    mult(device_matrix<T, Device, SO, Alloc> const& first,
+         device_matrix<T, Device, SO, Alloc> const& second)
     {
         MGCPP_ASSERT(
             first.shape().second == second.shape().first,
@@ -35,7 +35,7 @@ namespace mgcpp
         size_t k = first_shape.second;
         size_t n = second_shape.second;
 
-        device_matrix<T, Device, row_major> result{m, n};
+        device_matrix<T, Device, SO, Alloc> result{m, n};
 
         auto* context = first.context();
         auto handle = context->get_cublas_context(Device);
@@ -55,17 +55,17 @@ namespace mgcpp
         return result;
     }
     
-    template<typename T, size_t Device, allignment Allign>
-    device_vector<T, Device, Allign>
+    template<typename T, size_t Device, allignment Allign, typename Alloc>
+    device_vector<T, Device, Allign, Alloc>
     strict::
     mult(T scalar,
-         device_vector<T, Device, Allign> const& vec)
+         device_vector<T, Device, Allign, Alloc> const& vec)
     {
         auto* context = vec.context();
         auto handle = context->get_cublas_context(Device);
         auto size = vec.shape();
 
-        device_vector<T, Device, Allign> result(vec);
+        device_vector<T, Device, Allign, Alloc> result(vec);
 
         auto status = cublas_scal(handle, size,
                                   &scalar,

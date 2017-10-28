@@ -12,16 +12,16 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device, allignment Allign>
-    device_vector<T, Device, Allign>
+    template<typename T, size_t Device, allignment Allign, typename Alloc>
+    device_vector<T, Device, Allign, Alloc>
     strict::
-    sub(device_vector<T, Device, Allign> const& first,
-        device_vector<T, Device, Allign> const& second)
+    sub(device_vector<T, Device, Allign, Alloc> const& first,
+        device_vector<T, Device, Allign, Alloc> const& second)
     {
         MGCPP_ASSERT(first.shape() == second.shape(),
                      "vector dimensions didn't match");
 
-        device_vector<T, Device, Allign> result(first);
+        device_vector<T, Device, Allign, Alloc> result(first);
 
         auto* thread_context = first.context();
         auto handle = thread_context->get_cublas_context(Device);

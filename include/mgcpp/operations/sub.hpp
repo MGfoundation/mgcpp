@@ -13,10 +13,10 @@ namespace mgcpp
 {
     namespace strict
     {
-        template<typename T, size_t Device, allignment Allign>
-        inline device_vector<T, Device, Allign>
-        sub(device_vector<T, Device, Allign> const& first,
-            device_vector<T, Device, Allign> const& second);
+        template<typename T, size_t Device, allignment Allign, typename Alloc>
+        inline device_vector<T, Device, Allign, Alloc>
+        sub(device_vector<T, Device, Allign, Alloc> const& first,
+            device_vector<T, Device, Allign, Alloc> const& second);
     }
 }
 
