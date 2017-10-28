@@ -119,13 +119,13 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     operator=(device_matrix<T, DeviceId, SO, Alloc> const& other)
     {
-        auto total_size = other._shape.first * other._shape.second;
         if(_data)
         {
-            device_deallocate(_data, total_size);
+            device_deallocate(_data, _shape.first * _shape.second);
             _data = nullptr;
         }
 
+        auto total_size = other._shape.first * other._shape.second;
         _data = device_allocate(total_size);
         _shape = other._shape;
 
@@ -366,7 +366,7 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO,
              typename Alloc>
-    matrix_shape const&
+    std::pair<size_t, size_t> const&
     device_matrix<T, DeviceId, SO, Alloc>::
     shape() const noexcept
     { return _shape; }

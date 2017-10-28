@@ -13,7 +13,6 @@
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
-#include <mgcpp/global/shape.hpp>
 #include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/host/forward.hpp>
 
@@ -34,7 +33,7 @@ namespace mgcpp
 
     private:
         thread_context* _context;
-        matrix_shape _shape;
+        std::pair<size_t, size_t> _shape;
         T* _data;
 
     public:
@@ -93,7 +92,7 @@ namespace mgcpp
         inline T*
         release_data() noexcept;
 
-        inline matrix_shape const&
+        inline std::pair<size_t, size_t> const&
         shape() const noexcept;
     };
 }
