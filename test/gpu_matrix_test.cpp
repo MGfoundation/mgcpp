@@ -266,8 +266,7 @@ TEST(gpu_matrix, copy_construction)
 
     EXPECT_FALSE(original._released);
     EXPECT_FALSE(copied._released);
-    EXPECT_EQ(original._m_dim, copied._m_dim);
-    EXPECT_EQ(original._n_dim, copied._n_dim);
+    EXPECT_EQ(original._shape, copied._shape);
 }
 
 TEST(gpu_matrix, copy_assign_operator)
@@ -302,8 +301,7 @@ TEST(gpu_matrix, copy_assign_operator)
 
     EXPECT_FALSE(original._released);
     EXPECT_FALSE(copied._released);
-    EXPECT_EQ(original._m_dim, copied._m_dim);
-    EXPECT_EQ(original._n_dim, copied._n_dim);
+    EXPECT_EQ(original._shape, copied._shape);
 }
 
 TEST(gpu_matrix, move_constructor)
@@ -336,8 +334,8 @@ TEST(gpu_matrix, move_constructor)
 
     EXPECT_TRUE(original._released);
     EXPECT_FALSE(moved._released);
-    EXPECT_EQ(moved._m_dim, row_dim);
-    EXPECT_EQ(moved._n_dim, col_dim);
+    EXPECT_EQ(moved._shape.first, row_dim);
+    EXPECT_EQ(moved._shape.second, col_dim);
 }
 
 TEST(gpu_matrix, move_assign_operator)
@@ -371,6 +369,6 @@ TEST(gpu_matrix, move_assign_operator)
 
     EXPECT_TRUE(original._released);
     EXPECT_FALSE(moved._released);
-    EXPECT_EQ(moved._m_dim, row_dim);
-    EXPECT_EQ(moved._n_dim, col_dim);
+    EXPECT_EQ(moved._shape.first, row_dim);
+    EXPECT_EQ(moved._shape.second, col_dim);
 }
