@@ -90,8 +90,20 @@ namespace mgcpp
              allignment Allign>
     host_vector<T, Allign>::
     host_vector(std::initializer_list<T> const& array) noexcept
+        : _data(nullptr),
+          _size(array.size()), 
+          _released(true) 
     {
+        T* ptr = (T*)malloc(sizeof(T) * _size);
+        if(!ptr)
+        {
+            MGCPP_THROW_BAD_ALLOC;
+        }
+        _released = false;
+
+        std::copy(array.begin(), array.end(), _data);
         
+        _data = ptr;
     }
 
     template<typename T,

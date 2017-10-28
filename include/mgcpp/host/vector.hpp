@@ -37,11 +37,13 @@ namespace mgcpp
 
         inline host_vector(size_t size, T* data) noexcept;
 
-        inline host_vector(std::initializer_list<T> const& array) noexcept;
 
         inline host_vector(host_vector<T, Allign> const& other);
 
         inline host_vector(host_vector<T, Allign>&& other) noexcept;
+
+        inline
+        host_vector(std::initializer_list<T> const& array) noexcept;
 
         template<size_t DeviceId>
         inline
