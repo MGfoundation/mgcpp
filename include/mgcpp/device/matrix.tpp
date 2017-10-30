@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/device/matrix.hpp>
-#include <mgcpp/host/matrix.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
@@ -280,29 +279,29 @@ namespace mgcpp
          return *this;
     }
 
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO,
-             typename Alloc>
-    host_matrix<T, SO>
-    device_matrix<T, DeviceId, SO, Alloc>::
-    copy_to_host() 
-    {
-        size_t total_size = _shape.first * _shape.second;
-        T* buffer = allocate(total_size);
+    // template<typename T,
+    //          size_t DeviceId,
+    //          storage_order SO,
+    //          typename Alloc>
+    // host_matrix<T, SO>
+    // device_matrix<T, DeviceId, SO, Alloc>::
+    // copy_to_host() 
+    // {
+    //     size_t total_size = _shape.first * _shape.second;
+    //     T* buffer = allocate(total_size);
 
-        try
-        { copy_to_host(buffer, _data, total_size); }
-        catch(std::system_error const& err)
-        {
-            deallocate(buffer, total_size);
-            throw err;
-        }
+    //     try
+    //     { copy_to_host(buffer, _data, total_size); }
+    //     catch(std::system_error const& err)
+    //     {
+    //         deallocate(buffer, total_size);
+    //         throw err;
+    //     }
 
-        return host_matrix<T, SO>(_shape.first,
-                                  _shape.second,
-                                  buffer);
-    }
+    //     return host_matrix<T, SO>(_shape.first,
+    //                               _shape.second,
+    //                               buffer);
+    // }
 
     template<typename T,
              size_t DeviceId,

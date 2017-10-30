@@ -12,7 +12,6 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
-#include <mgcpp/host/forward.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -58,8 +57,8 @@ namespace mgcpp
         device_matrix(
             std::initializer_list<std::initializer_list<T>> const& array);
 
-        inline
-        device_matrix(host_matrix<T, SO> const& cpu_mat);
+        // inline
+        // device_matrix(host_matrix<T, SO> const& cpu_mat);
 
         inline
         device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other);
@@ -88,8 +87,8 @@ namespace mgcpp
         // inline device_matrix<T, DeviceId, SO, Alloc>&
         // operator=(host_matrix<T, SO> const& cpu_mat);
 
-        inline host_matrix<T, SO>  
-        copy_to_host();
+        // inline host_matrix<T, SO>  
+        // copy_to_host();
 
         inline T
         check_value(size_t i, size_t j) const;

@@ -6,7 +6,6 @@
 
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
-//#include <mgcpp/host/vector.hpp>
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/device/vector.hpp>

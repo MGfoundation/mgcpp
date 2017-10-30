@@ -11,7 +11,6 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
-//#include <mgcpp/host/forward.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
