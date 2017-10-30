@@ -61,13 +61,13 @@ namespace mgcpp
         device_vector(HostVec const& host_mat, Adapter& adapter);
 
         inline
+        device_vector(std::initializer_list<T> const& array);
+
+        inline
         device_vector(device_vector<T, DeviceId, Allign, Alloc> const& other);
 
         inline
         device_vector(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept;
-
-        inline
-        device_vector(std::initializer_list<T> const& array);
 
         inline device_vector<T, DeviceId, Allign, Alloc>&
         operator=(device_vector<T, DeviceId, Allign, Alloc> const& other);

@@ -8,43 +8,38 @@
 
 #define ERROR_CHECK_EXCEPTION true
 
-#define private public
-//#include <mgcpp/host/vector.hpp>
 #include <mgcpp/device/vector.hpp>
 
-TEST(gpu_vector, default_constructor)
+TEST(device_vector, default_constructor)
 {
-    mgcpp::device_vector<float> vec{};
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
 
-    auto shape = vec.shape();
-    EXPECT_EQ(shape, 0);
-    EXPECT_EQ(vec._data, nullptr);
-    EXPECT_EQ(vec._context, 
-              mgcpp::device_vector<float>()._context);
+    EXPECT_NO_THROW(
+        do
+        {
+            mgcpp::device_vector<float> vec{};
+
+            EXPECT_EQ(vec.shape(), 0);
+            EXPECT_EQ(vec.data(), nullptr);
+            EXPECT_EQ(vec.context(),
+                      mgcpp::device_vector<float>().context());
+        }while(false));
 }
 
-TEST(gpu_vector, size_constructor)
+TEST(device_vector, size_constructor)
 {
-    size_t size = 10;
-    mgcpp::device_vector<float> vec(size);
-
-    auto shape = vec.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(vec._data, nullptr);
-    EXPECT_EQ(vec._context, 
-              mgcpp::device_vector<float>()._context);
-}
-
-TEST(gpu_vector, initializing_constructor)
-{
-    size_t size = 10;
-    float init_val = 7;
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
     auto before_memory = before.value().first;
 
-    mgcpp::device_vector<float> vec(size, init_val);
+    size_t size = 10;
+    mgcpp::device_vector<float> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<float>(size));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -52,20 +47,137 @@ TEST(gpu_vector, initializing_constructor)
 
     EXPECT_GT(before_memory, after_memory);
 
-    auto shape = vec.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(vec._data, nullptr);
-    EXPECT_EQ(vec._context, 
-              mgcpp::device_vector<float>()._context);
-
-    for(auto i = 0u; i < size; ++i)
-    {
-        EXPECT_EQ(vec.check_value(i), init_val);
-    }
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(), 
+              mgcpp::device_vector<float>().context());
 }
 
-TEST(gpu_vector, cpy_constructor)
+TEST(device_vector, initializing_constructor)
 {
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    float init_val = 7;
+    mgcpp::device_vector<float> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<float>(size, init_val));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(), 
+              mgcpp::device_vector<float>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), init_val);
+            }
+        }while(false)
+        );
+}
+
+TEST(device_vector, constructon_from_host_data)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    float* host = (float*)malloc(sizeof(float) * size);
+
+    float counter = 0;
+    for(size_t i = 0; i < size; ++i)
+    {
+        host[i] = counter;
+        ++counter;
+    }
+
+    mgcpp::device_vector<float> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<float>(size, host));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_EQ(vec.context(), 
+              mgcpp::device_vector<float>().context());
+
+    counter = 0;
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), host[i]);
+                ++counter;
+            }
+        }while(false));
+    free(host);
+}
+
+TEST(device_vector, constructon_from_init_list)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    auto init_list = std::initializer_list<float>({1, 2, 3, 4, 5});
+
+    mgcpp::device_vector<float> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<float>(init_list));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), init_list.size());
+    EXPECT_EQ(vec.context(), 
+              mgcpp::device_vector<float>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            size_t it = 0;
+            for(auto i : init_list)
+            {
+                EXPECT_EQ(i, vec.check_value(it));
+                ++it;
+            }
+        }while(false));
+}
+
+TEST(device_vector, cpy_constructor)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
     size_t size = 10;
     size_t init_val = 7;
     mgcpp::device_vector<float> original(size, init_val);
@@ -74,7 +186,9 @@ TEST(gpu_vector, cpy_constructor)
     EXPECT_TRUE(before);
     auto before_memory = before.value().first;
 
-    mgcpp::device_vector<float> copied(original);
+    mgcpp::device_vector<float> copied{};
+    EXPECT_NO_THROW(
+        copied = mgcpp::device_vector<float>(original));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -82,20 +196,90 @@ TEST(gpu_vector, cpy_constructor)
 
     EXPECT_GT(before_memory, after_memory);
 
-    auto shape = copied.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(copied._data, nullptr);
-    EXPECT_EQ(copied._context, 
-              mgcpp::device_vector<float>()._context);
-
-    for(auto i = 0u; i < size; ++i)
-    {
-        EXPECT_EQ(copied.check_value(i), init_val);
-    }
+    EXPECT_EQ(copied.shape(), original.shape());
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(copied.check_value(i), init_val);
+            }
+        }while(false));
 }
 
-TEST(gpu_vector, move_constructor)
+TEST(device_vector, allocation_during_cpy_assign)
 {
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    size_t size = 10;
+    size_t init_val = 7;
+    mgcpp::device_vector<float> original(size, init_val);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    mgcpp::device_vector<float> copied(size / 2);
+    EXPECT_NO_THROW(copied = original);
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(copied.shape(), original.shape());
+    EXPECT_EQ(copied.capacity(), original.capacity());
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(copied.check_value(i), init_val);
+            }
+        }while(false));
+}
+
+TEST(device_vector, no_allocation_during_cpy_assign)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    size_t size = 10;
+    size_t init_val = 7;
+    mgcpp::device_vector<float> original(size, init_val);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    mgcpp::device_vector<float> copied(size * 2);
+    EXPECT_NO_THROW(copied = original);
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_EQ(before_memory, after_memory);
+
+    EXPECT_EQ(copied.shape(), original.shape());
+    EXPECT_GT(copied.capacity(), original.capacity());
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(copied.check_value(i), init_val);
+            }
+        }while(false));
+}
+
+TEST(device_vector, move_constructor)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
     size_t size = 10;
     size_t init_val = 7;
     mgcpp::device_vector<float> original(size, init_val);
@@ -111,81 +295,72 @@ TEST(gpu_vector, move_constructor)
     auto after_memory = after.value().first;
 
     EXPECT_EQ(before_memory, after_memory);
-
-    auto shape = moved.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(moved._data, nullptr);
-    EXPECT_EQ(moved._context, 
-              mgcpp::device_vector<float>()._context);
+    EXPECT_EQ(original.data(), nullptr);
+    EXPECT_EQ(moved.shape(), 10);
 
     for(auto i = 0u; i < size; ++i)
     {
         EXPECT_EQ(moved.check_value(i), init_val);
     }
-
-    EXPECT_EQ(original._data, nullptr);
 }
 
-TEST(gpu_vector, cpy_assign_operator)
+TEST(device_vector, move_assign_operator)
 {
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
     size_t size = 10;
     size_t init_val = 7;
     mgcpp::device_vector<float> original(size, init_val);
-    mgcpp::device_vector<float> copied(size * 3, init_val);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
     auto before_memory = before.value().first;
 
-    copied = original;
-
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(after);
-    auto after_memory = after.value().first;
-
-    EXPECT_LT(before_memory, after_memory);
-
-    auto shape = copied.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(copied._data, nullptr);
-    EXPECT_EQ(copied._context, 
-              mgcpp::device_vector<float>()._context);
-
-    for(auto i = 0u; i < size; ++i)
-    {
-        EXPECT_EQ(copied.check_value(i), init_val);
-    }
-}
-
-TEST(gpu_vector, move_assign_operator)
-{
-    size_t size = 10;
-    size_t init_val = 7;
-    mgcpp::device_vector<float> original(size, init_val);
     mgcpp::device_vector<float> moved(size, init_val);
-
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_memory = before.value().first;
-
     moved = std::move(original);
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
     auto after_memory = after.value().first;
 
-    EXPECT_LT(before_memory, after_memory);
+    EXPECT_EQ(before_memory, after_memory);
 
-    auto shape = moved.shape();
-    EXPECT_EQ(shape, 10);
-    EXPECT_NE(moved._data, nullptr);
-    EXPECT_EQ(moved._context, 
-              mgcpp::device_vector<float>()._context);
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(moved.check_value(i), init_val);
+            }
+        }while(false));
 
-    for(auto i = 0u; i < size; ++i)
-    {
-        EXPECT_EQ(moved.check_value(i), init_val);
-    }
+    EXPECT_EQ(moved.shape(), size);
+    EXPECT_EQ(original.data(), nullptr);
+}
 
-    EXPECT_EQ(original._data, nullptr);
+
+TEST(device_vector, copy_to_host)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    size_t size = 10;
+    float* host = (float*)malloc(sizeof(float) * size);
+
+    size_t init_val = 7;
+    mgcpp::device_vector<float> vec(size, init_val);
+
+    EXPECT_NO_THROW(vec.copy_to_host(host));
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(host[i], init_val);
+            }
+        }while(false));
+
+    free(host);
 }

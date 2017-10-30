@@ -101,11 +101,11 @@ namespace mgcpp
         try
         {
             copy_from_host(_data, buffer, _shape);
-            deallocate(buffer);
+            deallocate(buffer, _shape);
         }
         catch(std::system_error const& err)
         {
-            deallocate(buffer);
+            deallocate(buffer, _shape);
             throw err;
         }
     }
