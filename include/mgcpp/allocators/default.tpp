@@ -14,13 +14,13 @@ namespace mgcpp
     template<typename T, size_t DeviceId>
     T*
     default_allocator<T, DeviceId>::
-    allocator(size_t n) const
+    allocate(size_t n) 
     { return _alloc_tr::allocate(_alloc, n); }
 
     template<typename T, size_t DeviceId>
     void
     default_allocator<T, DeviceId>::
-    allocator(T* p, size_t n) const
+    deallocate(T* p, size_t n)
     { return _alloc_tr::deallocate(_alloc, p, n); }
 
     template<typename T, size_t DeviceId>

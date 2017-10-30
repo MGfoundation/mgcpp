@@ -9,7 +9,6 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
 
-#include <cstdlib>
 #include <type_traits>
 
 namespace mgcpp
@@ -351,30 +350,18 @@ namespace mgcpp
         return to;
     }
 
-    // template<typename T,
-    //          size_t DeviceId,
-    //          storage_order SO,
-    //          typename Alloc>
-    // device_matrix<T, DeviceId, SO, Alloc>&
-    // device_matrix<T, DeviceId, SO, Alloc>::
-    // operator=(host_matrix<T, SO> const& cpu_mat)
-    // {
-    //     auto total_size = _shape.first * _shape.second;
-    //     if(_data)
-    //     {
-    //         device_deallocate(_data, total_size);
-    //         _data = nullptr;
-    //     }
-
-    //     auto shape = cpu_mat.shape();
-    //     _shape.first = shape.first;
-    //     _shape.second = shape.second;
-
-    //     auto _data = device_allocate(total_size);
-    //     copy_from_host(_data, cpu_mat.data(), total_size);
-        
-    //     return *this;
-    // }
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO,
+             typename Alloc>
+    void
+    device_matrix<T, DeviceId, SO, Alloc>::
+    copy_to_host(T* host_p) const
+    {
+        if(!host_p)
+        { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
+        copy_to_host(host_memory, _data, _shape.first * _shape.second);
+    }
 
     template<typename T,
              size_t DeviceId,

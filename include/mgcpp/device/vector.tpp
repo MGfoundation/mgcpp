@@ -257,82 +257,18 @@ namespace mgcpp
         return *this;
     }
 
-    // template<typename T,
-    //          size_t DeviceId,
-    //          allignment Allign,
-    //          typename Alloc>
-    // device_vector<T, DeviceId, Allign, Alloc>&
-    // device_vector<T, DeviceId, Allign, Alloc>::
-    // operator=(host_vector<T, Allign, Alloc> const& host) 
-    // {
-    //     auto set_device_stat = cuda_set_device(DeviceId);
-    //     if(!set_device_stat)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-    //     }
-
-    //     if(_released)
-    //     {
-    //         auto free_stat = cuda_free(_data);
-    //         if(!free_stat)
-    //         {
-    //             MGCPP_THROW_SYSTEM_ERROR(free_stat.error());
-    //         }
-    //         _released = true;
-    //     }
-
-    //     auto alloc_result = cuda_malloc<T>(host._size);
-    //     if(!alloc_result)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-    //     }
-    //     _released = true;
-
-    //     auto cpy_result =
-    //         cuda_memcpy(alloc_result, host.data(), _size,
-    //                     cuda_memcpy_kind::host_to_device);
-
-    //     _data = alloc_result;
-
-    //     if(!cpy_result)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-    //     }
-
-    //     return *this;
-    // }
-
-    // template<typename T,
-    //          size_t DeviceId,
-    //          allignment Allign,
-    //          typename Alloc>
-    // host_vector<T, Allign, Alloc> 
-    // device_vector<T, DeviceId, Allign, Alloc>::
-    // copy_to_host() const
-    // {
-    //     auto set_device_stat = cuda_set_device(DeviceId);
-    //     if(!set_device_stat)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-    //     }
-
-    //     T* host_memory = (T*)malloc(_size * sizeof(T));
-    //     if(!host_memory)
-    //     {
-    //         MGCPP_THROW_BAD_ALLOC;
-    //     }
-        
-    //     auto cpy_result =
-    //         cuda_memcpy(host_memory, _data, _size,
-    //                     cuda_memcpy_kind::device_to_host);
-    //     if(!cpy_result)
-    //     {
-    //         free(host_memory);
-    //         MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-    //     }
-
-    //     return host_vector<T, Allign, typename Alloc>(_size, host_memory);
-    // }
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign,
+             typename Alloc>
+    void
+    device_vector<T, DeviceId, Allign, Alloc>::
+    copy_to_host(T* host_p) const
+    {
+        if(!host_p)
+        { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
+        copy_to_host(host_memory, _data, _shape.first * _shape.second);
+    }
 
 
     template<typename T,

@@ -56,23 +56,17 @@ namespace mgcpp
         inline
         device_vector(std::initializer_list<T> const& array);
 
-        // inline
-        // device_vector(host_vector<T, Allign> const& other);
-
         inline device_vector<T, DeviceId, Allign, Alloc>&
         operator=(device_vector<T, DeviceId, Allign, Alloc> const& other);
 
         inline device_vector<T, DeviceId, Allign, Alloc>&
         operator=(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept;
 
-        // inline device_vector<T, DeviceId, Allign>&
-        // operator=(host_vector<T, Allign> const& other); 
-
         inline device_vector<T, DeviceId, Allign, Alloc>&
         zero();
 
-        // inline host_vector<T, Allign>
-        // copy_to_host() const;
+        inline void 
+        copy_to_host(T* host_p) const;
 
         inline T
         check_value(size_t i) const;

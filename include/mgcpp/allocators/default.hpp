@@ -20,9 +20,9 @@ namespace mgcpp
 
         Alloc _alloc;
 
-        inline T* allocator(size_t n) const;
+        inline T* allocate(size_t n);
 
-        inline void allocator(T* p, size_t n) const;
+        inline void deallocate(T* p, size_t n);
 
         inline T* device_allocate(size_t n) const;
 

@@ -14,6 +14,7 @@
 #include <mgcpp/global/storage_order.hpp>
 
 #include <cstdlib>
+#include <memory>
 #include <initializer_list>
 
 namespace mgcpp
@@ -81,14 +82,8 @@ namespace mgcpp
         inline device_matrix<T, DeviceId, SO, Alloc>&
         resize(size_t i, size_t j, T init);
 
-        // void
-        // shrink_to_fit();
-
-        // inline device_matrix<T, DeviceId, SO, Alloc>&
-        // operator=(host_matrix<T, SO> const& cpu_mat);
-
-        // inline host_matrix<T, SO>  
-        // copy_to_host();
+        inline void
+        copy_to_host(T* host_p);
 
         inline T
         check_value(size_t i, size_t j) const;
