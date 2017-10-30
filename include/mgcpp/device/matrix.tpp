@@ -93,14 +93,17 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     device_matrix(std::initializer_list<std::initializer_list<T>> const& array)
         : _context(&global_context::get_thread_context()),
-          _shape(array.size(), std::max(array.begin(),
-                                        array.end(),
-                                        [](auto const& first, auto const& second)
-                                        { return first.size() < second.size(); })),
+          _shape(array.size(),
+                 std::max(array.begin(),
+                          array.end(),
+                          [](auto const& first, auto const& second)
+                          { return first->size() < second->size(); })->size()),
           _data(device_allocate(_shape.first * _shape.second)),
           _capacity(_shape.first * _shape.second)
     {
-        T* buffer = allocate(_shape.first * _shape.second);
+        size_t total_size = _shape.first * _shape.second;
+
+        T* buffer = allocate(total_size);
         size_t i = 0;
         for(auto const& row : array)
         {
@@ -114,12 +117,12 @@ namespace mgcpp
 
         try
         {
-            copy_from_host(_data, buffer, _shape.first * _shape.second);
-            deallocate(buffer);
+            copy_from_host(_data, buffer, total_size);
+            deallocate(buffer,  total_size);
         }
         catch(std::system_error const& err)
         {
-            deallocate(buffer);
+            deallocate(buffer, total_size);
             throw err;
         }
     }
