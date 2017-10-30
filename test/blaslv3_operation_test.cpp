@@ -21,9 +21,7 @@ TEST(mat_mat_operation, row_major_multiplication)
 
     auto C_mat = mgcpp::strict::mult(A_mat, B_mat);
 
-    auto C_mat_host = C_mat.copy_to_host();
-    
-    auto shape = C_mat_host.shape();
+    auto shape = C_mat.shape();
     EXPECT_EQ(shape.first, 2);
     EXPECT_EQ(shape.second, 3);
 
@@ -31,7 +29,7 @@ TEST(mat_mat_operation, row_major_multiplication)
     {
         for(size_t j = 0; j < shape.second; ++j)
         {
-            EXPECT_EQ(C_mat_host(i, j), 32)
+            EXPECT_EQ(C_mat.check_value(i, j), 32)
                 << "i: " << i << " j: " << j; 
         } 
     }
@@ -44,9 +42,7 @@ TEST(mat_mat_operation , row_major_addition)
 
     auto C_mat = mgcpp::strict::add(A_mat, B_mat);
 
-    auto C_mat_host = C_mat.copy_to_host();
-    
-    auto shape = C_mat_host.shape();
+    auto shape = C_mat.shape();
     EXPECT_EQ(shape.first, 4);
     EXPECT_EQ(shape.second, 2);
 
@@ -54,7 +50,7 @@ TEST(mat_mat_operation , row_major_addition)
     {
         for(size_t j = 0; j < shape.second; ++j)
         {
-            EXPECT_EQ(C_mat_host(i, j), 6)
+            EXPECT_EQ(C_mat.check_value(i, j), 6)
                 << "i: " << i << " j: " << j; 
         } 
     }
