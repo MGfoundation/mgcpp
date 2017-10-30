@@ -208,9 +208,7 @@ namespace mgcpp
         _shape = other._shape;
 
         if(!cpy_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
 
         return *this;
     }
@@ -229,10 +227,10 @@ namespace mgcpp
             _data = nullptr;
         }
         _data = other._data;
-        other._data = nullptr;
         _capacity = other._capacity;
-        other._capacity = 0;
         _shape = std::move(other._shape);
+        other._data = nullptr;
+        other._capacity = 0;
 
         return *this;
     }
@@ -246,21 +244,15 @@ namespace mgcpp
     zero()
     {
         if(!_data)
-        {
-            MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
-        }
+        { MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated"); }
 
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         auto set_result = cuda_memset(_data, static_cast<T>(0), _shape);
         if(!set_result)
-        { 
-            MGCPP_THROW_SYSTEM_ERROR(set_result.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(set_result.error()); }
 
         return *this;
     }
@@ -358,19 +350,11 @@ namespace mgcpp
 
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         T* from = (_data + i);
         T to;
-        auto result = cuda_memcpy(
-            &to, from, 1, cuda_memcpy_kind::device_to_host);
-
-        if(!result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(result.error());
-        }
+        copy_to_host(&to, from, 1);
 
         return to;
     }
