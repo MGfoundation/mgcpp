@@ -128,6 +128,51 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO,
              typename Alloc>
+    template<typename HostMat, typename>
+    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix(HostMat const& host_mat)
+        :_context(&global_context::get_thread_context()),
+         _shape(0, 0),
+         _data(nullptr),
+         _capacity(0)
+    {
+        adapter<HostMat> adapt();
+
+        T* host_p;
+        adapt(host_mat, &host_p, &_shape.first, &_shape.second);
+
+        size_t total_size = _shape.first * _shape.second;
+        _capacity = total_size;
+        _data = device_allocate(total_size);
+        copy_from_host(_data, host_p, total_size);
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO,
+             typename Alloc>
+    template<typename HostMat, typename Adapter, typename>
+    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix(HostMat const& host_mat,
+                  Adapter& adapter)
+        :_context(&global_context::get_thread_context()),
+         _shape(0, 0),
+         _data(nullptr),
+         _capacity(0)
+    {
+        T* host_p;
+        adapter(host_mat, &host_p, &_shape.first, &_shape.second);
+
+        size_t total_size = _shape.first * _shape.second;
+        _capacity = total_size;
+        _data = device_allocate(total_size);
+        copy_from_host(_data, host_p, total_size);
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO,
+             typename Alloc>
     device_matrix<T, DeviceId, SO, Alloc>::
     device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
@@ -146,19 +191,6 @@ namespace mgcpp
         }
     }
 
-    // template<typename T,
-    //          size_t DeviceId,
-    //          storage_order SO,
-    //          typename Alloc>
-    // device_matrix<T, DeviceId, SO, Alloc>::
-    // device_matrix(host_matrix<T, SO> const& cpu_mat)
-    //     : _context(&global_context::get_thread_context()),
-    //       _shape(cpu_mat.shape()),
-    //       _data(device_allocate(_shape.first * _shape.second)),
-    //       _capacity(_shape.first * _shape.second)
-    // {
-    //     copy_from_host(_data, cpu_mat.data());
-    // }
 
     template<typename T,
              size_t DeviceId,
@@ -277,32 +309,8 @@ namespace mgcpp
             deallocate(buffer, total_size);
             throw err;
         }
-         return *this;
+        return *this;
     }
-
-    // template<typename T,
-    //          size_t DeviceId,
-    //          storage_order SO,
-    //          typename Alloc>
-    // host_matrix<T, SO>
-    // device_matrix<T, DeviceId, SO, Alloc>::
-    // copy_to_host() 
-    // {
-    //     size_t total_size = _shape.first * _shape.second;
-    //     T* buffer = allocate(total_size);
-
-    //     try
-    //     { copy_to_host(buffer, _data, total_size); }
-    //     catch(std::system_error const& err)
-    //     {
-    //         deallocate(buffer, total_size);
-    //         throw err;
-    //     }
-
-    //     return host_matrix<T, SO>(_shape.first,
-    //                               _shape.second,
-    //                               buffer);
-    // }
 
     template<typename T,
              size_t DeviceId,
@@ -360,7 +368,7 @@ namespace mgcpp
     {
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
-        copy_to_host(host_memory, _data, _shape.first * _shape.second);
+        copy_to_host(host_p, _data, _shape.first * _shape.second);
     }
 
     template<typename T,

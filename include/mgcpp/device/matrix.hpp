@@ -4,10 +4,11 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_GPU_MATRIX_HPP_
-#define _MGCPP_GPU_MATRIX_HPP_
+#ifndef _MGCPP_DEVICE_MATRIX_HPP_
+#define _MGCPP_DEVICE_MATRIX_HPP_
 
 #include <mgcpp/allocators/default.hpp>
+#include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
@@ -15,6 +16,7 @@
 
 #include <cstdlib>
 #include <memory>
+#include <type_traits>
 #include <initializer_list>
 
 namespace mgcpp
@@ -58,8 +60,16 @@ namespace mgcpp
         device_matrix(
             std::initializer_list<std::initializer_list<T>> const& array);
 
-        // inline
-        // device_matrix(host_matrix<T, SO> const& cpu_mat);
+        template<typename HostMat,
+                 typename = typename std::enable_if<adapter<HostMat>::value>::type>
+        inline 
+        device_matrix(HostMat const& host_mat);
+
+        template<typename HostMat, typename Adapter,
+                 typename = typename
+                 std::enable_if<std::is_function<Adapter>::value>::type>
+        inline 
+        device_matrix(HostMat const& host_mat, Adapter& adapter);
 
         inline
         device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other);
@@ -83,7 +93,7 @@ namespace mgcpp
         resize(size_t i, size_t j, T init);
 
         inline void
-        copy_to_host(T* host_p);
+        copy_to_host(T* host_p) const;
 
         inline T
         check_value(size_t i, size_t j) const;

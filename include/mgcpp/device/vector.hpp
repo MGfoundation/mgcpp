@@ -4,10 +4,11 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_GPU_VECTOR_HPP_
-#define _MGCPP_GPU_VECTOR_HPP_
+#ifndef _MGCPP_DEVICE_VECTOR_HPP_
+#define _MGCPP_DEVICE_VECTOR_HPP_
 
 #include <mgcpp/allocators/default.hpp>
+#include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
@@ -46,6 +47,18 @@ namespace mgcpp
         inline device_vector(size_t size, T init);
 
         inline device_vector(size_t size, T const* data);
+
+        template<typename HostVec,
+                 typename = typename
+                 std::enable_if<adapter<HostVec>::value>::type>
+        inline 
+        device_vector(HostVec const& host_mat);
+
+        template<typename HostVec, typename Adapter,
+                 typename = typename
+                 std::enable_if<std::is_function<Adapter>::value>::type>
+        inline 
+        device_vector(HostVec const& host_mat, Adapter& adapter);
 
         inline
         device_vector(device_vector<T, DeviceId, Allign, Alloc> const& other);
