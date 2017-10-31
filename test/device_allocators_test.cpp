@@ -55,4 +55,7 @@ TEST(default_allocator, copy_to_and_from_host)
     EXPECT_NO_THROW({allocator.copy_to_host(host, device, size);});
 
     EXPECT_EQ(*host, 10);
+
+    allocator.deallocate(host, size);
+    allocator.device_deallocate(device, size);
 }
