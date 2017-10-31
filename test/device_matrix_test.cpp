@@ -249,6 +249,10 @@ TEST(device_matrix, matrix_init_from_init_list)
     EXPECT_TRUE(before);
     auto before_freemem = before.value().first;
 
+    std::cout << std::max(init_list.begin(),
+                          init_list.end(),
+                          [](auto const& first, auto const& second)
+                          { return first->size() < second->size(); })->size() << std::endl;
     mgcpp::device_matrix<float> mat{};
     EXPECT_NO_THROW(
         mat = mgcpp::device_matrix<float>(init_list));
