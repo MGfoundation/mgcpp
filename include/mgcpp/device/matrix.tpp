@@ -110,7 +110,7 @@ namespace mgcpp
             std::fill(std::copy(row.begin(),
                                 row.end(),
                                 buffer + i * _shape.second),
-                      buffer + (i+1) * _shape.second,
+                      buffer + (i + 1) * _shape.second,
                       T());
             ++i; 
         }
@@ -123,7 +123,9 @@ namespace mgcpp
         catch(std::system_error const& err)
         {
             deallocate(buffer, total_size);
-            throw err;
+            device_deallocate(_data, total_size);
+
+            //MGCPP_THROW(err);
         }
     }
 
