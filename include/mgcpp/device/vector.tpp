@@ -106,7 +106,7 @@ namespace mgcpp
         catch(std::system_error const& err)
         {
             deallocate(buffer, _shape);
-            throw err;
+            MGCPP_THROW(err);
         }
     }
 
@@ -188,46 +188,6 @@ namespace mgcpp
         other._data = nullptr;
         other._capacity = 0;
     }
-
-    // template<typename T,
-    //          size_t DeviceId,
-    //          allignment Allign,
-    //          typename Alloc>
-    // device_vector<T, DeviceId, Allign, Alloc>::
-    // device_vector(host_vector<T, Allign, Alloc> const& other)
-    //     :_data(nullptr),
-    //      _context(&global_context::get_thread_context()),
-    //      _size(other._size),
-    //      _released(true)
-    // {
-    //     auto set_device_stat = cuda_set_device(DeviceId);
-    //     if(!set_device_stat)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
-    //     }
-
-    //     auto alloc_result = cuda_malloc<T>(other._size);
-    //     if(!alloc_result)
-    //     {
-    //         MGCPP_THROW_SYSTEM_ERROR(alloc_result.error());
-    //     }
-    //     _released = false;
-    //     _size = other._size;
-
-    //     auto cpy_result =
-    //         cuda_memcpy(alloc_result.value(),
-    //                     other._data,
-    //                     _size,
-    //                     cuda_memcpy_kind::host_to_device);
-
-    //     if(!cpy_result)
-    //     {
-    //         (void)cuda_free(alloc_result.value());
-    //         MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-    //     }
-
-    //     _data = alloc_result.value();
-    // }
 
     template<typename T,
              size_t DeviceId,
