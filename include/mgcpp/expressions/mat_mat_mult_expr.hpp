@@ -10,41 +10,37 @@
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/expressions/expr_eval.hpp>
 #include <mgcpp/expressions/mat_expr.hpp>
-#include <mgcpp/expressions/result_type.hpp>
-#include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/mat_expr.hpp>
 #include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp
 {
     template<typename LhsExpr, typename RhsExpr>
-    struct mat_mat_mult_expr
+    struct mat_mat_mult_expr_t { };
+
+    template<typename LhsExpr, typename RhsExpr>
+    struct mat_expr<mat_mat_mult_expr_t<LhsExpr, RhsExpr>>
     {
-        using result_type =
-            typename result_type<LhsExpr>::type;
+        using lhs_expr_type = typename std::decay<LhsExpr>::type;
+        using rhs_expr_type = typename std::decay<RhsExpr>::type;
+
+        using result_type = typename lhs_expr_type::result_type;
 
         LhsExpr&& _lhs;
         RhsExpr&& _rhs;
 
-        inline mat_mat_mult_expr(LhsExpr&& lhs,
-                                 RhsExpr&& rhs) noexcept;
+        inline mat_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
         inline result_type
-        eval();
+        eval() const;
     };
 
     template<typename LhsExpr, typename RhsExpr>
-    struct result_type<
-        mat_mat_mult_expr<LhsExpr, RhsExpr>,
-        typename assert_both_mat_expr<LhsExpr, RhsExpr>::type>
-    {
-        using type =
-            typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type;
-    };
+    using mat_mat_mult_expr = mat_expr<mat_mat_mult_expr_t<LhsExpr, RhsExpr>>;
 
     template<typename LhsExpr, typename RhsExpr>
     inline typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
-    eval(mat_mat_mult_expr<LhsExpr, RhsExpr>& expr);
+    eval(mat_mat_mult_expr<LhsExpr, RhsExpr> const& expr);
 
     template<typename LhsExpr, typename RhsExpr,
              typename = typename

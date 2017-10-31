@@ -27,6 +27,11 @@ namespace mgcpp
              typename Alloc = mgcpp::default_allocator<T, DeviceId>>
     class device_matrix : public Alloc
     {
+    public:
+        using this_type = device_matrix<T, DeviceId, SO, Alloc>;
+        using result_type = this_type;
+
+    private:
         using Alloc::allocate;
         using Alloc::deallocate;
         using Alloc::device_allocate;
@@ -34,12 +39,10 @@ namespace mgcpp
         using Alloc::copy_to_host;
         using Alloc::copy_from_host;
 
-    private:
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
         T* _data;
         size_t _capacity;
-
 
         inline size_t
         determine_ndim(std::initializer_list<

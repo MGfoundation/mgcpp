@@ -12,24 +12,16 @@
 namespace mgcpp
 {
     template<typename LhsExpr, typename RhsExpr>
-    mat_mat_mult_expr<LhsExpr, RhsExpr>::
-    mat_mat_mult_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
-        :_lhs(std::forward<LhsExpr>(lhs)),
-         _rhs(std::forward<RhsExpr>(rhs)) {}
+    mat_expr<mat_mat_mult_expr_t<LhsExpr, RhsExpr>>::
+    mat_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
+        : _lhs(std::forward<LhsExpr>(lhs)),
+          _rhs(std::forward<RhsExpr>(rhs)) {}
 
     template<typename LhsExpr, typename RhsExpr>
-    typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
-    mat_mat_mult_expr<LhsExpr, RhsExpr>::
-    eval()
+    typename mat_expr<mat_mat_mult_expr_t<LhsExpr, RhsExpr>>::result_type
+    mat_expr<mat_mat_mult_expr_t<LhsExpr, RhsExpr>>::
+    eval() const
     {
-        using first_type =
-            typename mgcpp::result_type<LhsExpr>::type;
-        using second_type =
-            typename mgcpp::result_type<RhsExpr>::type;
-
-        if(!std::is_same<first_type, second_type>::value)
-            MGCPP_THROW_RUNTIME_ERROR("type of matrices not equal");
-
         auto lhs = mgcpp::eval(_lhs);
         auto rhs = mgcpp::eval(_rhs);
 
@@ -37,14 +29,15 @@ namespace mgcpp
         auto rhs_shape = rhs.shape();
 
         if(lhs_shape.second != rhs_shape.first)
-            MGCPP_THROW_LENGTH_ERROR("dimension doesn't match");
+        {
+            MGCPP_THROW_INVALID_ARGUMENT("dimension doesn't match");
+        }
 
         return strict::mult(lhs, rhs);
     }
 
     template<typename LhsExpr, typename RhsExpr>
-    typename result_type<
-        mat_mat_mult_expr<LhsExpr, RhsExpr>>::type
+    typename mat_mat_mult_expr<LhsExpr, RhsExpr>::result_type
     eval(mat_mat_mult_expr<LhsExpr, RhsExpr>&& expr)
     {
         expr.eval();
