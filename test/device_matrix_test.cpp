@@ -62,7 +62,7 @@ namespace mgcpp
             *out_p = mat.data();
             auto shape = mat.shape();
             *m = shape.first;
-            *n = shape.first;
+            *n = shape.second;
         }
     };
 }
