@@ -139,7 +139,7 @@ namespace mgcpp
          _data(nullptr),
          _capacity(0)
     {
-        adapter<HostMat> adapt();
+        adapter<HostMat> adapt{};
 
         T* host_p;
         adapt(host_mat, &host_p, &_shape.first, &_shape.second);
