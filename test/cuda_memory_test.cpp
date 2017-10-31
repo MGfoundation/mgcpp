@@ -88,16 +88,21 @@ TEST(cuda_memset, memset_to_zero)
     size_t size = 1;
     auto memory = mgcpp::cuda_malloc<float>(size);
 
-    *memory.value() = 7;
+    float host = 7;
+
+    auto to_device_stat = mgcpp::cuda_memcpy(
+        memory.value(), &host, size,
+        mgcpp::cuda_memcpy_kind::host_to_device);
+    EXPECT_TRUE(to_device_stat);
 
     auto status = mgcpp::cuda_memset(memory.value(), 0.0f, size);
     EXPECT_TRUE(status);
 
-    float host = 0;
+    host = 7;
     auto to_host_stat =
         mgcpp::cuda_memcpy(&host, memory.value(), size,
                            mgcpp::cuda_memcpy_kind::device_to_host);
     EXPECT_TRUE(to_host_stat);
-    EXPECT_EQ(host, 7);
+    EXPECT_EQ(host, 0);
 }
 
