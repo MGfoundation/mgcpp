@@ -116,7 +116,7 @@ namespace mgcpp
     device_matrix(std::initializer_list<
                   std::initializer_list<T>> const& init_list)
         : _context(&global_context::get_thread_context()),
-          _shape(array.size(), determine_ndim(init_list)),
+          _shape(init_list.size(), determine_ndim(init_list)),
           _data(device_allocate(_shape.first * _shape.second)),
           _capacity(_shape.first * _shape.second)
     {
