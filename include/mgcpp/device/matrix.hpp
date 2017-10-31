@@ -40,6 +40,11 @@ namespace mgcpp
         T* _data;
         size_t _capacity;
 
+
+        inline size_t
+        determine_ndim(std::initializer_list<
+                       std::initializer_list<T>> const& list) const noexcept;
+
     public:
         inline
         device_matrix() noexcept;

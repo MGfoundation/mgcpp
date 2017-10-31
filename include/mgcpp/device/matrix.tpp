@@ -91,14 +91,32 @@ namespace mgcpp
              size_t DeviceId,
              storage_order SO,
              typename Alloc>
+    size_t
     device_matrix<T, DeviceId, SO, Alloc>::
-    device_matrix(std::initializer_list<std::initializer_list<T>> const& array)
+    determine_ndim(std::initializer_list<
+                   std::initializer_list<T>> const& list) const noexcept
+    {
+        auto max_elem = std::max(list.begin(),
+                                 list.end(),
+                                 [](auto const& first,
+                                    auto const& second)
+                                 { return first->size() < second->size(); });
+
+        if(max_elem == list.end())
+            return list.begin()->size();
+        else
+            return max_elem->size();
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             storage_order SO,
+             typename Alloc>
+    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix(std::initializer_list<
+                  std::initializer_list<T>> const& init_list)
         : _context(&global_context::get_thread_context()),
-          _shape(array.size(),
-                 std::max(array.begin(),
-                          array.end(),
-                          [](auto const& first, auto const& second)
-                          { return first->size() < second->size(); })->size()),
+          _shape(array.size(), determine_ndim(init_list)),
           _data(device_allocate(_shape.first * _shape.second)),
           _capacity(_shape.first * _shape.second)
     {
@@ -312,7 +330,7 @@ namespace mgcpp
         catch(std::system_error const& err)
         {
             deallocate(buffer, total_size);
-            throw err;
+            MGCPP_THROW(err);
         }
         return *this;
     }
