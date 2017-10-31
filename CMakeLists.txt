@@ -25,6 +25,11 @@ option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 
+if(NOT CUDA_ARCH)
+    message("cuda arch wasn't provided, using default value 61")
+    set(CUDA_ARCH 61)
+endif()
+
 
 # cmake modules path
 set(CMAKE_MODULE_PATH
@@ -34,7 +39,9 @@ set(CMAKE_MODULE_PATH
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-list(APPEND CUDA_NVCC_FLAGS "-arch=sm_61; code=sm_61; -O3")
+# set(CUDA_NVCC_FLAGS
+#     -arch=sm_${CUDA_ARCH}
+#     code=sm_${CUDA_ARCH})
 
 message("build flags = ${CUDA_NVCC_FLAGS}")
 
@@ -43,8 +50,7 @@ message("build flags = ${CUDA_NVCC_FLAGS}")
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(KERNELS_SOURCE_DIR ${SOURCE_DIR}/kernels)
 
-set(BASE_SOURCE_FILES "")
-# ${KERNELS_SOURCE_DIR}/fill.cu)
+set(BASE_SOURCE_FILES ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/init.cpp
@@ -84,6 +90,8 @@ target_include_directories("${PROJECT_NAME}base"
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
+
+set(CUDA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
 
 ## mgcpp dependencies

@@ -558,6 +558,3 @@ TEST(gpu_matrix, matrix_zero_without_allocation_failure)
 
     EXPECT_ANY_THROW(mat.zero());
 }
-
-
-

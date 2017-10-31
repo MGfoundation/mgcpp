@@ -17,11 +17,6 @@ namespace mgcpp
     // inline outcome::result<void>
     // fill(ElemType* device_ptr, ElemType value, size_t count);
 
-    void fill64(void* ptr, uint64_t bitvec, size_t size);
-
-    void fill32(void* ptr, uint32_t bitvec, size_t size);
-
-    void fill16(void* ptr, uint16_t bitvec, size_t size);
 }
 
 #endif
