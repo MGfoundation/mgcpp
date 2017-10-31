@@ -37,9 +37,8 @@
 
 
 #ifndef MGCPP_THROW_SYSTEM_ERROR
-#define MGCPP_THROW_SYSTEM_ERROR(ERROR_CODE)                    \
-    MGCPP_THROW(std::system_error(                              \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_SYSTEM_ERROR(ERROR, ...)    \
+    MGCPP_THROW(std::system_error(ERROR))
 #endif
 
 #ifndef MGCPP_THROW_BAD_ALLOC
@@ -48,8 +47,8 @@
 #endif
 
 #ifndef MGCPP_THROW_INVALID_ARGUMENT
-#define MGCPP_THROW_INVALID_ARGUMENT(...)                   \
-    MGCPP_THROW(std::invalid_argument(                      \
+#define MGCPP_THROW_INVALID_ARGUMENT(...)                       \
+    MGCPP_THROW(std::invalid_argument(                          \
                     MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
 #endif
 

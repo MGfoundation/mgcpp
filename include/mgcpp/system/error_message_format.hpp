@@ -26,7 +26,7 @@ namespace mgcpp
     template<typename Head, typename... Args>
     inline std::string
     string_meta_concat_impl(Head const& head,
-                            Args... const& args)
+                            Args... args)
     { return std::string(head) + string_meta_concat_impl(args...); }
 
     template<typename... Args>
