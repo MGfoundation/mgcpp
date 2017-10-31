@@ -7,26 +7,19 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
 
-#include <type_traits>
-
 #include <mgcpp/device/forward.hpp>
-#include <mgcpp/system/concept.hpp>
-#include <mgcpp/type_traits/gpu_mat.hpp>
-#include <mgcpp/expressions/result_type.hpp>
+#include <mgcpp/type_traits/device_matrix.hpp>
 
 namespace mgcpp
 {
-    template<typename GpuMat,
-             MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
-    inline GpuMat 
-    eval(GpuMat&& mat);
+    template<typename T>
+    struct mat_expr {};
 
-    template<typename GpuMat>
-    struct result_type<GpuMat,
-                       typename assert_gpu_matrix<GpuMat>::result>
-    {
-        using type = typename std::decay<GpuMat>::type;
-    };
+    template<typename Matrix,
+             typename = typename
+             assert_device_matrix<Matrix>::result>
+    inline Matrix
+    eval(Matrix&& device_mat);
 }
 
 #include <mgcpp/expressions/mat_expr.tpp>

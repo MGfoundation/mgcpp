@@ -4,12 +4,14 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <mgcpp/expressions/mat_expr.hpp>
+
 namespace mgcpp
 {
-    template<typename GpuMat, typename>
-    inline GpuMat 
-    eval(GpuMat&& mat)
+    template<typename Matrix, typename>
+    Matrix
+    eval(Matrix&& device_mat)
     {
-        return std::forward<GpuMat>(mat);
+        return std::forward<Matrix>(device_mat);
     }
 }

@@ -9,32 +9,41 @@
 
 #include <type_traits>
 
-#include <mgcpp/expressions/result_type.hpp>
-#include <mgcpp/type_traits/gpu_mat.hpp>
+#include <mgcpp/expressions/mat_expr.hpp>
+#include <mgcpp/device/forward.hpp>
 
 namespace mgcpp
 {
+    template<typename T>
+    struct is_mat_expr : std::false_type {};
+
+    template<typename Expr>
+    struct is_mat_expr<mat_expr<Expr>> : std::true_type {};
+
+    template<typename Type,
+             size_t DeviceId,
+             storage_order SO,
+             typename Alloc>
+    struct is_mat_expr<device_matrix<Type, DeviceId, SO, Alloc>>
+        : std::true_type {};
+
     template<typename Head>
     struct assert_mat_expr
     {
         using result = typename std::enable_if<
-            is_gpu_matrix<
-                typename result_type<
-                    typename std::decay<Head>::type
-                    >::type
-                >::value>
-            ::type;
+            is_mat_expr<
+                typename std::decay<Head>::type>::value>::type;
     };
 
-    template<typename Head1, typename Head2>
+    template<typename First, typename Second>
     struct assert_both_mat_expr
     {
-        using result = typename std::enable_if<
-            is_gpu_matrix<
-                typename result_type<Head1>::type>::value
-            &&  is_gpu_matrix<
-                typename result_type<Head2>::type>::value
-            >::type;
+        using result =
+            typename std::enable_if<
+            is_mat_expr<
+                typename std::decay<First>::type>::value
+            && is_mat_expr<
+                typename std::decay<Second>::type>::value>::type;
     };
 }
 
