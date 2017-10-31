@@ -271,7 +271,7 @@ namespace mgcpp
         { 
             try
             {
-                device_deallocate( _data, _shape.first * _shape.second);
+                device_deallocate( _data, _capacity);
             } catch(...){};
             _data = nullptr;
         }

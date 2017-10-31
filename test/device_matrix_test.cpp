@@ -309,12 +309,13 @@ TEST(device_matrix, reallocation_during_copy_assign)
     size_t col_dim = 10;
     float init = 7;
 
+    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> copied(row_dim /2, col_dim /2);
+    
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
     auto before_freemem = before.value().first;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
-    mgcpp::device_matrix<float> copied(row_dim /2, col_dim /2);
     EXPECT_NO_THROW(copied = original);
 
     EXPECT_EQ(copied.check_value(0,0), init); //supressing optimization
