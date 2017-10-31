@@ -66,21 +66,20 @@ TEST(cuda_memcpy, memcpy_to_and_from_host)
 {
     size_t size = 1;
     auto device = mgcpp::cuda_malloc<float>(size);
-    float* host = (float*)malloc(sizeof(float) * size);
+    float host = 7;
 
-
-    *host = 7;
+    host = 7;
     auto to_device_stat = mgcpp::cuda_memcpy(
-        device.value(), host, size, mgcpp::cuda_memcpy_kind::host_to_device);
+        device.value(), &host, size, mgcpp::cuda_memcpy_kind::host_to_device);
     EXPECT_TRUE(to_device_stat);
 
-    *host = 0;
+    host = 0;
     auto to_host_stat = mgcpp::cuda_memcpy(
-        host, device.value(), size, mgcpp::cuda_memcpy_kind::device_to_host);
+        &host, device.value(), size, mgcpp::cuda_memcpy_kind::device_to_host);
     EXPECT_TRUE(to_host_stat);
 
-    EXPECT_EQ(*host, 7);
-    free(host);
+    EXPECT_EQ(host, 7);
+    (void)mgcpp::cuda_free(device.value());
 }
 
 TEST(cuda_memset, memset_to_zero)
@@ -104,5 +103,7 @@ TEST(cuda_memset, memset_to_zero)
                            mgcpp::cuda_memcpy_kind::device_to_host);
     EXPECT_TRUE(to_host_stat);
     EXPECT_EQ(host, 0);
+
+    (void)mgcpp::cuda_free(memory.value());
 }
 
