@@ -292,13 +292,15 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     resize(size_t i, size_t j)
     {
-        if(_data)
+        size_t total_size = i * j;
+        if(total_size > _capacity)
         {
-            device_deallocate(_data, _shape.first * _shape.second);
-            _data = nullptr;
+            device_deallocate(_data, _capacity);
+            _data = device_allocate(total_size); 
+            _capacity = total_size;
         }
 
-        _data = device_allocate(i * j);
+        _data = device_allocate(total_size);
         _shape = std::make_pair(i, j);
 
         return *this;
@@ -312,13 +314,14 @@ namespace mgcpp
     device_matrix<T, DeviceId, SO, Alloc>::
     resize(size_t i, size_t j, T init)
     {
-        if(_data)
+        size_t total_size = i * j;
+        if(total_size > _capacity)
         {
-            device_deallocate(_data, _shape.first * _shape.second);
-            _data = nullptr;
+            device_deallocate(_data, _capacity);
+            _data = device_allocate(total_size); 
+            _capacity = total_size;
         }
 
-        size_t total_size = i * j;
         _data = device_allocate(total_size);
         _shape = std::make_pair(i, j);
 

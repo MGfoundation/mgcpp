@@ -283,6 +283,26 @@ namespace mgcpp
              typename Alloc>
     device_vector<T, DeviceId, Allign, Alloc>&
     device_vector<T, DeviceId, Allign, Alloc>::
+    resize(size_t size)
+    {
+        if(size > _capacity)
+        {
+            device_deallocate(_data, _capacity);
+            _data = device_allocate(size); 
+            _capacity = size;
+        }
+        _data = device_allocate(size);
+        _shape = size;
+
+        return *this;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign,
+             typename Alloc>
+    device_vector<T, DeviceId, Allign, Alloc>&
+    device_vector<T, DeviceId, Allign, Alloc>::
     zero()
     {
         if(!_data)

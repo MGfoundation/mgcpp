@@ -78,6 +78,9 @@ namespace mgcpp
         inline device_vector<T, DeviceId, Allign, Alloc>&
         zero();
 
+        inline device_vector<T, DeviceId, Allign, Alloc>&
+        resize(size_t size);
+
         inline void 
         copy_to_host(T* host_p) const;
 
