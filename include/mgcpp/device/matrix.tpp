@@ -10,6 +10,7 @@
 #include <mgcpp/cuda/device.hpp>
 
 #include <type_traits>
+#include <iostream>
 
 namespace mgcpp
 {
@@ -103,10 +104,13 @@ namespace mgcpp
     {
         size_t total_size = _shape.first * _shape.second;
 
+        std::cout << "safe" << std::endl;
+
         T* buffer = allocate(total_size);
         size_t i = 0;
         for(auto const& row : array)
         {
+            std::cout << "safe" << std::endl;
             std::fill(std::copy(row.begin(),
                                 row.end(),
                                 buffer + i * _shape.second),
@@ -115,6 +119,7 @@ namespace mgcpp
             ++i; 
         }
 
+        std::cout << "safe" << std::endl;
         try
         {
             copy_from_host(_data, buffer, total_size);
@@ -124,8 +129,7 @@ namespace mgcpp
         {
             deallocate(buffer, total_size);
             device_deallocate(_data, total_size);
-
-            //MGCPP_THROW(err);
+            MGCPP_THROW(err);
         }
     }
 
