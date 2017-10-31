@@ -124,7 +124,7 @@ namespace mgcpp
 
         T* buffer = allocate(total_size);
         size_t i = 0;
-        for(auto const& row : array)
+        for(auto const& row : init_list)
         {
             std::fill(std::copy(row.begin(),
                                 row.end(),
