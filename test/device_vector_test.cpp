@@ -10,6 +10,46 @@
 
 #include <mgcpp/device/vector.hpp>
 
+template<typename T>
+class dummy_vector
+{
+private:
+    size_t _size;
+    T* _data;
+    
+public:
+    dummy_vector(size_t size)
+        : _size(size)
+    { _data = (T*)malloc(sizeof(T) * _size); }
+
+    T& operator[](size_t size)
+    { return _data[size]; }
+
+    T* data() const
+    { return _data; }
+
+    size_t shape() const
+    { return _size; }
+
+    ~dummy_vector()
+    { free(_data); }
+};
+
+namespace mgcpp
+{
+    template<typename T>
+    struct adapter<dummy_vector<T>> : std::true_type
+    {
+        void
+        operator()(dummy_vector<T> const& vec,
+                   T** out_p, size_t* size)
+        {
+            *out_p = vec.data();
+            *size = vec.shape();
+        }
+    };
+}
+
 TEST(device_vector, default_constructor)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -134,6 +174,34 @@ TEST(device_vector, constructon_from_host_data)
             }
         }while(false));
     free(host);
+}
+
+TEST(device_vector, third_party_matrix_construction)
+{
+    size_t size = 10;
+    dummy_vector<float> host(size);
+    
+    float counter = 0;
+    for(size_t i = 0; i < size; ++i)
+    {
+        host[i] = counter;
+        ++counter;
+    }
+
+    EXPECT_NO_THROW(
+        do
+        {
+            mgcpp::device_vector<float> device(host);
+
+            counter = 0;
+            for(size_t i = 0; i < size; ++i)
+            {
+                EXPECT_EQ(device.check_value(i), counter);
+                ++counter;
+            }
+
+            EXPECT_EQ(device.shape(), host.shape());
+        }while(false));
 }
 
 TEST(device_vector, constructon_from_init_list)
