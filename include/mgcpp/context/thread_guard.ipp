@@ -21,7 +21,7 @@ namespace mgcpp
         {
             for(auto i : device)
             {
-                (void)ctx.get_cublas_context(device);
+                (void)ctx.get_cublas_context(i);
             }
         }
     }
