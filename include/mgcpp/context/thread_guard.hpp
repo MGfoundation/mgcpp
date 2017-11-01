@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef _MGCPP_CONTEXT_THREAD_GUARD_HPP_
-#define _MGCPP_CONTEXT_TRHEAD_GUARD_HPP_
+#define _MGCPP_CONTEXT_THREAD_GUARD_HPP_
 
 #include <initializer_list>
 
