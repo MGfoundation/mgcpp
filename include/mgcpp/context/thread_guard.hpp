@@ -14,12 +14,13 @@ namespace mgcpp
     class thread_guard
     {
     public:
-        explicit thread_guard(std::initializer_list<size_t> device,
-                              bool cublas);
+        inline explicit
+        thread_guard(std::initializer_list<size_t> device, bool cublas);
+        
+        inline explicit
+        thread_guard(size_t device, bool cublas);
 
-        explicit thread_guard(size_t device, bool cublas);
-
-        ~thread_guard();
+        inline ~thread_guard();
     };
 }
 
