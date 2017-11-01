@@ -12,14 +12,14 @@ matrix:
           packages:
             - g++-6
 
-    - env: CXX=g++-7 CC=gcc-7
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
+    # - env: CXX=g++-7 CC=gcc-7
+    #   os: linux
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - ubuntu-toolchain-r-test
+    #       packages:
+    #         - g++-7
 
     - env: CXX=clang++-3.9 CC=clang-3.9
       os: linux
@@ -32,15 +32,15 @@ matrix:
             - g++-7
             - clang-3.9
 
-    - env: CXX=clang++-4.0 CC=clang-4.0
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - g++-7
-            - clang-4.0
+    # - env: CXX=clang++-4.0 CC=clang-4.0
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - ubuntu-toolchain-r-test
+    #         - llvm-toolchain-trusty-4.0
+    #       packages:
+    #         - g++-7
+    #         - clang-4.0
 
     # - env: CXX=clang++-5.0 CC=clang-5.0
     #   os: linux
