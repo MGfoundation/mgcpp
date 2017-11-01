@@ -132,25 +132,25 @@ namespace mgcpp
         copy_from_host(_data, host_p, _shape);
     }
 
-    template<typename T,
-             size_t DeviceId,
-             allignment Allign,
-             typename Alloc>
-    template<typename HostVec, typename Adapter, typename>
-    device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(HostVec const& host_vec, Adapter& adapter)
-        :_context(&global_context::get_thread_context()),
-         _shape(0),
-         _data(nullptr),
-         _capacity(0)
-    {
-        T* host_p;
-        adapter(host_vec, &host_p, &_shape);
+    // template<typename T,
+    //          size_t DeviceId,
+    //          allignment Allign,
+    //          typename Alloc>
+    // template<typename HostVec, typename Adapter, typename>
+    // device_vector<T, DeviceId, Allign, Alloc>::
+    // device_vector(HostVec const& host_vec, Adapter& adapter)
+    //     :_context(&global_context::get_thread_context()),
+    //      _shape(0),
+    //      _data(nullptr),
+    //      _capacity(0)
+    // {
+    //     T* host_p;
+    //     adapter(host_vec, &host_p, &_shape);
 
-        _capacity = _shape;
-        _data = device_allocate(_shape);
-        copy_from_host(_data, host_p, _shape);
-    }
+    //     _capacity = _shape;
+    //     _data = device_allocate(_shape);
+    //     copy_from_host(_data, host_p, _shape);
+    // }
 
     template<typename T,
              size_t DeviceId,

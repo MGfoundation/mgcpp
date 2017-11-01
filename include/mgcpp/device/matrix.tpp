@@ -170,27 +170,27 @@ namespace mgcpp
         copy_from_host(_data, host_p, total_size);
     }
 
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO,
-             typename Alloc>
-    template<typename HostMat, typename Adapter, typename>
-    device_matrix<T, DeviceId, SO, Alloc>::
-    device_matrix(HostMat const& host_mat,
-                  Adapter& adapter)
-        :_context(&global_context::get_thread_context()),
-         _shape(0, 0),
-         _data(nullptr),
-         _capacity(0)
-    {
-        T* host_p;
-        adapter(host_mat, &host_p, &_shape.first, &_shape.second);
+    // template<typename T,
+    //          size_t DeviceId,
+    //          storage_order SO,
+    //          typename Alloc>
+    // template<typename HostMat, typename Adapter, typename>
+    // device_matrix<T, DeviceId, SO, Alloc>::
+    // device_matrix(HostMat const& host_mat,
+    //               Adapter& adapter)
+    //     :_context(&global_context::get_thread_context()),
+    //      _shape(0, 0),
+    //      _data(nullptr),
+    //      _capacity(0)
+    // {
+    //     T* host_p;
+    //     adapter(host_mat, &host_p, &_shape.first, &_shape.second);
 
-        size_t total_size = _shape.first * _shape.second;
-        _capacity = total_size;
-        _data = device_allocate(total_size);
-        copy_from_host(_data, host_p, total_size);
-    }
+    //     size_t total_size = _shape.first * _shape.second;
+    //     _capacity = total_size;
+    //     _data = device_allocate(total_size);
+    //     copy_from_host(_data, host_p, total_size);
+    // }
 
     template<typename T,
              size_t DeviceId,

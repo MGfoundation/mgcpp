@@ -73,11 +73,11 @@ namespace mgcpp
         inline 
         device_matrix(HostMat const& host_mat);
 
-        template<typename HostMat, typename Adapter,
-                 typename = typename
-                 std::enable_if<std::is_function<Adapter>::value>::type>
-        inline 
-        device_matrix(HostMat const& host_mat, Adapter& adapter);
+        // template<typename HostMat, typename Adapter,
+        //          typename = typename
+        //          std::enable_if<std::is_function<Adapter>::value>::type>
+        // inline 
+        // device_matrix(HostMat const& host_mat, Adapter& adapter);
 
         inline
         device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other);

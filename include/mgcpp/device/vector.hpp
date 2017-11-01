@@ -54,11 +54,11 @@ namespace mgcpp
         inline 
         device_vector(HostVec const& host_mat);
 
-        template<typename HostVec, typename Adapter,
-                 typename = typename
-                 std::enable_if<std::is_function<Adapter>::value>::type>
-        inline 
-        device_vector(HostVec const& host_mat, Adapter& adapter);
+        // template<typename HostVec, typename Adapter,
+        //          typename = typename
+        //          std::enable_if<std::is_function<Adapter>::value>::type>
+        // inline 
+        // device_vector(HostVec const& host_mat, Adapter& adapter);
 
         inline
         device_vector(std::initializer_list<T> const& array);
