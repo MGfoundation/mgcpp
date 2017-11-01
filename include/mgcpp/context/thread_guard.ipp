@@ -29,7 +29,7 @@ namespace mgcpp
     thread_guard::
     thread_guard(size_t device, bool cublas)
     {
-        auto ctx = global_context::get_thread_context();
+        auto& ctx = global_context::get_thread_context();
 
         if(cublas)
         {
