@@ -15,7 +15,7 @@ namespace mgcpp
     thread_guard(std::initializer_list<size_t> device,
                  bool cublas)
     {
-        auto ctx = global_context::get_thread_context();
+        auto& ctx = global_context::get_thread_context();
 
         if(cublas)
         {
