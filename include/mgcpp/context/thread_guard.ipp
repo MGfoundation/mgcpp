@@ -43,5 +43,3 @@ namespace mgcpp
         global_context::reference_cnt_decr();
     }
 }
-
-#endif
