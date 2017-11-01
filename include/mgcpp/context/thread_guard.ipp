@@ -38,7 +38,7 @@ namespace mgcpp
     }
 
     thread_guard::
-    ~thread_guard();
+    ~thread_guard()
     {
         global_context::reference_cnt_decr();
     }
