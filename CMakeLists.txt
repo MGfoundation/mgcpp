@@ -20,14 +20,20 @@ endmacro()
 set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
 
-# options
+# options && command line arguments
 option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
+option(BUILD_CUSTOM_KERNELS "compile mgcpp with mgcpp custom cuda kernels" OFF)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 
 if(NOT CUDA_ARCH)
-    message("cuda arch wasn't provided, using default value 61")
+    message(STATUS "cuda arch wasn't provided, using default value 61")
     set(CUDA_ARCH 61)
+endif()
+
+if(NOT CUDA_HOST_COMPILER)
+    message(STATUS "seperate cuda host compiler  wasn't provided, using CMAKE_CXX_COMPILER")
+    set(CUDA_HOST_COMPILER CMAKE_CXX_COMPILER)
 endif()
 
 
@@ -38,12 +44,6 @@ set(CMAKE_MODULE_PATH
 
 # cuda dependency
 find_package(CUDA REQUIRED)
-
-# set(CUDA_NVCC_FLAGS
-#     -arch=sm_${CUDA_ARCH}
-#     code=sm_${CUDA_ARCH})
-
-message("build flags = ${CUDA_NVCC_FLAGS}")
 
 
 # project source files
@@ -60,12 +60,23 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/error_code.cpp
     ${SOURCE_DIR}/thread_context.cpp)
 
-mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
-    "${BASE_SOURCE_FILES}")
+if(BUILD_CUSTOM_KERNELS)
+    mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
+	"${BASE_SOURCE_FILES}")
+
+    cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
+
+    set(CUDA_VERBOSE_BUILD ON)
+
+    # set(CUDA_NVCC_FLAGS
+    #     -arch=sm_${CUDA_ARCH}
+    #     code=sm_${CUDA_ARCH})
+
+    message("build flags = ${CUDA_NVCC_FLAGS}")
+endif()
+
 mgcpp_display_elements("Source files for ${PROJECT_NAME}"
     "${MAIN_SOURCE_FILES}")
-
-cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
 
 add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
@@ -83,19 +94,29 @@ set_target_properties(${PROJECT_NAME}
 
 
 # Include directories
-target_include_directories("${PROJECT_NAME}base"
-    PUBLIC
-    ${PROJECT_SOURCE_DIR}/include)
+if(BUILD_CUSTOM_KERNELS)
+    target_include_directories("${PROJECT_NAME}base"
+	PUBLIC
+	${PROJECT_SOURCE_DIR}/include)
+
+    set(CUDA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
+endif()
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include)
 
-set(CUDA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
-
 
 ## mgcpp dependencies
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
+
+# CUDA
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+    ${CUDA_INCLUDE_DIRS})
+
+target_link_libraries(${PROJECT_NAME}
+    ${CUDA_LIBRARIES})
 
 # cuBLAS
 cuda_add_cublas_to_target("${PROJECT_NAME}")
@@ -112,8 +133,10 @@ target_include_directories(${PROJECT_NAME}
     ${THIRD_PARTY_DIR}/outcome/include)
 
 # mgcpp base
-target_link_libraries(${PROJECT_NAME}
-    "${PROJECT_NAME}base")
+if(BUILD_CUSTOM_KERNELS)
+    target_link_libraries(${PROJECT_NAME}
+	"${PROJECT_NAME}base")
+endif()
 
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)
@@ -184,11 +207,18 @@ if(BUILD_TESTING)
     add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)
 endif()
 
+set(MGCPP_TARGETS
+    ${PROJECT_NAME}
+    "${PROJECT_NAME}_test")
+
+if(BUILD_CUSTOM_KERNELS)
+    set(MGCPP_TARGETS
+	${MGCPP_TARGETS}
+	"${PROJECT_NAME}base")
+endif()
+
 # install
-install(TARGETS
-    "${PROJECT_NAME}base"
-    "${PROJECT_NAME}"
-    "${PROJECT_NAME}_test"
+install(TARGETS ${MGCPP_TARGETS}
     RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
     ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib
     LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib)
