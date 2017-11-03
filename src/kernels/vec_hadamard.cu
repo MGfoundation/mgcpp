@@ -5,31 +5,29 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/kernels/bits/vec_hadamard.cuh>
-#include <mgcpp/kernels/kernel_status.hpp>
 
 namespace mgcpp
 {
     __global__ void
-    mgcppSvhad(float* x, float* y, float* z, size_t size)
+    mgcppSvhad_impl(float* x, float* y, float* z, size_t size)
     {
-	int const id = blockIdx.x*blockDim.x+threadIdx.x;
+	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 	if(id < size)
 	    z[id] = __fmul_rn(x[id], y[id]);
     }
 
     __global__ void
-    mgcppDvhad(double* x, double* y, double* z, size_t size)
+    mgcppDvhad_impl(double* x, double* y, double* z, size_t size)
     {
-	int const id = blockIdx.x*blockDim.x+threadIdx.x;
+	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 	if(id < size)
 	    z[id] = __dmul_rn(x[id], y[id]);
     }
 
     __global__ void
-    mgcppHvhad(__half* x, __half* y, __half* z, size_t size)
+    mgcppHvhad_impl(__half* x, __half* y, __half* z, size_t size)
     {
-	
-	int const id = blockIdx.x*blockDim.x+threadIdx.x;
+	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 	if(id < size)
 	    z[id] = __hmul(x[id], y[id]);
     }
@@ -40,7 +38,7 @@ namespace mgcpp
 	if(size == 0)
 	    return invalid_range;
 
-	mgcppSvhad<<<>>>();
+	mgcppSvhad_impl<<<1, 1>>>(x, y, z, size);
 
 	return success;
     }
@@ -51,7 +49,7 @@ namespace mgcpp
 	if(size == 0)
 	    return invalid_range;
 	
-	mgcppDvhad<<<>>>();
+	mgcppDvhad_impl<<<1, 1>>>(x, y, z, size);
 
 	return success;
     }
@@ -62,7 +60,7 @@ namespace mgcpp
 	if(size == 0)
 	    return invalid_range;
 	
-	mgcppHvhad<<<>>>();
+	mgcppHvhad_impl<<<1, 1>>>(x, y, z, size);
 
 	return success;
     }

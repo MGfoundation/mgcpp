@@ -7,7 +7,7 @@
 #ifndef _MGCPP_KERNELS_VECTOR_HADAMARD_HPP_
 #define _MGCPP_KERNELS_VECTOR_HADAMARD_HPP_
 
-#include <cuda_runtime.h>
+#include <cuda_fp16.h>
 
 #include <mgcpp/kernels/kernel_status.hpp>
 
