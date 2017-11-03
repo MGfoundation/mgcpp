@@ -132,26 +132,6 @@ namespace mgcpp
         copy_from_host(_data, host_p, _shape);
     }
 
-    // template<typename T,
-    //          size_t DeviceId,
-    //          allignment Allign,
-    //          typename Alloc>
-    // template<typename HostVec, typename Adapter, typename>
-    // device_vector<T, DeviceId, Allign, Alloc>::
-    // device_vector(HostVec const& host_vec, Adapter& adapter)
-    //     :_context(&global_context::get_thread_context()),
-    //      _shape(0),
-    //      _data(nullptr),
-    //      _capacity(0)
-    // {
-    //     T* host_p;
-    //     adapter(host_vec, &host_p, &_shape);
-
-    //     _capacity = _shape;
-    //     _data = device_allocate(_shape);
-    //     copy_from_host(_data, host_p, _shape);
-    // }
-
     template<typename T,
              size_t DeviceId,
              allignment Allign,
@@ -198,7 +178,11 @@ namespace mgcpp
     {
         if(other._shape > _capacity)
         {
-            device_deallocate(_data, _capacity);
+            if(!_data)
+            {
+                device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
             _data = device_allocate(other._shape); 
             _capacity = other._shape;
         }
@@ -247,11 +231,14 @@ namespace mgcpp
     {
         if(size > _capacity)
         {
-            device_deallocate(_data, _capacity);
+            if(!_data)
+            {
+                device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
             _data = device_allocate(size); 
             _capacity = size;
         }
-        _data = device_allocate(size);
         _shape = size;
 
         return *this;
@@ -327,6 +314,7 @@ namespace mgcpp
     {
         T* temp = _data;
         _data = nullptr;
+        _capacity = 0;
         return temp;
     }
 

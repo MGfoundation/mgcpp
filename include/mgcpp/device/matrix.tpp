@@ -170,28 +170,6 @@ namespace mgcpp
         copy_from_host(_data, host_p, total_size);
     }
 
-    // template<typename T,
-    //          size_t DeviceId,
-    //          storage_order SO,
-    //          typename Alloc>
-    // template<typename HostMat, typename Adapter, typename>
-    // device_matrix<T, DeviceId, SO, Alloc>::
-    // device_matrix(HostMat const& host_mat,
-    //               Adapter& adapter)
-    //     :_context(&global_context::get_thread_context()),
-    //      _shape(0, 0),
-    //      _data(nullptr),
-    //      _capacity(0)
-    // {
-    //     T* host_p;
-    //     adapter(host_mat, &host_p, &_shape.first, &_shape.second);
-
-    //     size_t total_size = _shape.first * _shape.second;
-    //     _capacity = total_size;
-    //     _data = device_allocate(total_size);
-    //     copy_from_host(_data, host_p, total_size);
-    // }
-
     template<typename T,
              size_t DeviceId,
              storage_order SO,
@@ -241,7 +219,11 @@ namespace mgcpp
         size_t other_size = other._shape.first * other._shape.second;
         if(other_size > _capacity)
         {
-            device_deallocate(_data, _capacity);
+            if(!_data)
+            {
+                device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
             _data = device_allocate(other_size); 
             _capacity = other_size;
         }
@@ -295,12 +277,15 @@ namespace mgcpp
         size_t total_size = i * j;
         if(total_size > _capacity)
         {
-            device_deallocate(_data, _capacity);
+            if(!_data)
+            {
+                device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
             _data = device_allocate(total_size); 
             _capacity = total_size;
         }
 
-        _data = device_allocate(total_size);
         _shape = std::make_pair(i, j);
 
         return *this;
@@ -317,7 +302,11 @@ namespace mgcpp
         size_t total_size = i * j;
         if(total_size > _capacity)
         {
-            device_deallocate(_data, _capacity);
+            if(!_data)
+            {
+                device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
             _data = device_allocate(total_size); 
             _capacity = total_size;
         }
@@ -425,6 +414,7 @@ namespace mgcpp
     {
         T* temp = _data;
         _data = nullptr;
+        _capacity = 0;
         return temp;
     }
 
