@@ -8,6 +8,7 @@
 
 #include <mgcpp/expressions/mat_mat_mult_expr.hpp>
 #include <mgcpp/operations/mult.hpp>
+#include <mgcpp/system/assert.hpp>
 
 namespace mgcpp
 {
@@ -30,7 +31,9 @@ namespace mgcpp
 
         if(lhs_shape.second != rhs_shape.first)
         {
-            MGCPP_THROW_INVALID_ARGUMENT("dimension doesn't match");
+            MGCPP_ASSERT(lhs_shape.second != rhs_shape.first,
+                         "dimension ", lhs_shape.second,
+                         " doesn't match ", rhs_shape.first);
         }
 
         return strict::mult(lhs, rhs);

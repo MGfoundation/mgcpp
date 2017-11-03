@@ -290,7 +290,9 @@ namespace mgcpp
     {
         if(i >= _shape)
         {
-            MGCPP_THROW_OUT_OF_RANGE("index out of range");
+            MGCPP_THROW_OUT_OF_RANGE(
+                "index out of range. size is ", _size, " ",
+                ", index is ", i);
         }
 
         auto set_device_stat = cuda_set_device(DeviceId);

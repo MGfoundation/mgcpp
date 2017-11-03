@@ -15,6 +15,7 @@
 
 #ifndef MGCPP_HANDLE_ERROR_MESSAGE
 #include <string>
+#include <stdint.h>
 
 namespace mgcpp
 {
@@ -22,6 +23,15 @@ namespace mgcpp
     inline std::string
     string_meta_concat_impl(Args const& args)
     { return std::string(args); }
+
+    inline std::string
+    string_meta_concat_impl(int64_t args)
+    { return std::to_string(args); }
+
+    template<typename... Args>
+    inline std::string
+    string_meta_concat_impl(int64_t head, Args... args)
+    { return std::to_string(head) + string_meta_concat_impl(args...); }
 
     template<typename Head, typename... Args>
     inline std::string

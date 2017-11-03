@@ -19,8 +19,10 @@ namespace mgcpp
 
 #ifndef MGCPP_ASSERT
 #include <cassert>
-#define MGCPP_ASSERT(EXPR, MESSAGE)                 \
-    assert(( EXPR ) || mgcpp::ASSERT_MESSAGE(MESSAGE)) 
+#include <mgcpp/system/error_message_format.hpp>
+#define MGCPP_ASSERT(EXPR, ...)                                         \
+    assert(( EXPR ) ||                                                  \
+           mgcpp::ASSERT_MESSAGE(MGCPP_HANDLE_ERROR_MEESAGE(__VA_ARGS__))) 
 #endif
 
 #endif

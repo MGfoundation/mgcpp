@@ -359,13 +359,18 @@ namespace mgcpp
     check_value(size_t i, size_t j) const 
     {
         if(i >= _shape.first || j >= _shape.second)
-        { MGCPP_THROW_OUT_OF_RANGE("index out of range"); }
+        {
+            MGCPP_THROW_OUT_OF_RANGE(
+                "index out of range. ",
+                " shape is ", _shape.first, " ", _shape.second,
+                ", index is ", i, " ",j );
+        }
 
-        auto set_device_stat = cuda_set_device(DeviceId);
-        if(!set_device_stat)
-        { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
+                auto set_device_stat = cuda_set_device(DeviceId);
+            if(!set_device_stat)
+                { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        T* from = (_data + (i * _shape.second + j));
+                T* from = (_data + (i * _shape.second + j));
         T to;
         copy_to_host(&to, from, 1);
 
