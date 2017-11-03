@@ -55,14 +55,43 @@ make -j4
 make install
 ```
 
-for building without MAGMA or cuSPARSE,
+for building without MAGMA or mgcpp native cuda kernels,
 
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
-cmake -DUSE_MAGMA=OFF -DUSE_CUSPARSE=OFF -G "<Generator>"
+cmake -DUSE_MAGMA=OFF -DBUILD_CUSTOM_KERNELS=OFF -G "<Generator>"
 make -j4
 make install
 ```
+
+The library probes your system cuda ```gpu-architecture``` and ```gpu-code``` code automatically.
+However if you to specify the code, 
+
+``` shell
+-DCUDA_ARCH=<arch>
+```
+
+In order to use different C++ compilers for compiling cuda code and native C++ code, <br />
+provide the argument below.
+
+``` shell
+-DCUDA_HOST_COMPILER=<full path to compiler>
+```
+
+You must provide the __FULL PATH__ to the cuda host compiler in order to work.
+Different cuda versions have different C++ compiler constraints. <br />
+For example ```cuda 8.0``` only support gcc up to 5.3.
+
+So, for an example case that you want to use cuda 8.0 for cuda code, gcc-7 for native C++ code,
+
+```shell
+git clone --recursive https://github.com/Red-Portal/mgcpp.git
+cmake -DCUDA_HOST_COMPILER=/usr/bin/g++-6 -DCMAKE_CXX_COMPILER=g++7 -G "<Generator>"
+make -j4
+make install
+```
+
+it should look like this.
 
 
 <a id="orgd700710"></a>
@@ -70,12 +99,10 @@ make install
 ## Dependencies
 
 -   cmake
--   gcc (>= 6) or clang (>= 3.9) or Visual Studio (>= 15)
+-   gcc 6, clang 3.9, Visual Studio 14.0 (2015) or later
 -   [outcome](https://github.com/ned14/outcome)
--   cuda (>= 8.0)
--   cuBLAS
+-   cuda 8.0 or later
 -   [MAGMA](https://github.com/kjbartel/magma) (optional)
--   cuSPARSE (optional)
 -   gtest (optional)
 
 
@@ -97,6 +124,8 @@ make install
 -   [ ] Add batch type
 -   [ ] Add high level linear algebra operations.
 -   [ ] Add benchmark
+-   [ ] Add FFT
+-   [ ] Add convolution
 
 
 <a id="orgb25347e"></a>

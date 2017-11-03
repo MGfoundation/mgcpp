@@ -34,8 +34,7 @@ find_package(CUDA REQUIRED)
 
 if(BUILD_CUSTOM_KERNELS)
     if(NOT CUDA_HOST_COMPILER)
-	message(STATUS "seperate cuda host compiler  wasn't provided, using CMAKE_CXX_COMPILER")
-	set(CUDA_HOST_COMPILER CMAKE_CXX_COMPILER)
+	message(STATUS "separate cuda host compiler  wasn't provided, using default")
     endif()
 
     if(NOT CUDA_ARCH)
@@ -68,8 +67,7 @@ if(BUILD_CUSTOM_KERNELS)
     set(CUDA_VERBOSE_BUILD ON)
 
     set(CUDA_NVCC_FLAGS
-	${CUDA_NVCC_FLAGS};
-	"${CUDA_GEN_CODE}")
+	${CUDA_NVCC_FLAGS}; "${CUDA_GEN_CODE}")
 
     message("build flags = ${CUDA_NVCC_FLAGS}")
 endif()

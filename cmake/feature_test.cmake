@@ -28,7 +28,7 @@ else()
     string(REGEX REPLACE "\n$" ""
 	CUDA_GENCODE_TEST_STATUS "${CUDA_GENCODE_TEST_STATUS}")
 
-    message(STATUS "successfully run feature test")
+    message(STATUS "running feature test - success")
     message(STATUS "setting NVCC flags ${CUDA_GENCODE_TEST_STATUS}")
     set(CUDA_GEN_CODE "${CUDA_GENCODE_TEST_STATUS}")
 endif()
