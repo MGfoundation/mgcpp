@@ -219,7 +219,7 @@ namespace mgcpp
         size_t other_size = other._shape.first * other._shape.second;
         if(other_size > _capacity)
         {
-            if(!_data)
+            if(_data)
             {
                 device_deallocate(_data, _capacity);
                 _capacity = 0;
@@ -277,7 +277,7 @@ namespace mgcpp
         size_t total_size = i * j;
         if(total_size > _capacity)
         {
-            if(!_data)
+            if(_data)
             {
                 device_deallocate(_data, _capacity);
                 _capacity = 0;
@@ -302,7 +302,7 @@ namespace mgcpp
         size_t total_size = i * j;
         if(total_size > _capacity)
         {
-            if(!_data)
+            if(_data)
             {
                 device_deallocate(_data, _capacity);
                 _capacity = 0;

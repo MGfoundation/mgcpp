@@ -178,7 +178,7 @@ namespace mgcpp
     {
         if(other._shape > _capacity)
         {
-            if(!_data)
+            if(_data)
             {
                 device_deallocate(_data, _capacity);
                 _capacity = 0;
@@ -231,7 +231,7 @@ namespace mgcpp
     {
         if(size > _capacity)
         {
-            if(!_data)
+            if(_data)
             {
                 device_deallocate(_data, _capacity);
                 _capacity = 0;
