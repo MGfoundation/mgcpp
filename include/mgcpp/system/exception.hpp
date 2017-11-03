@@ -13,8 +13,13 @@
 #define MGCPP_ABORT_ON_ERROR true
 #endif
 
+#ifndef MGCPP_ERROR_MESSAGE_HANDLER
+#define MGCPP_ERROR_MESSAGE_HANDLER( ... )      \
+    fprintf(stderr, __VA_ARGS__)
+#endif
+
 #ifndef mgcpp_error_check
-#define mgcpp_error_check(EXP)                              \
+#define mgcpp_error_check( EXP )                            \
     do{try{EXP;}catch(std::exception const& e){             \
             MGCPP_ERROR_MESSAGE_HANDLER(                    \
                 "[mgcpp errror] %s in %s line %d\n",        \
