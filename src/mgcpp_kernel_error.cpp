@@ -41,6 +41,10 @@ namespace mgcpp
         case index_out_of_range:
             return "requested operation range is incorrect";
             break;
+
+        case invalid_range:
+            return "operation range is invalid";
+            break;
         }
         return "";
     }

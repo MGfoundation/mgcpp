@@ -12,7 +12,8 @@ namespace mgcpp
     enum kernel_status_t
     {
         success = 0,
-        index_out_of_range = 1
+        index_out_of_range = 1,
+        invalid_range = 2
     };
 }
 

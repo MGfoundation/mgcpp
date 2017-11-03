@@ -48,7 +48,9 @@ endif()
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(KERNELS_SOURCE_DIR ${SOURCE_DIR}/kernels)
 
-set(BASE_SOURCE_FILES ${KERNELS_SOURCE_DIR}/fill.cu)
+set(BASE_SOURCE_FILES
+    ${KERNELS_SOURCE_DIR}/vec_hadamard.cu
+    ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/init.cpp
