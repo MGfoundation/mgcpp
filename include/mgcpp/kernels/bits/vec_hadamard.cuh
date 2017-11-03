@@ -7,6 +7,8 @@
 #ifndef _MGCPP_KERNELS_VECTOR_HADAMARD_HPP_
 #define _MGCPP_KERNELS_VECTOR_HADAMARD_HPP_
 
+#include <cuda_runtime.h>
+
 #include <mgcpp/kernels/kernel_status.hpp>
 
 namespace mgcpp
@@ -16,6 +18,9 @@ namespace mgcpp
 
     kernel_status_t
     mgcppDvhad(double* x, double* y, double* z, size_t size);
+
+    kernel_status_t
+    mgcppHvhad(__half* x, __half* y, __half* z, size_t size);
 }
 
 #endif
