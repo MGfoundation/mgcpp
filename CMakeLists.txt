@@ -19,31 +19,30 @@ endmacro()
 # set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_INSTALL_RPATH ${CMAKE_SOURCE_DIR}/lib)
 
-
-# options && command line arguments
-option(USE_MAGMA "compile mgcpp with magma features" ON)
-option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
-option(BUILD_CUSTOM_KERNELS "compile mgcpp with mgcpp custom cuda kernels" OFF)
-option(BUILD_TESTING "compile mgcpp with tests" ON)
-
-if(NOT CUDA_ARCH)
-    message(STATUS "cuda arch wasn't provided, using default value 61")
-    set(CUDA_ARCH 61)
-endif()
-
-if(NOT CUDA_HOST_COMPILER)
-    message(STATUS "seperate cuda host compiler  wasn't provided, using CMAKE_CXX_COMPILER")
-    set(CUDA_HOST_COMPILER CMAKE_CXX_COMPILER)
-endif()
-
-
 # cmake modules path
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+# options && command line arguments
+option(USE_MAGMA "compile mgcpp with magma features" ON)
+option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
+option(BUILD_CUSTOM_KERNELS "compile mgcpp with mgcpp custom cuda kernels" ON)
+option(BUILD_TESTING "compile mgcpp with tests" ON)
 
 # cuda dependency
 find_package(CUDA REQUIRED)
+
+if(BUILD_CUSTOM_KERNELS)
+    if(NOT CUDA_HOST_COMPILER)
+	message(STATUS "seperate cuda host compiler  wasn't provided, using CMAKE_CXX_COMPILER")
+	set(CUDA_HOST_COMPILER CMAKE_CXX_COMPILER)
+    endif()
+
+    if(NOT CUDA_ARCH)
+	message(STATUS "cuda arch wasn't provided, running feature test")
+	include(feature_test)
+    endif()
+endif()
 
 
 # project source files
@@ -68,9 +67,9 @@ if(BUILD_CUSTOM_KERNELS)
 
     set(CUDA_VERBOSE_BUILD ON)
 
-    # set(CUDA_NVCC_FLAGS
-    #     -arch=sm_${CUDA_ARCH}
-    #     code=sm_${CUDA_ARCH})
+    set(CUDA_NVCC_FLAGS
+	${CUDA_NVCC_FLAGS};
+	"${CUDA_GEN_CODE}")
 
     message("build flags = ${CUDA_NVCC_FLAGS}")
 endif()
