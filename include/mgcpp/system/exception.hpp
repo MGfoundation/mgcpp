@@ -8,7 +8,6 @@
 #define _CUDA_EXCEPTIONS_HPP_
 
 #include <stdexcept>
-#include <mgcpp/system/error_message_format.hpp>
 
 #ifndef MGCPP_ABORT_ON_ERROR
 #define MGCPP_ABORT_ON_ERROR true
@@ -24,10 +23,10 @@
 #endif
 
 #ifdef ERROR_CHECK_EXCEPTION
-#define MGCPP_THROW(EXCEPTION)                                  \
-    do{ MGCPP_ERROR_MESSAGE_HANDLER(                            \
-            "[mgcpp errror] %s in %s line %d\n",                \
-            EXCEPTION.what(), __FILE__, __LINE__);              \
+#define MGCPP_THROW(EXCEPTION)                      \
+    do{ MGCPP_ERROR_MESSAGE_HANDLER(                \
+            "[mgcpp errror] %s in %s line %d\n",    \
+            EXCEPTION.what(), __FILE__, __LINE__);  \
         throw EXCEPTION; }while(false)
 #endif
 
@@ -47,39 +46,33 @@
 #endif
 
 #ifndef MGCPP_THROW_INVALID_ARGUMENT
-#define MGCPP_THROW_INVALID_ARGUMENT(...)                       \
-    MGCPP_THROW(std::invalid_argument(                          \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_INVALID_ARGUMENT( MESSAGE )     \
+    MGCPP_THROW(std::invalid_argument( MESSAGE ))
 #endif
 
 #ifndef MGCPP_THROW_LENGTH_ERROR
-#define MGCPP_THROW_LENGTH_ERROR(...)                           \
-    MGCPP_THROW(std::length_error(                              \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_LENGTH_ERROR( MESSAGE )     \
+    MGCPP_THROW(std::length_error( MESSAGE ))
 #endif
 
 #ifndef MGCPP_THROW_OUT_OF_RANGE
-#define MGCPP_THROW_OUT_OF_RANGE(...)                           \
-    MGCPP_THROW(std::out_of_range(                              \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_OUT_OF_RANGE( MESSAGE )     \
+    MGCPP_THROW(std::out_of_range( MESSAGE ))
 #endif
 
 #ifndef MGCPP_THROW_RUNTIME_ERROR
-#define MGCPP_THROW_RUNTIME_ERROR(...)                          \
-    MGCPP_THROW(std::runtime_error(                             \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_RUNTIME_ERROR( MESSAGE )    \
+    MGCPP_THROW(std::runtime_error( MESSAGE ))
 #endif
 
 #ifndef MGCPP_THROW_OVERFLOW_ERROR
-#define MGCPP_THROW_OVERFLOW_ERROR(...)                         \
-    MGCPP_THROW(std::overflow_error(                            \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_OVERFLOW_ERROR( MESSAGE )   \
+    MGCPP_THROW(std::overflow_error( MESSAGE ))
 #endif
 
 #ifndef MGCPP_THROW_UNDERFLOW_ERROR
-#define MGCPP_THROW_UNDERFLOW_ERROR(...)                        \
-    MGCPP_THROW(std::underflow_error(                           \
-                    MGCPP_HANDLE_ERROR_MESSAGE(__VA_ARGS__)))
+#define MGCPP_THROW_UNDERFLOW_ERROR( MESSAGE )      \
+    MGCPP_THROW(std::underflow_error( MESSAGE ))
 #endif
 
 #endif
