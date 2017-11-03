@@ -311,7 +311,6 @@ namespace mgcpp
             _capacity = total_size;
         }
 
-        _data = device_allocate(total_size);
         _shape = std::make_pair(i, j);
 
         T* buffer = allocate(total_size);
