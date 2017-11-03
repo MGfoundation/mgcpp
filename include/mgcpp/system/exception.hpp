@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _CUDA_EXCEPTIONS_HPP_
-#define _CUDA_EXCEPTIONS_HPP_
+#ifndef _MGCPP_SYSTEM_EXCEPTIONS_HPP_
+#define _MGCPP_SYSTEM_EXCEPTIONS_HPP_
 
 #include <stdexcept>
 
