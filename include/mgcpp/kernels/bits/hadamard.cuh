@@ -14,13 +14,13 @@
 namespace mgcpp
 {
     kernel_status_t
-    mgcppSvhad(float* x, float* y, float* z, size_t size);
+    mgblas_Svhp(float* x, float* y, float* z, size_t size);
 
     kernel_status_t
-    mgcppDvhad(double* x, double* y, double* z, size_t size);
+    mgblas_Dvhp(double* x, double* y, double* z, size_t size);
 
     kernel_status_t
-    mgcppHvhad(__half* x, __half* y, __half* z, size_t size);
+    mgblas_Hvhp(__half* x, __half* y, __half* z, size_t size);
 }
 
 #endif
