@@ -29,7 +29,7 @@ namespace mgcpp
         auto lhs_shape = lhs.shape();
         auto rhs_shape = rhs.shape();
 
-        MGCPP_ASSERT(lhs_shape.second != rhs_shape.first,
+        MGCPP_ASSERT(lhs_shape.second == rhs_shape.first,
                      "dimension doesn't match ");
 
         return strict::mult(lhs, rhs);
