@@ -1,60 +1,82 @@
-#include <mgcpp/kernels/bits/fill.cuh>
 
-#include <stdint.h>
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#include <mgcpp/kernels/bits/fill.cuh>
+#include <cmath>
+
+#define BLK 64
 
 namespace mgcpp
 {
-    void fill64(void* ptr, int bitvec, size_t size)
-    {
-	
-    }
-
-    // void fill32(void* ptr, uint32_t bitvec, size_t size)
-    // {
-	
-    // }
-
-    // void fill16(void* ptr, uint16_t bitvec, size_t size)
-    // {
-	
-    // }
-
-    __host__ __device__  void
-    fill64_impl(int* ptr, int bitvec, size_t count)
+    __global__  void
+    mgblas_Sfill_impl(float* arr, float value, size_t n)
     {
 	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
 
 	for (size_t i = idx;
-	     i < count;
+	     i < n;
 	     i += gridDim.x * blockDim.x)
 	{
-	    ptr[i] = bitvec;
+	    arr[i] = value;
 	}
     }
 
-    // __host__ __device__  void
-    // fill32_impl(uint32_t* ptr, uint32_t bitvec, size_t count)
-    // {
-    // 	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    __global__  void
+    mgblas_Dfill_impl(double* arr, double value, size_t n)
+    {
+    	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // 	for (size_t i = idx;
-    // 	     i < count;
-    // 	     i += gridDim.x * blockDim.x)
-    // 	{
-    // 	    ptr[i] = bitvec;
-    // 	}
-    // }
+    	for (size_t i = idx;
+    	     i < n;
+    	     i += gridDim.x * blockDim.x)
+    	{
+    	    arr[i] = value;
+    	}
+    }
 
-    // __host__ __device__  void
-    // fill16_impl(uint16_t* ptr, uint16_t bitvec, size_t count)
-    // {
-    // 	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    __global__  void
+    mgblas_Hfill_impl(__half* arr, __half value, size_t n)
+    {
+    	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // 	for (size_t i = idx;
-    // 	     i < count;
-    // 	     i += gridDim.x * blockDim.x)
-    // 	{
-    // 	    ptr[i] = bitvec;
-    // 	}
-    // }
+    	for (size_t i = idx;
+    	     i < n;
+    	     i += gridDim.x * blockDim.x)
+    	{
+    	    arr[i] = value;
+    	}
+    }
+
+    kernel_status_t
+    mgblas_Sfill(float* arr, float value, size_t n)
+    {
+	int grid_size = static_cast<int>(
+	    ceil(static_cast<float>(n)/ BLK ));
+	mgblas_Sfill_impl<<<BLK, grid_size>>>(arr, value, n);
+
+	return success;
+    }
+
+    kernel_status_t
+    mgblas_Dfill(double* arr, double value, size_t n)
+    {
+	int grid_size = static_cast<int>(
+	    ceil(static_cast<float>(n)/ BLK ));
+	mgblas_Dfill_impl<<<BLK, grid_size>>>(arr, value, n);
+
+	return success;
+    }
+
+    kernel_status_t
+    mgblas_Hfill(__half* arr, __half value, size_t n)
+    {
+	int grid_size = static_cast<int>(
+	    ceil(static_cast<float>(n)/ BLK ));
+	mgblas_Hfill_impl<<<BLK, grid_size>>>(arr, value, n);
+
+	return success;
+    }
 }

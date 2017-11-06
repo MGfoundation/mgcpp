@@ -4,16 +4,23 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_KERNELS_BITS_FILL_HPP_
-#define _MGCPP_KERNELS_BITS_FILL_HPP_
+#ifndef _MGCPP_KERNELS_BITS_FILL_CUH_
+#define _MGCPP_KERNELS_BITS_FILL_CUH_
+
+#include <mgcpp/kernels/kernel_status.hpp>
+
+#include <cuda_fp16.h>
 
 namespace mgcpp
 {
-    void fill64(void* ptr, int bitvec, size_t size);
+    kernel_status_t
+    mgblas_Sfill(float* arr, float value, size_t n);
 
-    // void fill32(void* ptr, uint32_t bitvec, size_t size);
+    kernel_status_t
+    mgblas_Dfill(double* arr, double value, size_t n);
 
-    // void fill16(void* ptr, uint16_t bitvec, size_t size);
+    kernel_status_t
+    mgblas_Hfill(__half* arr, __half value, size_t n);
 }
 
 #endif
