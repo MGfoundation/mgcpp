@@ -8,6 +8,7 @@
 #define _MGCPP_KERNELS_MGBLAS_LV1_HPP_
 
 #include <outcome.hpp>
+namespace outcome = OUTCOME_V2_NAMESPACE;
 
 #include <cstdlib>
 
