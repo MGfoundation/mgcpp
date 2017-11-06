@@ -82,14 +82,13 @@ TEST(vec_operation, vec_scalar_mult)
     }
 }
 
-TEST(vec_operation, vec_hadamard_product)
+TEST(vec_vec_operation, vec_hadamard_product)
 {
     size_t size = 5;
     float first_val = 3;
     float second_val = 5;
     mgcpp::device_vector<float> first(size, first_val);
     mgcpp::device_vector<float> second(size, second_val);
-
 
     mgcpp::device_vector<float> result{};
     EXPECT_NO_THROW({
