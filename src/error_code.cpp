@@ -56,7 +56,8 @@ namespace mgcpp
         {
         case status_t::success:
             if(err == cublas_error_t::CUBLAS_STATUS_SUCCESS ||
-               err == cuda_error_t::cudaSuccess)
+               err == cuda_error_t::cudaSuccess ||
+               err == kernel_status_t::success)
                 return true;
             else
                 return false;

@@ -7,12 +7,13 @@
 #ifndef _MGCPP_SYSTEM_ERROR_CODE_
 #define _MGCPP_SYSTEM_ERROR_CODE_
 
-#include <mgcpp/system/cuda_error.hpp>
-#include <mgcpp/system/cublas_error.hpp>
-
 #include <system_error>
 #include <type_traits>
 #include <string>
+
+#include <mgcpp/system/cuda_error.hpp>
+#include <mgcpp/system/cublas_error.hpp>
+#include <mgcpp/system/mgcpp_kernel_error.hpp>
 
 namespace mgcpp
 {

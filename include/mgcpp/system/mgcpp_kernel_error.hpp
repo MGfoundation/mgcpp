@@ -12,8 +12,11 @@
 #include <system_error>
 #include <type_traits>
 
-std::error_code
-make_error_code(mgcpp::kernel_status_t err) noexcept;
+namespace mgcpp
+{
+    std::error_code
+    make_error_code(mgcpp::kernel_status_t err) noexcept;
+}
 
 namespace std
 {
