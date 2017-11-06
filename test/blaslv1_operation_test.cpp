@@ -8,6 +8,7 @@
 
 #include <mgcpp/operations/sum.hpp>
 #include <mgcpp/operations/add.hpp>
+#include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/device/vector.hpp>
@@ -78,5 +79,25 @@ TEST(vec_operation, vec_scalar_mult)
     for(auto i = 0u; i < size; ++i)
     {
         EXPECT_EQ(result.check_value(i), init_val * scalar);
+    }
+}
+
+TEST(vec_operation, vec_hadamard_product)
+{
+    size_t size = 5;
+    float first_val = 3;
+    float second_val = 5;
+    mgcpp::device_vector<float> first(size, first_val);
+    mgcpp::device_vector<float> second(size, second_val);
+
+
+    mgcpp::device_vector<float> result{};
+    EXPECT_NO_THROW({
+            result = mgcpp::strict::hdmd(first, second);
+        });
+
+    for(auto i = 0u; i < size; ++i)
+    {
+        EXPECT_EQ(result.check_value(i), first_val * second_val);
     }
 }
