@@ -48,11 +48,11 @@ namespace mgcpp
         }
         return "";
     }
-}
 
-std::error_code
-make_error_code(mgcpp::kernel_status_t err) noexcept
-{
-    return {static_cast<int>(err),
-            mgcpp::mgcpp_kernel_error_category};
+    std::error_code
+    make_error_code(mgcpp::kernel_status_t err) noexcept
+    {
+        return {static_cast<int>(err),
+                mgcpp::mgcpp_kernel_error_category};
+    }
 }
