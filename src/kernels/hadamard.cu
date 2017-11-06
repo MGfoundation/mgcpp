@@ -26,7 +26,7 @@ namespace mgcpp
 	__syncthreads();
 
 	if(id < size)
-	    z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
+	    shared_z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
 	__syncthreads();
 
 	z[id] = shared_z[threadIdx.x];
@@ -47,7 +47,7 @@ namespace mgcpp
 	__syncthreads();
 
 	if(id < size)
-	    z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
+	    shared_z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
 	__syncthreads();
 
 	z[id] = shared_z[threadIdx.x];
@@ -68,7 +68,7 @@ namespace mgcpp
 	__syncthreads();
 
 	if(id < size)
-	    z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
+	    shared_z[threadIdx.x] = __fmul_rn(shared_x[threadIdx.x], shared_y[threadIdx.x]);
 	__syncthreads();
 
 	z[id] = shared_z[threadIdx.x];
