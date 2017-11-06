@@ -70,9 +70,9 @@ namespace mgcpp
 	shared_z[threadIdx.x] = z[id];
 	__syncthreads();
 
-	if(id < size)
-	    shared_z[threadIdx.x] = __hmul(shared_x[threadIdx.x], shared_y[threadIdx.x]);
-	__syncthreads();
+	// if(id < size)
+	//     shared_z[threadIdx.x] = __hmul(shared_x[threadIdx.x], shared_y[threadIdx.x]);
+	// __syncthreads();
 
 	z[id] = shared_z[threadIdx.x];
     }
