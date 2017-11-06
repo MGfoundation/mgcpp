@@ -9,7 +9,7 @@
 
 #include <mgcpp/kernels/kernel_status.hpp>
 
-#include <cuda_fp16.h>
+//#include <cuda_fp16.h>
 
 namespace mgcpp
 {
