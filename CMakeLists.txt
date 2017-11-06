@@ -40,6 +40,8 @@ if(BUILD_CUSTOM_KERNELS)
     if(NOT CUDA_ARCH)
 	message(STATUS "cuda arch wasn't provided, running feature test")
 	include(feature_test)
+    else()
+	set(CUDA_GEN_CODE "-gencode arch=compute_${CUDA_ARCH},code=sm_${CUDA_ARCH}")
     endif()
 endif()
 
@@ -110,6 +112,12 @@ target_include_directories(${PROJECT_NAME}
 ## mgcpp dependencies
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 
+# mgcpp base
+if(BUILD_CUSTOM_KERNELS)
+    target_link_libraries(${PROJECT_NAME}
+	"${PROJECT_NAME}base")
+endif()
+
 # CUDA
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -131,12 +139,6 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${THIRD_PARTY_DIR}/outcome/include)
-
-# mgcpp base
-if(BUILD_CUSTOM_KERNELS)
-    target_link_libraries(${PROJECT_NAME}
-	"${PROJECT_NAME}base")
-endif()
 
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)
