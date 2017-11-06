@@ -12,7 +12,8 @@
 namespace mgcpp
 {
     __global__ void
-    mgblas_Svhp_impl(float* x, float* y, float* z, size_t size)
+    mgblas_Svhp_impl(float const* x, float const* y,
+		     float* z, size_t size)
     {
 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -33,7 +34,8 @@ namespace mgcpp
     }
 
     __global__ void
-    mgblas_Dvhp_impl(double* x, double* y, double* z, size_t size)
+    mgblas_Dvhp_impl(double const* x, double const* y,
+		     double* z, size_t size)
     {
 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -54,7 +56,8 @@ namespace mgcpp
     }
 
     __global__ void
-    mgblas_Hvhp_impl(__half* x, __half* y, __half* z, size_t size)
+    mgblas_Hvhp_impl(__half const* x, __half const* y,
+		     __half* z, size_t size)
     {
 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -75,7 +78,8 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Svhp(float* x, float* y, float* z, size_t size)
+    mgblas_Svhp(float const* x, float const* y,
+		float* z, size_t size)
     {
 	if(size == 0)
 	    return invalid_range;
@@ -89,7 +93,8 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Dvhp(double* x, double* y, double* z, size_t size)
+    mgblas_Dvhp(double const* x, double const* y,
+		double* z, size_t size)
     {
 	if(size == 0)
 	    return invalid_range;
@@ -103,7 +108,8 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Hvhp(__half* x, __half* y, __half* z, size_t size)
+    mgblas_Hvhp(__half const* x, __half const* y,
+		__half* z, size_t size)
     {
 	if(size == 0)
 	    return invalid_range;
@@ -115,5 +121,4 @@ namespace mgcpp
 
 	return success;
     }
-
 }
