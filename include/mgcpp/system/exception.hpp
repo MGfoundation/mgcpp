@@ -41,7 +41,7 @@
 
 
 #ifndef MGCPP_THROW_SYSTEM_ERROR
-#define MGCPP_THROW_SYSTEM_ERROR(ERROR, ...)    \
+#define MGCPP_THROW_SYSTEM_ERROR(ERROR)         \
     MGCPP_THROW(std::system_error(ERROR))
 #endif
 
