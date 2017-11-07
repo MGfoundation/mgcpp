@@ -14,27 +14,31 @@ namespace mgcpp
     __global__  void
     mgblas_Sfill_impl(float* arr, float value, size_t n)
     {
-	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+	int const id = blockIdx.x * blockDim.x + threadIdx.x;
+	__shared__ float shared[64];
 
-	for (size_t i = idx;
-	     i < n;
-	     i += gridDim.x * blockDim.x)
-	{
-	    arr[i] = value;
-	}
+	if(id >= n)
+	    return;
+
+	shared[threadIdx.x] = value;
+	__syncthreads();
+
+	arr[id] = shared[threadIdx.x];
     }
 
     __global__  void
     mgblas_Dfill_impl(double* arr, double value, size_t n)
     {
-    	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+	int const id = blockIdx.x * blockDim.x + threadIdx.x;
+	__shared__ double shared[64];
 
-    	for (size_t i = idx;
-    	     i < n;
-    	     i += gridDim.x * blockDim.x)
-    	{
-    	    arr[i] = value;
-    	}
+	if(id >= n)
+	    return;
+
+	shared[threadIdx.x] = value;
+	__syncthreads();
+
+	arr[id] = shared[threadIdx.x];
     }
 
     // __global__  void
