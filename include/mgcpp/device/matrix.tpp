@@ -318,16 +318,21 @@ namespace mgcpp
 
         _shape = std::make_pair(i, j);
 
-        T* buffer = allocate(total_size);
-        std::fill(buffer, buffer + total_size, init);
+        auto status = mgblas_fill(_data, init, total_size);
 
-        try
-        { copy_from_host(_data, buffer, total_size); }
-        catch(std::system_error const& err)
-        {
-            deallocate(buffer, total_size);
-            MGCPP_THROW(err);
-        }
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        // T* buffer = allocate(total_size);
+        // std::fill(buffer, buffer + total_size, init);
+
+        // try
+        // { copy_from_host(_data, buffer, total_size); }
+        // catch(std::system_error const& err)
+        // {
+        //     deallocate(buffer, total_size);
+        //     MGCPP_THROW(err);
+        // }
         return *this;
     }
 

@@ -12,6 +12,7 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/device/matrix.hpp>
 #include <mgcpp/device/vector.hpp>
+#include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp
@@ -27,36 +28,18 @@ namespace mgcpp
         {
             auto set_device_status = cuda_set_device(DeviceId);
             if(!set_device_status)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
-            }
+            { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
             T result;
             size_t size = vec.shape();
             
-            T* buffer = (T*)malloc(sizeof(T) * size);
-            if(!buffer)
-            {
-                MGCPP_THROW_BAD_ALLOC; 
-            }
-
-            std::fill(buffer, buffer + size, 1);
-
             auto temp = cuda_malloc<T>(size);
             if(!temp)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(temp.error()); 
-            }
+            { MGCPP_THROW_SYSTEM_ERROR(temp.error()); }
 
-            auto memcpy_status =
-                cuda_memcpy(temp.value(), buffer, size,
-                            cuda_memcpy_kind::host_to_device);
-            if(!memcpy_status)
-            {
-                free(buffer);
-                (void)cuda_free(temp.value());
-                MGCPP_THROW_SYSTEM_ERROR(memcpy_status.error());
-            }
+            auto fill_status = mgblas_fill(temp.value(), 1, size);
+            if(!fill_status)
+            { MGCPP_THROW_SYSTEM_ERROR(fill_status.error()); }
 
             auto* context = vec.context();
             auto handle = context->get_cublas_context(DeviceId);
@@ -66,12 +49,9 @@ namespace mgcpp
                                      vec.data(), 1,
                                      &result);
 
-            free(buffer);
             (void)cuda_free(temp.value());
             if(!status)
-            {
-                MGCPP_THROW_SYSTEM_ERROR(status.error());
-            }
+            { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
             return result;
         }

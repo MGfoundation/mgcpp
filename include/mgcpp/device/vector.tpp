@@ -8,6 +8,7 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/device/vector.hpp>
 #include <mgcpp/system/exception.hpp>
 
@@ -51,17 +52,9 @@ namespace mgcpp
         T* buffer = allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
-        try
-        {
-            copy_from_host(_data, buffer, _shape);
-            deallocate(buffer, _shape);
-        }
-        catch(std::system_error const& err)
-        {
-            deallocate(buffer, _shape);
-            device_deallocate(_data, _capacity);
-            MGCPP_THROW_SYSTEM_ERROR(err);
-        }
+        auto status = mgblas_fill(_data, init, _shape);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }
 
     template<typename T,
