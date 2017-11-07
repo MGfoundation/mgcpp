@@ -10,7 +10,7 @@
 
 namespace mgcpp
 {
-    outcome::result<void>
+    inline outcome::result<void>
     mgblas_fill(float* arr, float value, size_t n)
     {
         std::error_code status = mgblas_Sfill(arr, value, n); 
@@ -21,7 +21,7 @@ namespace mgcpp
             return outcome::success();
     }
 
-    outcome::result<void>
+    inline outcome::result<void>
     mgblas_fill(double* arr, double value, size_t n)
     {
         std::error_code status = mgblas_Dfill(arr, value, n); 
