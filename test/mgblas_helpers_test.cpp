@@ -24,7 +24,7 @@ TEST(mgblas_helpers, array_init)
 
     float* host = (float*)malloc(sizeof(float) * size);
 
-    (void)mgcpp::cuda_memcpy(rst.value(), host, size,
+    (void)mgcpp::cuda_memcpy(host, rst.value(), size,
                              mgcpp::cuda_memcpy_kind::device_to_host);
 
     for(auto i = 0u; i < size; ++i)
