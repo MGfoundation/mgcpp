@@ -4,10 +4,11 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/device/matrix.hpp>
-#include <mgcpp/system/exception.hpp>
-#include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
+#include <mgcpp/cuda/memory.hpp>
+#include <mgcpp/device/matrix.hpp>
+#include <mgcpp/kernels/mgblas_helpers.hpp>
+#include <mgcpp/system/exception.hpp>
 
 #include <type_traits>
 #include <iostream>
@@ -49,20 +50,24 @@ namespace mgcpp
     {
         size_t total_size = _shape.first * _shape.second;
 
-        T* buffer = allocate(total_size);
-        std::fill(buffer, buffer + total_size, init);
+        auto status = mgblas_fill(_data, init, total_size);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status); }
 
-        try
-        {
-            copy_from_host(_data, buffer, total_size);
-            deallocate(buffer, total_size);
-        }
-        catch(std::system_error const& err)
-        {
-            deallocate(buffer, total_size);
-            device_deallocate(_data, DeviceId);
-            MGCPP_THROW_SYSTEM_ERROR(err);
-        }
+        // T* buffer = allocate(total_size);
+        // std::fill(buffer, buffer + total_size, init);
+
+        // try
+        // {
+        //     copy_from_host(_data, buffer, total_size);
+        //     deallocate(buffer, total_size);
+        // }
+        // catch(std::system_error const& err)
+        // {
+        //     deallocate(buffer, total_size);
+        //     device_deallocate(_data, DeviceId);
+        //     MGCPP_THROW_SYSTEM_ERROR(err);
+        // }
     }
 
     template<typename T,
