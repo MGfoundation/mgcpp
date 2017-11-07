@@ -52,7 +52,7 @@ namespace mgcpp
 
         auto status = mgblas_fill(_data, init, total_size);
         if(!status)
-        { MGCPP_THROW_SYSTEM_ERROR(status); }
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         // T* buffer = allocate(total_size);
         // std::fill(buffer, buffer + total_size, init);
