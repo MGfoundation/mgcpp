@@ -19,6 +19,13 @@ namespace mgcpp
                  typename Alloc>
         inline device_vector<T, Device, Allign, Alloc>
         abs(device_vector<T, Device, Allign, Alloc> const& vec);
+
+        template<typename T,
+                 size_t Device,
+                 storage_order SO,
+                 typename Alloc>
+        inline device_matrix<T, Device, SO, Alloc>
+        abs(device_matrix<T, Device, SO, Alloc> const& mat);
     }
 }
 

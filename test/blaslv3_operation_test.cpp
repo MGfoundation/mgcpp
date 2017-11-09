@@ -12,6 +12,7 @@
 
 #include <mgcpp/device/matrix.hpp>
 #include <mgcpp/operations/mult.hpp>
+#include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/add.hpp>
 
 TEST(mat_mat_operation, row_major_multiplication)
@@ -54,4 +55,21 @@ TEST(mat_mat_operation , row_major_addition)
                 << "i: " << i << " j: " << j; 
         } 
     }
+}
+
+TEST(mat_operation, mat_abs)
+{
+    mgcpp::device_matrix<float> mat{{-1, -2, -3}, {-4, -5, -6}};
+
+    mgcpp::device_matrix<float> result{};
+    EXPECT_NO_THROW({
+            result = mgcpp::strict::abs(mat);
+
+            EXPECT_EQ(result.check_value(0, 0), 1);
+            EXPECT_EQ(result.check_value(0, 1), 2);
+            EXPECT_EQ(result.check_value(0, 2), 3);
+            EXPECT_EQ(result.check_value(1, 0), 4);
+            EXPECT_EQ(result.check_value(1, 1), 5);
+            EXPECT_EQ(result.check_value(1, 2), 6);
+        });
 }

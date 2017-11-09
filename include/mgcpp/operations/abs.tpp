@@ -36,5 +36,28 @@ namespace mgcpp
 
         return result;
     }
+
+    template<typename T,
+             size_t Device,
+             storage_order SO,
+             typename Alloc>
+    device_matrix<T, Device, SO, Alloc>
+    strict::
+    abs(device_matrix<T, Device, SO, Alloc> const& mat)
+    {
+        auto set_device_status = cuda_set_device(Device);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
+
+        auto shape = mat.shape();
+
+        auto result = mgcpp::device_matrix<float>(mat);
+        auto status = mgblas_vab(result.data_mutable(), shape.first * shape.second);
+
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
+    }
 }
 
