@@ -22,6 +22,10 @@ namespace mgcpp
     strict::
     abs(device_vector<T, Device, Allign, Alloc> const& vec)
     {
+        auto set_device_status = cuda_set_device(Device);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
+
         size_t n = vec.shape();
 
         auto result = mgcpp::device_vector<float>(vec);
