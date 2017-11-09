@@ -26,10 +26,7 @@ namespace mgcpp
         auto lhs = mgcpp::eval(_lhs);
         auto rhs = mgcpp::eval(_rhs);
 
-        auto lhs_shape = lhs.shape();
-        auto rhs_shape = rhs.shape();
-
-        MGCPP_ASSERT(lhs_shape.second == rhs_shape.first,
+        MGCPP_ASSERT(lhs.shape().second == rhs.shape().first,
                      "dimension doesn't match ");
 
         return strict::mult(lhs, rhs);
