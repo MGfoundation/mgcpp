@@ -67,8 +67,12 @@ before_install:
   - echo ${CC}
   - echo ${CXX}
   - ${CXX} --version
+  - sudo add-apt-repository -y ppa:nschloe/boost-nightly
+  - sudo apt-get update -qq
 
 install:
+  - sudo apt-get install libboost-all-dev
+
   - source .travis/cuda_install.sh
 
   - echo "installing cmake"
