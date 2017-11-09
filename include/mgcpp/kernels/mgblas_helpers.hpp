@@ -9,8 +9,8 @@
 
 #include <mgcpp/kernels/bits/fill.cuh>
 
-#include <outcome.hpp>
-namespace outcome = OUTCOME_V2_NAMESPACE;
+#include <boost/outcome.hpp>
+namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <cstdlib>
 

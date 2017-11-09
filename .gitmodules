@@ -1,3 +1,3 @@
-[submodule "outcome"]
-	path = third_party/outcome
-	url = https://github.com/ned14/outcome.git
+[submodule "third_party/boost-outcome"]
+	path = third_party/boost-outcome
+	url = https://github.com/ned14/boost-outcome

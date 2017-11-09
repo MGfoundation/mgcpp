@@ -138,7 +138,7 @@ endif()
 # add outcome library
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-    ${THIRD_PARTY_DIR}/outcome/include)
+    ${THIRD_PARTY_DIR}/boost-outcome/include)
 
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)

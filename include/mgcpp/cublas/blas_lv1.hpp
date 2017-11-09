@@ -9,13 +9,12 @@
 
 #include <cstdlib>
 
-#include <outcome.hpp>
+#include <boost/outcome.hpp>
+namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <cublas_v2.h>
 
-namespace outcome = OUTCOME_V2_NAMESPACE;
-
-namespace mgcpp
+    namespace mgcpp
 {
     template<typename T>
     inline outcome::result<void>

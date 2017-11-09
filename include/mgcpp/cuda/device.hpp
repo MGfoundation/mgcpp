@@ -7,13 +7,12 @@
 #ifndef _MGCPP_CUDA_DEVICE_HPP_
 #define _MGCPP_CUDA_DEVICE_HPP_
 
-#include <outcome.hpp>
+#include <boost/outcome.hpp>
+namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <mgcpp/system/error_code.hpp>
 
 #include <cstdlib>
-
-namespace outcome = OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {

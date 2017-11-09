@@ -7,15 +7,14 @@
 #ifndef _MGCPP_CUDA_MEMORY_HPP_
 #define _MGCPP_CUDA_MEMORY_HPP_
 
-#include <outcome.hpp>
+#include <boost/outcome.hpp>
+namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <mgcpp/system/error_code.hpp>
 
 #include <type_traits>
 #include <cstdlib>
 #include <new>
-
-namespace outcome = OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {
