@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_KERNELS_HADAMARD_HPP_
-#define _MGCPP_KERNELS_HADAMARD_HPP_
+#ifndef _MGCPP_KERNELS_ABSOLUTE_HPP_
+#define _MGCPP_KERNELS_ABSOLUTE_HPP_
 
 #include <cuda_fp16.h>
 
@@ -14,16 +14,14 @@
 namespace mgcpp
 {
     kernel_status_t
-    mgblas_Svhp(float const* x, float const* y,
-		float* z, size_t size);
+    mgblas_Svab(float* x, size_t n);
 
     kernel_status_t
-    mgblas_Dvhp(double const* x, double const* y,
-		double* z, size_t size); 
+    mgblas_Dvab(double* x, size_t n); 
 
-    kernel_status_t
-    mgblas_Hvhp(__half const* x, __half const* y,
-		__half* z, size_t size);
+    // kernel_status_t
+    // mgblas_Hvab(__half const* x, __half const* y,
+    // 		__half* z, size_t size);
 }
 
 #endif

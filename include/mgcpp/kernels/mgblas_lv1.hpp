@@ -17,6 +17,10 @@ namespace mgcpp
     template<typename T>
     inline outcome::result<void>
     mgblas_vhp(T const* x, T const* y, T* z, size_t n);
+
+    template<typename T>
+    inline outcome::result<void>
+    mgblas_vab(T* x, size_t n);
 }
 
 #include <mgcpp/kernels/mgblas_lv1.tpp>

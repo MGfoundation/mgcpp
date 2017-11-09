@@ -5,12 +5,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/kernels/bits/hadamard.cuh>
+#include <mgcpp/kernels/bits/absolute.cuh>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/mgcpp_kernel_error.hpp>
 
 namespace mgcpp
 {
-    outcome::result<void>
+    inline outcome::result<void>
     mgblas_vhp(float const* x, float const* y,
                float* z, size_t n)
     {
@@ -22,11 +23,33 @@ namespace mgcpp
             return outcome::success();
     }
 
-    outcome::result<void>
+    inline outcome::result<void>
     mgblas_vhp(double const* x, double const* y,
                double* z, size_t n)
     {
         std::error_code status = mgblas_Dvhp(x, y, z, n); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    mgblas_vab(float* x, size_t n)
+    {
+        std::error_code status = mgblas_Svab(x, n); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    mgblas_vab(double* x, size_t n)
+    {
+        std::error_code status = mgblas_Dvab(x, n); 
 
         if(status != status_t::success)
             return status;
