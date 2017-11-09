@@ -10,6 +10,7 @@
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/operations/sub.hpp>
+#include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/device/vector.hpp>
 
@@ -80,6 +81,20 @@ TEST(vec_operation, vec_scalar_mult)
     {
         EXPECT_EQ(result.check_value(i), init_val * scalar);
     }
+}
+
+TEST(vec_operation, vec_abs)
+{
+    mgcpp::device_vector<float> vec{-1, -2, -3};
+
+    mgcpp::device_vector<float> result{};
+    EXPECT_NO_THROW({
+            result = mgcpp::strict::abs(vec);
+
+            EXPECT_EQ(result.check_value(0), 1);
+            EXPECT_EQ(result.check_value(1), 2);
+            EXPECT_EQ(result.check_value(2), 3);
+        });
 }
 
 TEST(vec_vec_operation, vec_hadamard_product)
