@@ -137,8 +137,11 @@ if(USE_CUSPARSE)
 endif()
 
 # add outcome library
+find_package(Boost REQUIRED)
+
 target_include_directories(${PROJECT_NAME}
     PUBLIC
+    ${Boost_INCLUDE_DIRS}
     ${THIRD_PARTY_DIR}/boost-outcome/include)
 
 # cuBLAS, MAGMA dependency
