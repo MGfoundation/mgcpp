@@ -79,6 +79,6 @@ install:
   - source .travis/gtest_install.sh
 
 script:
-  - ~/cmake-${CMAKE_VER}/bin/cmake -G -DCUDA_HOST_COMPILER=clang++-3.5 "Unix Makefiles"
+  - ~/cmake-${CMAKE_VER}/bin/cmake -DCUDA_HOST_COMPILER=clang++-3.5 -G "Unix Makefiles"
   - make -j2
   - make install
