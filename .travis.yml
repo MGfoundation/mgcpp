@@ -9,17 +9,21 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.5
           packages:
             - g++-6
+            - clang-3.5
 
-    # - env: CXX=g++-7 CC=gcc-7
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #       packages:
-    #         - g++-7
+    - env: CXX=g++-7 CC=gcc-7
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-3.5
+          packages:
+            - g++-7
+            - clang-3.5
 
     - env: CXX=clang++-3.9 CC=clang-3.9
       os: linux
@@ -27,31 +31,36 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-3.9
+            - llvm-toolchain-trusty-3.5
           packages:
             - g++-7
+            - clang-3.5
             - clang-3.9
 
-    # - env: CXX=clang++-4.0 CC=clang-4.0
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #         - llvm-toolchain-trusty-4.0
-    #       packages:
-    #         - g++-7
-    #         - clang-4.0
+    - env: CXX=clang++-4.0 CC=clang-4.0
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-trusty-3.5
+          packages:
+            - g++-7
+            - clang-3.5
+            - clang-4.0
 
-    # - env: CXX=clang++-5.0 CC=clang-5.0
-    #   os: linux
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #         - llvm-toolchain-trusty-5.0
-    #       packages:
-    #         - g++-7
-    #         - clang-5.0
+    - env: CXX=clang++-5.0 CC=clang-5.0
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-5.0
+            - llvm-toolchain-trusty-3.5
+          packages:
+            - g++-7
+            - clang-3.5
+            - clang-5.0
 
 before_install:
   - eval "${MATRIX_EVAL}"
@@ -70,6 +79,6 @@ install:
   - source .travis/gtest_install.sh
 
 script:
-  - ~/cmake-${CMAKE_VER}/bin/cmake -G "Unix Makefiles"
+  - ~/cmake-${CMAKE_VER}/bin/cmake -G -DCUDA_HOST_COMPILER=clang++-3.5 "Unix Makefiles"
   - make -j2
   - make install
