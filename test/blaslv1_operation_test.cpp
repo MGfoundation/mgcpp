@@ -11,6 +11,7 @@
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/operations/abs.hpp>
+#include <mgcpp/operations/mean.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/device/vector.hpp>
 
@@ -94,6 +95,17 @@ TEST(vec_operation, vec_abs)
             EXPECT_EQ(result.check_value(0), 1);
             EXPECT_EQ(result.check_value(1), 2);
             EXPECT_EQ(result.check_value(2), 3);
+        });
+}
+
+TEST(vec_operation, vec_mean)
+{
+    mgcpp::device_vector<float> vec{1, 2, 3};
+
+    EXPECT_NO_THROW({
+            float result = mgcpp::strict::mean(vec);
+
+            EXPECT_EQ(result, 2);
         });
 }
 
