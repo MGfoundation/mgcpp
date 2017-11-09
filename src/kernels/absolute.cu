@@ -4,82 +4,102 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/kernels/bits/fill.cuh>
+#include <mgcpp/kernels/bits/absolute.cuh>
 #include <cmath>
 
 #define BLK 64
 
 namespace mgcpp
 {
-    __global__  void
-    mgblas_Sfill_impl(float* arr, float value, size_t n)
+    __global__ void
+    mgblas_Svab_impl(float* x, size_t n)
     {
 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
-	__shared__ float shared[64];
 
-	if(id >= n)
-	    return;
+	__shared__ float shared[BLK];
 
-	shared[threadIdx.x] = value;
+	shared[threadIdx.x] = x[id];
 	__syncthreads();
 
-	arr[id] = shared[threadIdx.x];
+	if(id < n)
+	    shared[threadIdx.x] = fabsf(shared[threadIdx.x]);
+	__syncthreads();
+
+	x[id] = shared[threadIdx.x];
     }
 
-    __global__  void
-    mgblas_Dfill_impl(double* arr, double value, size_t n)
+    __global__ void
+    mgblas_Dvab_impl(double* x, size_t n)
     {
 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
-	__shared__ double shared[64];
 
-	if(id >= n)
-	    return;
+	__shared__ double shared[BLK];
 
-	shared[threadIdx.x] = value;
+	shared[threadIdx.x] = x[id];
 	__syncthreads();
 
-	arr[id] = shared[threadIdx.x];
+	if(id < n)
+	    shared[threadIdx.x] = fabs(shared[threadIdx.x]);
+	__syncthreads();
+
+	x[id] = shared[threadIdx.x];
     }
 
-    // __global__  void
-    // mgblas_Hfill_impl(__half* arr, __half value, size_t n)
+    // __global__ void
+    // mgblas_Hvab_impl(__half* x, size_t n)
     // {
-    // 	size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    // 	int const id = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // 	for (size_t i = idx;
-    // 	     i < n;
-    // 	     i += gridDim.x * blockDim.x)
-    // 	{
-    // 	    arr[i] = value;
-    // 	}
+    // 	__shared__ __half shared[BLK];
+
+    // 	shared[threadIdx.x] = x[id];
+    // 	__syncthreads();
+
+    // 	if(id < n)
+    // 	    shared_z[threadIdx.x] = __hmul(shared_x[threadIdx.x], shared_y[threadIdx.x]);
+    // 	__syncthreads();
+
+    // 	z[id] = shared_z[threadIdx.x];
     // }
 
     kernel_status_t
-    mgblas_Sfill(float* arr, float value, size_t n)
+    mgblas_Svab(float* x, size_t n)
     {
-	int grid_size = static_cast<int>(
-	    ceil(static_cast<float>(n)/ BLK ));
-	mgblas_Sfill_impl<<<BLK, grid_size>>>(arr, value, n);
+	if(n== 0)
+	    return invalid_range;
+
+	int grid_size =
+	    static_cast<int>(
+		ceil(static_cast<float>(n)/ BLK ));
+	mgblas_Svab_impl<<<BLK, grid_size>>>(x, n);
 
 	return success;
     }
 
     kernel_status_t
-    mgblas_Dfill(double* arr, double value, size_t n)
+    mgblas_Dvab(double* x, size_t n)
     {
-	int grid_size = static_cast<int>(
-	    ceil(static_cast<float>(n)/ BLK ));
-	mgblas_Dfill_impl<<<BLK, grid_size>>>(arr, value, n);
+	if(n== 0)
+	    return invalid_range;
+	
+	int grid_size =
+	    static_cast<int>(
+		ceil(static_cast<float>(n)/ BLK ));
+	mgblas_Dvab_impl<<<BLK, grid_size>>>(x, n);
 
 	return success;
     }
 
     // kernel_status_t
-    // mgblas_Hfill(__half* arr, __half value, size_t n)
+    // mgblas_Hvab(__half* x, size_t n)
     // {
-    // 	int grid_size = static_cast<int>(
-    // 	    ceil(static_cast<float>(n)/ BLK ));
-    // 	mgblas_Hfill_impl<<<BLK, grid_size>>>(arr, value, n);
+    // 	if(size == 0)
+    // 	    return invalid_range;
+	
+    // 	int grid_size =
+    // 	    static_cast<int>(
+    // 		ceil(static_cast<float>(size)/ BLK ));
+    // 	mgblas_Hvab_impl<<<BLK, grid_size>>>(x, size);
 
     // 	return success;
     // }

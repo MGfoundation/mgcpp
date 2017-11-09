@@ -100,10 +100,11 @@ it should look like this.
 
 -   cmake
 -   gcc 6, clang 3.9, Visual Studio 14.0 (2015) or later
--   [outcome](https://github.com/ned14/outcome)
+-   [boost-outcome](https://github.com/ned14/boost-outcome)
 -   cuda 8.0 or later
 -   [MAGMA](https://github.com/kjbartel/magma) (optional)
 -   gtest (optional)
+-   boost
 
 
 <a id="org6fefac1"></a>
