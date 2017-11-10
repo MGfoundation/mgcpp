@@ -6,6 +6,7 @@
 
 #include <mgcpp/kernels/bits/hadamard.cuh>
 #include <mgcpp/kernels/bits/absolute.cuh>
+#include <mgcpp/kernels/bits/reduce.cuh>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/mgcpp_kernel_error.hpp>
 
@@ -50,6 +51,28 @@ namespace mgcpp
     mgblas_vab(double* x, size_t n)
     {
         std::error_code status = mgblas_Dvab(x, n); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    mgblas_vpr(float const* x, float* y, size_t n)
+    {
+        std::error_code status = mgblas_Svpr(x, y, n); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    mgblas_vpr(double const* x, double* y, size_t n)
+    {
+        std::error_code status = mgblas_Dvpr(x, y, n); 
 
         if(status != status_t::success)
             return status;
