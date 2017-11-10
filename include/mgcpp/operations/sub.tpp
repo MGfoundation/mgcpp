@@ -41,4 +41,42 @@ namespace mgcpp
 
         return result;
     }
+
+    template<typename T, size_t Device, storage_order SO, typename Alloc>
+    device_matrix<T, Device, SO, Alloc>
+    strict::
+    sub(device_matrix<T, Device, SO, Alloc> const& first,
+        device_matrix<T, Device, SO, Alloc> const& second)
+    {
+        MGCPP_ASSERT(first.shape() == second.shape(),
+                     "matrix dimensions didn't match");
+
+        auto* thread_context = first.context();
+        auto handle = thread_context->get_cublas_context(Device);
+
+        auto shape = first.shape();
+
+        auto m = shape.first;
+        auto n = shape.second;
+
+        T const alpha = 1;
+        T const beta = -1;
+
+        device_matrix<T, Device, SO, Alloc> result{m, n};
+
+        auto status = cublas_geam(handle,
+                                  CUBLAS_OP_N,
+                                  CUBLAS_OP_N,
+                                  m, n,
+                                  &alpha,
+                                  first.data(), m,
+                                  &beta,
+                                  second.data(), m,
+                                  result.data_mutable(), m);
+
+        if(!status)
+            MGCPP_THROW_SYSTEM_ERROR(status.error());
+
+        return result;
+    }
 }

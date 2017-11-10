@@ -17,6 +17,11 @@ namespace mgcpp
         inline device_vector<T, Device, Allign, Alloc>
         sub(device_vector<T, Device, Allign, Alloc> const& first,
             device_vector<T, Device, Allign, Alloc> const& second);
+
+        template<typename T, size_t Device, storage_order SO, typename Alloc>
+        inline device_matrix<T, Device, SO, Alloc>
+        sub(device_matrix<T, Device, SO, Alloc> const& first,
+            device_matrix<T, Device, SO, Alloc> const& second);
     }
 }
 
