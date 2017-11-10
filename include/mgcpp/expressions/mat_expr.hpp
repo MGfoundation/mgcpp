@@ -8,6 +8,7 @@
 #define _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
 
 #include <mgcpp/device/forward.hpp>
+#include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_matrix.hpp>
 
 namespace mgcpp
@@ -16,8 +17,7 @@ namespace mgcpp
     struct mat_expr {};
 
     template<typename Matrix,
-             typename = typename
-             assert_device_matrix<Matrix>::result>
+             MGCPP_CONCEPT(is_device_matrix<Matrix>::value)>
     inline Matrix
     eval(Matrix&& device_mat);
 }

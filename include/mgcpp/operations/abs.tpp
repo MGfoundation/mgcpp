@@ -37,21 +37,21 @@ namespace mgcpp
         return result;
     }
 
-    template<typename T,
-             size_t Device,
-             storage_order SO,
-             typename Alloc>
-    device_matrix<T, Device, SO, Alloc>
+    template<typename DeviceMatrix, typename>
+    device_matrix<typename DeviceMatrix::value_type,
+                  DeviceMatrix::device_id,
+                  typename DeviceMatrix::allocator_type>
     strict::
-    abs(device_matrix<T, Device, SO, Alloc> const& mat)
+    abs(DeviceMatrix const& mat)
     {
-        auto set_device_status = cuda_set_device(Device);
+        auto set_device_status =
+            cuda_set_device(DeviceMatrix::device_id);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
         auto shape = mat.shape();
 
-        auto result = mgcpp::device_matrix<float>(mat);
+        auto result = DeviceMatrix(mat);
         auto status = mgblas_vab(result.data_mutable(), shape.first * shape.second);
 
         if(!status)

@@ -7,29 +7,35 @@
 #ifndef _MGCPP_DEVICE_MATRIX_HPP_
 #define _MGCPP_DEVICE_MATRIX_HPP_
 
-#include <mgcpp/allocators/default.hpp>
 #include <mgcpp/adapters/adapters.hpp>
+#include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/storage_order.hpp>
+#include <mgcpp/system/concept.hpp>
+#include <mgcpp/type_traits/device_matrix.hpp>
 
 #include <cstdlib>
+#include <initializer_list>
 #include <memory>
 #include <type_traits>
-#include <initializer_list>
 
 namespace mgcpp
 {
-    template<typename T,
+    template<typename Type,
              size_t DeviceId = 0,
-             storage_order SO = row_major,
-             typename Alloc = mgcpp::default_allocator<T, DeviceId>>
+             typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
     class device_matrix : public Alloc
     {
     public:
-        using this_type = device_matrix<T, DeviceId, SO, Alloc>;
+        using this_type = device_matrix<Type, DeviceId, Alloc>;
+        using value_type = Type;
+        using pointer = value_type*;
         using result_type = this_type;
+        using allocator_type = Alloc;
+
+        static size_t const device_id = DeviceId;
 
     private:
         using Alloc::allocate;
@@ -41,12 +47,12 @@ namespace mgcpp
 
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
-        T* _data;
+        Type* _data;
         size_t _capacity;
 
         inline size_t
         determine_ndim(std::initializer_list<
-                       std::initializer_list<T>> const& list) const noexcept;
+                       std::initializer_list<Type>> const& list) const noexcept;
 
     public:
         inline
@@ -59,57 +65,54 @@ namespace mgcpp
         device_matrix(size_t i, size_t j);
 
         inline
-        device_matrix(size_t i, size_t j, T init);
+        device_matrix(size_t i, size_t j, Type init);
         
         inline
-        device_matrix(size_t i, size_t j, T const* data);
+        device_matrix(size_t i, size_t j, Type const* data);
 
         inline
         device_matrix(
-            std::initializer_list<std::initializer_list<T>> const& array);
+            std::initializer_list<std::initializer_list<Type>> const& array);
+
+        // inline
+        // device_matrix(std::initializer_list<device_vector<Type>> const& array);
 
         template<typename HostMat,
-                 typename = typename std::enable_if<adapter<HostMat>::value>::type>
+                 MGCPP_CONCEPT(adapter<HostMat>::value)>
         inline 
         device_matrix(HostMat const& host_mat);
 
-        // template<typename HostMat, typename Adapter,
-        //          typename = typename
-        //          std::enable_if<std::is_function<Adapter>::value>::type>
-        // inline 
-        // device_matrix(HostMat const& host_mat, Adapter& adapter);
+        inline
+        device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);
 
         inline
-        device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other);
+        device_matrix(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
 
-        inline
-        device_matrix(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
+        inline device_matrix<Type, DeviceId, Alloc>&
+        operator=(device_matrix<Type, DeviceId, Alloc> const& other);
 
-        inline device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(device_matrix<T, DeviceId, SO, Alloc> const& other);
+        inline device_matrix<Type, DeviceId, Alloc>&
+        operator=(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
 
-        inline device_matrix<T, DeviceId, SO, Alloc>&
-        operator=(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept;
-
-        inline device_matrix<T, DeviceId, SO, Alloc>&
+        inline device_matrix<Type, DeviceId, Alloc>&
         zero();
 
-        inline device_matrix<T, DeviceId, SO, Alloc>&
+        inline device_matrix<Type, DeviceId, Alloc>&
         resize(size_t i, size_t j);
 
-        inline device_matrix<T, DeviceId, SO, Alloc>&
-        resize(size_t i, size_t j, T init);
+        inline device_matrix<Type, DeviceId, Alloc>&
+        resize(size_t i, size_t j, Type init);
 
         inline void
-        copy_to_host(T* host_p) const;
+        copy_to_host(Type* host_p) const;
 
-        inline T
+        inline Type
         check_value(size_t i, size_t j) const;
 
-        inline T const*
+        inline Type const*
         data() const noexcept;
 
-        inline T*
+        inline Type*
         data_mutable() noexcept;
 
         inline size_t
@@ -118,7 +121,7 @@ namespace mgcpp
         inline thread_context*
         context() const noexcept;
 
-        inline T*
+        inline Type*
         release_data() noexcept;
 
         inline std::pair<size_t, size_t> const&

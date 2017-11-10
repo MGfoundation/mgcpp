@@ -20,12 +20,10 @@ namespace mgcpp
         inline T
         sum(device_vector<T, DeviceId, Allign, Alloc> const& vec);
 
-        template<typename T,
-                 size_t DeviceId,
-                 storage_order SO,
-                 typename Alloc>
-        inline T
-        sum(device_matrix<T, DeviceId, SO, Alloc> const& mat);
+        template<typename DeviceMatrix,
+                 MGCPP_CONCEPT(is_device_matrix<DeviceMatrix>::value)>
+        inline typename DeviceMatrix::value_type
+        sum(DeviceMatrix const& mat);
     }
 }
 

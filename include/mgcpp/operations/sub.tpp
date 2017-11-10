@@ -42,27 +42,35 @@ namespace mgcpp
         return result;
     }
 
-    template<typename T, size_t Device, storage_order SO, typename Alloc>
-    device_matrix<T, Device, SO, Alloc>
+    template<typename LhsMat, typename RhsMat, typename>
+    device_matrix<typename LhsMat::value_type,
+                  LhsMat::device_id,
+                  typename LhsMat::allocator_type>
     strict::
-    sub(device_matrix<T, Device, SO, Alloc> const& first,
-        device_matrix<T, Device, SO, Alloc> const& second)
+    sub(LhsMat const& first, RhsMat const& second)
     {
+        using value_type = typename LhsMat::value_type;
+        using allocator_type = typename LhsMat::allocator_type;
+        size_t const device_id = LhsMat::device_id;
+
         MGCPP_ASSERT(first.shape() == second.shape(),
                      "matrix dimensions didn't match");
 
         auto* thread_context = first.context();
-        auto handle = thread_context->get_cublas_context(Device);
+        auto handle =
+            thread_context->get_cublas_context(device_id);
 
         auto shape = first.shape();
 
         auto m = shape.first;
         auto n = shape.second;
 
-        T const alpha = 1;
-        T const beta = -1;
+        value_type const alpha = 1;
+        value_type const beta = -1;
 
-        device_matrix<T, Device, SO, Alloc> result{m, n};
+        device_matrix<value_type,
+                      device_id,
+                      allocator_type> result{m, n};
 
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,

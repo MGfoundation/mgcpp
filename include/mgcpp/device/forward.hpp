@@ -15,7 +15,6 @@ namespace mgcpp
 {
     template< typename T,
               size_t DeviceId,
-              storage_order SO,
               typename Alloc >
     class device_matrix;
 

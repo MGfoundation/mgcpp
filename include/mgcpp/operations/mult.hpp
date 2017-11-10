@@ -8,15 +8,20 @@
 #define _MGCPP_OPERATIONS_MULTIPLICATION_HPP_
 
 #include <mgcpp/device/forward.hpp>
+#include <mgcpp/system/concept.hpp>
+#include <mgcpp/type_traits/device_matrix.hpp>
 
 namespace mgcpp
 {
     namespace strict
     {
-        template<typename T, size_t Device, storage_order SO, typename Alloc>
-        inline device_matrix<T, Device, SO, Alloc>
-        mult(device_matrix<T, Device, SO, Alloc> const& first,
-             device_matrix<T, Device, SO, Alloc> const& second);
+        template<typename LhsMat, typename RhsMat,
+                 MGCPP_CONCEPT(is_device_matrix<LhsMat>::value &&
+                               is_device_matrix<RhsMat>::value)>
+        inline device_matrix<typename LhsMat::value_type,
+                             LhsMat::device_id,
+                             typename LhsMat::allocator_type>
+        mult(LhsMat const& first, RhsMat const& second);
 
         template<typename T, size_t Device, allignment Allign, typename Alloc>
         inline device_vector<T, Device, Allign, Alloc>

@@ -17,9 +17,8 @@ namespace mgcpp
 {
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix() noexcept
     : _context(&global_context::get_thread_context()),
         _shape(0, 0),
@@ -28,9 +27,8 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix(size_t i, size_t j)
         :_context(&global_context::get_thread_context()),
          _shape(i, j),
@@ -39,9 +37,8 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix(size_t i, size_t j, T init)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
@@ -53,28 +50,12 @@ namespace mgcpp
         auto status = mgblas_fill(_data, init, total_size);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
-
-        // T* buffer = allocate(total_size);
-        // std::fill(buffer, buffer + total_size, init);
-
-        // try
-        // {
-        //     copy_from_host(_data, buffer, total_size);
-        //     deallocate(buffer, total_size);
-        // }
-        // catch(std::system_error const& err)
-        // {
-        //     deallocate(buffer, total_size);
-        //     device_deallocate(_data, DeviceId);
-        //     MGCPP_THROW_SYSTEM_ERROR(err);
-        // }
     }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix(size_t i, size_t j, T const* data)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
@@ -94,10 +75,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     size_t
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     determine_ndim(std::initializer_list<
                    std::initializer_list<T>> const& list) const noexcept
     {
@@ -115,9 +95,8 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
                   std::initializer_list<T>> const& init_list)
         : _context(&global_context::get_thread_context()),
@@ -154,10 +133,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     template<typename HostMat, typename>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     device_matrix(HostMat const& host_mat)
         :_context(&global_context::get_thread_context()),
          _shape(0, 0),
@@ -177,10 +155,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
-    device_matrix(device_matrix<T, DeviceId, SO, Alloc> const& other)
+    device_matrix<T, DeviceId, Alloc>::
+    device_matrix(device_matrix<T, DeviceId, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
          _data(device_allocate(_shape.first * _shape.second)),
@@ -200,10 +177,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
-    device_matrix(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept
+    device_matrix<T, DeviceId, Alloc>::
+    device_matrix(device_matrix<T, DeviceId, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
           _data(other._data),
@@ -215,11 +191,10 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>&
-    device_matrix<T, DeviceId, SO, Alloc>::
-    operator=(device_matrix<T, DeviceId, SO, Alloc> const& other)
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
+    operator=(device_matrix<T, DeviceId, Alloc> const& other)
     {
         size_t other_size = other._shape.first * other._shape.second;
         if(other_size > _capacity)
@@ -248,11 +223,10 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>&
-    device_matrix<T, DeviceId, SO, Alloc>::
-    operator=(device_matrix<T, DeviceId, SO, Alloc>&& other) noexcept
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
+    operator=(device_matrix<T, DeviceId, Alloc>&& other) noexcept
     {
         if(_data)
         { 
@@ -273,10 +247,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>&
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
     resize(size_t i, size_t j)
     {
         size_t total_size = i * j;
@@ -298,10 +271,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>&
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
     resize(size_t i, size_t j, T init)
     {
         size_t total_size = i * j;
@@ -338,10 +310,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>&
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
     zero()
     {
         if(!_data)
@@ -362,10 +333,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     T
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     check_value(size_t i, size_t j) const 
     {
         if(i >= _shape.first || j >= _shape.second)
@@ -386,10 +356,9 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     void
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     copy_to_host(T* host_p) const
     {
         if(!host_p)
@@ -399,28 +368,25 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     inline T const*
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     data() const noexcept
     { return _data; }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     inline T*
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     data_mutable() noexcept
     { return _data; }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     inline T*
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     release_data() noexcept
     {
         T* temp = _data;
@@ -431,36 +397,32 @@ namespace mgcpp
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     inline size_t 
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     capacity() const noexcept
     { return _capacity; }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     inline thread_context*
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     context() const noexcept
     { return _context; }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
     std::pair<size_t, size_t> const&
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     shape() const noexcept
     { return _shape; }
 
     template<typename T,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    device_matrix<T, DeviceId, SO, Alloc>::
+    device_matrix<T, DeviceId, Alloc>::
     ~device_matrix() noexcept
     {
         if(_data)

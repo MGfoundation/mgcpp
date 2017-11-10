@@ -43,8 +43,8 @@ namespace mgcpp
     eval(mat_mat_mult_expr<LhsExpr, RhsExpr> const& expr);
 
     template<typename LhsExpr, typename RhsExpr,
-             typename = typename
-             assert_both_mat_expr<LhsExpr, RhsExpr>::result>
+             MGCPP_CONCEPT(is_mat_expr<LhsExpr>::value
+                           && is_mat_expr<RhsExpr>::value)>
     inline mat_mat_mult_expr<LhsExpr, RhsExpr> 
     operator*(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 }

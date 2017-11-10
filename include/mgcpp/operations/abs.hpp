@@ -8,6 +8,8 @@
 #define _MGCPP_OPERATIONS_ABSOLUTE_HPP_
 
 #include <mgcpp/device/forward.hpp>
+#include <mgcpp/system/concept.hpp>
+#include <mgcpp/type_traits/device_matrix.hpp>
 
 namespace mgcpp
 {
@@ -20,12 +22,18 @@ namespace mgcpp
         inline device_vector<T, Device, Allign, Alloc>
         abs(device_vector<T, Device, Allign, Alloc> const& vec);
 
-        template<typename T,
-                 size_t Device,
-                 storage_order SO,
-                 typename Alloc>
-        inline device_matrix<T, Device, SO, Alloc>
-        abs(device_matrix<T, Device, SO, Alloc> const& mat);
+        // template<typename T, size_t Device, typename Alloc,
+        //          template<typename, size_t, typename> class DeviceMatrix,
+        //          MGCPP_CONCEPT(is_device_matrix<DeviceMatrix>::value)>
+        // inline device_matrix<T, Device, Alloc>
+        // abs(DeviceMatrix<T, Device, Alloc> const& mat);
+
+        template<typename DeviceMatrix,
+                 MGCPP_CONCEPT(is_device_matrix<DeviceMatrix>::value)>
+        inline device_matrix<typename DeviceMatrix::value_type,
+                             DeviceMatrix::device_id,
+                             typename DeviceMatrix::allocator_type>
+        abs(DeviceMatrix const& mat);
     }
 }
 

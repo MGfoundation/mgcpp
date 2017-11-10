@@ -13,24 +13,21 @@
 
 namespace mgcpp
 {
-    template<typename T>
-    struct is_device_matrix : std::false_type {};
+    template<typename Type>
+    struct is_device_matrix_impl : std::false_type {};
 
-    template<typename T,
+    template<typename Type,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    struct is_device_matrix<mgcpp::device_matrix<T, DeviceId, SO, Alloc>>
+    struct is_device_matrix_impl<mgcpp::device_matrix<Type, DeviceId, Alloc>>
         : std::true_type {};
 
-    template<typename Mat>
-    struct assert_device_matrix
+    template<typename DeviceMat>
+    struct is_device_matrix
     {
-        using result =
-            typename std::enable_if<
-            is_device_matrix<
-                typename std::decay<Mat>::type>::value
-            >::type;
+        enum { value = is_device_matrix_impl<
+               typename std::decay<DeviceMat>::type
+               >::value };
     };
 }
 

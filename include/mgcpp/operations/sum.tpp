@@ -38,19 +38,20 @@ namespace mgcpp
         return result;
     }
 
-    template<typename T,
-             size_t DeviceId,
-             storage_order SO,
-             typename Alloc>
-    T
+    template<typename DeviceMatrix,
+             MGCPP_CONCEPT(is_device_matrix<DeviceMatrix>::value)>
+    inline typename DeviceMatrix::value_type
     strict::
-    sum(device_matrix<T, DeviceId, SO, Alloc> const& mat)
+    sum(DeviceMatrix const& mat)
     {
-        auto set_device_status = cuda_set_device(DeviceId);
+        using value_type = typename DeviceMatrix::value_type;
+        size_t const device_id = DeviceMatrix::device_id;
+
+        auto set_device_status = cuda_set_device(device_id);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        T result;
+        value_type result;
         auto shape = mat.shape();
             
         auto status =

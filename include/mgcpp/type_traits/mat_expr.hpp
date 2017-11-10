@@ -15,35 +15,23 @@
 namespace mgcpp
 {
     template<typename T>
-    struct is_mat_expr : std::false_type {};
+    struct is_mat_expr_impl : std::false_type {};
 
     template<typename Expr>
-    struct is_mat_expr<mat_expr<Expr>> : std::true_type {};
+    struct is_mat_expr_impl<mat_expr<Expr>> : std::true_type {};
 
     template<typename Type,
              size_t DeviceId,
-             storage_order SO,
              typename Alloc>
-    struct is_mat_expr<device_matrix<Type, DeviceId, SO, Alloc>>
+    struct is_mat_expr_impl<device_matrix<Type, DeviceId, Alloc>>
         : std::true_type {};
 
-    template<typename Head>
-    struct assert_mat_expr
+    template<typename DeviceMat>
+    struct is_mat_expr
     {
-        using result = typename std::enable_if<
-            is_mat_expr<
-                typename std::decay<Head>::type>::value>::type;
-    };
-
-    template<typename First, typename Second>
-    struct assert_both_mat_expr
-    {
-        using result =
-            typename std::enable_if<
-            is_mat_expr<
-                typename std::decay<First>::type>::value
-            && is_mat_expr<
-                typename std::decay<Second>::type>::value>::type;
+        enum { value = is_mat_expr_impl<
+               typename std::decay<DeviceMat>::type
+               >::value };
     };
 }
 
