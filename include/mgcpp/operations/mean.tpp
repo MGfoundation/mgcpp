@@ -59,6 +59,6 @@ namespace mgcpp
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-        return result / shape.first * shape.second;
+        return result / (shape.first * shape.second);
     }
 }
