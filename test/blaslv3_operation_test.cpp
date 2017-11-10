@@ -13,6 +13,7 @@
 #include <mgcpp/device/matrix.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/abs.hpp>
+#include <mgcpp/operations/sum.hpp>
 #include <mgcpp/operations/add.hpp>
 
 TEST(mat_mat_operation, row_major_multiplication)
@@ -71,5 +72,19 @@ TEST(mat_operation, mat_abs)
             EXPECT_EQ(result.check_value(1, 0), 4);
             EXPECT_EQ(result.check_value(1, 1), 5);
             EXPECT_EQ(result.check_value(1, 2), 6);
+        });
+}
+
+TEST(mat_operation, mat_sum)
+{
+    size_t m = 5;
+    size_t n = 5;
+    size_t value = 5;
+    mgcpp::device_matrix<float> mat(m, n, value);
+
+    EXPECT_NO_THROW({
+            float result = mgcpp::strict::sum(mat);
+
+            EXPECT_EQ(result, m * n * value);
         });
 }
