@@ -7,6 +7,7 @@
 #ifndef _MGCPP_CONTEXT_THREAD_GUARD_HPP_
 #define _MGCPP_CONTEXT_THREAD_GUARD_HPP_
 
+#include <cstdlib>
 #include <initializer_list>
 
 namespace mgcpp
