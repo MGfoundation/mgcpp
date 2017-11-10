@@ -6,14 +6,14 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/operations/sum.hpp>
+#include <mgcpp/device/vector.hpp>
+#include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/hdmd.hpp>
-#include <mgcpp/operations/sub.hpp>
-#include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/mean.hpp>
 #include <mgcpp/operations/mult.hpp>
-#include <mgcpp/device/vector.hpp>
+#include <mgcpp/operations/sub.hpp>
+#include <mgcpp/operations/sum.hpp>
 
 TEST(vec_vec_operation, vec_sum)
 {

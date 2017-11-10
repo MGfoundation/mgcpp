@@ -19,6 +19,13 @@ namespace mgcpp
                  typename Alloc>
         inline T
         mean(device_vector<T, DeviceId, Allign, Alloc> const& vec);
+
+        template<typename T,
+                 size_t DeviceId,
+                 storage_order SO,
+                 typename Alloc>
+        inline T
+        mean(device_matrix<T, DeviceId, SO, Alloc> const& mat);
     }
 }
 

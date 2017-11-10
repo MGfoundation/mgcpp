@@ -11,10 +11,11 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/device/matrix.hpp>
-#include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/abs.hpp>
-#include <mgcpp/operations/sum.hpp>
 #include <mgcpp/operations/add.hpp>
+#include <mgcpp/operations/mean.hpp>
+#include <mgcpp/operations/mult.hpp>
+#include <mgcpp/operations/sum.hpp>
 
 TEST(mat_mat_operation, row_major_multiplication)
 {
@@ -86,5 +87,16 @@ TEST(mat_operation, mat_sum)
             float result = mgcpp::strict::sum(mat);
 
             EXPECT_EQ(result, m * n * value);
+        });
+}
+
+TEST(mat_operation, mat_mean)
+{
+    mgcpp::device_matrix<float> mat({{1, 2, 3}, {1, 2, 3}});
+
+    EXPECT_NO_THROW({
+            float result = mgcpp::strict::mean(mat);
+
+            EXPECT_EQ(result, 2);
         });
 }
