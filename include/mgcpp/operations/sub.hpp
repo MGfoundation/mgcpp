@@ -19,8 +19,8 @@ namespace mgcpp
             device_vector<T, Device, Allign, Alloc> const& second);
 
         template<typename LhsMat, typename RhsMat,
-                 MGCPP_CONCEPT(is_device_matrix<LhsMat>::value
-                               && is_device_matrix<RhsMat>::value)>
+                 MGCPP_CONCEPT(is_device_matrix<LhsMat>::value &&
+                               is_device_matrix<RhsMat>::value)>
         inline device_matrix<typename LhsMat::value_type,
                              LhsMat::device_id,
                              typename LhsMat::allocator_type>
