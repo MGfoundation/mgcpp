@@ -11,6 +11,7 @@
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/system/concept.hpp>
 
 #include <cstdlib>
@@ -22,16 +23,17 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId = 0,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
-    class device_matrix
+    class device_matrix :
+        public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
+                            Type,
+                            DeviceId>
     {
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
         using value_type = Type;
-        using pointer = value_type*;
         using result_type = this_type;
         using allocator_type = Alloc;
-
-        static size_t const device_id = DeviceId;
+        size_t const device_id = DeviceId;
 
     private:
         thread_context* _context;
@@ -69,9 +71,6 @@ namespace mgcpp
         device_matrix(
             std::initializer_list<std::initializer_list<Type>> const& array,
             Alloc const& alloc = Alloc());
-
-        // inline
-        // device_matrix(std::initializer_list<device_vector<Type>> const& array);
 
         template<typename HostMat,
                  MGCPP_CONCEPT(adapter<HostMat>::value)>
