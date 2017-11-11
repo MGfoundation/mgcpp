@@ -64,25 +64,34 @@ namespace mgcpp
         return result;
     }
     
-    template<typename T, size_t Device, allignment Allign, typename Alloc>
-    device_vector<T, Device, Allign, Alloc>
+    template<typename DenseVec,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    device_vector<Type, DeviceId, Allign,
+                  typename DenseVec::allocator_type>
     strict::
-    mult(T scalar,
-         device_vector<T, Device, Allign, Alloc> const& vec)
+    mult(Type scalar,
+         dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
     {
-        auto* context = vec.context();
-        auto handle = context->get_cublas_context(Device);
-        auto size = vec.shape();
+        using allocator_type = typename DenseVec::allocator_type;
 
-        device_vector<T, Device, Allign, Alloc> result(vec);
+        auto const& original_vec = ~vec;
 
+        auto* context = original_vec.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        auto size = original_vec.shape();
+
+        auto result = device_vector<Type,
+                                    DeviceId,
+                                    Allign,
+                                    allocator_type>(original_vec);
         auto status = cublas_scal(handle, size,
                                   &scalar,
                                   result.data_mutable(), 1);
         if(!status)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }

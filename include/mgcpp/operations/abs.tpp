@@ -12,23 +12,29 @@
 
 namespace mgcpp
 {
-    template<typename T,
-             size_t Device,
-             allignment Allign,
-             typename Alloc>
-    device_vector<T, Device, Allign, Alloc>
+    template<typename DenseVec,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    device_vector<Type, DeviceId, Allign, typename DenseVec::allocator_type>
     strict::
-    abs(device_vector<T, Device, Allign, Alloc> const& vec)
+    abs(dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
     {
-        auto set_device_status = cuda_set_device(Device);
+        using allocator_type = typename DenseVec::allocator_type;
+
+        auto const& original_vec = ~vec;
+
+        auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        size_t n = vec.shape();
+        size_t n = original_vec.shape();
 
-        auto result = mgcpp::device_vector<float>(vec);
+        auto result = mgcpp::device_vector<Type,
+                                           DeviceId,
+                                           Allign,
+                                           allocator_type>(original_vec);
         auto status = mgblas_vab(result.data_mutable(), n);
-
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

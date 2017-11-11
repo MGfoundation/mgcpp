@@ -13,23 +13,25 @@
 
 namespace mgcpp
 {
-    template<typename T,
+    template<typename DenseVec,
+             typename Type,
              size_t DeviceId,
-             allignment Allign,
-             typename Alloc>
-    T
+             allignment Allign>
+    Type
     strict::
-    sum(device_vector<T, DeviceId, Allign, Alloc> const& vec)
+    sum(dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
     {
+        auto const& original_vec = ~vec;
+
         auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        T result;
-        size_t size = vec.shape();
-            
-        auto status = mgblas_vpr(vec.data(), &result, size);
+        size_t size = original_vec.shape();
 
+        Type result;
+            
+        auto status = mgblas_vpr(original_vec.data(), &result, size);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

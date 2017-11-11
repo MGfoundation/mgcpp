@@ -10,32 +10,42 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device, allignment Allign, typename Alloc>
-    device_vector<T, Device, Allign, Alloc>
+    template<typename LhsDeviceVec,
+             typename RhsDeviceVec,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    device_vector<Type, DeviceId, Allign,
+                  typename LhsDeviceVec::allocator_type>
     strict::
-    sub(device_vector<T, Device, Allign, Alloc> const& first,
-        device_vector<T, Device, Allign, Alloc> const& second)
+    sub(dense_vector<LhsDeviceVec, Type, DeviceId, Allign> const& lhs,
+        dense_vector<RhsDeviceVec, Type, DeviceId, Allign> const& rhs)
     {
-        MGCPP_ASSERT(first.shape() == second.shape(),
+        using allocator_type = typename LhsDeviceVec::allocator_type;
+
+        auto const& lhs_vec = ~lhs;
+        auto const& rhs_vec = ~rhs;
+
+        MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(),
                      "vector dimensions didn't match");
 
-        device_vector<T, Device, Allign, Alloc> result(first);
+        auto* thread_context = lhs_vec.context();
+        auto handle = thread_context->get_cublas_context(DeviceId);
 
-        auto* thread_context = first.context();
-        auto handle = thread_context->get_cublas_context(Device);
+        auto size = lhs_vec.shape();
 
-        T const alpha = -1;
+        Type const alpha = -1;
 
-        auto size = first.shape();
-
+        auto result = device_vector<Type,
+                                    DeviceId,
+                                    Allign,
+                                    allocator_type>(lhs_vec);
         auto status = cublas_axpy(handle, size,
                                   &alpha,
-                                  second.data(), 1,
+                                  rhs_vec.data(), 1,
                                   result.data_mutable(), 1);
         if(!status)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }

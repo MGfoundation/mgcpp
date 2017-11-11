@@ -4,32 +4,30 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <cstdlib>
-#include <algorithm>
-
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp
 {
-    template<typename T,
+    template<typename DenseVec,
+             typename Type,
              size_t DeviceId,
-             allignment Allign,
-             typename Alloc>
-    T
+             allignment Allign>
+    Type
     strict::
-    mean(device_vector<T, DeviceId, Allign, Alloc> const& vec)
+    mean(dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
     {
+        auto const& original_vec = ~vec; 
+
         auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        T result;
-        size_t size = vec.shape();
-            
-        auto status = mgblas_vpr(vec.data(), &result, size);
+        size_t size = original_vec.shape();
+        Type result;
 
+        auto status = mgblas_vpr(original_vec.data(), &result, size);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -50,13 +48,13 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
         auto shape = original_mat.shape();
-        Type result;
+
         size_t total_size = shape.first * shape.second;
+        Type result;
             
         auto status = mgblas_vpr(original_mat.data(),
                                  &result,
                                  total_size);
-
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

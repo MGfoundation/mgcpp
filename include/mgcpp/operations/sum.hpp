@@ -7,20 +7,23 @@
 #ifndef _MGCPP_OPERATIONS_SUM_HPP_
 #define _MGCPP_OPERATIONS_SUM_HPP_
 
-#include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/matrix/dense_matrix.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
+
+#include <cstdlib>
 
 namespace mgcpp
 {
     namespace strict
     {
-        template<typename T,
+        template<typename DeviceVec,
+                 typename Type,
                  size_t DeviceId,
-                 allignment Allign,
-                 typename Alloc>
-        inline T
-        sum(device_vector<T, DeviceId, Allign, Alloc> const& vec);
+                 allignment Allign>
+        inline Type
+        sum(dense_vector<DeviceVec, Type, DeviceId, Allign> const& vec);
 
         template<typename DenseMat,
                  typename Type,

@@ -7,11 +7,12 @@
 #ifndef _MGCPP_OPERATIONS_ADDITION_HPP_
 #define _MGCPP_OPERATIONS_ADDITION_HPP_
 
-#include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/matrix/dense_matrix.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
-#include <type_traits>
+#include <cstdlib>
 
 namespace mgcpp
 {
@@ -21,17 +22,20 @@ namespace mgcpp
                  typename RhsDenseMat,
                  typename Type,
                  size_t DeviceId>
-        inline device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+        inline device_matrix<Type, DeviceId,
+                             typename LhsDenseMat::allocator_type>
         add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
             dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
 
-        template<typename T,
+        template<typename LhsDenseVec,
+                 typename RhsDenseVec,
+                 typename Type,
                  size_t Device,
-                 allignment Allign,
-                 typename Alloc>
-        inline device_vector<T, Device, Allign, Alloc>
-        add(device_vector<T, Device, Allign, Alloc> const& first,
-            device_vector<T, Device, Allign, Alloc> const& second);
+                 allignment Allign>
+        inline device_vector<Type, Device, Allign,
+                             typename LhsDenseVec::allocator_type>
+        add(dense_vector<LhsDenseVec, Type, Device, Allign> const& first,
+            dense_vector<RhsDenseVec, Type, Device, Allign> const& second);
     }
 }
 

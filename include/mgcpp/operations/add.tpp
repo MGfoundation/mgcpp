@@ -44,8 +44,7 @@ namespace mgcpp
         Type const alpha = 1;
         Type const beta = 1;
 
-        device_matrix<Type, DeviceId, allocator_type> result{m, n};
-
+        auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,
                                   CUBLAS_OP_N,
@@ -55,38 +54,52 @@ namespace mgcpp
                                   &beta,
                                   rhs_mat.data(), m,
                                   result.data_mutable(), m);
-
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }
 
-    template<typename T, size_t Device, allignment Allign, typename Alloc>
-    device_vector<T, Device, Allign, Alloc>
+    template<typename LhsDenseVec,
+             typename RhsDenseVec,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    device_vector<Type, DeviceId, Allign,
+                  typename LhsDenseVec::allocator_type>
     strict::
-    add(device_vector<T, Device, Allign, Alloc> const& first,
-        device_vector<T, Device, Allign, Alloc> const& second)
+    add(dense_vector<LhsDenseVec, Type, DeviceId, Allign> const& lhs,
+        dense_vector<RhsDenseVec, Type, DeviceId, Allign> const& rhs)
     {
-        MGCPP_ASSERT(first.shape() == second.shape(),
-                     "vecotr size didn't match");
+        using allocator_type = typename LhsDenseVec::allocator_type;
 
-        device_vector<T, Device, Allign, Alloc> result(second);
+        auto const& lhs_vec = ~lhs;
+        auto const& rhs_vec = ~rhs;
 
-        auto* thread_context = first.context();
-        auto handle = thread_context->get_cublas_context(Device);
+        MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(),
+                     "vector size didn't match");
 
-        T const alpha = 1;
-        auto size = first.shape();
+        auto set_device_status = cuda_set_device(DeviceId);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
+        auto* thread_context = lhs_vec.context();
+        auto handle = thread_context->get_cublas_context(DeviceId);
+
+        auto size = lhs_vec.shape();
+
+        Type const alpha = 1;
+
+        auto result = device_vector<Type,
+                                    DeviceId,
+                                    Allign,
+                                    allocator_type>(lhs_vec);
         auto status = cublas_axpy(handle, size,
                                   &alpha,
-                                  first.data(), 1,
+                                  rhs_vec.data(), 1,
                                   result.data_mutable(), 1);
         if(!status)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }

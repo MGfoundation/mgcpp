@@ -9,18 +9,22 @@
 
 #include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
+
+#include <cstdlib>
 
 namespace mgcpp
 {
     namespace strict
     {
-        template<typename T,
+        template<typename DenseVec,
+                 typename Type,
                  size_t Device,
-                 allignment Allign,
-                 typename Alloc>
-        inline device_vector<T, Device, Allign, Alloc>
-        abs(device_vector<T, Device, Allign, Alloc> const& vec);
+                 allignment Allign>
+        inline device_vector<Type, Device, Allign,
+                             typename DenseVec::allocator_type>
+        abs(dense_vector<DenseVec, Type, Device, Allign> const& vec);
 
         template<typename DenseMat,
                  typename Type,

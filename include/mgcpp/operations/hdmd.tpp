@@ -11,24 +11,36 @@
 
 namespace mgcpp
 {
-    template<typename T, size_t Device, allignment Allign, typename Alloc>
-    inline device_vector<T, Device, Allign, Alloc>
+    template<typename LhsDenseVec,
+             typename RhsDenseVec,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    device_vector<Type, DeviceId, Allign,
+                  typename LhsDenseVec::allocator_type>
     strict::
-    hdmd(device_vector<T, Device, Allign, Alloc> const& first,
-         device_vector<T, Device, Allign, Alloc> const& second)
+    hdmd(dense_vector<LhsDenseVec, Type, DeviceId, Allign> const& lhs,
+         dense_vector<RhsDenseVec, Type, DeviceId, Allign> const& rhs)
     {
-        MGCPP_ASSERT(first.shape() == second.shape(),
+        using allocator_type = typename LhsDenseVec::allocator_type;
+
+        auto const& lhs_vec = ~lhs;
+        auto const& rhs_vec = ~rhs;
+
+        MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(),
                      "matrix dimensions didn't match");
 
-        size_t size = first.shape();
-        device_vector<T, Device, Allign, Alloc> result(size);
+        size_t size = lhs_vec.shape();
 
-        auto status = mgblas_vhp(first.data(), second.data(),
+        auto result = device_vector<Type,
+                                    DeviceId,
+                                    Allign,
+                                    allocator_type>(size);
+        auto status = mgblas_vhp(lhs_vec.data(), rhs_vec.data(),
                                  result.data_mutable(),
                                  size);
-
         if(!status)
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }
