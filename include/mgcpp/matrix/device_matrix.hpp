@@ -23,10 +23,10 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId = 0,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
-    class device_matrix :
-        public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
-                            Type,
-                            DeviceId>
+    class device_matrix
+        : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
+                              Type,
+                              DeviceId>
     {
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;

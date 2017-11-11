@@ -11,7 +11,9 @@
 
 namespace mgcpp
 {
-    template<typename DenseMatType, typename Type, size_t DeviceId>
+    template<typename DenseMatType,
+             typename Type,
+             size_t DeviceId>
     class dense_matrix :
         public matrix_base<DenseMatType, Type, DeviceId>
     {

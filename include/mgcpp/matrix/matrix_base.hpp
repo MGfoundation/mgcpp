@@ -9,7 +9,9 @@
 
 namespace mgcpp
 {
-    template<typename MatrixType, typename Type, size_t DeviceId>
+    template<typename MatrixType,
+             typename Type,
+             size_t DeviceId>
     struct matrix_base
     {
         inline MatrixType const&
