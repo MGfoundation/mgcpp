@@ -12,51 +12,52 @@
 
 namespace mgcpp
 {
-    template<typename LhsMat, typename RhsMat, typename>
-    device_matrix<typename LhsMat::value_type,
-                  LhsMat::device_id,
-                  typename LhsMat::allocator_type>
+    template<typename LhsDenseMat,
+             typename RhsDenseMat,
+             typename Type,
+             size_t DeviceId>
+    device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
     strict::
-    add(LhsMat const& first, RhsMat const& second)
+    add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
+        dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs)
     {
-        using value_type = typename LhsMat::value_type;
-        using allocator_type = typename LhsMat::allocator_type;
-        size_t const device_id = LhsMat::device_id;
+        using allocator_type = typename LhsDenseMat::allocator_type;
+        
+        auto const& lhs_mat = ~lhs;
+        auto const& rhs_mat = ~rhs;
 
-        MGCPP_ASSERT(first.shape() == second.shape(),
-                         "matrix dimensions didn't match");
+        MGCPP_ASSERT(lhs_mat.shape() == rhs_mat.shape(),
+                     "matrix dimensions didn't match");
 
-        auto set_device_status = cuda_set_device(LhsMat::device_id);
+        auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        auto* thread_context = first.context();
-        auto handle = thread_context->get_cublas_context(device_id);
+        auto* thread_context = lhs_mat.context();
+        auto handle = thread_context->get_cublas_context(DeviceId);
 
-        auto shape = first.shape();
+        auto shape = lhs_mat.shape();
 
-        auto m = shape.first;
-        auto n = shape.second;
+        size_t m = shape.first;
+        size_t n = shape.second;
 
-        value_type const alpha = 1;
-        value_type const beta = 1;
+        Type const alpha = 1;
+        Type const beta = 1;
 
-        device_matrix<value_type,
-                      device_id,
-                      allocator_type> result{m, n};
+        device_matrix<Type, DeviceId, allocator_type> result{m, n};
 
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,
                                   CUBLAS_OP_N,
                                   m, n,
                                   &alpha,
-                                  first.data(), m,
+                                  lhs_mat.data(), m,
                                   &beta,
-                                  second.data(), m,
+                                  rhs_mat.data(), m,
                                   result.data_mutable(), m);
 
         if(!status)
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }

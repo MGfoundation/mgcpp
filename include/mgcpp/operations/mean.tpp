@@ -36,27 +36,30 @@ namespace mgcpp
         return result / size;
     }
 
-    template<typename DeviceMatrix, typename>
-    typename DeviceMatrix::value_type
+    template<typename DeviceMatrix,
+             typename Type,
+             size_t DeviceId>
+    Type
     strict::
-    mean(DeviceMatrix const& mat)
+    mean(dense_matrix<DeviceMatrix, Type, DeviceId> const& mat)
     {
-        using value_type = typename DeviceMatrix::value_type;
-        size_t const device_id = DeviceMatrix::device_id;
+        auto const& original_mat = ~mat; 
 
-        auto set_device_status = cuda_set_device(device_id);
+        auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        value_type result;
-        auto shape = mat.shape();
+        auto shape = original_mat.shape();
+        Type result;
+        size_t total_size = shape.first * shape.second;
             
-        auto status =
-            mgblas_vpr(mat.data(), &result, shape.first * shape.second);
+        auto status = mgblas_vpr(original_mat.data(),
+                                 &result,
+                                 total_size);
 
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-        return result / (shape.first * shape.second);
+        return result / total_size;
     }
 }

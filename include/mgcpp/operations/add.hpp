@@ -8,9 +8,8 @@
 #define _MGCPP_OPERATIONS_ADDITION_HPP_
 
 #include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
-#include <mgcpp/system/concept.hpp>
-#include <mgcpp/type_traits/device_matrix.hpp>
 
 #include <type_traits>
 
@@ -18,16 +17,18 @@ namespace mgcpp
 {
     namespace strict
     {
-        template<typename LhsMat, typename RhsMat,
-                 MGCPP_CONCEPT(is_device_matrix<LhsMat>::value &&
-                               is_device_matrix<RhsMat>::value)>
-        inline device_matrix<typename LhsMat::value_type,
-                             LhsMat::device_id,
-                             typename LhsMat::allocator_type>
-        add(LhsMat const& first,
-            RhsMat const& second);
+        template<typename LhsDenseMat,
+                 typename RhsDenseMat,
+                 typename Type,
+                 size_t DeviceId>
+        inline device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+        add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
+            dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
 
-        template<typename T, size_t Device, allignment Allign, typename Alloc>
+        template<typename T,
+                 size_t Device,
+                 allignment Allign,
+                 typename Alloc>
         inline device_vector<T, Device, Allign, Alloc>
         add(device_vector<T, Device, Allign, Alloc> const& first,
             device_vector<T, Device, Allign, Alloc> const& second);

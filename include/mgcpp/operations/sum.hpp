@@ -8,6 +8,7 @@
 #define _MGCPP_OPERATIONS_SUM_HPP_
 
 #include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
 namespace mgcpp
@@ -21,10 +22,11 @@ namespace mgcpp
         inline T
         sum(device_vector<T, DeviceId, Allign, Alloc> const& vec);
 
-        template<typename DeviceMatrix,
-                 MGCPP_CONCEPT(is_device_matrix<DeviceMatrix>::value)>
-        inline typename DeviceMatrix::value_type
-        sum(DeviceMatrix const& mat);
+        template<typename DenseMat,
+                 typename Type,
+                 size_t DeviceId>
+        inline Type
+        sum(dense_matrix<DenseMat, Type, DeviceId> const& mat);
     }
 }
 

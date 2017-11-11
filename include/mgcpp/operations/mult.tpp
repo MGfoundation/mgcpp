@@ -13,48 +13,53 @@
 
 namespace mgcpp
 {
-    template<typename LhsMat, typename RhsMat, typename>
-    device_matrix<typename LhsMat::value_type,
-                  LhsMat::device_id,
-                  typename LhsMat::allocator_type>
+    template<typename LhsDenseMat,
+             typename RhsDenseMat,
+             typename Type,
+             size_t DeviceId>
+    device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
     strict::
-    mult(LhsMat const& first, RhsMat const& second)
+    mult(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
+         dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs)
     {
-        using value_type = typename LhsMat::value_type;
-        using allocator_type = typename LhsMat::allocator_type;
-        size_t const device_id = LhsMat::device_id; 
+        using allocator_type = typename LhsDenseMat::allocator_type;
 
-        MGCPP_ASSERT(first.shape().second == second.shape().first,
+        auto const& lhs_mat = ~lhs;
+        auto const& rhs_mat = ~rhs;
+
+        MGCPP_ASSERT(lhs_mat.shape().second == rhs_mat.shape().first,
                      "matrix dimensions didn't match");
 
-        value_type const alpha = 1;
-        value_type const beta = 0;
+        auto set_device_status = cuda_set_device(DeviceId);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        auto second_shape = second.shape();
-        auto first_shape = first.shape();
+        auto* context = lhs_mat.context();
+        auto handle = context->get_cublas_context(DeviceId);
 
-        size_t m = first_shape.first;
-        size_t k = first_shape.second;
-        size_t n = second_shape.second;
+        auto lhs_shape = lhs_mat.shape();
+        auto rhs_shape = rhs_mat.shape();
 
-        device_matrix<value_type,
-                      device_id,
-                      allocator_type> result{m, n};
+        size_t m = lhs_shape.first;
+        size_t k = lhs_shape.second;
+        size_t n = rhs_shape.second;
 
-        auto* context = first.context();
-        auto handle = context->get_cublas_context(device_id);
-    
+        Type const alpha = 1;
+        Type const beta = 0;
+
+        auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
+
         auto status = cublas_gemm(handle,
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
                                   &alpha,
-                                  first.data(), m,
-                                  second.data(), k,
+                                  lhs_mat.data(), m,
+                                  rhs_mat.data(), k,
                                   &beta,
                                   result.data_mutable(), m);
 
         if(!status)
-            MGCPP_THROW_SYSTEM_ERROR(status.error());
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return result;
     }

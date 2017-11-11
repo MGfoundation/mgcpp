@@ -35,23 +35,25 @@ namespace mgcpp
         return result;
     }
 
-    template<typename DeviceMatrix, typename>
-    device_matrix<typename DeviceMatrix::value_type,
-                  DeviceMatrix::device_id,
-                  typename DeviceMatrix::allocator_type>
+    template<typename DenseMat,
+             typename Type,
+             size_t DeviceId>
+    device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
     strict::
-    abs(DeviceMatrix const& mat)
+    abs(dense_matrix<DenseMat, Type, DeviceId> const& mat)
     {
-        auto set_device_status =
-            cuda_set_device(DeviceMatrix::device_id);
+        using allocator_type = typename DenseMat::allocator_type;
+
+        auto const& original_mat = ~mat;
+
+        auto set_device_status = cuda_set_device(DeviceId);
         if(!set_device_status)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
 
-        auto shape = mat.shape();
+        auto shape = original_mat.shape();
 
-        auto result = DeviceMatrix(mat);
+        auto result = device_matrix<Type, DeviceId, allocator_type>(original_mat);
         auto status = mgblas_vab(result.data_mutable(), shape.first * shape.second);
-
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
