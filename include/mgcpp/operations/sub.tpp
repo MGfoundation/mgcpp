@@ -5,8 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/cublas/blaslike_ext.hpp>
-#include <mgcpp/device/matrix.hpp>
-#include <mgcpp/device/vector.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/system/exception.hpp>
 

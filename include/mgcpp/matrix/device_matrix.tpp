@@ -6,7 +6,7 @@
 
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
-#include <mgcpp/device/matrix.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/system/exception.hpp>
 

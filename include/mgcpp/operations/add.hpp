@@ -7,7 +7,8 @@
 #ifndef _MGCPP_OPERATIONS_ADDITION_HPP_
 #define _MGCPP_OPERATIONS_ADDITION_HPP_
 
-#include <mgcpp/device/forward.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_matrix.hpp>
 

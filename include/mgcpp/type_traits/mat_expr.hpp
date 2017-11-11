@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/mat_expr.hpp>
-#include <mgcpp/device/forward.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp
 {

@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/device/vector.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/hdmd.hpp>

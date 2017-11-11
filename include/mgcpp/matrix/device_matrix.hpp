@@ -11,7 +11,6 @@
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/device/forward.hpp>
 #include <mgcpp/system/concept.hpp>
 
 #include <cstdlib>
@@ -127,5 +126,5 @@ namespace mgcpp
     };
 }
 
-#include <mgcpp/device/matrix.tpp>
+#include <mgcpp/matrix/device_matrix.tpp>
 #endif

@@ -7,7 +7,8 @@
 #ifndef _MGCPP_OPERATIONS_HADAMARD_HPP_
 #define _MGCPP_OPERATIONS_HADAMARD_HPP_
 
-#include <mgcpp/device/forward.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 
 namespace mgcpp
 {

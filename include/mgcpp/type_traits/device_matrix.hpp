@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#include <mgcpp/device/forward.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp
 {

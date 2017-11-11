@@ -15,7 +15,7 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/adapters/adapter_base.hpp>
 #include <mgcpp/cuda/device.hpp>
-#include <mgcpp/device/matrix.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 
 size_t
 encode_index(size_t i, size_t j, size_t n)

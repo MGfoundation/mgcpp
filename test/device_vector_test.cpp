@@ -8,7 +8,7 @@
 
 #define ERROR_CHECK_EXCEPTION true
 
-#include <mgcpp/device/vector.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 
 template<typename T>
 class dummy_vector

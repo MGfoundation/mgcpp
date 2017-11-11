@@ -11,7 +11,6 @@
 #include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/system/concept.hpp>
-#include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
 
 #include <cstdlib>
@@ -112,5 +111,5 @@ namespace mgcpp
     };
 }
 
-#include <mgcpp/device/vector.tpp>
+#include <mgcpp/vector/device_vector.tpp>
 #endif

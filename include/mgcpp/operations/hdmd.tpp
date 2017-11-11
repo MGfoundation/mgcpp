@@ -4,7 +4,6 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/device/vector.hpp>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/system/assert.hpp>

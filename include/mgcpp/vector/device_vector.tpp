@@ -9,7 +9,7 @@
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/kernels/mgblas_helpers.hpp>
-#include <mgcpp/device/vector.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/system/exception.hpp>
 
 #include <algorithm>

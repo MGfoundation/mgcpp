@@ -8,8 +8,6 @@
 #include <algorithm>
 
 #include <mgcpp/cuda/device.hpp>
-#include <mgcpp/device/matrix.hpp>
-#include <mgcpp/device/vector.hpp>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/exception.hpp>
 

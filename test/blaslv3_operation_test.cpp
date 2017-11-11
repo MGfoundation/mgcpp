@@ -10,7 +10,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/device/matrix.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/operations/abs.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/mean.hpp>
