@@ -22,6 +22,7 @@ namespace mgcpp
     device_matrix() noexcept
     : _context(&global_context::get_thread_context()),
         _shape(0, 0),
+        _allocator(),
         _data(nullptr),
         _capacity(0) {}
 
@@ -29,20 +30,33 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_matrix<T, DeviceId, Alloc>::
-    device_matrix(size_t i, size_t j)
+    device_matrix(Alloc const& alloc) 
+        : _context(&global_context::get_thread_context()),
+          _shape(0, 0),
+          _allocator(alloc),
+          _data(nullptr),
+          _capacity(0) {}
+
+    template<typename T,
+             size_t DeviceId,
+             typename Alloc>
+    device_matrix<T, DeviceId, Alloc>::
+    device_matrix(size_t i, size_t j, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(i, j),
-         _data(device_allocate(_shape.first * _shape.second)),
+         _allocator(alloc),
+         _data(_allocator.device_allocate(_shape.first * _shape.second)),
          _capacity(i * j) {}
 
     template<typename T,
              size_t DeviceId,
              typename Alloc>
     device_matrix<T, DeviceId, Alloc>::
-    device_matrix(size_t i, size_t j, T init)
+    device_matrix(size_t i, size_t j, T init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
-          _data(device_allocate(_shape.first * _shape.second)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape.first * _shape.second)),
           _capacity(i * j)
     {
         size_t total_size = _shape.first * _shape.second;
@@ -56,19 +70,20 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_matrix<T, DeviceId, Alloc>::
-    device_matrix(size_t i, size_t j, T const* data)
+    device_matrix(size_t i, size_t j, T const* data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
-          _data(device_allocate(_shape.first * _shape.second)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape.first * _shape.second)),
           _capacity(i * j)
     {
+        size_t total_size = _shape.first * _shape.second;
+
         try
-        {
-            copy_from_host(_data, data, _shape.first * _shape.second);
-        }
+        { _allocator.copy_from_host(_data, data, total_size); }
         catch(std::system_error const& err)
         {
-            device_deallocate(_data, _shape.first * _shape.second);
+            _allocator.device_deallocate(_data, total_size);
             MGCPP_THROW_SYSTEM_ERROR(err);
         }
     }
@@ -98,15 +113,17 @@ namespace mgcpp
              typename Alloc>
     device_matrix<T, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
-                  std::initializer_list<T>> const& init_list)
+                  std::initializer_list<T>> const& init_list,
+                  Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(init_list.size(), determine_ndim(init_list)),
-          _data(device_allocate(_shape.first * _shape.second)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape.first * _shape.second)),
           _capacity(_shape.first * _shape.second)
     {
         size_t total_size = _shape.first * _shape.second;
 
-        T* buffer = allocate(total_size);
+        T* buffer = _allocator.allocate(total_size);
         size_t i = 0;
         for(auto const& row : init_list)
         {
@@ -120,13 +137,13 @@ namespace mgcpp
 
         try
         {
-            copy_from_host(_data, buffer, total_size);
-            deallocate(buffer,  total_size);
+            _allocator.copy_from_host(_data, buffer, total_size);
+            _allocator.deallocate(buffer,  total_size);
         }
         catch(std::system_error const& err)
         {
-            deallocate(buffer, total_size);
-            device_deallocate(_data, total_size);
+            _allocator.deallocate(buffer, total_size);
+            _allocator.device_deallocate(_data, total_size);
             MGCPP_THROW(err);
         }
     }
@@ -136,9 +153,10 @@ namespace mgcpp
              typename Alloc>
     template<typename HostMat, typename>
     device_matrix<T, DeviceId, Alloc>::
-    device_matrix(HostMat const& host_mat)
+    device_matrix(HostMat const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(0, 0),
+         _allocator(alloc),
          _data(nullptr),
          _capacity(0)
     {
@@ -148,9 +166,9 @@ namespace mgcpp
         adapt(host_mat, &host_p, &_shape.first, &_shape.second);
 
         size_t total_size = _shape.first * _shape.second;
+        _data = _allocator.device_allocate(total_size);
         _capacity = total_size;
-        _data = device_allocate(total_size);
-        copy_from_host(_data, host_p, total_size);
+        _allocator.copy_from_host(_data, host_p, total_size);
     }
 
     template<typename T,
@@ -160,7 +178,8 @@ namespace mgcpp
     device_matrix(device_matrix<T, DeviceId, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
-         _data(device_allocate(_shape.first * _shape.second)),
+         _allocator(other._allocator),
+         _data(_allocator.device_allocate(_shape.first * _shape.second)),
          _capacity(_shape.first * _shape.second)
     {
         auto cpy_result = cuda_memcpy(_data, other._data,
@@ -169,7 +188,7 @@ namespace mgcpp
 
         if(!cpy_result)
         {
-            device_deallocate(_data, _capacity);
+            _allocator.device_deallocate(_data, _capacity);
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
     }
@@ -182,6 +201,7 @@ namespace mgcpp
     device_matrix(device_matrix<T, DeviceId, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
+          _allocator(std::move(other._allocator)),
           _data(other._data),
           _capacity(other._capacity)
     {
@@ -196,15 +216,16 @@ namespace mgcpp
     device_matrix<T, DeviceId, Alloc>::
     operator=(device_matrix<T, DeviceId, Alloc> const& other)
     {
-        size_t other_size = other._shape.first * other._shape.second;
+        auto shape = other._shape;
+        size_t other_size = shape.first * shape.second;
         if(other_size > _capacity)
         {
             if(_data)
             {
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = device_allocate(other_size); 
+            _data = _allocator.device_allocate(other_size); 
             _capacity = other_size;
         }
         auto cpy_result = cuda_memcpy(_data,
@@ -212,11 +233,10 @@ namespace mgcpp
                                       other_size,
                                       cuda_memcpy_kind::device_to_device);
         _shape = other._shape;
+        _allocator = other._allocator;
 
         if(!cpy_result)
-        {
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
+        { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
 
         return *this;
     }
@@ -232,13 +252,14 @@ namespace mgcpp
         { 
             try
             {
-                device_deallocate( _data, _capacity);
+                _allocator.device_deallocate( _data, _capacity);
             } catch(...){};
             _data = nullptr;
         }
         _data = other._data;
         _capacity = other._capacity;
         _shape = std::move(other._shape);
+        _allocator = std::move(other._allocator);
         other._data = nullptr;
         other._capacity = 0;
 
@@ -257,10 +278,10 @@ namespace mgcpp
         {
             if(_data)
             {
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = device_allocate(total_size); 
+            _data = _allocator.device_allocate(total_size); 
             _capacity = total_size;
         }
 
@@ -281,10 +302,10 @@ namespace mgcpp
         {
             if(_data)
             {
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = device_allocate(total_size); 
+            _data = _allocator.device_allocate(total_size); 
             _capacity = total_size;
         }
 
@@ -295,16 +316,6 @@ namespace mgcpp
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-        // T* buffer = allocate(total_size);
-        // std::fill(buffer, buffer + total_size, init);
-
-        // try
-        // { copy_from_host(_data, buffer, total_size); }
-        // catch(std::system_error const& err)
-        // {
-        //     deallocate(buffer, total_size);
-        //     MGCPP_THROW(err);
-        // }
         return *this;
     }
 
@@ -349,7 +360,7 @@ namespace mgcpp
 
         T* from = (_data + (i * _shape.second + j));
         T to;
-        copy_to_host(&to, from, 1);
+        _allocator.copy_to_host(&to, from, 1);
 
         return to;
     }
@@ -361,9 +372,10 @@ namespace mgcpp
     device_matrix<T, DeviceId, Alloc>::
     copy_to_host(T* host_p) const
     {
+        size_t total_size = _shape.first * _shape.second;
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
-        copy_to_host(host_p, _data, _shape.first * _shape.second);
+        _allocator.copy_to_host(host_p, _data, total_size);
     }
 
     template<typename T,
@@ -427,7 +439,7 @@ namespace mgcpp
     {
         if(_data)
             try{
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
             }catch(...){};
         global_context::reference_cnt_decr();
     }

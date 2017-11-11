@@ -4,37 +4,40 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_DEVICE_VECTOR_HPP_
-#define _MGCPP_DEVICE_VECTOR_HPP_
+#ifndef _MGCPP_VECTOR_DEVICE_VECTOR_HPP_
+#define _MGCPP_VECTOR_DEVICE_VECTOR_HPP_
 
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/system/concept.hpp>
 #include <mgcpp/device/forward.hpp>
 #include <mgcpp/global/allignment.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
+#include <type_traits>
 
 namespace mgcpp
 {
-    template<typename T,
+    template<typename Type,
              size_t DeviceId = 0,
              allignment Allign = row,
-             typename Alloc = mgcpp::default_allocator<T, DeviceId>>
-    class device_vector : public Alloc
+             typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
+    class device_vector
     {
-        using Alloc::allocate;
-        using Alloc::deallocate;
-        using Alloc::device_allocate;
-        using Alloc::device_deallocate;
-        using Alloc::copy_to_host;
-        using Alloc::copy_from_host;
+    public:
+        using this_type = device_vector<Type, DeviceId, Allign, Alloc>;
+        using value_type = Type;
+        using pointer = value_type*;
+        using result_type = this_type;
+        using allocator_type = Alloc;
 
     private:
         thread_context* _context;
         size_t _shape;
-        T* _data;
+        Alloc _allocator;
+        Type* _data;
         size_t _capacity;
 
     public:
@@ -42,61 +45,60 @@ namespace mgcpp
 
         inline ~device_vector() noexcept;
 
-        inline device_vector(size_t size);
+        inline device_vector(Alloc const& alloc) noexcept;
 
-        inline device_vector(size_t size, T init);
+        inline device_vector(size_t size, Alloc const& alloc = Alloc());
 
-        inline device_vector(size_t size, T const* data);
+        inline device_vector(size_t size, Type init,
+                             Alloc const& alloc = Alloc());
+
+        inline device_vector(size_t size, Type const* data,
+                             Alloc const& alloc = Alloc());
+
+        inline
+        device_vector(std::initializer_list<Type> const& array,
+                      Alloc const& alloc = Alloc());
 
         template<typename HostVec,
-                 typename = typename
-                 std::enable_if<adapter<HostVec>::value>::type>
+                 MGCPP_CONCEPT(adapter<HostVec>::value)>
         inline 
-        device_vector(HostVec const& host_mat);
-
-        // template<typename HostVec, typename Adapter,
-        //          typename = typename
-        //          std::enable_if<std::is_function<Adapter>::value>::type>
-        // inline 
-        // device_vector(HostVec const& host_mat, Adapter& adapter);
+        device_vector(HostVec const& host_mat,
+                      Alloc const& alloc = Alloc());
 
         inline
-        device_vector(std::initializer_list<T> const& array);
+        device_vector(device_vector<Type, DeviceId, Allign, Alloc> const& other);
 
         inline
-        device_vector(device_vector<T, DeviceId, Allign, Alloc> const& other);
+        device_vector(device_vector<Type, DeviceId, Allign, Alloc>&& other) noexcept;
 
-        inline
-        device_vector(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept;
+        inline device_vector<Type, DeviceId, Allign, Alloc>&
+        operator=(device_vector<Type, DeviceId, Allign, Alloc> const& other);
 
-        inline device_vector<T, DeviceId, Allign, Alloc>&
-        operator=(device_vector<T, DeviceId, Allign, Alloc> const& other);
+        inline device_vector<Type, DeviceId, Allign, Alloc>&
+        operator=(device_vector<Type, DeviceId, Allign, Alloc>&& other) noexcept;
 
-        inline device_vector<T, DeviceId, Allign, Alloc>&
-        operator=(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept;
-
-        inline device_vector<T, DeviceId, Allign, Alloc>&
+        inline device_vector<Type, DeviceId, Allign, Alloc>&
         zero();
 
-        inline device_vector<T, DeviceId, Allign, Alloc>&
+        inline device_vector<Type, DeviceId, Allign, Alloc>&
         resize(size_t size);
 
         inline void 
-        copy_to_host(T* host_p) const;
+        copy_to_host(Type* host_p) const;
 
-        inline T
+        inline Type
         check_value(size_t i) const;
 
-        inline T const*
+        inline Type const*
         data() const noexcept;
 
-        inline T*
+        inline Type*
         data_mutable() noexcept;
 
         inline size_t
         capacity() const noexcept;
 
-        inline T*
+        inline Type*
         release_data() noexcept;
 
         inline thread_context*

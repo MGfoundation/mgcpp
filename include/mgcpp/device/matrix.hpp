@@ -4,21 +4,18 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_DEVICE_MATRIX_HPP_
-#define _MGCPP_DEVICE_MATRIX_HPP_
+#ifndef _MGCPP_MATRIX_DEVICE_MATRIX_HPP_
+#define _MGCPP_MATRIX_DEVICE_MATRIX_HPP_
 
 #include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/device/forward.hpp>
-#include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/system/concept.hpp>
-#include <mgcpp/type_traits/device_matrix.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
-#include <memory>
 #include <type_traits>
 
 namespace mgcpp
@@ -26,7 +23,7 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId = 0,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
-    class device_matrix : public Alloc
+    class device_matrix
     {
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
@@ -38,15 +35,9 @@ namespace mgcpp
         static size_t const device_id = DeviceId;
 
     private:
-        using Alloc::allocate;
-        using Alloc::deallocate;
-        using Alloc::device_allocate;
-        using Alloc::device_deallocate;
-        using Alloc::copy_to_host;
-        using Alloc::copy_from_host;
-
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
+        Alloc _allocator;
         Type* _data;
         size_t _capacity;
 
@@ -55,24 +46,30 @@ namespace mgcpp
                        std::initializer_list<Type>> const& list) const noexcept;
 
     public:
-        inline
-        device_matrix() noexcept;
+        inline device_matrix() noexcept;
 
         inline
         ~device_matrix() noexcept;
 
         inline
-        device_matrix(size_t i, size_t j);
+        device_matrix(Alloc const& alloc);
 
         inline
-        device_matrix(size_t i, size_t j, Type init);
+        device_matrix(size_t i, size_t j,
+                      Alloc const& alloc = Alloc());
+
+        inline
+        device_matrix(size_t i, size_t j, Type init,
+                      Alloc const& alloc = Alloc());
         
         inline
-        device_matrix(size_t i, size_t j, Type const* data);
+        device_matrix(size_t i, size_t j, Type const* data,
+                      Alloc const& alloc = Alloc());
 
         inline
         device_matrix(
-            std::initializer_list<std::initializer_list<Type>> const& array);
+            std::initializer_list<std::initializer_list<Type>> const& array,
+            Alloc const& alloc = Alloc());
 
         // inline
         // device_matrix(std::initializer_list<device_vector<Type>> const& array);
@@ -80,7 +77,8 @@ namespace mgcpp
         template<typename HostMat,
                  MGCPP_CONCEPT(adapter<HostMat>::value)>
         inline 
-        device_matrix(HostMat const& host_mat);
+        device_matrix(HostMat const& host_mat,
+                      Alloc const& alloc = Alloc());
 
         inline
         device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);

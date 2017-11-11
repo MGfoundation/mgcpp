@@ -24,6 +24,7 @@ namespace mgcpp
     device_vector() noexcept
     :_context(&global_context::get_thread_context()),
         _shape(0),
+        _allocator(),
         _data(nullptr),
         _capacity(0) {}
 
@@ -32,10 +33,23 @@ namespace mgcpp
              allignment Allign,
              typename Alloc>
     device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(size_t size)
+    device_vector(Alloc const& alloc) noexcept
+        :_context(&global_context::get_thread_context()),
+         _shape(0),
+         _allocator(alloc),
+         _data(nullptr),
+         _capacity(0) {}
+
+    template<typename T,
+             size_t DeviceId,
+             allignment Allign,
+             typename Alloc>
+    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector(size_t size, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(size),
-         _data(device_allocate(_shape)),
+         _allocator(alloc),
+         _data(_allocator.device_allocate(_shape)),
          _capacity(_shape) {}
 
     template<typename T,
@@ -43,13 +57,14 @@ namespace mgcpp
              allignment Allign,
              typename Alloc>
     device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(size_t size, T init)
+    device_vector(size_t size, T init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
-          _data(device_allocate(_shape)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        T* buffer = allocate(_shape);
+        T* buffer = _allocator.allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
         auto status = mgblas_fill(_data, init, _shape);
@@ -62,17 +77,18 @@ namespace mgcpp
              allignment Allign,
              typename Alloc>
     device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(size_t size, T const* data)
+    device_vector(size_t size, T const* data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
-          _data(device_allocate(_shape)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape)),
           _capacity(size)
     {
         try
-        { copy_from_host(_data, data, _shape); }
+        { _allocator.copy_from_host(_data, data, _shape); }
         catch(std::system_error const& err)
         {
-            device_deallocate(_data, _capacity);
+            _allocator.device_deallocate(_data, _capacity);
             MGCPP_THROW_SYSTEM_ERROR(err);
         }
     }
@@ -82,23 +98,25 @@ namespace mgcpp
              allignment Allign,
              typename Alloc>
     device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(std::initializer_list<T> const& array)
+    device_vector(std::initializer_list<T> const& array,
+                  Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(array.size()),
-          _data(device_allocate(_shape)),
+          _allocator(alloc),
+          _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        T* buffer = allocate(_shape);
+        T* buffer = _allocator.allocate(_shape);
         std::copy(array.begin(), array.end(), buffer);
 
         try
         {
-            copy_from_host(_data, buffer, _shape);
-            deallocate(buffer, _shape);
+            _allocator.copy_from_host(_data, buffer, _shape);
+            _allocator.deallocate(buffer, _shape);
         }
         catch(std::system_error const& err)
         {
-            deallocate(buffer, _shape);
+            _allocator.deallocate(buffer, _shape);
             MGCPP_THROW(err);
         }
     }
@@ -109,9 +127,10 @@ namespace mgcpp
              typename Alloc>
     template<typename HostVec, typename>
     device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(HostVec const& host_mat)
+    device_vector(HostVec const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(0),
+         _allocator(alloc),
          _data(nullptr),
          _capacity(0)
     {
@@ -121,8 +140,8 @@ namespace mgcpp
         adapt(host_mat, &host_p, &_shape);
 
         _capacity = _shape;
-        _data = device_allocate(_shape);
-        copy_from_host(_data, host_p, _shape);
+        _data = _allocator.device_allocate(_shape);
+        _allocator.copy_from_host(_data, host_p, _shape);
     }
 
     template<typename T,
@@ -133,7 +152,8 @@ namespace mgcpp
     device_vector(device_vector<T, DeviceId, Allign, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
-         _data(device_allocate(_shape)),
+         _allocator(other._allocator),
+         _data(_allocator.device_allocate(_shape)),
          _capacity(_shape)
     {
         auto cpy_result = cuda_memcpy(_data, other._data, _shape,
@@ -141,7 +161,7 @@ namespace mgcpp
 
         if(!cpy_result)
         {
-            device_deallocate(_data, _shape);
+            _allocator.device_deallocate(_data, _shape);
             MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
         }
     }
@@ -155,6 +175,7 @@ namespace mgcpp
     device_vector(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
+          _allocator(std::move(other._allocator)),
           _data(other._data),
           _capacity(other._capacity)
     {
@@ -173,10 +194,10 @@ namespace mgcpp
         {
             if(_data)
             {
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = device_allocate(other._shape); 
+            _data = _allocator.device_allocate(other._shape); 
             _capacity = other._shape;
         }
 
@@ -185,6 +206,7 @@ namespace mgcpp
                                       other._shape,
                                       cuda_memcpy_kind::device_to_device);
         _shape = other._shape;
+        _allocator = other._allocator;
 
         if(!cpy_result)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
@@ -202,12 +224,13 @@ namespace mgcpp
     {
         if(_data)
         { 
-            try { device_deallocate(_data, _shape); } catch(...){};
+            try { _allocator.device_deallocate(_data, _shape); } catch(...){};
             _data = nullptr;
         }
         _data = other._data;
         _capacity = other._capacity;
         _shape = std::move(other._shape);
+        _allocator = std::move(other._allocator);
         other._data = nullptr;
         other._capacity = 0;
 
@@ -226,10 +249,10 @@ namespace mgcpp
         {
             if(_data)
             {
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = device_allocate(size); 
+            _data = _allocator.device_allocate(size); 
             _capacity = size;
         }
         _shape = size;
@@ -269,7 +292,7 @@ namespace mgcpp
     {
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
-        copy_to_host(host_p, _data, _shape);
+        _allocator.copy_to_host(host_p, _data, _shape);
     }
 
 
@@ -282,9 +305,7 @@ namespace mgcpp
     check_value(size_t i) const
     {
         if(i >= _shape)
-        {
-            MGCPP_THROW_OUT_OF_RANGE("index out of range.");
-        }
+        { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
 
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
@@ -292,7 +313,7 @@ namespace mgcpp
 
         T* from = (_data + i);
         T to;
-        copy_to_host(&to, from, 1);
+        _allocator.copy_to_host(&to, from, 1);
 
         return to;
     }
@@ -374,7 +395,7 @@ namespace mgcpp
     {
         if(_data)
             try{
-                device_deallocate(_data, _capacity);
+                _allocator.device_deallocate(_data, _capacity);
             }catch(...){};
         global_context::reference_cnt_decr();
     }

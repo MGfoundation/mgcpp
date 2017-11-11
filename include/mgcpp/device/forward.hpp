@@ -8,7 +8,6 @@
 #define _MGCPP_GPU_FORWARD_HPP_
 
 #include <cstdlib>
-#include <mgcpp/global/storage_order.hpp>
 #include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp
