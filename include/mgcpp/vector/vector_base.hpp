@@ -1,0 +1,31 @@
+
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef _MGCPP_VECTOR_VECTOR_BASE_HPP_
+#define _MGCPP_VECTOR_VECTOR_BASE_HPP_
+
+#include <mgcpp/global/allignment.hpp>
+
+#include <cstdlib>
+
+namespace mgcpp
+{
+    template<typename VectorType,
+             typename Type,
+             size_t DeviceId,
+             allignment Allign>
+    struct vector_base
+    {
+        inline VectorType const&
+        operator~() const noexcept;
+
+        inline VectorType&
+        operator~() noexcept;
+    };
+}
+
+#include <mgcpp/vector/vector_base.tpp>
+#endif

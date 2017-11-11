@@ -7,11 +7,12 @@
 #ifndef _MGCPP_VECTOR_DEVICE_VECTOR_HPP_
 #define _MGCPP_VECTOR_DEVICE_VECTOR_HPP_
 
-#include <mgcpp/allocators/default.hpp>
 #include <mgcpp/adapters/adapters.hpp>
+#include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/system/concept.hpp>
 #include <mgcpp/global/allignment.hpp>
+#include <mgcpp/system/concept.hpp>
+#include <mgcpp/vector/dense_vector.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -24,13 +25,17 @@ namespace mgcpp
              allignment Allign = row,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
     class device_vector
+        : public dense_vector<device_vector<Type, DeviceId, Allign, Alloc>,
+                              Type,
+                              DeviceId,
+                              Allign>
     {
     public:
         using this_type = device_vector<Type, DeviceId, Allign, Alloc>;
         using value_type = Type;
-        using pointer = value_type*;
         using result_type = this_type;
         using allocator_type = Alloc;
+        size_t const device_id = DeviceId;
 
     private:
         thread_context* _context;
