@@ -4,11 +4,13 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <gtest/gtest.h>
+
+#define ERROR_CHECK_EXCEPTION true
+
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/matrix/column_view.hpp>
-
-#include <gtest/gtest.h>
 
 TEST(column_view, construction)
 {
