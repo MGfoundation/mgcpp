@@ -94,7 +94,7 @@ namespace mgcpp
     size_t
     device_matrix<T, DeviceId, Alloc>::
     determine_ndim(std::initializer_list<
-                   std::initializer_list<T>> const& list) const noexcept
+                       std::initializer_list<T>> const& list) const noexcept
     {
         auto max_elem = std::max(list.begin(),
                                  list.end(),
@@ -113,7 +113,7 @@ namespace mgcpp
              typename Alloc>
     device_matrix<T, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
-                  std::initializer_list<T>> const& init_list,
+                      std::initializer_list<T>> const& init_list,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(init_list.size(), determine_ndim(init_list)),
@@ -174,15 +174,16 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              typename Alloc>
+    template<typename DenseMatrix>
     device_matrix<T, DeviceId, Alloc>::
-    device_matrix(device_matrix<T, DeviceId, Alloc> const& other)
+    device_matrix(dense_matrix<DenseMatrix, T, DeviceId> const& other)
         :_context(&global_context::get_thread_context()),
-         _shape(other._shape),
-         _allocator(other._allocator),
+         _shape((~other)._shape),
+         _allocator(),
          _data(_allocator.device_allocate(_shape.first * _shape.second)),
          _capacity(_shape.first * _shape.second)
     {
-        auto cpy_result = cuda_memcpy(_data, other._data,
+        auto cpy_result = cuda_memcpy(_data, (~other)._data,
                                       _shape.first * _shape.second,
                                       cuda_memcpy_kind::device_to_device);
 
@@ -212,6 +213,28 @@ namespace mgcpp
     template<typename T,
              size_t DeviceId,
              typename Alloc>
+    device_matrix<T, DeviceId, Alloc>::
+    device_matrix(device_matrix<T, DeviceId, Alloc> const& other)
+        :_context(&global_context::get_thread_context()),
+         _shape(other._shape),
+         _allocator(other._allocator),
+         _data(_allocator.device_allocate(_shape.first * _shape.second)),
+         _capacity(_shape.first * _shape.second)
+    {
+        auto cpy_result = cuda_memcpy(_data, other._data,
+                                      _shape.first * _shape.second,
+                                      cuda_memcpy_kind::device_to_device);
+
+        if(!cpy_result)
+        {
+            _allocator.device_deallocate(_data, _capacity);
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             typename Alloc>
     device_matrix<T, DeviceId, Alloc>&
     device_matrix<T, DeviceId, Alloc>::
     operator=(device_matrix<T, DeviceId, Alloc> const& other)
@@ -234,6 +257,40 @@ namespace mgcpp
                                       cuda_memcpy_kind::device_to_device);
         _shape = other._shape;
         _allocator = other._allocator;
+
+        if(!cpy_result)
+        { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
+
+        return *this;
+    }
+
+    template<typename T,
+             size_t DeviceId,
+             typename Alloc>
+    template<typename DenseMatrix>
+    device_matrix<T, DeviceId, Alloc>&
+    device_matrix<T, DeviceId, Alloc>::
+    operator=(dense_matrix<DenseMatrix, T, DeviceId> const& other)
+    {
+        auto const& other_densemat = ~other;
+
+        auto shape = other_densemat._shape;
+        size_t other_size = shape.first * shape.second;
+        if(other_size > _capacity)
+        {
+            if(_data)
+            {
+                _allocator.device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
+            _data = _allocator.device_allocate(other_size); 
+            _capacity = other_size;
+        }
+        auto cpy_result = cuda_memcpy(_data,
+                                      other_densemat._data,
+                                      other_size,
+                                      cuda_memcpy_kind::device_to_device);
+        _shape = other_densemat._shape;
 
         if(!cpy_result)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }

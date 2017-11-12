@@ -68,9 +68,9 @@ namespace mgcpp
                       Alloc const& alloc = Alloc());
 
         inline
-        device_matrix(
-            std::initializer_list<std::initializer_list<Type>> const& array,
-            Alloc const& alloc = Alloc());
+        device_matrix(std::initializer_list<
+                          std::initializer_list<Type>> const& array,
+                      Alloc const& alloc = Alloc());
 
         template<typename HostMat,
                  MGCPP_CONCEPT(adapter<HostMat>::value)>
@@ -81,11 +81,19 @@ namespace mgcpp
         inline
         device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);
 
+        template<typename DenseMatrix>
+        inline
+        device_matrix(dense_matrix<DenseMatrix, Type, DeviceId> const& other);
+
         inline
         device_matrix(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
 
         inline device_matrix<Type, DeviceId, Alloc>&
         operator=(device_matrix<Type, DeviceId, Alloc> const& other);
+
+        template<typename DenseMatrix>
+        inline device_matrix<Type, DeviceId, Alloc>&
+        operator=(dense_matrix<DenseMatrix, Type, DeviceId> const& other);
 
         inline device_matrix<Type, DeviceId, Alloc>&
         operator=(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
