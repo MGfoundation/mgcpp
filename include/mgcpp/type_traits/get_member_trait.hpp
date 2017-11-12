@@ -11,24 +11,44 @@
 #include <mgcpp/vector/device_vector.hpp>
 
 #include <type_traits>
+#include <cstdlib>
 
 namespace mgcpp
 {
-    template<typename T>
-    struct get_allocator { };
-
-    template<typename Type
+    template<typename Type,
              size_t DeviceId,
              typename Alloc>
-    struct get_allocator<device_matrix<Type, DeviceId, Alloc>>
-    { using value = Alloc; };
+    class device_matrix;
 
     template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    struct get_allocator<device_vector<Type, Allign, DeviceId, Alloc>>
-    { using value = Alloc; };
+    class device_vector;
+
+    template<typename T>
+    struct get_allocator_impl { };
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
+    struct get_allocator_impl<device_matrix<Type, DeviceId, Alloc>>
+    { using type = Alloc; };
+
+    template<typename Type,
+             allignment Allign,
+             size_t DeviceId,
+             typename Alloc>
+    struct get_allocator_impl<device_vector<Type, Allign, DeviceId, Alloc>>
+    { using type = Alloc; };
+
+    template<typename Type>
+    struct get_allocator
+    {
+        using type =
+            typename get_allocator_impl<
+            typename std::decay<Type>::type>::type;
+    };
 }
 
 #endif
