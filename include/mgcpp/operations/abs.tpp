@@ -14,11 +14,11 @@ namespace mgcpp
 {
     template<typename DenseVec,
              typename Type,
-             size_t DeviceId,
-             allignment Allign>
-    device_vector<Type, DeviceId, Allign, typename DenseVec::allocator_type>
+             allignment Allign,
+             size_t DeviceId>
+    device_vector<Type, Allign, DeviceId, typename DenseVec::allocator_type>
     strict::
-    abs(dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
+    abs(dense_vector<DenseVec, Type, Allign, DeviceId> const& vec)
     {
         using allocator_type = typename DenseVec::allocator_type;
 
@@ -31,8 +31,8 @@ namespace mgcpp
         size_t n = original_vec.shape();
 
         auto result = mgcpp::device_vector<Type,
-                                           DeviceId,
                                            Allign,
+                                           DeviceId,
                                            allocator_type>(original_vec);
         auto status = mgblas_vab(result.data_mutable(), n);
         if(!status)

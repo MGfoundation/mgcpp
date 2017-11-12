@@ -39,12 +39,12 @@ namespace mgcpp
 
         template<typename DenseVec,
                  typename Type,
-                 size_t DeviceId,
-                 allignment Allign>
-        inline device_vector<Type, DeviceId, Allign,
+                 allignment Allign,
+                 size_t DeviceId>
+        inline device_vector<Type, Allign, DeviceId, 
                              typename DenseVec::allocator_type>
         mult(Type scalar,
-             dense_vector<DenseVec, Type, DeviceId, Allign> const& vec);
+             dense_vector<DenseVec, Type, Allign, DeviceId> const& vec);
 
 
         // template<typename T, size_t Device, storage_order SO>

@@ -10,28 +10,26 @@
 #include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/global/allignment.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
-#include <type_traits>
 
 namespace mgcpp
 {
     template<typename Type,
-             size_t DeviceId = 0,
              allignment Allign = row,
+             size_t DeviceId = 0,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
     class device_vector
-        : public dense_vector<device_vector<Type, DeviceId, Allign, Alloc>,
+        : public dense_vector<device_vector<Type, Allign, DeviceId, Alloc>,
                               Type,
-                              DeviceId,
-                              Allign>
+                              Allign,
+                              DeviceId>
     {
     public:
-        using this_type = device_vector<Type, DeviceId, Allign, Alloc>;
+        using this_type = device_vector<Type, Allign, DeviceId, Alloc>;
         using value_type = Type;
         using result_type = this_type;
         using allocator_type = Alloc;
@@ -70,21 +68,21 @@ namespace mgcpp
                       Alloc const& alloc = Alloc());
 
         inline
-        device_vector(device_vector<Type, DeviceId, Allign, Alloc> const& other);
+        device_vector(device_vector<Type, Allign, DeviceId, Alloc> const& other);
 
         inline
-        device_vector(device_vector<Type, DeviceId, Allign, Alloc>&& other) noexcept;
+        device_vector(device_vector<Type, Allign, DeviceId, Alloc>&& other) noexcept;
 
-        inline device_vector<Type, DeviceId, Allign, Alloc>&
-        operator=(device_vector<Type, DeviceId, Allign, Alloc> const& other);
+        inline device_vector<Type, Allign, DeviceId, Alloc>&
+        operator=(device_vector<Type, Allign, DeviceId, Alloc> const& other);
 
-        inline device_vector<Type, DeviceId, Allign, Alloc>&
-        operator=(device_vector<Type, DeviceId, Allign, Alloc>&& other) noexcept;
+        inline device_vector<Type, Allign, DeviceId, Alloc>&
+        operator=(device_vector<Type, Allign, DeviceId, Alloc>&& other) noexcept;
 
-        inline device_vector<Type, DeviceId, Allign, Alloc>&
+        inline device_vector<Type, Allign, DeviceId, Alloc>&
         zero();
 
-        inline device_vector<Type, DeviceId, Allign, Alloc>&
+        inline device_vector<Type, Allign, DeviceId, Alloc>&
         resize(size_t size);
 
         inline void 

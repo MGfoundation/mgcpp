@@ -14,13 +14,13 @@ namespace mgcpp
     template<typename LhsDenseVec,
              typename RhsDenseVec,
              typename Type,
-             size_t DeviceId,
-             allignment Allign>
-    device_vector<Type, DeviceId, Allign,
+             allignment Allign,
+             size_t DeviceId>
+    device_vector<Type, Allign, DeviceId, 
                   typename LhsDenseVec::allocator_type>
     strict::
-    hdmd(dense_vector<LhsDenseVec, Type, DeviceId, Allign> const& lhs,
-         dense_vector<RhsDenseVec, Type, DeviceId, Allign> const& rhs)
+    hdmd(dense_vector<LhsDenseVec, Type, Allign, DeviceId> const& lhs,
+         dense_vector<RhsDenseVec, Type, Allign, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDenseVec::allocator_type;
 
@@ -33,8 +33,8 @@ namespace mgcpp
         size_t size = lhs_vec.shape();
 
         auto result = device_vector<Type,
-                                    DeviceId,
                                     Allign,
+                                    DeviceId,
                                     allocator_type>(size);
         auto status = mgblas_vhp(lhs_vec.data(), rhs_vec.data(),
                                  result.data_mutable(),

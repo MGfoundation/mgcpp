@@ -12,11 +12,11 @@ namespace mgcpp
 {
     template<typename DenseVec,
              typename Type,
-             size_t DeviceId,
-             allignment Allign>
+             allignment Allign,
+             size_t DeviceId>
     Type
     strict::
-    mean(dense_vector<DenseVec, Type, DeviceId, Allign> const& vec)
+    mean(dense_vector<DenseVec, Type, Allign, DeviceId> const& vec)
     {
         auto const& original_vec = ~vec; 
 

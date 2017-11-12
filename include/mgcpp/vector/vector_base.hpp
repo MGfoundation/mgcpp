@@ -7,16 +7,20 @@
 #ifndef _MGCPP_VECTOR_VECTOR_BASE_HPP_
 #define _MGCPP_VECTOR_VECTOR_BASE_HPP_
 
-#include <mgcpp/global/allignment.hpp>
-
 #include <cstdlib>
 
 namespace mgcpp
 {
+    enum allignment : bool
+    {
+        row = true,
+        column = false
+    };
+
     template<typename VectorType,
              typename Type,
-             size_t DeviceId,
-             allignment Allign>
+             allignment Allign,
+             size_t DeviceId>
     struct vector_base
     {
         inline VectorType const&

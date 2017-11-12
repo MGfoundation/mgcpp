@@ -17,10 +17,10 @@
 namespace mgcpp
 {
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector() noexcept
     :_context(&global_context::get_thread_context()),
         _shape(0),
@@ -29,10 +29,10 @@ namespace mgcpp
         _capacity(0) {}
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(Alloc const& alloc) noexcept
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -41,10 +41,10 @@ namespace mgcpp
          _capacity(0) {}
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(size_t size, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(size),
@@ -53,10 +53,10 @@ namespace mgcpp
          _capacity(_shape) {}
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(size_t size, T init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
@@ -73,10 +73,10 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(size_t size, T const* data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
@@ -94,10 +94,10 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(std::initializer_list<T> const& array,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
@@ -122,11 +122,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     template<typename HostVec, typename>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     device_vector(HostVec const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -145,11 +145,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(device_vector<T, DeviceId, Allign, Alloc> const& other)
+    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector(device_vector<T, Allign, DeviceId, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
          _allocator(other._allocator),
@@ -168,11 +168,11 @@ namespace mgcpp
 
     
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
-    device_vector(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept
+    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector(device_vector<T, Allign, DeviceId, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
           _allocator(std::move(other._allocator)),
@@ -184,11 +184,12 @@ namespace mgcpp
     }
 
     template<typename T,
+             allignment Allign,
              size_t DeviceId,
-             allignment Allign, typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>&
-    device_vector<T, DeviceId, Allign, Alloc>::
-    operator=(device_vector<T, DeviceId, Allign, Alloc> const& other)
+             typename Alloc>
+    device_vector<T, Allign, DeviceId, Alloc>&
+    device_vector<T, Allign, DeviceId, Alloc>::
+    operator=(device_vector<T, Allign, DeviceId, Alloc> const& other)
     {
         if(other._shape > _capacity)
         {
@@ -215,12 +216,12 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>&
-    device_vector<T, DeviceId, Allign, Alloc>::
-    operator=(device_vector<T, DeviceId, Allign, Alloc>&& other) noexcept
+    device_vector<T, Allign, DeviceId, Alloc>&
+    device_vector<T, Allign, DeviceId, Alloc>::
+    operator=(device_vector<T, Allign, DeviceId, Alloc>&& other) noexcept
     {
         if(_data)
         { 
@@ -238,11 +239,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>&
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>&
+    device_vector<T, Allign, DeviceId, Alloc>::
     resize(size_t size)
     {
         if(size > _capacity)
@@ -261,11 +262,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>&
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>&
+    device_vector<T, Allign, DeviceId, Alloc>::
     zero()
     {
         if(!_data)
@@ -283,11 +284,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     void
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     copy_to_host(T* host_p) const
     {
         if(!host_p)
@@ -297,11 +298,11 @@ namespace mgcpp
 
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     T
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     check_value(size_t i) const
     {
         if(i >= _shape)
@@ -319,11 +320,11 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     inline T*
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     release_data() noexcept
     {
         T* temp = _data;
@@ -333,70 +334,72 @@ namespace mgcpp
     }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     inline thread_context*
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     context() const noexcept
     { return _context; }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     size_t 
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     capacity() const noexcept
     { return _capacity; }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     T const*
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     data() const noexcept
     { return _data; }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     T*
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     data_mutable() noexcept
     { return _data; }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     shape() const noexcept
     { return _shape; }
 
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     size() const noexcept
     { return _shape; }
     
     template<typename T,
-             size_t DeviceId,
              allignment Allign,
+             size_t DeviceId,
              typename Alloc>
-    device_vector<T, DeviceId, Allign, Alloc>::
+    device_vector<T, Allign, DeviceId, Alloc>::
     ~device_vector() noexcept
     {
         if(_data)
-            try{
+            try
+            {
                 _allocator.device_deallocate(_data, _capacity);
-            }catch(...){};
+            }
+            catch(...){};
         global_context::reference_cnt_decr();
     }
 }

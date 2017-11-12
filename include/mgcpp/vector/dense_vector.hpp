@@ -8,16 +8,15 @@
 #define _MGCPP_VECTOR_DENSE_VECTOR_HPP_
 
 #include <mgcpp/vector/vector_base.hpp>
-#include <mgcpp/global/allignment.hpp>
 
 namespace mgcpp
 {
     template<typename DenseVecType,
              typename Type,
-             size_t DeviceId,
-             allignment Allign>
+             allignment Allign,
+             size_t DeviceId>
     class dense_vector :
-        public vector_base<DenseVecType, Type, DeviceId, Allign>
+        public vector_base<DenseVecType, Type, Allign, DeviceId>
     {
 
     };

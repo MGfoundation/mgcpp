@@ -59,11 +59,12 @@ TEST(device_vector, default_constructor)
         do
         {
             mgcpp::device_vector<float> vec{};
-
+            
             EXPECT_EQ(vec.shape(), 0);
             EXPECT_EQ(vec.data(), nullptr);
             EXPECT_EQ(vec.context(),
                       mgcpp::device_vector<float>().context());
+
         }while(false));
 }
 
@@ -77,7 +78,7 @@ TEST(device_vector, size_constructor)
     auto before_memory = before.value().first;
 
     size_t size = 10;
-    mgcpp::device_vector<float> vec{};
+    mgcpp::device_vector<float, mgcpp::allignment::row> vec{};
     EXPECT_NO_THROW(
         vec = mgcpp::device_vector<float>(size));
 
