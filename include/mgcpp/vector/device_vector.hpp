@@ -70,8 +70,16 @@ namespace mgcpp
         inline
         device_vector(device_vector<Type, Allign, DeviceId, Alloc> const& other);
 
+        template<typename DenseVec>
+        inline
+        device_vector(dense_vector<DenseVec, Type, Allign, DeviceId> const& other);
+
         inline
         device_vector(device_vector<Type, Allign, DeviceId, Alloc>&& other) noexcept;
+
+        template<typename DenseVec>
+        inline device_vector<Type, Allign, DeviceId, Alloc>&
+        operator=(dense_vector<DenseVec, Type, Allign, DeviceId> const& other);
 
         inline device_vector<Type, Allign, DeviceId, Alloc>&
         operator=(device_vector<Type, Allign, DeviceId, Alloc> const& other);

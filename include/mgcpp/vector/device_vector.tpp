@@ -16,11 +16,11 @@
 
 namespace mgcpp
 {
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     device_vector() noexcept
     :_context(&global_context::get_thread_context()),
         _shape(0),
@@ -28,11 +28,11 @@ namespace mgcpp
         _data(nullptr),
         _capacity(0) {}
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     device_vector(Alloc const& alloc) noexcept
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -40,11 +40,11 @@ namespace mgcpp
          _data(nullptr),
          _capacity(0) {}
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     device_vector(size_t size, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(size),
@@ -52,19 +52,19 @@ namespace mgcpp
          _data(_allocator.device_allocate(_shape)),
          _capacity(_shape) {}
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
-    device_vector(size_t size, T init, Alloc const& alloc)
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(size_t size, Type init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
           _allocator(alloc),
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        T* buffer = _allocator.allocate(_shape);
+        Type* buffer = _allocator.allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
         auto status = mgblas_fill(_data, init, _shape);
@@ -72,12 +72,12 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
-    device_vector(size_t size, T const* data, Alloc const& alloc)
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(size_t size, Type const* data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
           _allocator(alloc),
@@ -93,12 +93,12 @@ namespace mgcpp
         }
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
-    device_vector(std::initializer_list<T> const& array,
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(std::initializer_list<Type> const& array,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(array.size()),
@@ -106,7 +106,7 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        T* buffer = _allocator.allocate(_shape);
+        Type* buffer = _allocator.allocate(_shape);
         std::copy(array.begin(), array.end(), buffer);
 
         try
@@ -121,12 +121,12 @@ namespace mgcpp
         }
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     template<typename HostVec, typename>
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     device_vector(HostVec const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -136,7 +136,7 @@ namespace mgcpp
     {
         adapter<HostVec> adapt{};
 
-        T* host_p;
+        Type* host_p;
         adapt(host_mat, &host_p, &_shape);
 
         _capacity = _shape;
@@ -144,15 +144,15 @@ namespace mgcpp
         _allocator.copy_from_host(_data, host_p, _shape);
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
-    device_vector(device_vector<T, Allign, DeviceId, Alloc> const& other)
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(device_vector<Type, Allign, DeviceId, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
-         _allocator(other._allocator),
+         _allocator(),
          _data(_allocator.device_allocate(_shape)),
          _capacity(_shape)
     {
@@ -166,13 +166,35 @@ namespace mgcpp
         }
     }
 
-    
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
-    device_vector(device_vector<T, Allign, DeviceId, Alloc>&& other) noexcept
+    template<typename DenseVec>
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(dense_vector<DenseVec, Type, Allign, DeviceId> const& other)
+        :_context(&global_context::get_thread_context()),
+         _shape((~other)._shape),
+         _allocator(),
+         _data(_allocator.device_allocate(_shape)),
+         _capacity(_shape)
+    {
+        auto cpy_result = cuda_memcpy(_data, (~other)._data, _shape,
+                                      cuda_memcpy_kind::device_to_device);
+
+        if(!cpy_result)
+        {
+            _allocator.device_deallocate(_data, _shape);
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+    }
+
+    template<typename Type,
+             allignment Allign,
+             size_t DeviceId,
+             typename Alloc>
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    device_vector(device_vector<Type, Allign, DeviceId, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
           _allocator(std::move(other._allocator)),
@@ -183,13 +205,47 @@ namespace mgcpp
         other._capacity = 0;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>&
-    device_vector<T, Allign, DeviceId, Alloc>::
-    operator=(device_vector<T, Allign, DeviceId, Alloc> const& other)
+    template<typename DenseVec>
+    device_vector<Type, Allign, DeviceId, Alloc>&
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    operator=(dense_vector<DenseVec, Type, Allign, DeviceId> const& other)
+    {
+        auto const& other_densevec = ~other;
+
+        if(other_densevec._shape > _capacity)
+        {
+            if(_data)
+            {
+                _allocator.device_deallocate(_data, _capacity);
+                _capacity = 0;
+            }
+            _data = _allocator.device_allocate(other_densevec._shape); 
+            _capacity = other_densevec._shape;
+        }
+
+        auto cpy_result = cuda_memcpy(_data,
+                                      other_densevec._data,
+                                      other_densevec._shape,
+                                      cuda_memcpy_kind::device_to_device);
+        _shape = other_densevec._shape;
+
+        if(!cpy_result)
+        { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
+
+        return *this;
+    }
+
+    template<typename Type,
+             allignment Allign,
+             size_t DeviceId,
+             typename Alloc>
+    device_vector<Type, Allign, DeviceId, Alloc>&
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    operator=(device_vector<Type, Allign, DeviceId, Alloc> const& other)
     {
         if(other._shape > _capacity)
         {
@@ -207,7 +263,6 @@ namespace mgcpp
                                       other._shape,
                                       cuda_memcpy_kind::device_to_device);
         _shape = other._shape;
-        _allocator = other._allocator;
 
         if(!cpy_result)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
@@ -215,13 +270,13 @@ namespace mgcpp
         return *this;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>&
-    device_vector<T, Allign, DeviceId, Alloc>::
-    operator=(device_vector<T, Allign, DeviceId, Alloc>&& other) noexcept
+    device_vector<Type, Allign, DeviceId, Alloc>&
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    operator=(device_vector<Type, Allign, DeviceId, Alloc>&& other) noexcept
     {
         if(_data)
         { 
@@ -238,12 +293,12 @@ namespace mgcpp
         return *this;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>&
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>&
+    device_vector<Type, Allign, DeviceId, Alloc>::
     resize(size_t size)
     {
         if(size > _capacity)
@@ -261,12 +316,12 @@ namespace mgcpp
         return *this;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>&
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>&
+    device_vector<Type, Allign, DeviceId, Alloc>::
     zero()
     {
         if(!_data)
@@ -276,20 +331,20 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        auto set_result = cuda_memset(_data, static_cast<T>(0), _shape);
+        auto set_result = cuda_memset(_data, static_cast<Type>(0), _shape);
         if(!set_result)
         { MGCPP_THROW_SYSTEM_ERROR(set_result.error()); }
 
         return *this;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     void
-    device_vector<T, Allign, DeviceId, Alloc>::
-    copy_to_host(T* host_p) const
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    copy_to_host(Type* host_p) const
     {
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
@@ -297,12 +352,12 @@ namespace mgcpp
     }
 
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    T
-    device_vector<T, Allign, DeviceId, Alloc>::
+    Type
+    device_vector<Type, Allign, DeviceId, Alloc>::
     check_value(size_t i) const
     {
         if(i >= _shape)
@@ -312,86 +367,86 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        T* from = (_data + i);
-        T to;
+        Type* from = (_data + i);
+        Type to;
         _allocator.copy_to_host(&to, from, 1);
 
         return to;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    inline T*
-    device_vector<T, Allign, DeviceId, Alloc>::
+    inline Type*
+    device_vector<Type, Allign, DeviceId, Alloc>::
     release_data() noexcept
     {
-        T* temp = _data;
+        Type* temp = _data;
         _data = nullptr;
         _capacity = 0;
         return temp;
     }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     inline thread_context*
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     context() const noexcept
     { return _context; }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     size_t 
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     capacity() const noexcept
     { return _capacity; }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    T const*
-    device_vector<T, Allign, DeviceId, Alloc>::
+    Type const*
+    device_vector<Type, Allign, DeviceId, Alloc>::
     data() const noexcept
     { return _data; }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    T*
-    device_vector<T, Allign, DeviceId, Alloc>::
+    Type*
+    device_vector<Type, Allign, DeviceId, Alloc>::
     data_mutable() noexcept
     { return _data; }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     shape() const noexcept
     { return _shape; }
 
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     size() const noexcept
     { return _shape; }
     
-    template<typename T,
+    template<typename Type,
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    device_vector<T, Allign, DeviceId, Alloc>::
+    device_vector<Type, Allign, DeviceId, Alloc>::
     ~device_vector() noexcept
     {
         if(_data)
