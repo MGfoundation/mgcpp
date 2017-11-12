@@ -183,6 +183,8 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/mgblas_helpers_test.cpp
 	${TEST_DIR}/device_matrix_test.cpp
+	${TEST_DIR}/device_matrix_test.cpp
+	${TEST_DIR}/matrix_view_test.cpp
 	${TEST_DIR}/device_vector_test.cpp
 	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/blaslv1_operation_test.cpp
