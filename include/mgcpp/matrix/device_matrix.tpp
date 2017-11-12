@@ -171,6 +171,30 @@ namespace mgcpp
         _allocator.copy_from_host(_data, host_p, total_size);
     }
 
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
+    device_matrix<Type, DeviceId, Alloc>::
+    device_matrix(device_matrix<Type, DeviceId, Alloc> const& other)
+        :_context(&global_context::get_thread_context()),
+         _shape(other._shape),
+         _allocator(),
+         _data(_allocator.device_allocate(_shape.first * _shape.second)),
+         _capacity(_shape.first * _shape.second)
+    {
+        auto cpy_result = cuda_memcpy(_data, other._data,
+                                      _shape.first * _shape.second,
+                                      cuda_memcpy_kind::device_to_device);
+
+        if(!cpy_result)
+        {
+            _allocator.device_deallocate(_data, _capacity);
+            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
+        }
+    }
+
+
     template<typename Type,
              size_t DeviceId,
              typename Alloc>
@@ -213,28 +237,6 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId,
              typename Alloc>
-    device_matrix<Type, DeviceId, Alloc>::
-    device_matrix(device_matrix<Type, DeviceId, Alloc> const& other)
-        :_context(&global_context::get_thread_context()),
-         _shape(other._shape),
-         _allocator(other._allocator),
-         _data(_allocator.device_allocate(_shape.first * _shape.second)),
-         _capacity(_shape.first * _shape.second)
-    {
-        auto cpy_result = cuda_memcpy(_data, other._data,
-                                      _shape.first * _shape.second,
-                                      cuda_memcpy_kind::device_to_device);
-
-        if(!cpy_result)
-        {
-            _allocator.device_deallocate(_data, _capacity);
-            MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
-        }
-    }
-
-    template<typename Type,
-             size_t DeviceId,
-             typename Alloc>
     device_matrix<Type, DeviceId, Alloc>&
     device_matrix<Type, DeviceId, Alloc>::
     operator=(device_matrix<Type, DeviceId, Alloc> const& other)
@@ -256,7 +258,6 @@ namespace mgcpp
                                       other_size,
                                       cuda_memcpy_kind::device_to_device);
         _shape = other._shape;
-        _allocator = other._allocator;
 
         if(!cpy_result)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
