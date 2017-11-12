@@ -115,7 +115,7 @@ namespace mgcpp
     column_view<DenseMat, Type, DeviceId>::
     check_value(size_t i) const
     {
-        if(i < _matrix->shape().second)
+        if(i >= _matrix->shape().second)
         { MGCPP_THROW_OUT_OF_RANGE("index out of range"); }
 
         Type return_value;
