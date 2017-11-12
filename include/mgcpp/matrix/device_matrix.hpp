@@ -13,6 +13,7 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/system/concept.hpp>
+#include <mgcpp/matrix/column_view.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -107,6 +108,12 @@ namespace mgcpp
         inline device_matrix<Type, DeviceId, Alloc>&
         resize(size_t i, size_t j, Type init);
 
+        inline column_view<this_type, Type, DeviceId>
+        column(size_t i) noexcept;
+
+        // inline &
+        // row_view(size_t j) noexcept;
+
         inline void
         copy_to_host(Type* host_p) const;
 
@@ -127,6 +134,9 @@ namespace mgcpp
 
         inline Type*
         release_data() noexcept;
+
+        inline Alloc
+        allocator() noexcept;
 
         inline std::pair<size_t, size_t> const&
         shape() const noexcept;

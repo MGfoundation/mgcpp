@@ -441,7 +441,16 @@ namespace mgcpp
     device_vector<Type, Allign, DeviceId, Alloc>::
     size() const noexcept
     { return _shape; }
-    
+
+    template<typename Type,
+             allignment Allign,
+             size_t DeviceId,
+             typename Alloc>
+    Alloc 
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    allocator() noexcept
+    { return _allocator; }
+
     template<typename Type,
              allignment Allign,
              size_t DeviceId,

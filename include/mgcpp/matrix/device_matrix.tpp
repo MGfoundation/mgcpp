@@ -400,6 +400,16 @@ namespace mgcpp
         return *this;
     }
 
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
+    column_view<device_matrix<Type, DeviceId, Alloc>, Type, DeviceId>
+    device_matrix<Type, DeviceId, Alloc>::
+    column(size_t i) noexcept
+    { return column_view<this_type, Type, DeviceId>(*this, i); }
+
+
     template<typename Type,
              size_t DeviceId,
              typename Alloc>
@@ -488,6 +498,14 @@ namespace mgcpp
     device_matrix<Type, DeviceId, Alloc>::
     shape() const noexcept
     { return _shape; }
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
+    Alloc
+    device_matrix<Type, DeviceId, Alloc>::
+    allocator() noexcept
+    { return _allocator; }
 
     template<typename Type,
              size_t DeviceId,

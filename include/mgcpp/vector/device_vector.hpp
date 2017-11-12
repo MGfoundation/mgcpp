@@ -117,6 +117,9 @@ namespace mgcpp
         inline size_t
         shape() const noexcept;
 
+        inline Alloc
+        allocator() noexcept;
+
         inline size_t
         size() const noexcept;
     };
