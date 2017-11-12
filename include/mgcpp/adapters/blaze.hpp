@@ -8,6 +8,7 @@
 #define _MGCPP_ADAPTERS_BLAZE_HPP_
 
 #include <mgcpp/adapters/adapter_base.hpp>
+#include <cstdlib>
 
 namespace blaze
 {
