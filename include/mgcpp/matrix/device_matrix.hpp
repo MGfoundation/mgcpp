@@ -71,7 +71,7 @@ namespace mgcpp
 
         inline
         device_matrix(std::initializer_list<
-                          std::initializer_list<Type>> const& array,
+                          std::initializer_list<Type>> array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostMat,

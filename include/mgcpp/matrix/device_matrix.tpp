@@ -113,7 +113,7 @@ namespace mgcpp
              typename Alloc>
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
-                      std::initializer_list<Type>> const& init_list,
+                      std::initializer_list<Type>> init_list,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(init_list.size(), determine_ndim(init_list)),
