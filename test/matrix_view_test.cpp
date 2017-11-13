@@ -34,12 +34,12 @@ TEST(column_view, copy_from_init_list)
 {
     mgcpp::device_matrix<float> mat(2, 3);
 
-    auto first = mat.column(0);
+    auto first  = mat.column(0);
     auto second = mat.column(1);
-    auto third = mat.column(2);
-    first = {1, 2};
+    auto third  = mat.column(2);
+    first  = {1, 2};
     second = {3, 4};
-    third = {5, 6};
+    third  = {5, 6};
 
     EXPECT_NO_THROW(
         do
