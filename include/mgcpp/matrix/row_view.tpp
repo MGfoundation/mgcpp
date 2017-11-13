@@ -69,7 +69,7 @@ namespace mgcpp
             auto status = cuda_memcpy(data_mutable() + i * stride,
                                       buffer + i,
                                       size,
-                                      cuda_memcpy_kind::device_to_device);
+                                      cuda_memcpy_kind::host_to_device);
             if(!status)
             { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
         }
@@ -101,7 +101,7 @@ namespace mgcpp
             auto status = cuda_memcpy(data_mutable() + i * stride,
                                       dense_vec.data() + i,
                                       size,
-                                      cuda_memcpy_kind::device_to_device);
+                                      cuda_memcpy_kind::host_to_device);
             if(!status)
             { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
         }
