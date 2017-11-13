@@ -55,10 +55,13 @@ namespace mgcpp
     column_view<DenseMat, Type, DeviceId>::
     operator=(std::initializer_list<Type> const& init)
     {
+        size_t size = _matrix->shape().second;
+        MGCPP_ASSERT(size == init.size(),
+                     "column view and assigned vector size doesn't match");
+
         Type* buffer = _allocator.allocate(init.size());
         std::copy(init.begin(), init.end(), buffer);
 
-        size_t size = _matrix->shape().second;
         auto status = cuda_memcpy(data_mutable(),
                                   buffer,
                                   size,
@@ -81,6 +84,9 @@ namespace mgcpp
         auto const& dense_vec = ~vec;
 
         size_t size = _matrix->shape().second;
+        MGCPP_ASSERT(size == dense_vec.shape(),
+                     "column view and assigned vector size doesn't match");
+
         auto status = cuda_memcpy(data_mutable(),
                                   dense_vec.data(),
                                   size,
