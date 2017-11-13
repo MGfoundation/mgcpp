@@ -132,7 +132,7 @@ namespace mgcpp
                                  row_list.end(),
                            buffer + i * _shape.second ),
                       buffer + (i + 1) * _shape.second,
-                      Type);
+                      Type());
             ++i;
         }
 
