@@ -124,15 +124,17 @@ namespace mgcpp
         size_t total_size = _shape.first * _shape.second;
 
         Type* buffer = _allocator.allocate(total_size);
+
         size_t i = 0;
+        size_t j = 0;
         for(auto const& row : init_list)
         {
-            std::fill(std::copy(row.begin(),
-                                row.end(),
-                                buffer + i * _shape.second),
-                      buffer + (i + 1) * _shape.second,
-                      Type());
-            ++i; 
+            for(Type elem : row)
+            {
+                buffer[i * _shape.second + j] = elem;
+                ++j;
+            }
+            ++i;
         }
 
         try

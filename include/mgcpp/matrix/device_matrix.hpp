@@ -11,9 +11,10 @@
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/matrix/dense_matrix.hpp>
-#include <mgcpp/system/concept.hpp>
 #include <mgcpp/matrix/column_view.hpp>
+#include <mgcpp/matrix/dense_matrix.hpp>
+#include <mgcpp/matrix/row_view.hpp>
+#include <mgcpp/system/concept.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -111,8 +112,8 @@ namespace mgcpp
         inline column_view<this_type, Type, DeviceId>
         column(size_t i) noexcept;
 
-        // inline &
-        // row_view(size_t j) noexcept;
+        inline row_view<this_type, Type, DeviceId>
+        row(size_t i) noexcept;
 
         inline void
         copy_to_host(Type* host_p) const;
