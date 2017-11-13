@@ -113,7 +113,7 @@ namespace mgcpp
              typename Alloc>
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
-                      std::initializer_list<Type>> init_list,
+                      std::initializer_list<Type>> const& init_list,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(init_list.size(), determine_ndim(init_list)),
@@ -125,16 +125,15 @@ namespace mgcpp
 
         Type* buffer = _allocator.allocate(total_size);
 
-        size_t j = 0;
-        for(auto const& row : init_list)
+        size_t i = 0;
+        for(const auto& row_list : init_list)
         {
-            size_t i = 0;
-            for(Type elem : row)
-            {
-                buffer[i * _shape.second + j] = elem;
-                ++i;
-            }
-            ++j;
+            std::fill(std::copy( row_list.begin(),
+                                 row_list.end(),
+                           buffer + i * _shape.second ),
+                      buffer + (i + 1) * _shape.second,
+                      Type);
+            ++i;
         }
 
         try
