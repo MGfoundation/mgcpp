@@ -132,9 +132,9 @@ namespace mgcpp
             for(Type elem : row)
             {
                 buffer[i * _shape.second + j] = elem;
-                ++j;
+                ++i;
             }
-            ++i;
+            ++j;
         }
 
         try
