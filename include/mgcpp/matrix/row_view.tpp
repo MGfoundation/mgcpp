@@ -101,7 +101,7 @@ namespace mgcpp
             auto status = cuda_memcpy(data_mutable() + i * stride,
                                       dense_vec.data() + i,
                                       size,
-                                      cuda_memcpy_kind::host_to_device);
+                                      cuda_memcpy_kind::device_to_device);
             if(!status)
             { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
         }
@@ -158,7 +158,7 @@ namespace mgcpp
     template<typename DenseMat,
              typename Type,
              size_t DeviceId>
-    inline Type const*
+    Type const*
     row_view<DenseMat, Type, DeviceId>::
     data() const noexcept
     {
@@ -169,7 +169,7 @@ namespace mgcpp
     template<typename DenseMat,
              typename Type,
              size_t DeviceId>
-    inline Type*
+    Type*
     row_view<DenseMat, Type, DeviceId>::
     data_mutable() noexcept
     {
