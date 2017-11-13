@@ -96,29 +96,29 @@ TEST(mat_operation, mat_abs)
                  EXPECT_EQ(result.check_value(1, 1), 5);
                  EXPECT_EQ(result.check_value(1, 2), 6);
              });
-     }
+}
 
-     TEST(mat_operation, mat_sum)
-     {
-         size_t m = 5;
-         size_t n = 5;
-         size_t value = 5;
-         mgcpp::device_matrix<float> mat(m, n, value);
+TEST(mat_operation, mat_sum)
+{
+    size_t m = 5;
+    size_t n = 5;
+    size_t value = 5;
+    mgcpp::device_matrix<float> mat(m, n, value);
 
-         EXPECT_NO_THROW({
-                 float result = mgcpp::strict::sum(mat);
+    EXPECT_NO_THROW({
+            float result = mgcpp::strict::sum(mat);
 
-                 EXPECT_EQ(result, m * n * value);
-             });
-     }
+            EXPECT_EQ(result, m * n * value);
+        });
+}
 
-     TEST(mat_operation, mat_mean)
-     {
-         mgcpp::device_matrix<float> mat({{1, 2, 3}, {1, 2, 3}});
+TEST(mat_operation, mat_mean)
+{
+    mgcpp::device_matrix<float> mat({{1, 2, 3}, {1, 2, 3}});
 
-         EXPECT_NO_THROW({
-                 float result = mgcpp::strict::mean(mat);
+    EXPECT_NO_THROW({
+            float result = mgcpp::strict::mean(mat);
 
-                 EXPECT_EQ(result, 2);
-             });
+            EXPECT_EQ(result, 2);
+        });
 }
