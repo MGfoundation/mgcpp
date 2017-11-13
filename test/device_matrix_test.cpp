@@ -311,23 +311,15 @@ TEST(device_matrix, reallocation_during_copy_assign)
 
     mgcpp::device_matrix<float> original(row_dim, col_dim, init);
     mgcpp::device_matrix<float> copied(row_dim /2, col_dim /2);
+    size_t before_capacity = copied.capacity();
     
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_freemem = before.value().first;
-
     EXPECT_NO_THROW(copied = original);
 
     EXPECT_EQ(copied.check_value(0,0), init); //supressing optimization
 
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(after);
-    auto after_freemem = before.value().first;
-
-    EXPECT_GT(after_freemem, before_freemem);
-
     EXPECT_EQ(original.shape(), copied.shape());
     EXPECT_EQ(original.capacity(), copied.capacity());
+    EXPECT_LT(before_capacity, copied.capacity());
 }
 
 TEST(device_matrix, no_reallocation_during_copy_assign)
@@ -433,18 +425,11 @@ TEST(device_matrix, move_assign_operator)
 
     mgcpp::device_matrix<float> original(row_dim, col_dim, init);
     mgcpp::device_matrix<float> moved(row_dim * 2, col_dim * 2);
-
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_freemem = before.value().first;
+    size_t before_capacity = moved.capacity();
 
     moved = std::move(original);
 
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(after);
-    auto after_freemem = after.value().first;
-
-    EXPECT_LT(before_freemem, after_freemem);
+    EXPECT_GT(before_capacity, moved.capacity());
 
     EXPECT_NO_THROW(
         do{
@@ -470,18 +455,11 @@ TEST(device_matrix, matrix_resize)
     size_t row_dim = 10;
     size_t col_dim = 10;
     mgcpp::device_matrix<float> mat(row_dim, col_dim);
-
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_freemem = before.value().first;
+    size_t before_capacity = mat.capacity();
 
     EXPECT_NO_THROW(mat.resize(row_dim * 2, col_dim * 2));
 
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto after_freemem = after.value().first;
-
-    EXPECT_GT(before_freemem, after_freemem);
+    EXPECT_GT(mat.capacity(), before_capacity);
 }
 
 TEST(device_matrix, matrix_resize_init)
@@ -492,10 +470,7 @@ TEST(device_matrix, matrix_resize_init)
     size_t row_dim = 10;
     size_t col_dim = 10;
     mgcpp::device_matrix<float> mat(row_dim, col_dim);
-
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_freemem = before.value().first;
+    size_t before_capacity = mat.capacity();
 
     float init_val= 7;
 
@@ -503,11 +478,7 @@ TEST(device_matrix, matrix_resize_init)
                                col_dim * 2,
                                init_val));
 
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto after_freemem = after.value().first;
-
-    EXPECT_GT(before_freemem, after_freemem);
+    EXPECT_GT(mat.capacity(), before_capacity);
 
     EXPECT_NO_THROW(
         do
