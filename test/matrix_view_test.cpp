@@ -26,7 +26,7 @@ TEST(column_view, construction)
             EXPECT_EQ(view.check_value(0), 1);
             EXPECT_EQ(view.check_value(1), 4);
 
-            EXPECT_EQ(view.shape(), 3);
+            EXPECT_EQ(view.shape(), 2);
         }while(false));
 }
 
@@ -56,7 +56,7 @@ TEST(column_view, copy_from_init_list)
 
 TEST(column_view, copy_from_device_vector)
 {
-    mgcpp::device_matrix<float> mat(2, 3);
+    mgcpp::device_matrix<float> mat(3, 2);
 
     auto first = mat.column(0);
     auto second = mat.column(1);
