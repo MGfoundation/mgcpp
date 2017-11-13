@@ -112,6 +112,8 @@ namespace mgcpp
                                   data(),
                                   size,
                                   cuda_memcpy_kind::device_to_host);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }
 
     template<typename DenseMat,
@@ -129,6 +131,9 @@ namespace mgcpp
                                   data() + i,
                                   1,
                                   cuda_memcpy_kind::device_to_host);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
         return return_value;
     }
 
