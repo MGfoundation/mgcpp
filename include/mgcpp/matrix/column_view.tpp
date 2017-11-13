@@ -66,7 +66,7 @@ namespace mgcpp
                                   buffer,
                                   size,
                                   cuda_memcpy_kind::host_to_device);
-        _allocator.deallocate(buffer);
+        _allocator.deallocate(buffer, init.size());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
