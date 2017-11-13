@@ -421,6 +421,15 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId,
              typename Alloc>
+    row_view<device_matrix<Type, DeviceId, Alloc>, Type, DeviceId>
+    device_matrix<Type, DeviceId, Alloc>::
+    row(size_t i) noexcept
+    { return row_view<this_type, Type, DeviceId>(*this, i); }
+
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
     Type
     device_matrix<Type, DeviceId, Alloc>::
     check_value(size_t i, size_t j) const 

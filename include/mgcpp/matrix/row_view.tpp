@@ -62,13 +62,20 @@ namespace mgcpp
         Type* buffer = _allocator.allocate(init.size());
         std::copy(init.begin(), init.end(), buffer);
 
-        auto status = cuda_memcpy(data_mutable(),
-                                  buffer,
-                                  size,
-                                  cuda_memcpy_kind::host_to_device);
+        /* temporary stupid implementation */
+        size_t stride = _matrix->shape().first;
+        for(size_t i = 0; i < size; ++i)
+        {
+            auto status = cuda_memcpy(data_mutable() + i * stride,
+                                      buffer + i,
+                                      size,
+                                      cuda_memcpy_kind::device_to_device);
+            if(!status)
+            { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+        }
+        /*                                 */
+
         free(buffer);
-        if(!status)
-        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
         return *this;
     }
@@ -87,12 +94,18 @@ namespace mgcpp
         MGCPP_ASSERT(size == dense_vec.shape(),
                      "row view and assigned vector size doesn't match");
 
-        auto status = cuda_memcpy(data_mutable(),
-                                  dense_vec.data(),
-                                  size,
-                                  cuda_memcpy_kind::device_to_device);
-        if(!status)
-        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+        /* temporary stupid implementation */
+        size_t stride = _matrix->shape().first;
+        for(size_t i = 0; i < size; ++i)
+        {
+            auto status = cuda_memcpy(data_mutable() + i * stride,
+                                      dense_vec.data() + i,
+                                      size,
+                                      cuda_memcpy_kind::device_to_device);
+            if(!status)
+            { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+        }
+        /*                                 */
 
         return *this;
     }
@@ -108,10 +121,19 @@ namespace mgcpp
         { MGCPP_THROW_INVALID_ARGUMENT("provided pointer is null"); }
 
         size_t size = _matrix->shape().second;
-        auto status = cuda_memcpy(host_p,
-                                  data(),
-                                  size,
-                                  cuda_memcpy_kind::device_to_host);
+
+        /* temporary stupid implementation */
+        size_t stride = _matrix->shape().first;
+        for(size_t i = 0; i < size; ++i)
+        {
+            auto status = cuda_memcpy(host_p + i,
+                                      data() + i * stride,
+                                      size,
+                                      cuda_memcpy_kind::device_to_host);
+            if(!status)
+            { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+        }
+        /*                                 */
     }
 
     template<typename DenseMat,
@@ -125,8 +147,9 @@ namespace mgcpp
         { MGCPP_THROW_OUT_OF_RANGE("index out of range"); }
 
         Type return_value;
+        size_t stride = _matrix->shape().first;
         auto status = cuda_memcpy(&return_value,
-                                  data() + i,
+                                  data() + i * stride,
                                   1,
                                   cuda_memcpy_kind::device_to_host);
         return return_value;
@@ -139,11 +162,7 @@ namespace mgcpp
     row_view<DenseMat, Type, DeviceId>::
     data() const noexcept
     {
-        auto shape = _matrix->shape();
-        size_t idx = _row_idx * shape.second;
-
-        Type const* ptr = _matrix->data() + idx;
-
+        Type const* ptr = _matrix->data() + _row_idx;
         return ptr;
     }
 
@@ -154,11 +173,7 @@ namespace mgcpp
     row_view<DenseMat, Type, DeviceId>::
     data_mutable() noexcept
     {
-        auto shape = _matrix->shape();
-        size_t idx = _row_idx * shape.second;
-
-        Type* ptr = _matrix->data_mutable() + idx;
-
+        Type* ptr = _matrix->data_mutable() + _row_idx;
         return ptr;
     }
 

@@ -74,3 +74,65 @@ TEST(column_view, copy_from_device_vector)
             EXPECT_EQ(mat.check_value(2, 1), 6);
         }while(false));
 }
+
+TEST(row_view, construction)
+{
+    mgcpp::device_matrix<float> mat{
+        {1, 2, 3},
+        {4, 5, 6}};
+
+    auto view = mat.row(0);
+
+    EXPECT_NO_THROW(
+        do
+        {
+            EXPECT_EQ(view.check_value(0), 1);
+            EXPECT_EQ(view.check_value(1), 2);
+            EXPECT_EQ(view.check_value(2), 3);
+
+            EXPECT_EQ(view.shape(), 3);
+        }while(false));
+}
+
+TEST(row_view, copy_from_init_list)
+{
+    mgcpp::device_matrix<float> mat(2, 3);
+
+    auto first  = mat.row(0);
+    auto second = mat.row(1);
+    first  = {1, 2, 3};
+    second = {4, 5, 6};
+
+    EXPECT_NO_THROW(
+        do
+        {
+            EXPECT_EQ(mat.check_value(0, 0), 1);
+            EXPECT_EQ(mat.check_value(0, 1), 2);
+            EXPECT_EQ(mat.check_value(0, 2), 3);
+            EXPECT_EQ(mat.check_value(1, 0), 4);
+            EXPECT_EQ(mat.check_value(1, 1), 5);
+            EXPECT_EQ(mat.check_value(1, 2), 6);
+        }while(false));
+}
+
+
+TEST(row_view, copy_from_device_vector)
+{
+    mgcpp::device_matrix<float> mat(2, 3);
+
+    auto first = mat.row(0);
+    auto second = mat.row(1);
+    first = mgcpp::device_vector<float, mgcpp::row>({1, 2, 3});
+    second = mgcpp::device_vector<float, mgcpp::row>({4, 5, 6});
+
+    EXPECT_NO_THROW(
+        do
+        {
+            EXPECT_EQ(mat.check_value(0, 0), 1);
+            EXPECT_EQ(mat.check_value(0, 1), 2);
+            EXPECT_EQ(mat.check_value(0, 2), 3);
+            EXPECT_EQ(mat.check_value(1, 0), 4);
+            EXPECT_EQ(mat.check_value(1, 1), 5);
+            EXPECT_EQ(mat.check_value(1, 2), 6);
+        }while(false));
+}
