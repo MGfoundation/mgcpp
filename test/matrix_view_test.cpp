@@ -56,21 +56,21 @@ TEST(column_view, copy_from_init_list)
 
 TEST(column_view, copy_from_device_vector)
 {
-    mgcpp::device_matrix<float> mat(3, 3);
+    mgcpp::device_matrix<float> mat(2, 3);
 
     auto first = mat.column(0);
     auto second = mat.column(1);
-    first = mgcpp::device_vector<float>({1, 2, 3});
-    second = mgcpp::device_vector<float>({4, 5, 6});
+    first = mgcpp::device_vector<float, mgcpp::column>({1, 2, 3});
+    second = mgcpp::device_vector<float, mgcpp::column>({4, 5, 6});
 
     EXPECT_NO_THROW(
         do
         {
             EXPECT_EQ(mat.check_value(0, 0), 1);
-            EXPECT_EQ(mat.check_value(0, 1), 2);
-            EXPECT_EQ(mat.check_value(0, 2), 3);
-            EXPECT_EQ(mat.check_value(1, 0), 4);
+            EXPECT_EQ(mat.check_value(1, 0), 2);
+            EXPECT_EQ(mat.check_value(2, 0), 3);
+            EXPECT_EQ(mat.check_value(0, 1), 4);
             EXPECT_EQ(mat.check_value(1, 1), 5);
-            EXPECT_EQ(mat.check_value(1, 2), 6);
+            EXPECT_EQ(mat.check_value(2, 1), 6);
         }while(false));
 }
