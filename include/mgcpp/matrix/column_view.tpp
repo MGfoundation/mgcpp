@@ -181,5 +181,5 @@ namespace mgcpp
     size_t 
     column_view<DenseMat, Type, DeviceId>::
     shape() const noexcept
-    { return _matrix->shape().second; }
+    { return _matrix->shape().first; }
 }

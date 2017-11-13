@@ -128,11 +128,18 @@ namespace mgcpp
         size_t i = 0;
         for(const auto& row_list : init_list)
         {
-            std::fill(std::copy( row_list.begin(),
-                                 row_list.end(),
-                           buffer + i * _shape.second ),
-                      buffer + (i + 1) * _shape.second,
-                      Type());
+            // std::fill(std::copy(row_list.begin(),
+            //                     row_list.end(),
+            //                     buffer + i * _shape.second ),
+            //           buffer + (i + 1) * _shape.second,
+            //           Type());
+            // ++i;
+            size_t j = 0;
+            for(Type elem : row_list)
+            {
+                buffer[i + _shape.first * j] = elem;
+                ++j;
+            }
             ++i;
         }
 
@@ -419,15 +426,13 @@ namespace mgcpp
     check_value(size_t i, size_t j) const 
     {
         if(i >= _shape.first || j >= _shape.second)
-        {
-            MGCPP_THROW_OUT_OF_RANGE("index out of range.");
-        }
+        { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
 
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        Type* from = (_data + (i * _shape.second + j));
+        Type* from = (_data + (i + _shape.first * j));
         Type to;
         _allocator.copy_to_host(&to, from, 1);
 

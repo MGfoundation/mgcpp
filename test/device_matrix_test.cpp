@@ -18,9 +18,9 @@
 #include <mgcpp/matrix/device_matrix.hpp>
 
 size_t
-encode_index(size_t i, size_t j, size_t n)
+encode_index(size_t i, size_t j, size_t m)
 {
-    return i * n + j;
+    return i + j * m;
 }
 
 template<typename T>
@@ -37,7 +37,7 @@ public:
     { _data = (T*)malloc(sizeof(T) * _m * _n); }
 
     T& operator()(size_t i, size_t j)
-    { return _data[encode_index(i, j, _n)]; }
+    { return _data[encode_index(i, j, _m)]; }
 
     T* data() const
     { return _data; }
@@ -194,7 +194,7 @@ TEST(device_matrix, matrix_init_from_host_data)
     {
         for(size_t j = 0; j < col_dim; ++j)
         {
-            data[encode_index(i, j, col_dim)] = counter;
+            data[encode_index(i, j, row_dim)] = counter;
             ++counter;
         }
     }
