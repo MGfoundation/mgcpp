@@ -125,10 +125,10 @@ namespace mgcpp
 
         Type* buffer = _allocator.allocate(total_size);
 
-        size_t i = 0;
         size_t j = 0;
         for(auto const& row : init_list)
         {
+            size_t i = 0;
             for(Type elem : row)
             {
                 buffer[i * _shape.second + j] = elem;
@@ -140,12 +140,12 @@ namespace mgcpp
         try
         {
             _allocator.copy_from_host(_data, buffer, total_size);
-            _allocator.deallocate(buffer,  total_size);
+            _allocator.deallocate(buffer, total_size);
         }
         catch(std::system_error const& err)
         {
             _allocator.deallocate(buffer, total_size);
-            _allocator.device_deallocate(_data, total_size);
+            _allocator.device_deallocate(_data, _capacity);
             MGCPP_THROW(err);
         }
     }
