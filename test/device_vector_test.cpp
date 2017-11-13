@@ -251,19 +251,9 @@ TEST(device_vector, cpy_constructor)
     size_t init_val = 7;
     mgcpp::device_vector<float> original(size, init_val);
 
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_memory = before.value().first;
-
     mgcpp::device_vector<float> copied{};
     EXPECT_NO_THROW(
         copied = mgcpp::device_vector<float>(original));
-
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(after);
-    auto after_memory = after.value().first;
-
-    EXPECT_GT(before_memory, after_memory);
 
     EXPECT_EQ(copied.shape(), original.shape());
     EXPECT_NO_THROW(
@@ -290,13 +280,11 @@ TEST(device_vector, allocation_during_cpy_assign)
     auto before_memory = before.value().first;
 
     mgcpp::device_vector<float> copied(size / 2);
+    size_t original_capacity = copied.capacity(); 
+
     EXPECT_NO_THROW(copied = original);
 
-    auto after = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(after);
-    auto after_memory = after.value().first;
-
-    EXPECT_GT(before_memory, after_memory);
+    EXPECT_GT(copied.capacity(), original_capacity);
 
     EXPECT_EQ(copied.shape(), original.shape());
     EXPECT_EQ(copied.capacity(), original.capacity());
