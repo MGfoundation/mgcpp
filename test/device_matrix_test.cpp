@@ -494,7 +494,7 @@ TEST(device_matrix, matrix_resize_init)
         }while(false););
 }
 
-TEST(gpu_matrix, matrix_zero_after_allocation)
+TEST(device_matrix, matrix_zero_after_allocation)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
     EXPECT_TRUE(set_device_stat);
@@ -520,7 +520,7 @@ TEST(gpu_matrix, matrix_zero_after_allocation)
         }while(false););
 }
 
-TEST(gpu_matrix, matrix_zero_without_allocation_failure)
+TEST(device_matrix, matrix_zero_without_allocation_failure)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
     EXPECT_TRUE(set_device_stat);

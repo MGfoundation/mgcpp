@@ -275,10 +275,6 @@ TEST(device_vector, allocation_during_cpy_assign)
     size_t init_val = 7;
     mgcpp::device_vector<float> original(size, init_val);
 
-    auto before = mgcpp::cuda_mem_get_info();
-    EXPECT_TRUE(before);
-    auto before_memory = before.value().first;
-
     mgcpp::device_vector<float> copied(size / 2);
     size_t original_capacity = copied.capacity(); 
 
