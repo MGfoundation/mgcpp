@@ -391,8 +391,6 @@ namespace mgcpp
 
         Type* to = (_data + i);
         _allocator.copy_from_host(to, &value, 1);
-
-        return to;
     }
 
 

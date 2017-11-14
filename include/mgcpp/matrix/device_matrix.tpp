@@ -465,8 +465,6 @@ namespace mgcpp
 
         Type* to = (_data + (i + _shape.first * j));
         _allocator.copy_from_host(to, &value, 1);
-
-        return to;
     }
 
 
