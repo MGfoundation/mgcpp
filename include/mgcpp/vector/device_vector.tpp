@@ -378,6 +378,28 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
+    void
+    device_vector<Type, Allign, DeviceId, Alloc>::
+    set_value(size_t i, Type value) 
+    {
+        if(i >= _shape)
+        { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
+
+        Type* to = (_data + i);
+        _allocator.copy_from_host(to, &value, 1);
+
+        return to;
+    }
+
+
+    template<typename Type,
+             allignment Allign,
+             size_t DeviceId,
+             typename Alloc>
     inline Type*
     device_vector<Type, Allign, DeviceId, Alloc>::
     release_data() noexcept

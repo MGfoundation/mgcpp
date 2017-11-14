@@ -99,6 +99,9 @@ namespace mgcpp
         inline Type
         check_value(size_t i) const;
 
+        inline void
+        set_value(size_t i, Type value);
+
         inline Type const*
         data() const noexcept;
 

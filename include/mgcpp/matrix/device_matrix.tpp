@@ -448,6 +448,28 @@ namespace mgcpp
         return to;
     }
 
+
+    template<typename Type,
+             size_t DeviceId,
+             typename Alloc>
+    void
+    device_matrix<Type, DeviceId, Alloc>::
+    set_value(size_t i, size_t j, Type value)
+    {
+        if(i >= _shape.first || j >= _shape.second)
+        { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
+
+        auto set_device_stat = cuda_set_device(DeviceId);
+        if(!set_device_stat)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
+
+        Type* to = (_data + (i + _shape.first * j));
+        _allocator.copy_from_host(to, &value, 1);
+
+        return to;
+    }
+
+
     template<typename Type,
              size_t DeviceId,
              typename Alloc>

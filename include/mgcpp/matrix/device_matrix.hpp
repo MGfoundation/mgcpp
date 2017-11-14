@@ -121,6 +121,9 @@ namespace mgcpp
         inline Type
         check_value(size_t i, size_t j) const;
 
+        inline void
+        set_value(size_t i, size_t j, Type value);
+
         inline Type const*
         data() const noexcept;
 
