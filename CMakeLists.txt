@@ -45,6 +45,8 @@ if(BUILD_CUSTOM_KERNELS)
     endif()
 endif()
 
+set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
+
 
 # project source files
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
@@ -159,6 +161,8 @@ else()
     message(STATUS "Not building with Magma (certain features will be restricted)")
 endif(USE_MAGMA)
 
+set(MGCPP_TARGETS
+    ${PROJECT_NAME})
 
 # Tests
 if(BUILD_TESTING)
@@ -215,11 +219,12 @@ if(BUILD_TESTING)
 
     # ctest
     add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)
+
+    set(MGCPP_TARGETS
+	${MGCPP_TARGETS}
+    "${PROJECT_NAME}_test")
 endif()
 
-set(MGCPP_TARGETS
-    ${PROJECT_NAME}
-    "${PROJECT_NAME}_test")
 
 if(BUILD_CUSTOM_KERNELS)
     set(MGCPP_TARGETS
