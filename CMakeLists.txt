@@ -45,7 +45,7 @@ if(BUILD_CUSTOM_KERNELS)
     endif()
 endif()
 
-set(CUDA_NVCC_FLAGS "-shared -Xcompiler -fPIC")
+set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
 
 
 # project source files
