@@ -6,8 +6,9 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {
+    template<>
     inline outcome::result<void>
-    mgblas_rfft(size_t n, float const* x, float* result)
+    cublas_rfft(size_t n, float const* x, float* result)
     {
         cufftResult status;
         cufftHandle plan;

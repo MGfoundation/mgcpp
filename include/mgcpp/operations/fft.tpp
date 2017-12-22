@@ -2,7 +2,7 @@
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
-#include <mgcpp/kernels/mgblas_fft.tpp>
+#include <mgcpp/cublas/cublas_fft.hpp>
 
 namespace mgcpp
 {
@@ -22,7 +22,7 @@ namespace mgcpp
 
         auto result = device_vector<Type, Align, DeviceId, allocator_type>(n / 2 * 2 + 2);
 
-        auto status = mgcpp::mgblas_rfft(n, dev_vec.data(), result.data_mutable());
+        auto status = mgcpp::cublas_rfft(n, dev_vec.data(), result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
