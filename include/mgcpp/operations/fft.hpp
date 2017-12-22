@@ -13,7 +13,7 @@ namespace mgcpp
              size_t DeviceId>
     inline device_vector<Type, Align, DeviceId,
                          typename DeviceVec::allocator_type>
-    fft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
+    rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
 }
 
 #include <mgcpp/operations/fft.tpp>

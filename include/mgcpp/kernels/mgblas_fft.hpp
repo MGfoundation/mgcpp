@@ -9,7 +9,7 @@ namespace mgcpp
 {
     template<typename T>
     inline outcome::result<void>
-    mgblas_rfft(size_t n, T* const x, T* result);
+    mgblas_rfft(size_t n, T const* x, T* result);
 }
 
 #include <mgcpp/cublas/blas_fft.tpp>

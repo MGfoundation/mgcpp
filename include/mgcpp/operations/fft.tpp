@@ -2,6 +2,8 @@
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
+#include <mgcpp/kernels/mgblas_fft.tpp>
+
 namespace mgcpp
 {
     template<typename DeviceVec,
@@ -10,15 +12,20 @@ namespace mgcpp
              size_t DeviceId>
     inline device_vector<Type, Align, DeviceId,
                          typename DeviceVec::allocator_type>
-    fft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
+    rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
     {
         using allocator_type = typename DeviceVec::allocator_type;
 
-        auto dev_vec = ~vec;
+        auto const& dev_vec = ~vec;
 
         size_t n = dev_vec.shape();
 
-        auto result = device_vector<Type, Align, DeviceId, allocator_type>(n);
+        auto result = device_vector<Type, Align, DeviceId, allocator_type>(n / 2 * 2 + 2);
+
+        auto status = mgcpp::mgblas_rfft(n, dev_vec.data(), result.data_mutable());
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
         return result;
     }
 }

@@ -133,6 +133,9 @@ target_link_libraries(${PROJECT_NAME}
 # cuBLAS
 cuda_add_cublas_to_target("${PROJECT_NAME}")
 
+# cuFFT
+cuda_add_cufft_to_target("${PROJECT_NAME}")
+
 # cuSPARSE
 if(USE_CUSPARSE)
     target_link_libraries(${PROJECT_NAME}
