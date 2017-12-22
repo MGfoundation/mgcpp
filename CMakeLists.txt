@@ -193,7 +193,8 @@ if(BUILD_TESTING)
 	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/blaslv1_operation_test.cpp
 	${TEST_DIR}/blaslv3_operation_test.cpp
-	${TEST_DIR}/blaslv3_expression_test.cpp)
+	${TEST_DIR}/blaslv3_expression_test.cpp
+	${TEST_DIR}/fft_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	"${TEST_SOURCE_FILES}")
 
