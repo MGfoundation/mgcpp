@@ -44,12 +44,13 @@ namespace mgcpp
 
         auto const& dev_vec = ~vec;
 
-        size_t fft_size;
+        size_t fft_size = n;
         if (n < 0)
             fft_size = (dev_vec.shape() / 2 - 1) * 2;
-        else {
-            fft_size = n;
-            // FIXME: zero-pad input to match floor(n/2)+1 points
+        else if (fft_size / 2 + 1 > dev_vec.shape())
+        {
+            // FIXME: zero-pad input to length floor(n/2)+1
+            MGCPP_THROW_RUNTIME_ERROR("Zero-pad FFT unimplemented");
         }
         size_t output_size = fft_size;
 
@@ -94,6 +95,7 @@ namespace mgcpp
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
+        // Normalize the result
         if (direction == fft_direction::inverse)
             result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size), result);
 
