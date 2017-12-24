@@ -48,6 +48,6 @@ namespace mgcpp
     cublas_cfft(size_t n, T const* x, T* result, cublas::fft_direction direction);
 }
 
-#include <mgcpp/cublas/cublas_fft.tpp>
+#include <mgcpp/cublas/cufft_fft.tpp>
 
 #endif

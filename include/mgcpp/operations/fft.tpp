@@ -2,7 +2,7 @@
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
-#include <mgcpp/cublas/cublas_fft.hpp>
+#include <mgcpp/cublas/cufft_fft.hpp>
 #include <mgcpp/operations/mult.hpp>
 
 namespace mgcpp
@@ -59,7 +59,8 @@ namespace mgcpp
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-        // TODO: should the result be normalized or not?
+        // Normalize the result
+        result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size), result);
         return result;
     }
 
@@ -92,6 +93,9 @@ namespace mgcpp
                                          dir);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        if (direction == fft_direction::inverse)
+            result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size), result);
 
         return result;
     }

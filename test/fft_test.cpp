@@ -91,7 +91,7 @@ TEST(fft_operation, float_complex_to_real_inv_fft)
 
     EXPECT_EQ(result.size(), size);
     for (auto i = 0u; i < size; ++i) {
-        EXPECT_EQ(result.check_value(i), expected[i] * size);
+        EXPECT_EQ(result.check_value(i), expected[i]);
     }
 }
 
@@ -121,7 +121,7 @@ TEST(fft_operation, double_complex_to_real_inv_fft)
 
     EXPECT_EQ(result.size(), size);
     for (auto i = 0u; i < size; ++i) {
-        EXPECT_EQ(result.check_value(i), expected[i] * size);
+        EXPECT_EQ(result.check_value(i), expected[i]);
     }
 }
 
@@ -205,7 +205,7 @@ TEST(fft_operation, float_complex_to_complex_inv_fft)
 
     EXPECT_EQ(result.size(), size * 2);
     for (auto i = 0u; i < size * 2; ++i) {
-        EXPECT_EQ(result.check_value(i), expected[i] * size);
+        EXPECT_EQ(result.check_value(i), expected[i]);
     }
 }
 
@@ -289,6 +289,6 @@ TEST(fft_operation, double_complex_to_complex_inv_fft)
 
     EXPECT_EQ(result.size(), size * 2);
     for (auto i = 0u; i < size * 2; ++i) {
-        EXPECT_EQ(result.check_value(i), expected[i] * size);
+        EXPECT_EQ(result.check_value(i), expected[i]);
     }
 }
