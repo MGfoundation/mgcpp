@@ -63,6 +63,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/init.cpp
     ${SOURCE_DIR}/global_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
+    ${SOURCE_DIR}/cufft_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/error_code.cpp
     ${SOURCE_DIR}/mgcpp_kernel_error.cpp

@@ -10,6 +10,14 @@ namespace mgcpp
     template<typename T>
     inline outcome::result<void>
     cublas_rfft(size_t n, T const* x, T* result);
+
+    template<typename T>
+    inline outcome::result<void>
+    cublas_irfft(size_t n, T const* x, T* result);
+
+    template<typename T>
+    inline outcome::result<void>
+    cublas_cfft(size_t n, T const* x, T* result);
 }
 
 #include <mgcpp/cublas/cublas_fft.tpp>

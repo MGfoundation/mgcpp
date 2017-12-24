@@ -33,3 +33,34 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
         EXPECT_EQ(result.check_value(i), expected[i]);
     }
 }
+
+TEST(fft_operation, double_real_to_complex_fwd_fft)
+{
+    mgcpp::device_vector<double> vec({
+        1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3
+    });
+
+    size_t size = vec.size();
+
+    mgcpp::device_vector<double> result;
+    EXPECT_NO_THROW({result = mgcpp::rfft(vec);});
+
+    double expected[] = {
+        32., 0.,
+        0., 0.,
+        0., 0.,
+        0., 0.,
+
+        0., 0.,
+        0., 0.,
+        0., 0.,
+        0., 0.,
+
+        -16., 0.
+    };
+
+    EXPECT_EQ(result.size(), size / 2 * 2 + 2);
+    for (auto i = 0u; i < size; ++i) {
+        EXPECT_EQ(result.check_value(i), expected[i]);
+    }
+}
