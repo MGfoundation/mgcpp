@@ -13,6 +13,7 @@ namespace mgcpp
              size_t DeviceId>
     inline device_vector<Type, Align, DeviceId,
                          typename DeviceVec::allocator_type>
+    strict::
     rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
     {
         using allocator_type = typename DeviceVec::allocator_type;
@@ -38,6 +39,7 @@ namespace mgcpp
              size_t DeviceId>
     inline device_vector<Type, Align, DeviceId,
                          typename DeviceVec::allocator_type>
+    strict::
     irfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec, int n)
     {
         using allocator_type = typename DeviceVec::allocator_type;
@@ -72,6 +74,7 @@ namespace mgcpp
              size_t DeviceId>
     inline device_vector<Type, Align, DeviceId,
                          typename DeviceVec::allocator_type>
+    strict::
     cfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec, fft_direction direction)
     {
         using allocator_type = typename DeviceVec::allocator_type;
