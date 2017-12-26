@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <ostream>
+#include <type_traits>
 
 namespace mgcpp
 {
@@ -12,7 +13,7 @@ namespace mgcpp
         T real, imag;
 
         complex() : real{}, imag{} {}
-        complex(T x) : real{x}, imag{} {}
+        explicit complex(T x) : real{x}, imag{} {}
         complex(T real, T imag) : real{real}, imag{imag} {}
 
         complex operator* (T rhs) const {
@@ -64,6 +65,9 @@ namespace mgcpp
             return *this = *this - rhs;
         }
     };
+
+    static_assert(std::is_standard_layout<complex<float>>::value, "mgcpp::complex<float> is not standard layout");
+    static_assert(std::is_standard_layout<complex<double>>::value, "mgcpp::complex<double> is not standard layout");
 
     template<typename T>
     std::ostream& operator<< (std::ostream& os, complex<T> x) {

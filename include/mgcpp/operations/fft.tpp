@@ -93,7 +93,7 @@ namespace mgcpp
 
         // Normalize the result
         if (direction == fft_direction::inverse)
-            result = mgcpp::strict::mult(mgcpp::complex<Type>(1. / fft_size), result);
+            result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size), result);
 
         return result;
     }

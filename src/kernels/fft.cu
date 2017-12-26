@@ -4,7 +4,6 @@
 #include <mgcpp/kernels/bits/fft.cuh>
 
 #define BLK 64Lu
-//#define BLK 64Lu
 #define PI(T) static_cast<T>(3.141592653589793238462643383279502884197169399375105820974944)
 
 namespace mgcpp
@@ -73,7 +72,7 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_cfft_impl(cmplx<T> *x, cmplx<T> *y, size_t n, size_t level, size_t m)
+    mgblas_cfft_impl(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t level, size_t m)
     {
         __shared__ cmplx<T> s[BLK];
         int const tid = threadIdx.x;
