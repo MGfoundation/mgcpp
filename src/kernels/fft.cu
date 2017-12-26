@@ -1,8 +1,10 @@
 
+#include <cstdio>
+#include <algorithm>
 #include <mgcpp/kernels/bits/fft.cuh>
 
-//#define BLK 8
-#define BLK 64
+#define BLK 64Lu
+//#define BLK 64Lu
 #define PI(T) static_cast<T>(3.141592653589793238462643383279502884197169399375105820974944)
 
 namespace mgcpp
@@ -42,32 +44,62 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_rfft_impl(T const *x, cmplx<T> *y, size_t n)
+    mgblas_rfft_impl(T const *x, cmplx<T> *y, size_t n, size_t m)
     {
         __shared__ cmplx<T> s[BLK];
-        int const idx = blockIdx.x * blockDim.x + threadIdx.x;
         int const tid = threadIdx.x;
+        int const idx = blockIdx.x * BLK + tid;
 
         if (idx < n) {
             s[tid].real = x[idx];
             s[tid].imag = 0;
             __syncthreads();
+            for (int k = 2; k <= m; k <<= 1) {
+                int const i = tid % k;
+                if (i < k / 2) {
+                    int const a = tid;
+                    int const b = a + k / 2;
+                    T phi = -2 * PI(T) * i / k;
+                    cmplx<T> z = {cos(phi), sin(phi)};
+                    cmplx<T> u = s[a], v = s[b] * z;
+                    s[a] = u + v;
+                    s[b] = u - v;
+                }
+                __syncthreads();
+            }
+            y[idx] = s[tid];
+        }
+    }
 
-            for (int k = 2; k <= n; k <<= 1) {
-                    int const i = idx % k;
-                    if (i < k / 2) {
-                        int const a = idx - blockIdx.x * blockDim.x;
-                        int const b = a + k / 2;
-                        T phi = -2 * PI(T) * i / k;
-                        cmplx<T> z = {cos(phi), sin(phi)}; // z = W_k^(idx%k)
-                        cmplx<T> u = s[a];
-                        s[a] = u + s[b] * z;
-                        s[b] = u - s[b] * z;
-                    }
+    template<typename T>
+    __global__  void
+    mgblas_cfft_impl(cmplx<T> *x, cmplx<T> *y, size_t n, size_t level, size_t m)
+    {
+        __shared__ cmplx<T> s[BLK];
+        int const tid = threadIdx.x;
+        int const idx = blockIdx.x * BLK + tid;
+        int const jump = n / level;
+        int const sidx = idx / jump + (idx % jump) * level;
+
+        if (sidx < n) {
+            s[tid] = x[sidx];
+            __syncthreads();
+
+            for (int k = 2; k <= m; k <<= 1) {
+                int const i = tid % k;
+                if (i < k / 2) {
+                    int const a = tid;
+                    int const b = a + k / 2;
+                    T phi = -2 * PI(T) * (sidx % (k * level)) / (k * level);
+                    cmplx<T> z = {cos(phi), sin(phi)}; // z = W_k^(idx%k)
+                    cmplx<T> u = s[a], v = s[b] * z;
+                    s[a] = u + v;
+                    s[b] = u - v;
+                }
                 __syncthreads();
             }
 
-            y[idx] = s[tid];
+            y[sidx] = s[tid];
         }
     }
 
@@ -75,8 +107,11 @@ namespace mgcpp
     mgblas_Srfft(float const *x, float *y, size_t n)
     {
         cmplx<float> *cy = reinterpret_cast<cmplx<float>*>(y);
-	int grid_size = static_cast<int>(ceil(static_cast<float>(n)/ BLK));
-        mgblas_rfft_impl<float><<<grid_size, BLK>>>(x, cy, n);
+        int grid_size = static_cast<int>(ceil(static_cast<float>(n)/ BLK));
+        mgblas_rfft_impl<float><<<grid_size, BLK>>>(x, cy, n, std::min(n, BLK));
+        for (size_t m = n / BLK, level = BLK; m > 1; level *= BLK, m /= BLK) {
+            mgblas_cfft_impl<float><<<grid_size, BLK>>>(cy, cy, n, level, std::min(m, BLK));
+        }
 
         return success;
     }
