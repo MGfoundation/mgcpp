@@ -112,7 +112,6 @@ namespace mgcpp
         for (size_t m = n / BLK, level = BLK; m > 1; level *= BLK, m /= BLK) {
             mgblas_cfft_impl<float><<<grid_size, BLK>>>(cy, cy, n, level, std::min(m, BLK));
         }
-
         return success;
     }
 }

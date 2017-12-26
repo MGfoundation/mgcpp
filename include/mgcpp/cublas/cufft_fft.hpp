@@ -2,6 +2,8 @@
 #ifndef _MGCPP_BLAS_FFT_HPP_
 #define _MGCPP_BLAS_FFT_HPP_
 
+#include <mgcpp/global/complex.hpp>
+
 #include <boost/outcome.hpp>
 namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
@@ -17,7 +19,7 @@ namespace mgcpp
      */
     template<typename T>
     inline outcome::result<void>
-    cublas_rfft(size_t n, T const* x, T* result);
+    cublas_rfft(size_t n, T const* x, complex<T>* result);
 
     /** Performs complex-to-real inverse unnormalized FFT.
      *  \param n fft size
@@ -26,7 +28,7 @@ namespace mgcpp
      */
     template<typename T>
     inline outcome::result<void>
-    cublas_irfft(size_t n, T const* x, T* result);
+    cublas_irfft(size_t n, complex<T> const* x, T* result);
 
     namespace cublas
     {
@@ -45,7 +47,7 @@ namespace mgcpp
      */
     template<typename T>
     inline outcome::result<void>
-    cublas_cfft(size_t n, T const* x, T* result, cublas::fft_direction direction);
+    cublas_cfft(size_t n, complex<T> const* x, complex<T>* result, cublas::fft_direction direction);
 }
 
 #include <mgcpp/cublas/cufft_fft.tpp>
