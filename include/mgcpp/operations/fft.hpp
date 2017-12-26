@@ -17,14 +17,16 @@ namespace mgcpp
         template<typename DeviceVec,
                 typename Type,
                 allignment Align,
-                size_t DeviceId>
+                size_t DeviceId,
+                typename Alloc = mgcpp::default_allocator<complex<Type>, DeviceId>>
         inline device_vector<complex<Type>, Align, DeviceId>
         rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
 
         template<typename DeviceVec,
                 typename Type,
                 allignment Align,
-                size_t DeviceId>
+                size_t DeviceId,
+                typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
         inline device_vector<Type, Align, DeviceId>
         irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, int n = -1);
 
