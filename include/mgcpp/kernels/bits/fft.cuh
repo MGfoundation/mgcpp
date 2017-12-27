@@ -6,7 +6,7 @@
 
 namespace mgcpp
 {
-    kernel_status_t mgblas_Srfft(float const *x, float *y, size_t n);
+    kernel_status_t mgblas_Cfft(float const *x, float *y, size_t n);
 }
 
 #endif

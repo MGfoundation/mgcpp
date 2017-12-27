@@ -3,7 +3,7 @@
 
 #include <mgcpp/operations/fft.hpp>
 
-#define TEST_SIZE 4096
+#define TEST_SIZE 2048
 
 #include <random>
 #include <valarray>
@@ -55,8 +55,10 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size / 2 + 1);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -78,8 +80,10 @@ TEST(fft_operation, double_real_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size / 2 + 1);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -113,7 +117,8 @@ TEST(fft_operation, float_complex_to_real_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i), expected[i].real, 1e-4);
+            EXPECT_NEAR(result.check_value(i), expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -146,7 +151,8 @@ TEST(fft_operation, double_complex_to_real_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i), expected[i].real, 1e-4);
+            EXPECT_NEAR(result.check_value(i), expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -175,8 +181,10 @@ TEST(fft_operation, float_complex_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -204,8 +212,10 @@ TEST(fft_operation, double_complex_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -234,8 +244,10 @@ TEST(fft_operation, float_complex_to_complex_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
@@ -263,44 +275,44 @@ TEST(fft_operation, double_complex_to_complex_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }
 
 #include <mgcpp/kernels/bits/fft.cuh>
-TEST(fft_operation, float_real_to_complex_fwd_fft_custom_kernel)
+TEST(fft_operation, float_complex_to_complex_fwd_fft_custom_kernel)
 {
     for (size_t size = 1; size <= TEST_SIZE; size *= 2)
     {
-        mgcpp::device_vector<float> vec(size);
-        for (auto i = 0u; i < size; ++i) vec.set_value(i, dist(rng));
+        mgcpp::device_vector<mgcpp::complex<float>> vec(size);
+        for (auto i = 0u; i < size; ++i) {
+            mgcpp::complex<float> random_complex(dist(rng), dist(rng));
+            vec.set_value(i, random_complex);
+        }
 
         carray expected(size);
-        for (auto i = 0u; i < vec.size(); ++i)
-            expected[i] = {vec.check_value(i), 0};
+        for (auto i = 0u; i < vec.size(); ++i) {
+            auto c = vec.check_value(i);
+            expected[i].real = c.real;
+            expected[i].imag = c.imag;
+        }
         fft(expected, false);
 
         mgcpp::device_vector<mgcpp::complex<float>> result(size);
-
-        for (auto i = 1u, j = 0u; i < size; i++) {
-            auto b = size >> 1;
-            while (!((j ^= b) & b)) b >>= 1;
-            if (i < j) {
-                float t = vec.check_value(i);
-                vec.set_value(i, vec.check_value(j));
-                vec.set_value(j, t);
-            }
-        }
-        mgcpp::mgblas_Srfft(vec.data(),
+        mgcpp::mgblas_Cfft(reinterpret_cast<float const*>(vec.data()),
                             reinterpret_cast<float*>(result.data_mutable()),
                             size);
 
-        //EXPECT_EQ(result.size(), size / 2 + 1);
+        EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4);
-            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4);
+            EXPECT_NEAR(result.check_value(i).real, expected[i].real, 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i).imag, expected[i].imag, 1e-4)
+                << "size = " << size << ", i = " << i;
         }
     }
 }

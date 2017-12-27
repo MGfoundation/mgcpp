@@ -43,15 +43,15 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_rfft_impl(T const *x, cmplx<T> *y, size_t n, size_t m)
+    mgblas_Cfft_impl(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t m)
     {
         __shared__ cmplx<T> s[BLK];
         int const tid = threadIdx.x;
         int const idx = blockIdx.x * BLK + tid;
 
         if (idx < n) {
-            s[tid].real = x[idx];
-            s[tid].imag = 0;
+            int const ridx = __brev(idx) >> (__clz(n) + 1);
+            s[tid] = x[ridx];
             __syncthreads();
             for (int k = 2; k <= m; k <<= 1) {
                 int const i = tid % k;
@@ -72,7 +72,7 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_cfft_impl(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t level, size_t m)
+    mgblas_Cfft_impl2(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t level, size_t m)
     {
         __shared__ cmplx<T> s[BLK];
         int const tid = threadIdx.x;
@@ -83,7 +83,6 @@ namespace mgcpp
         if (sidx < n) {
             s[tid] = x[sidx];
             __syncthreads();
-
             for (int k = 2; k <= m; k <<= 1) {
                 int const i = tid % k;
                 if (i < k / 2) {
@@ -103,13 +102,17 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Srfft(float const *x, float *y, size_t n)
+    mgblas_Cfft(float const *x, float *y, size_t n)
     {
+        if (n < 1) return invalid_range;
+
+        cmplx<float> const *cx = reinterpret_cast<cmplx<float> const*>(x);
         cmplx<float> *cy = reinterpret_cast<cmplx<float>*>(y);
+
         int grid_size = static_cast<int>(ceil(static_cast<float>(n)/ BLK));
-        mgblas_rfft_impl<float><<<grid_size, BLK>>>(x, cy, n, std::min(n, BLK));
+        mgblas_Cfft_impl<float><<<grid_size, BLK>>>(cx, cy, n, std::min(n, BLK));
         for (size_t m = n / BLK, level = BLK; m > 1; level *= BLK, m /= BLK) {
-            mgblas_cfft_impl<float><<<grid_size, BLK>>>(cy, cy, n, level, std::min(m, BLK));
+            mgblas_Cfft_impl2<float><<<grid_size, BLK>>>(cy, cy, n, level, std::min(m, BLK));
         }
         return success;
     }
