@@ -18,10 +18,12 @@ C++ Multi GPU Math Library Based on CUDA
 
 ## Introduction
 
-mgcpp is a GPGPU math library. Using various CUDA libraries as backends, <br />
-it provides an optimized, standard C++ interface, abstracted C++ math library. <br />
+mgcpp is a CUDA based C++ linear algebra library. <br />
+It is an optimized, standard C++ library. <br />
 
+### Disclaimer 
 This library is heavily under development and in pre-alpha state.<br />
+msvc support is not properly tested and guarenteed to work.
 For contribution, please refer to TODO or contact me.
 
 
@@ -41,7 +43,8 @@ auto C = mgcpp::eval(A * B);
 
 ```
 
-The above code invokes cuBLAS's gemm function. All operations are lazely computed and graph optimized using C++ expression templates.
+The above code invokes cuBLAS's gemm function.
+All mgcpp expressions are lazily computed and optimized using C++ expression template method.
 
 
 <a id="org0bb6aa9"></a>
@@ -65,13 +68,14 @@ make install
 ```
 
 The library probes your system cuda ```gpu-architecture``` and ```gpu-code``` code automatically.
-However if you to specify the code, 
+However if you want to specify the computability code, <br />
+add the argument below to the command line. 
 
 ``` shell
 -DCUDA_ARCH=<arch>
 ```
 
-In order to use different C++ compilers for compiling cuda code and native C++ code, <br />
+In order to use a different C++ compiler for cuda code and native C++ code, <br />
 provide the argument below.
 
 ``` shell
@@ -82,7 +86,7 @@ You must provide the __FULL PATH__ to the cuda host compiler in order to work.
 Different cuda versions have different C++ compiler constraints. <br />
 For example ```cuda 8.0``` only support gcc up to 5.3.
 
-So, for an example case that you want to use cuda 8.0 for cuda code, gcc-7 for native C++ code,
+So, for an example case that you want to use cuda 9.0 for cuda code, gcc-6 for native C++ code,
 
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
@@ -91,14 +95,12 @@ make -j4
 make install
 ```
 
-it should look like this.
-
 
 <a id="orgd700710"></a>
 
 ## Dependencies
 
--   cmake
+-   cmake 3.8 or later
 -   gcc 6, clang 3.9, Visual Studio 14.0 (2015) or later
 -   [boost-outcome](https://github.com/ned14/boost-outcome)
 -   cuda 8.0 or later
@@ -109,24 +111,18 @@ it should look like this.
 
 <a id="org6fefac1"></a>
 
-## TODO 
+## Planned Features
 
--   [X] Finish thread context class for managing threads.
--   [ ] Support msvc build.
--   [ ] Add BLAS lv1 operations.
--   [ ] Add BLAS lv2 operations.
--   [ ] Add BLAS lv3 operations.
--   [ ] Add exprssions for BLAS lv1 operations.
--   [ ] Add exprssions for BLAS lv2 operations.
--   [ ] Add exprssions for BLAS lv3 operations.
--   [ ] Add dense vector type
--   [ ] Add sparse matrix type
--   [ ] Add sparse vector type
--   [ ] Add batch type
--   [ ] Add high level linear algebra operations.
--   [ ] Add benchmark
--   [ ] Add FFT
--   [ ] Add convolution
+- Fully tested msvc support.
+- Epression template optimization for all operations.
+- Tensor type and tensor operations.
+- sparse matrix, sparse vector, sparse tensor types.
+- Batch matrix type and batch matrix operations.
+- cuSPARSE support.
+- Full cuFFT support.
+- Convolution operation.
+- half precision type support.
+- Full compatibility with [uBLAS](http://www.boost.org/doc/libs/1_59_0/libs/numeric/ublas/doc/), [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [blaze](https://bitbucket.org/blaze-lib/blaze)
 
 
 <a id="orgb25347e"></a>
@@ -142,7 +138,7 @@ Red-Portal
 
 ## License
 
-Copyright RedPortal 2017.
+Copyright RedPortal, fuzzythecat, mujjingun 2017.
 
 Distributed under the Boost Software License, Version 1.0. <br />
 (See accompanying file LICENSE or copy at <http://www.boost.org/LICENSE_1_0.txt>)
