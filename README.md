@@ -16,7 +16,7 @@
 ## Introduction
 
 mgcpp is a CUDA based C++ linear algebra library. <br />
-It provides a standard C++ interface without any CUDU specific syntax. <br />
+It provides a standard C++ interface without any CUDA specific syntax. <br />
 
 
 ### Disclaimer 
