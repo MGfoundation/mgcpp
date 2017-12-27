@@ -8,44 +8,11 @@
 
 namespace mgcpp
 {
-    // device complex type
-    template<typename T>
-    struct cmplx {
-        T real, imag;
-
-        __device__
-        cmplx operator* (cmplx rhs) const {
-            cmplx r = {
-                real * rhs.real - imag * rhs.imag,
-                real * rhs.imag + imag * rhs.real
-            };
-            return r;
-        }
-
-        __device__
-        cmplx operator+ (cmplx rhs) const {
-            cmplx r = {
-                real + rhs.real,
-                imag + rhs.imag
-            };
-            return r;
-        }
-
-        __device__
-        cmplx operator- (cmplx rhs) const {
-            cmplx r = {
-                real - rhs.real,
-                imag - rhs.imag
-            };
-            return r;
-        }
-    };
-
     template<typename T>
     __global__  void
-    mgblas_Cfft_impl(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t m)
+    mgblas_Cfft_impl(complex<T> const *x, complex<T> *y, size_t n, size_t m)
     {
-        __shared__ cmplx<T> s[BLK];
+        __shared__ complex<T> s[BLK];
         int const tid = threadIdx.x;
         int const idx = blockIdx.x * BLK + tid;
 
@@ -59,8 +26,8 @@ namespace mgcpp
                     int const a = tid;
                     int const b = a + k / 2;
                     T phi = -2 * PI(T) * i / k;
-                    cmplx<T> z = {cos(phi), sin(phi)};
-                    cmplx<T> u = s[a], v = s[b] * z;
+                    complex<T> z = {cos(phi), sin(phi)};
+                    complex<T> u = s[a], v = s[b] * z;
                     s[a] = u + v;
                     s[b] = u - v;
                 }
@@ -72,9 +39,9 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_Cfft_impl2(cmplx<T> const *x, cmplx<T> *y, size_t n, size_t level, size_t m)
+    mgblas_Cfft_impl2(complex<T> const *x, complex<T> *y, size_t n, size_t level, size_t m)
     {
-        __shared__ cmplx<T> s[BLK];
+        __shared__ complex<T> s[BLK];
         int const tid = threadIdx.x;
         int const idx = blockIdx.x * BLK + tid;
         int const jump = n / level;
@@ -89,8 +56,8 @@ namespace mgcpp
                     int const a = tid;
                     int const b = a + k / 2;
                     T phi = -2 * PI(T) * (sidx % (k * level)) / (k * level);
-                    cmplx<T> z = {cos(phi), sin(phi)}; // z = W_k^(idx%k)
-                    cmplx<T> u = s[a], v = s[b] * z;
+                    complex<T> z = {cos(phi), sin(phi)}; // z = W_k^(idx%k)
+                    complex<T> u = s[a], v = s[b] * z;
                     s[a] = u + v;
                     s[b] = u - v;
                 }
@@ -102,17 +69,14 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Cfft(float const *x, float *y, size_t n)
+    mgblas_Cfft(complex<float> const *x, complex<float> *y, size_t n)
     {
         if (n < 1) return invalid_range;
 
-        cmplx<float> const *cx = reinterpret_cast<cmplx<float> const*>(x);
-        cmplx<float> *cy = reinterpret_cast<cmplx<float>*>(y);
-
         int grid_size = static_cast<int>(ceil(static_cast<float>(n)/ BLK));
-        mgblas_Cfft_impl<float><<<grid_size, BLK>>>(cx, cy, n, std::min(n, BLK));
+        mgblas_Cfft_impl<float><<<grid_size, BLK>>>(x, y, n, std::min(n, BLK));
         for (size_t m = n / BLK, level = BLK; m > 1; level *= BLK, m /= BLK) {
-            mgblas_Cfft_impl2<float><<<grid_size, BLK>>>(cy, cy, n, level, std::min(m, BLK));
+            mgblas_Cfft_impl2<float><<<grid_size, BLK>>>(y, y, n, level, std::min(m, BLK));
         }
         return success;
     }

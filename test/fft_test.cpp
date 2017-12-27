@@ -303,9 +303,7 @@ TEST(fft_operation, float_complex_to_complex_fwd_fft_custom_kernel)
         fft(expected, false);
 
         mgcpp::device_vector<mgcpp::complex<float>> result(size);
-        mgcpp::mgblas_Cfft(reinterpret_cast<float const*>(vec.data()),
-                            reinterpret_cast<float*>(result.data_mutable()),
-                            size);
+        mgcpp::mgblas_Cfft(vec.data(), result.data_mutable(), size);
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
