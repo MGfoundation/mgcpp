@@ -10,7 +10,7 @@ namespace mgcpp
 {
     template<typename T>
     __global__  void
-    mgblas_Cfft_impl(complex<T> const *x, complex<T> *y, size_t n, size_t m)
+    mgblas_Cfft_impl(complex<T> const *x, complex<T> *y, size_t n, size_t m, int dir)
     {
         __shared__ complex<T> s[BLK];
         int const tid = threadIdx.x;
@@ -25,7 +25,7 @@ namespace mgcpp
                 if (i < k / 2) {
                     int const a = tid;
                     int const b = a + k / 2;
-                    T phi = -2 * PI(T) * i / k;
+                    T phi = dir * 2 * PI(T) * i / k;
                     complex<T> z = {cos(phi), sin(phi)};
                     complex<T> u = s[a], v = s[b] * z;
                     s[a] = u + v;
@@ -39,7 +39,7 @@ namespace mgcpp
 
     template<typename T>
     __global__  void
-    mgblas_Cfft_impl2(complex<T> const *x, complex<T> *y, size_t n, size_t level, size_t m)
+    mgblas_Cfft_impl2(complex<T> const *x, complex<T> *y, size_t n, size_t level, size_t m, int dir)
     {
         __shared__ complex<T> s[BLK];
         int const tid = threadIdx.x;
@@ -55,7 +55,8 @@ namespace mgcpp
                 if (i < k / 2) {
                     int const a = tid;
                     int const b = a + k / 2;
-                    T phi = -2 * PI(T) * (sidx % (k * level)) / (k * level);
+                    int const j = sidx % (k * level);
+                    T phi = dir * 2 * PI(T) * j / (k * level);
                     complex<T> z = {cos(phi), sin(phi)}; // z = W_k^(idx%k)
                     complex<T> u = s[a], v = s[b] * z;
                     s[a] = u + v;
@@ -69,14 +70,15 @@ namespace mgcpp
     }
 
     kernel_status_t
-    mgblas_Cfft(complex<float> const *x, complex<float> *y, size_t n)
+    mgblas_Cfft(complex<float> const *x, complex<float> *y, size_t n, bool is_inv)
     {
         if (n < 1) return invalid_range;
-
         int grid_size = static_cast<int>(ceil(static_cast<float>(n)/ BLK));
-        mgblas_Cfft_impl<float><<<grid_size, BLK>>>(x, y, n, std::min(n, BLK));
+
+        int dir = is_inv? 1 : -1;
+        mgblas_Cfft_impl<float><<<grid_size, BLK>>>(x, y, n, std::min(n, BLK), dir);
         for (size_t m = n / BLK, level = BLK; m > 1; level *= BLK, m /= BLK) {
-            mgblas_Cfft_impl2<float><<<grid_size, BLK>>>(y, y, n, level, std::min(m, BLK));
+            mgblas_Cfft_impl2<float><<<grid_size, BLK>>>(y, y, n, level, std::min(m, BLK), dir);
         }
         return success;
     }

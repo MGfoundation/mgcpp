@@ -7,7 +7,7 @@
 
 namespace mgcpp
 {
-    kernel_status_t mgblas_Cfft(complex<float> const *x, complex<float> *y, size_t n);
+    kernel_status_t mgblas_Cfft(complex<float> const *x, complex<float> *y, size_t n, bool is_inv);
 }
 
 #endif
