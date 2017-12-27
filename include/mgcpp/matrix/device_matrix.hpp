@@ -15,6 +15,8 @@
 #include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/matrix/row_view.hpp>
 #include <mgcpp/system/concept.hpp>
+#include <mgcpp/type_traits/device_pointer_type.hpp>
+#include <mgcpp/type_traits/host_value_type.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -32,7 +34,11 @@ namespace mgcpp
     {
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
-        using value_type = Type;
+        using value_type = typename value_type<Type>::type;
+        using pointer = Type*;
+        using const_pointer = Type const*;
+        using device_pointer = typename device_pointer<Type>::type;
+        using const_device_pointer = typename const_device_pointer<Type>::type;
         using result_type = this_type;
         using allocator_type = Alloc;
         size_t const device_id = DeviceId;
@@ -41,7 +47,7 @@ namespace mgcpp
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
         Alloc _allocator;
-        Type* _data;
+        pointer _data;
         size_t _capacity;
 
         inline size_t
@@ -66,7 +72,7 @@ namespace mgcpp
                       Alloc const& alloc = Alloc());
         
         inline
-        device_matrix(size_t i, size_t j, Type const* data,
+        device_matrix(size_t i, size_t j, const_pointer data,
                       Alloc const& alloc = Alloc());
 
         inline
@@ -107,7 +113,7 @@ namespace mgcpp
         resize(size_t i, size_t j);
 
         inline device_matrix<Type, DeviceId, Alloc>&
-        resize(size_t i, size_t j, Type init);
+        resize(size_t i, size_t j, value_type init);
 
         inline column_view<this_type, Type, DeviceId>
         column(size_t i) noexcept;
@@ -116,18 +122,18 @@ namespace mgcpp
         row(size_t i) noexcept;
 
         inline void
-        copy_to_host(Type* host_p) const;
+        copy_to_host(pointer host_p) const;
 
-        inline Type
+        inline value_type
         check_value(size_t i, size_t j) const;
 
         inline void
-        set_value(size_t i, size_t j, Type value);
+        set_value(size_t i, size_t j, value_type value);
 
-        inline Type const*
+        inline const_device_pointer
         data() const noexcept;
 
-        inline Type*
+        inline device_pointer
         data_mutable() noexcept;
 
         inline size_t
@@ -136,10 +142,10 @@ namespace mgcpp
         inline thread_context*
         context() const noexcept;
 
-        inline Type*
+        inline device_pointer
         release_data() noexcept;
 
-        inline Alloc
+        inline Alloc&
         allocator() noexcept;
 
         inline std::pair<size_t, size_t> const&

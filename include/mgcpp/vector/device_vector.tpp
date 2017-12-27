@@ -57,14 +57,14 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_vector<Type, Allign, DeviceId, Alloc>::
-    device_vector(size_t size, Type init, Alloc const& alloc)
+    device_vector(size_t size, value_type init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
           _allocator(alloc),
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        Type* buffer = _allocator.allocate(_shape);
+        pointer buffer = _allocator.allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
         auto status = mgblas_fill(_data, init, _shape);
@@ -77,7 +77,7 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_vector<Type, Allign, DeviceId, Alloc>::
-    device_vector(size_t size, Type const* data, Alloc const& alloc)
+    device_vector(size_t size, const_pointer data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
           _allocator(alloc),
@@ -106,7 +106,7 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        Type* buffer = _allocator.allocate(_shape);
+        pointer buffer = _allocator.allocate(_shape);
         std::copy(array.begin(), array.end(), buffer);
 
         try
@@ -136,7 +136,7 @@ namespace mgcpp
     {
         adapter<HostVec> adapt{};
 
-        Type* host_p;
+        pointer host_p; 
         adapt(host_mat, &host_p, &_shape);
 
         _capacity = _shape;
@@ -356,7 +356,7 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    Type
+    typename device_vector<Type, Allign, DeviceId, Alloc>::value_type
     device_vector<Type, Allign, DeviceId, Alloc>::
     check_value(size_t i) const
     {
@@ -367,8 +367,8 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        Type* from = (_data + i);
-        Type to;
+        device_pointer from = (_data + i);
+        value_type to;
         _allocator.copy_to_host(&to, from, 1);
 
         return to;
@@ -380,7 +380,7 @@ namespace mgcpp
              typename Alloc>
     void
     device_vector<Type, Allign, DeviceId, Alloc>::
-    set_value(size_t i, Type value) 
+    set_value(size_t i, value_type value) 
     {
         if(i >= _shape)
         { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
@@ -389,7 +389,7 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        Type* to = (_data + i);
+        device_pointer to = (_data + i);
         _allocator.copy_from_host(to, &value, 1);
     }
 
@@ -398,11 +398,11 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    inline Type*
+    typename device_vector<Type, Allign, DeviceId, Alloc>::device_pointer
     device_vector<Type, Allign, DeviceId, Alloc>::
     release_data() noexcept
     {
-        Type* temp = _data;
+        device_pointer temp = _data;
         _data = nullptr;
         _capacity = 0;
         return temp;
@@ -412,7 +412,7 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    inline thread_context*
+    thread_context*
     device_vector<Type, Allign, DeviceId, Alloc>::
     context() const noexcept
     { return _context; }
@@ -430,7 +430,7 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    Type const*
+    typename device_vector<Type, Allign, DeviceId, Alloc>::const_device_pointer
     device_vector<Type, Allign, DeviceId, Alloc>::
     data() const noexcept
     { return _data; }
@@ -439,7 +439,7 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    Type*
+    typename device_vector<Type, Allign, DeviceId, Alloc>::device_pointer
     device_vector<Type, Allign, DeviceId, Alloc>::
     data_mutable() noexcept
     { return _data; }
@@ -466,7 +466,7 @@ namespace mgcpp
              allignment Allign,
              size_t DeviceId,
              typename Alloc>
-    Alloc 
+    Alloc& 
     device_vector<Type, Allign, DeviceId, Alloc>::
     allocator() noexcept
     { return _allocator; }
@@ -479,11 +479,11 @@ namespace mgcpp
     ~device_vector() noexcept
     {
         if(_data)
+        {
             try
-            {
-                _allocator.device_deallocate(_data, _capacity);
-            }
+            { _allocator.device_deallocate(_data, _capacity); }
             catch(...){};
+        }
         global_context::reference_cnt_decr();
     }
 }
