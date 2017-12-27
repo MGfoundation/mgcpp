@@ -10,19 +10,19 @@ namespace mgcpp
 {
     template<typename VectorType,
              typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId>
     VectorType const&
-    vector_base<VectorType, Type, Allign, DeviceId>::
+    vector_base<VectorType, Type, Align, DeviceId>::
     operator~() const noexcept
     { return *static_cast<VectorType const*>(this); };
 
     template<typename VectorType,
              typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId>
     VectorType&
-    vector_base<VectorType, Type, Allign, DeviceId>::
+    vector_base<VectorType, Type, Align, DeviceId>::
     operator~() noexcept
     { return *static_cast<VectorType*>(this); };
 }

@@ -78,7 +78,7 @@ TEST(device_vector, size_constructor)
     auto before_memory = before.value().first;
 
     size_t size = 10;
-    mgcpp::device_vector<float, mgcpp::allignment::row> vec{};
+    mgcpp::device_vector<float, mgcpp::alignment::row> vec{};
     EXPECT_NO_THROW(
         vec = mgcpp::device_vector<float>(size));
 

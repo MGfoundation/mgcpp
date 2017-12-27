@@ -13,13 +13,13 @@ namespace mgcpp
     template<typename LhsDeviceVec,
              typename RhsDeviceVec,
              typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId>
-    device_vector<Type, Allign, DeviceId, 
+    device_vector<Type, Align, DeviceId, 
                   typename LhsDeviceVec::allocator_type>
     strict::
-    sub(dense_vector<LhsDeviceVec, Type, Allign, DeviceId> const& lhs,
-        dense_vector<RhsDeviceVec, Type, Allign, DeviceId> const& rhs)
+    sub(dense_vector<LhsDeviceVec, Type, Align, DeviceId> const& lhs,
+        dense_vector<RhsDeviceVec, Type, Align, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDeviceVec::allocator_type;
 
@@ -37,7 +37,7 @@ namespace mgcpp
         Type const alpha = -1;
 
         auto result = device_vector<Type,
-                                    Allign,
+                                    Align,
                                     DeviceId,
                                     allocator_type>(lhs_vec);
         auto status = cublas_axpy(handle, size,

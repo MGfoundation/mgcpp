@@ -31,20 +31,20 @@ namespace mgcpp
         //          typename RhsDenseVec,
         //          typename Type,
         //          size_t Device,
-        //          allignment Allign>
-        // inline device_vector<Type, Device, Allign,
+        //          alignment Align>
+        // inline device_vector<Type, Device, Align,
         //                      typename LhsDenseVec::allocator_type>
-        // mult(dense_vector<LhsDenseVec, Type, Device, Allign> const& first,
-        //      dense_vector<RhsDenseVec, Type, Device, Allign> const& second);
+        // mult(dense_vector<LhsDenseVec, Type, Device, Align> const& first,
+        //      dense_vector<RhsDenseVec, Type, Device, Align> const& second);
 
         template<typename DenseVec,
                  typename Type,
-                 allignment Allign,
+                 alignment Align,
                  size_t DeviceId>
-        inline device_vector<Type, Allign, DeviceId, 
+        inline device_vector<Type, Align, DeviceId, 
                              typename DenseVec::allocator_type>
         mult(Type scalar,
-             dense_vector<DenseVec, Type, Allign, DeviceId> const& vec);
+             dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
 
 
         // template<typename T, size_t Device, storage_order SO>

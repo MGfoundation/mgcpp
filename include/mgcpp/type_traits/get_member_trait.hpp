@@ -21,7 +21,7 @@ namespace mgcpp
     class device_matrix;
 
     template<typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId,
              typename Alloc>
     class device_vector;
@@ -36,10 +36,10 @@ namespace mgcpp
     { using type = Alloc; };
 
     template<typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    struct get_allocator_impl<device_vector<Type, Allign, DeviceId, Alloc>>
+    struct get_allocator_impl<device_vector<Type, Align, DeviceId, Alloc>>
     { using type = Alloc; };
 
     template<typename Type>

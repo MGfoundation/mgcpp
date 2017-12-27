@@ -13,10 +13,10 @@ namespace mgcpp
 {
     template<typename DenseVecType,
              typename Type,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId>
     class dense_vector :
-        public vector_base<DenseVecType, Type, Allign, DeviceId>
+        public vector_base<DenseVecType, Type, Align, DeviceId>
     {
 
     };
