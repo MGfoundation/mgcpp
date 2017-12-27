@@ -11,9 +11,6 @@
 <a id="org8251436"></a>
 
 # mgcpp [![Build Status](https://travis-ci.org/Red-Portal/mgcpp.svg?branch=master)](https://travis-ci.org/Red-Portal/mgcpp)
-C++ Multi GPU Math Library Based on CUDA
-
-
 <a id="org9dd78d2"></a>
 
 ## Introduction
