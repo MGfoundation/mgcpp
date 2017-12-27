@@ -31,7 +31,7 @@ void fft(carray &a, bool inv)
         }
     }
     if (inv) {
-        for (int i = 0; i < n; i++) a[i] /= n;
+        a /= mgcpp::complex<double>(n);
     }
 }
 std::default_random_engine rng;
@@ -346,4 +346,3 @@ TEST(fft_operation, float_complex_to_complex_inv_fft_custom_kernel)
         }
     }
 }
-

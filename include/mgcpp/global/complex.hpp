@@ -3,11 +3,11 @@
 #define _MGCPP_GLOBAL_COMPLEX_HPP_
 
 #include <cmath>
-#include <ostream>
 
 #ifdef __CUDACC__
 #define HOST_AND_DEVICE __host__ __device__
 #else
+#include <ostream>
 #include <type_traits>
 #define HOST_AND_DEVICE
 #endif
@@ -62,6 +62,20 @@ namespace mgcpp
         }
 
         HOST_AND_DEVICE
+        complex operator/ (complex rhs) const {
+            complex r = {
+                real * rhs.real + imag * rhs.imag,
+                imag * rhs.real - real * rhs.imag
+            };
+            return r / (rhs.real * rhs.real + rhs.imag * rhs.imag);
+        }
+
+        HOST_AND_DEVICE
+        complex& operator/= (complex rhs) {
+            return *this = *this / rhs;
+        }
+
+        HOST_AND_DEVICE
         complex operator+ (complex rhs) const {
             complex r = {
                 real + rhs.real,
@@ -93,7 +107,6 @@ namespace mgcpp
 #ifndef __CUDACC__
     static_assert(std::is_standard_layout<complex<float>>::value, "mgcpp::complex<float> is not standard layout");
     static_assert(std::is_standard_layout<complex<double>>::value, "mgcpp::complex<double> is not standard layout");
-#endif
 
     template<typename T>
     std::ostream& operator<< (std::ostream& os, complex<T> x) {
@@ -102,6 +115,7 @@ namespace mgcpp
         os.flags(f);
         return os;
     }
+#endif
 
     template<typename T>
     HOST_AND_DEVICE
