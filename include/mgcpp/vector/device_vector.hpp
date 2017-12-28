@@ -64,7 +64,7 @@ namespace mgcpp
                              Alloc const& alloc = Alloc());
 
         inline
-        device_vector(std::initializer_list<Type> const& array,
+        device_vector(std::initializer_list<value_type> const& array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostVec,

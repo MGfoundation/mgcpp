@@ -98,7 +98,7 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_vector<Type, Align, DeviceId, Alloc>::
-    device_vector(std::initializer_list<Type> const& array,
+    device_vector(std::initializer_list<value_type> const& array,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(array.size()),
