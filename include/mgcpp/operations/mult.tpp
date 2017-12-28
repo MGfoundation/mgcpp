@@ -65,14 +65,15 @@ namespace mgcpp
     }
     
     template<typename DenseVec,
-             typename Type,
+             typename ScalarType,
+             typename VectorType,
              alignment Align,
              size_t DeviceId>
-    device_vector<Type, Align, DeviceId, 
+    device_vector<VectorType, Align, DeviceId,
                   typename DenseVec::allocator_type>
     strict::
-    mult(Type scalar,
-         dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
+    mult(ScalarType scalar,
+         dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec)
     {
         using allocator_type = typename DenseVec::allocator_type;
 
@@ -83,7 +84,7 @@ namespace mgcpp
 
         auto size = original_vec.shape();
 
-        auto result = device_vector<Type,
+        auto result = device_vector<VectorType,
                                     Align,
                                     DeviceId,
                                     allocator_type>(original_vec);

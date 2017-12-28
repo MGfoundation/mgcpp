@@ -38,13 +38,14 @@ namespace mgcpp
         //      dense_vector<RhsDenseVec, Type, Device, Align> const& second);
 
         template<typename DenseVec,
-                 typename Type,
-                 alignment Align,
-                 size_t DeviceId>
-        inline device_vector<Type, Align, DeviceId, 
-                             typename DenseVec::allocator_type>
-        mult(Type scalar,
-             dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
+                typename ScalarType,
+                typename VectorType,
+                alignment Align,
+                size_t DeviceId>
+        device_vector<VectorType, Align, DeviceId,
+                    typename DenseVec::allocator_type>
+        mult(ScalarType scalar,
+             dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec);
 
 
         // template<typename T, size_t Device, storage_order SO>

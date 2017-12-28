@@ -45,7 +45,7 @@ namespace mgcpp
         thread_context* _context;
         size_t _shape;
         Alloc _allocator;
-        pointer _data;
+        device_pointer _data;
         size_t _capacity;
 
     public:
@@ -64,7 +64,7 @@ namespace mgcpp
                              Alloc const& alloc = Alloc());
 
         inline
-        device_vector(std::initializer_list<Type> const& array,
+        device_vector(std::initializer_list<value_type> const& array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostVec,

@@ -6,6 +6,7 @@
 
 #include <mgcpp/cublas/blas_lv1.hpp>
 #include <mgcpp/system/error_code.hpp>
+#include <mgcpp/global/complex.hpp>
 
 namespace mgcpp
 {
@@ -99,6 +100,67 @@ namespace mgcpp
         std::error_code status = cublasDscal(handle, n,
                                              alpha,
                                             vec, incvec); 
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                cuComplex const* alpha,
+                cuComplex* vec, size_t incvec) noexcept
+    {
+        // Technically undefined behavior, but no way around it
+        std::error_code status = cublasCscal(handle, n,
+                                             alpha,
+                                             vec, incvec);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                float const* alpha,
+                cuComplex* vec, size_t incvec) noexcept
+    {
+        std::error_code status = cublasCsscal(handle, n,
+                                              alpha,
+                                              vec, incvec);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                cuDoubleComplex const* alpha,
+                cuDoubleComplex* vec, size_t incvec) noexcept
+    {
+        std::error_code status = cublasZscal(handle, n,
+                                             alpha,
+                                             vec, incvec);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_scal(cublasHandle_t handle, size_t n,
+                double const* alpha,
+                cuDoubleComplex* vec, size_t incvec) noexcept
+    {
+        std::error_code status = cublasZdscal(handle, n,
+                                              alpha,
+                                              vec, incvec);
 
         if(status != status_t::success)
             return status;

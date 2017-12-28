@@ -60,12 +60,14 @@ set(BASE_SOURCE_FILES
     ${KERNELS_SOURCE_DIR}/hadamard.cu
     ${KERNELS_SOURCE_DIR}/absolute.cu
     ${KERNELS_SOURCE_DIR}/reduce.cu
-    ${KERNELS_SOURCE_DIR}/fill.cu)
+    ${KERNELS_SOURCE_DIR}/fill.cu
+    ${KERNELS_SOURCE_DIR}/fft.cu)
 
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/init.cpp
     ${SOURCE_DIR}/global_context.cpp
     ${SOURCE_DIR}/cublas_error.cpp
+    ${SOURCE_DIR}/cufft_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/error_code.cpp
     ${SOURCE_DIR}/mgcpp_kernel_error.cpp
@@ -145,6 +147,9 @@ target_link_libraries(${PROJECT_NAME}
 # cuBLAS
 cuda_add_cublas_to_target("${PROJECT_NAME}")
 
+# cuFFT
+cuda_add_cufft_to_target("${PROJECT_NAME}")
+
 # cuSPARSE
 if(USE_CUSPARSE)
     target_link_libraries(${PROJECT_NAME}
@@ -205,7 +210,8 @@ if(BUILD_TESTING)
 	#${TEST_DIR}/type_trait_test.cpp
 	${TEST_DIR}/blaslv1_operation_test.cpp
 	${TEST_DIR}/blaslv3_operation_test.cpp
-	${TEST_DIR}/blaslv3_expression_test.cpp)
+	${TEST_DIR}/blaslv3_expression_test.cpp
+	${TEST_DIR}/fft_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	"${TEST_SOURCE_FILES}")
 

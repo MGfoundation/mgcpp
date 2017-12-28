@@ -242,6 +242,43 @@ TEST(device_vector, constructon_from_init_list)
         }while(false));
 }
 
+TEST(device_vector, complex_vector_constructon_from_init_list)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    auto init_list = std::initializer_list<std::complex<float>>({1, 2, 3, 4, 5});
+
+    mgcpp::device_vector<mgcpp::complex<float>> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::complex<float>>(init_list));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), init_list.size());
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::complex<float>>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            size_t it = 0;
+            for(auto i : init_list)
+            {
+                EXPECT_EQ(i, vec.check_value(it));
+                ++it;
+            }
+        }while(false));
+}
+
 TEST(device_vector, cpy_constructor)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);

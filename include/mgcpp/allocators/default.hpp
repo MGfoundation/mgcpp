@@ -9,6 +9,7 @@
 
 #include <cstdlib>
 #include <memory>
+#include <mgcpp/type_traits/device_pointer_type.hpp>
 
 namespace mgcpp
 {
@@ -17,6 +18,8 @@ namespace mgcpp
     {
         typedef std::allocator<T> Alloc;
         typedef std::allocator_traits<Alloc> _alloc_tr;
+        using device_pointer = typename device_pointer<T>::type;
+        using const_device_pointer = typename const_device_pointer<T>::type;
 
         Alloc _alloc;
 
@@ -24,15 +27,15 @@ namespace mgcpp
 
         inline void deallocate(T* p, size_t n);
 
-        inline T* device_allocate(size_t n) const;
+        inline device_pointer device_allocate(size_t n) const;
 
-        inline void device_deallocate(T* p, size_t n) const;
-
-        inline void
-        copy_from_host(T* device, T const* host, size_t n) const;
+        inline void device_deallocate(device_pointer p, size_t n) const;
 
         inline void
-        copy_to_host(T* host, T const* device, size_t n) const;
+        copy_from_host(device_pointer device, T const* host, size_t n) const;
+
+        inline void
+        copy_to_host(T* host, const_device_pointer device, size_t n) const;
     };
 }
 

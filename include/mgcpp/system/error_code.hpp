@@ -13,6 +13,7 @@
 
 #include <mgcpp/system/cuda_error.hpp>
 #include <mgcpp/system/cublas_error.hpp>
+#include <mgcpp/system/cufft_error.hpp>
 #include <mgcpp/system/mgcpp_kernel_error.hpp>
 
 namespace mgcpp
