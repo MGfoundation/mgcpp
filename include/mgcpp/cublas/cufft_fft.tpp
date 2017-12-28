@@ -19,8 +19,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecR2C(plan,
-                              reinterpret_cast<cufftReal*>(const_cast<float*>(x)),
-                              reinterpret_cast<cufftComplex*>(result));
+                              const_cast<float*>(x),
+                              result);
         if (status != status_t::success) return status;
 
         status = cufftDestroy(plan);
@@ -38,8 +38,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecD2Z(plan,
-                              reinterpret_cast<cufftDoubleReal*>(const_cast<double*>(x)),
-                              reinterpret_cast<cufftDoubleComplex*>(result));
+                              const_cast<double*>(x),
+                              result);
         if (status != status_t::success) return status;
 
         status = cufftDestroy(plan);
@@ -57,8 +57,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecC2R(plan,
-                              reinterpret_cast<cufftComplex*>(const_cast<cuComplex*>(x)),
-                              reinterpret_cast<cufftReal*>(result));
+                              const_cast<cuComplex*>(x),
+                              result);
         if (status != status_t::success) return status;
 
         status = cufftDestroy(plan);
@@ -76,8 +76,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecZ2D(plan,
-                              reinterpret_cast<cufftDoubleComplex*>(const_cast<cuDoubleComplex*>(x)),
-                              reinterpret_cast<cufftDoubleReal*>(result));
+                              const_cast<cuDoubleComplex*>(x),
+                              result);
         if (status != status_t::success) return status;
 
         status = cufftDestroy(plan);
@@ -96,8 +96,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecC2C(plan,
-                              reinterpret_cast<cufftComplex*>(const_cast<cuComplex*>(x)),
-                              reinterpret_cast<cufftComplex*>(result),
+                              const_cast<cuComplex*>(x),
+                              result,
                               static_cast<int>(direction));
         if (status != status_t::success) return status;
 
@@ -116,8 +116,8 @@ namespace mgcpp
         if (status != status_t::success) return status;
 
         status = cufftExecZ2Z(plan,
-                              reinterpret_cast<cufftDoubleComplex*>(const_cast<cuDoubleComplex*>(x)),
-                              reinterpret_cast<cufftDoubleComplex*>(result),
+                              const_cast<cuDoubleComplex*>(x),
+                              result,
                               static_cast<int>(direction));
         if (status != status_t::success) return status;
 
