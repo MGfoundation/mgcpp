@@ -356,9 +356,9 @@ namespace mgcpp
              alignment Align,
              size_t DeviceId,
              typename Alloc>
-    typename device_vector<Type, Align, DeviceId, Alloc>::value_type
+    auto
     device_vector<Type, Align, DeviceId, Alloc>::
-    check_value(size_t i) const
+    check_value(size_t i) const -> value_type
     {
         if(i >= _shape)
         { MGCPP_THROW_OUT_OF_RANGE("index out of range."); }
@@ -368,7 +368,7 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer from = (_data + i);
-        value_type to;
+        Type to;
         _allocator.copy_to_host(&to, from, 1);
 
         return to;
@@ -390,7 +390,8 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer to = (_data + i);
-        _allocator.copy_from_host(to, &value, 1);
+        Type from = value;
+        _allocator.copy_from_host(to, &from, 1);
     }
 
 

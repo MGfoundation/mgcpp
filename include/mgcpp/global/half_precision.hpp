@@ -9,7 +9,7 @@
 
 namespace mgcpp
 {
-    enum class half{ };
+    enum class half : uint16_t { };
 }
 
 #endif

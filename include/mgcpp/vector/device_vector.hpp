@@ -45,7 +45,7 @@ namespace mgcpp
         thread_context* _context;
         size_t _shape;
         Alloc _allocator;
-        pointer _data;
+        device_pointer _data;
         size_t _capacity;
 
     public:
