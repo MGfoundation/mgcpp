@@ -1,137 +1,24 @@
 
-#ifndef _MGCPP_GLOBAL_COMPLEX_HPP_
-#define _MGCPP_GLOBAL_COMPLEX_HPP_
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <cmath>
-
-#ifdef __CUDACC__
-#define HOST_AND_DEVICE __host__ __device__
-#else
-#include <ostream>
-#include <type_traits>
-#define HOST_AND_DEVICE
-#endif
+#ifndef _MGCPP_TYPE_COMPLEX_HPP_
+#define _MGCPP_TYPE_COMPLEX_HPP_
 
 namespace mgcpp
 {
-    template<typename T>
-    struct complex {
-        T real, imag;
+    template<typename Type>
+    struct complex;
 
-        // constructors are problematic in nvcc
-#ifndef __CUDACC__
-        complex() : real{}, imag{} {}
-        explicit complex(T x) : real{x}, imag{} {}
-        complex(T real, T imag) : real{real}, imag{imag} {}
-#endif
+    template<>
+    struct complex<float>
+    { };
 
-        HOST_AND_DEVICE
-        complex operator* (T rhs) const {
-            complex r = { real * rhs, imag * rhs };
-            return r;
-        }
-
-        HOST_AND_DEVICE
-        complex& operator* (T rhs) {
-            return *this = *this * rhs;
-        }
-
-        HOST_AND_DEVICE
-        complex operator* (complex rhs) const {
-            complex r = {
-                real * rhs.real - imag * rhs.imag,
-                real * rhs.imag + imag * rhs.real
-            };
-            return r;
-        }
-
-        HOST_AND_DEVICE
-        complex& operator*= (complex rhs) {
-            return *this = *this * rhs;
-        }
-
-        HOST_AND_DEVICE
-        complex operator/ (T rhs) const {
-            complex r = { real / rhs, imag / rhs };
-            return r;
-        }
-
-        HOST_AND_DEVICE
-        complex& operator/= (T rhs) {
-            return *this = *this / rhs;
-        }
-
-        HOST_AND_DEVICE
-        complex operator/ (complex rhs) const {
-            complex r = {
-                real * rhs.real + imag * rhs.imag,
-                imag * rhs.real - real * rhs.imag
-            };
-            return r / (rhs.real * rhs.real + rhs.imag * rhs.imag);
-        }
-
-        HOST_AND_DEVICE
-        complex& operator/= (complex rhs) {
-            return *this = *this / rhs;
-        }
-
-        HOST_AND_DEVICE
-        complex operator+ (complex rhs) const {
-            complex r = {
-                real + rhs.real,
-                imag + rhs.imag
-            };
-            return r;
-        }
-
-        HOST_AND_DEVICE
-        complex& operator+= (complex rhs) {
-            return *this = *this + rhs;
-        }
-
-        HOST_AND_DEVICE
-        complex operator- (complex rhs) const {
-            complex r = {
-                real - rhs.real,
-                imag - rhs.imag
-            };
-            return r;
-        }
-
-        HOST_AND_DEVICE
-        complex& operator-= (complex rhs) {
-            return *this = *this - rhs;
-        }
-    };
-
-#ifndef __CUDACC__
-    static_assert(std::is_standard_layout<complex<float>>::value, "mgcpp::complex<float> is not standard layout");
-    static_assert(std::is_standard_layout<complex<double>>::value, "mgcpp::complex<double> is not standard layout");
-
-    template<typename T>
-    std::ostream& operator<< (std::ostream& os, complex<T> x) {
-        std::ios::fmtflags f(os.flags());
-        os << x.real << std::showpos << x.imag << 'i';
-        os.flags(f);
-        return os;
-    }
-#endif
-
-    template<typename T>
-    HOST_AND_DEVICE
-    mgcpp::complex<T> polar(T r, T theta) {
-        mgcpp::complex<T> x = {r * std::cos(theta), r * std::sin(theta)};
-        return x;
-    }
-}
-
-namespace std
-{
-    template<typename T>
-    HOST_AND_DEVICE
-    T abs(mgcpp::complex<T> x) {
-        return x.real * x.real + x.imag * x.imag;
-    }
+    template<>
+    struct complex<double>
+    { };
 }
 
 #endif

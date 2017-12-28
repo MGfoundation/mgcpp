@@ -64,12 +64,12 @@ namespace mgcpp
              typename RhsDenseVec,
              typename Type,
              size_t DeviceId,
-             allignment Allign>
-    device_vector<Type, Allign, DeviceId, 
+             alignment Align>
+    device_vector<Type, Align, DeviceId, 
                   typename LhsDenseVec::allocator_type>
     strict::
-    add(dense_vector<LhsDenseVec, Type, Allign, DeviceId> const& lhs,
-        dense_vector<RhsDenseVec, Type, Allign, DeviceId> const& rhs)
+    add(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
+        dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDenseVec::allocator_type;
 
@@ -91,7 +91,7 @@ namespace mgcpp
         Type const alpha = 1;
 
         auto result = device_vector<Type,
-                                    Allign,
+                                    Align,
                                     DeviceId,
                                     allocator_type>(lhs_vec);
         auto status = cublas_axpy(handle, size,

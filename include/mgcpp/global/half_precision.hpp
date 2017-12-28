@@ -9,7 +9,7 @@
 
 namespace mgcpp
 {
-    enum half_precision : float;
+    enum class half{ };
 }
 
 #endif

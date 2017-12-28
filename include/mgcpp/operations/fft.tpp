@@ -9,7 +9,7 @@ namespace mgcpp
 {
     template<typename DeviceVec,
             typename Type,
-            allignment Align,
+            alignment Align,
             size_t DeviceId,
             typename Alloc = mgcpp::default_allocator<complex<Type>, DeviceId>>
     inline device_vector<complex<Type>, Align, DeviceId>
@@ -32,7 +32,7 @@ namespace mgcpp
 
     template<typename DeviceVec,
             typename Type,
-            allignment Align,
+            alignment Align,
             size_t DeviceId,
             typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
     inline device_vector<Type, Align, DeviceId>
@@ -65,7 +65,7 @@ namespace mgcpp
 
     template<typename DeviceVec,
              typename Type,
-             allignment Align,
+             alignment Align,
              size_t DeviceId>
     inline device_vector<complex<Type>, Align, DeviceId>
     strict::

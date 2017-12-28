@@ -45,7 +45,11 @@ if(BUILD_CUSTOM_KERNELS)
     endif()
 endif()
 
-set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
+if(WIN32)
+    set(CUDA_NVCC_FLAGS "")
+else()
+    set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
+endif()
 
 
 # project source files
@@ -78,7 +82,7 @@ if(BUILD_CUSTOM_KERNELS)
     set(CUDA_VERBOSE_BUILD ON)
 
     set(CUDA_NVCC_FLAGS
-	${CUDA_NVCC_FLAGS}; "${CUDA_GEN_CODE}")
+	"${CUDA_NVCC_FLAGS}; ${CUDA_GEN_CODE}")
 
     message("build flags = ${CUDA_NVCC_FLAGS}")
 endif()
@@ -88,12 +92,17 @@ mgcpp_display_elements("Source files for ${PROJECT_NAME}"
 
 add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
-if(MSVC)
+if(WIN32 AND MSVC)
     set(BUILD_FLAGS
 	"${CMAKE_CXX_FLAGS} /w3 /Ot /Ox /MP")
 else()
-    set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
+    if(WIN32)
+	set(BUILD_FLAGS
+	    "${CMAKE_CXX_FLAGS} -std=c++14 -g -Wall -Wextra")
+    else()
+	set(BUILD_FLAGS
+	    "${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
+    endif()
 endif()
 message("C++ flags = ${BUILD_FLAGS}")
 
@@ -121,6 +130,9 @@ set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 # mgcpp base
 if(BUILD_CUSTOM_KERNELS)
     target_link_libraries(${PROJECT_NAME}
+	"${PROJECT_NAME}base")
+
+    set(MGCPP_TARGETS ${MGCPP_TARGETS}
 	"${PROJECT_NAME}base")
 endif()
 
@@ -199,13 +211,15 @@ if(BUILD_TESTING)
 	${TEST_DIR}/blaslv1_operation_test.cpp
 	${TEST_DIR}/blaslv3_operation_test.cpp
 	${TEST_DIR}/blaslv3_expression_test.cpp
-	${TEST_DIR}/fft_test.cpp
-	${TEST_DIR}/complex_test.cpp)
+	${TEST_DIR}/fft_test.cpp)
     mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 	"${TEST_SOURCE_FILES}")
 
     # add test target
     add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
+
+    set(MGCPP_TARGETS ${MGCPP_TARGETS}
+	"${PROJECT_NAME}_test")
 
     target_include_directories(${PROJECT_NAME}_test
 	PUBLIC
@@ -227,17 +241,8 @@ if(BUILD_TESTING)
     # ctest
     add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)
 
-    set(MGCPP_TARGETS
-	${MGCPP_TARGETS}
-    "${PROJECT_NAME}_test")
 endif()
 
-
-if(BUILD_CUSTOM_KERNELS)
-    set(MGCPP_TARGETS
-	${MGCPP_TARGETS}
-	"${PROJECT_NAME}base")
-endif()
 
 # install
 install(TARGETS ${MGCPP_TARGETS}

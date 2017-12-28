@@ -21,12 +21,12 @@ namespace mgcpp
         template<typename LhsDenseVec,
                  typename RhsDenseVec,
                  typename Type,
-                 allignment Allign,
+                 alignment Align,
                  size_t DeviceId>
-        inline device_vector<Type, Allign, DeviceId,
+        inline device_vector<Type, Align, DeviceId,
                              typename LhsDenseVec::allocator_type>
-        hdmd(dense_vector<LhsDenseVec, Type, Allign, DeviceId> const& lhs,
-             dense_vector<RhsDenseVec, Type, Allign, DeviceId> const& rhs);
+        hdmd(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
+             dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs);
     }
 }
 

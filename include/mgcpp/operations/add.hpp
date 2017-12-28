@@ -31,11 +31,11 @@ namespace mgcpp
                  typename RhsDenseVec,
                  typename Type,
                  size_t Device,
-                 allignment Allign>
-        inline device_vector<Type, Allign, Device, 
+                 alignment Align>
+        inline device_vector<Type, Align, Device, 
                              typename LhsDenseVec::allocator_type>
-        add(dense_vector<LhsDenseVec, Type, Allign, Device> const& first,
-            dense_vector<RhsDenseVec, Type, Allign, Device> const& second);
+        add(dense_vector<LhsDenseVec, Type, Align, Device> const& first,
+            dense_vector<RhsDenseVec, Type, Align, Device> const& second);
     }
 }
 

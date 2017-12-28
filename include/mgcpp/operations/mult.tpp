@@ -67,13 +67,13 @@ namespace mgcpp
     template<typename DenseVec,
              typename ScalarType,
              typename VectorType,
-             allignment Allign,
+             alignment Align,
              size_t DeviceId>
-    device_vector<VectorType, Allign, DeviceId,
+    device_vector<VectorType, Align, DeviceId,
                   typename DenseVec::allocator_type>
     strict::
     mult(ScalarType scalar,
-         dense_vector<DenseVec, VectorType, Allign, DeviceId> const& vec)
+         dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec)
     {
         using allocator_type = typename DenseVec::allocator_type;
 
@@ -85,7 +85,7 @@ namespace mgcpp
         auto size = original_vec.shape();
 
         auto result = device_vector<VectorType,
-                                    Allign,
+                                    Align,
                                     DeviceId,
                                     allocator_type>(original_vec);
         auto status = cublas_scal(handle, size,
