@@ -6,30 +6,37 @@
 #include <mgcpp/cublas/cufft_fft.hpp>
 #include <mgcpp/operations/fft.hpp>
 #include <mgcpp/operations/mult.hpp>
+#include <mgcpp/type_traits/allocator.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
 namespace mgcpp
 {
     template<typename DeviceVec,
-            typename Type,
+             typename Type,
              alignment Align,
-            size_t DeviceId,
-            typename Alloc>
-    device_vector<complex<Type>, Align, DeviceId, Alloc>
+             size_t DeviceId>
+    decltype(auto)
     strict::
     rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
     {
         using allocator_type = typename DeviceVec::allocator_type;
+        using result_allocator_type =
+            typename change_allocator_type<allocator_type, complex<Type>>::type;
 
         auto const& dev_vec = ~vec;
 
         size_t fft_size = dev_vec.shape();
         size_t output_size = fft_size / 2 + 1;
 
-        auto result = device_vector<complex<Type>, Align, DeviceId, Alloc>(output_size);
+        auto result = device_vector<complex<Type>,
+                                    Align,
+                                    DeviceId,
+                                    result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_rfft(fft_size, dev_vec.data(), result.data_mutable());
+        auto status = mgcpp::cublas_rfft(fft_size,
+                                         dev_vec.data(),
+                                         result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -39,13 +46,14 @@ namespace mgcpp
     template<typename DeviceVec,
              typename Type,
              alignment Align,
-             size_t DeviceId,
-             typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>
+             size_t DeviceId>
+    decltype(auto)
     strict::
     irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, int n)
     {
         using allocator_type = typename DeviceVec::allocator_type;
+        using result_allocator_type =
+            typename change_allocator_type<allocator_type, Type>::type;
 
         auto const& dev_vec = ~vec;
 
@@ -59,9 +67,14 @@ namespace mgcpp
         }
         size_t output_size = fft_size;
 
-        auto result = device_vector<Type, Align, DeviceId, Alloc>(output_size);
+        auto result = device_vector<Type,
+                                    Align,
+                                    DeviceId,
+                                    result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_irfft(fft_size, dev_vec.data(), result.data_mutable());
+        auto status = mgcpp::cublas_irfft(fft_size,
+                                          dev_vec.data(),
+                                          result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -74,20 +87,26 @@ namespace mgcpp
     template<typename DeviceVec,
              typename Type,
              alignment Align,
-             size_t DeviceId,
-             typename Alloc>
-    device_vector<complex<Type>, Align, DeviceId, Alloc>
+             size_t DeviceId>
+    decltype(auto)
     strict::
-    cfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, fft_direction direction)
+    cfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec,
+         fft_direction direction)
     {
         using allocator_type = typename DeviceVec::allocator_type;
+        using result_allocator_type =
+            typename change_allocator_type<allocator_type, complex<Type>>::type;
 
         auto const& dev_vec = ~vec;
 
         size_t fft_size = dev_vec.shape();
         size_t output_size = fft_size;
 
-        auto result = device_vector<complex<Type>, Align, DeviceId, Alloc>(output_size);
+
+        auto result = device_vector<complex<Type>,
+                                    Align,
+                                    DeviceId,
+                                    result_allocator_type>(output_size);
 
         cublas::fft_direction dir;
         if (direction == fft_direction::forward)
@@ -103,7 +122,8 @@ namespace mgcpp
 
         // Normalize the result
         if (direction == fft_direction::inverse)
-            result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size), result);
+            result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size),
+                                         result);
 
         return result;
     }
