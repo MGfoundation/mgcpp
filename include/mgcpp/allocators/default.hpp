@@ -9,33 +9,39 @@
 
 #include <cstdlib>
 #include <memory>
-#include <mgcpp/type_traits/device_pointer_type.hpp>
+#include <mgcpp/type_traits/device_value_type.hpp>
+#include <mgcpp/type_traits/host_value_type.hpp>
 
 namespace mgcpp
 {
-    template<typename T, size_t DeviceId>
-    struct default_allocator : std::allocator<T>
+    template<typename Type, size_t DeviceId>
+    struct default_allocator
     {
-        typedef std::allocator<T> Alloc;
+        using value_type = typename value_type<Type>::type;
+        using pointer = value_type*;
+        using const_pointer = value_type const*;
+        using device_value_type = typename device_value_type<Type>::type;
+        using device_pointer = device_value_type*;
+        using const_device_pointer = device_value_type const*;
+
+        typedef std::allocator<value_type> Alloc;
         typedef std::allocator_traits<Alloc> _alloc_tr;
-        using device_pointer = typename device_pointer<T>::type;
-        using const_device_pointer = typename const_device_pointer<T>::type;
 
         Alloc _alloc;
 
-        inline T* allocate(size_t n);
+        inline pointer allocate(size_t n);
 
-        inline void deallocate(T* p, size_t n);
+        inline void deallocate(pointer p, size_t n);
 
         inline device_pointer device_allocate(size_t n) const;
 
         inline void device_deallocate(device_pointer p, size_t n) const;
 
         inline void
-        copy_from_host(device_pointer device, T const* host, size_t n) const;
+        copy_from_host(device_pointer device, const_pointer host, size_t n) const;
 
         inline void
-        copy_to_host(T* host, const_device_pointer device, size_t n) const;
+        copy_to_host(pointer host, const_device_pointer device, size_t n) const;
     };
 }
 
