@@ -52,7 +52,7 @@ namespace mgcpp
              size_t DeviceId,
              typename Alloc>
     device_matrix<Type, DeviceId, Alloc>::
-    device_matrix(size_t i, size_t j, Type init, Alloc const& alloc)
+    device_matrix(size_t i, size_t j, value_type init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(i, j),
           _allocator(alloc),
@@ -94,7 +94,7 @@ namespace mgcpp
     size_t
     device_matrix<Type, DeviceId, Alloc>::
     determine_ndim(std::initializer_list<
-                       std::initializer_list<Type>> const& list) const noexcept
+                       std::initializer_list<value_type>> const& list) const noexcept
     {
         auto max_elem = std::max(list.begin(),
                                  list.end(),
@@ -113,7 +113,7 @@ namespace mgcpp
              typename Alloc>
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix(std::initializer_list<
-                      std::initializer_list<Type>> const& init_list,
+                      std::initializer_list<value_type>> const& init_list,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(init_list.size(), determine_ndim(init_list)),

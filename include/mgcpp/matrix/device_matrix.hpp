@@ -52,7 +52,7 @@ namespace mgcpp
 
         inline size_t
         determine_ndim(std::initializer_list<
-                       std::initializer_list<Type>> const& list) const noexcept;
+                       std::initializer_list<value_type>> const& list) const noexcept;
 
     public:
         inline device_matrix() noexcept;
@@ -68,7 +68,7 @@ namespace mgcpp
                       Alloc const& alloc = Alloc());
 
         inline
-        device_matrix(size_t i, size_t j, Type init,
+        device_matrix(size_t i, size_t j, value_type init,
                       Alloc const& alloc = Alloc());
         
         inline
@@ -77,7 +77,7 @@ namespace mgcpp
 
         inline
         device_matrix(std::initializer_list<
-                      std::initializer_list<Type>> const& array,
+                      std::initializer_list<value_type>> const& array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostMat,
