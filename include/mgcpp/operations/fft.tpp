@@ -11,7 +11,7 @@ namespace mgcpp
             typename Type,
             alignment Align,
             size_t DeviceId,
-            typename Alloc = mgcpp::default_allocator<complex<Type>, DeviceId>>
+            typename Alloc>
     inline device_vector<complex<Type>, Align, DeviceId>
     strict::
     rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
@@ -34,7 +34,7 @@ namespace mgcpp
             typename Type,
             alignment Align,
             size_t DeviceId,
-            typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
+            typename Alloc>
     inline device_vector<Type, Align, DeviceId>
     strict::
     irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, int n)
