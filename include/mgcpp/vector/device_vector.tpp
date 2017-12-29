@@ -344,7 +344,7 @@ namespace mgcpp
              typename Alloc>
     void
     device_vector<Type, Align, DeviceId, Alloc>::
-    copy_to_host(Type* host_p) const
+    copy_to_host(pointer host_p) const
     {
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
@@ -368,7 +368,7 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer from = (_data + i);
-        Type to;
+        value_type to;
         _allocator.copy_to_host(&to, from, 1);
 
         return to;
@@ -390,7 +390,7 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer to = (_data + i);
-        Type from = value;
+        value_type from = value;
         _allocator.copy_from_host(to, &from, 1);
     }
 

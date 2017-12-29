@@ -12,7 +12,7 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
-#include <mgcpp/type_traits/device_pointer_type.hpp>
+#include <mgcpp/type_traits/device_value_type.hpp>
 #include <mgcpp/type_traits/host_value_type.hpp>
 
 #include <cstdlib>
@@ -33,10 +33,11 @@ namespace mgcpp
     public:
         using this_type = device_vector<Type, Align, DeviceId, Alloc>;
         using value_type = typename value_type<Type>::type;
-        using pointer = Type*;
-        using const_pointer = Type const*;
-        using device_pointer = typename device_pointer<Type>::type;
-        using const_device_pointer = typename const_device_pointer<Type>::type;
+        using pointer = value_type*;
+        using const_pointer = value_type const*;
+        using device_value_type = typename device_value_type<Type>::type;
+        using device_pointer = device_value_type*;
+        using const_device_pointer = device_value_type const*;
         using result_type = this_type;
         using allocator_type = Alloc;
         size_t const device_id = DeviceId;
