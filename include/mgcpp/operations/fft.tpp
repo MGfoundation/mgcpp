@@ -12,11 +12,19 @@
 namespace mgcpp
 {
     template<typename DeviceVec,
+<<<<<<< HEAD
              typename Type,
              alignment Align,
              size_t DeviceId,
              typename Alloc>
     device_vector<complex<Type>, Align, DeviceId, Alloc>
+=======
+            typename Type,
+            alignment Align,
+            size_t DeviceId,
+            typename Alloc>
+    inline device_vector<complex<Type>, Align, DeviceId>
+>>>>>>> e8549c1f199e3098e00f5bdd35fae4b497d9fa97
     strict::
     rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
     {
@@ -40,11 +48,19 @@ namespace mgcpp
     }
 
     template<typename DeviceVec,
+<<<<<<< HEAD
              typename Type,
              alignment Align,
              size_t DeviceId,
              typename Alloc>
     device_vector<Type, Align, DeviceId, Alloc>
+=======
+            typename Type,
+            alignment Align,
+            size_t DeviceId,
+            typename Alloc>
+    inline device_vector<Type, Align, DeviceId>
+>>>>>>> e8549c1f199e3098e00f5bdd35fae4b497d9fa97
     strict::
     irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, int n)
     {
