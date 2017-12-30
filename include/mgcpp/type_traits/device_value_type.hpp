@@ -10,6 +10,7 @@
 #include <mgcpp/global/complex.hpp>
 #include <mgcpp/global/half_precision.hpp>
 #include <cuComplex.h>
+#include <cuda_fp16.h>
 
 #include <complex>
 
@@ -27,10 +28,9 @@ namespace mgcpp
     struct device_value_type<complex<double>>
     { using type = cuDoubleComplex; };
 
-    /*
-      template<>
-      struct device_value_type<half>
-      { using type = float; }; */
+    template<>
+    struct device_value_type<half>
+    { using type = __half; };
 }
 
 #endif
