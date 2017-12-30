@@ -17,17 +17,7 @@ namespace mgcpp
     template<>
     struct complex<float>
     {
-        complex() = default;
-
-        complex(std::complex<float> x)
-            : real(x.real()), imag(x.imag())
-        {}
-
-        operator std::complex<float>() const
-        {
-            return {real, imag};
-        }
-
+        ~complex() = delete;
     private:
         float real, imag;
     };
@@ -35,17 +25,7 @@ namespace mgcpp
     template<>
     struct complex<double>
     {
-        complex() = default;
-
-        complex(std::complex<double> x)
-            : real(x.real()), imag(x.imag())
-        {}
-
-        operator std::complex<double>() const
-        {
-            return {real, imag};
-        }
-
+        ~complex() = delete;
     private:
         double real, imag;
     };

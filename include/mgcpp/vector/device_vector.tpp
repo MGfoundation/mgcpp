@@ -67,7 +67,8 @@ namespace mgcpp
         pointer buffer = _allocator.allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
-        auto status = mgblas_fill(_data, init, _shape);
+        auto dinit = mgcpp_cast<device_pointer>(&init);
+        auto status = mgblas_fill(_data, *dinit, _shape);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }
@@ -106,18 +107,16 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        pointer buffer = _allocator.allocate(_shape);
-        std::copy(array.begin(), array.end(), buffer);
-
         try
         {
-            _allocator.copy_from_host(_data, buffer, _shape);
-            _allocator.deallocate(buffer, _shape);
+            // std::initializer_list's members are guaranteed to be
+            // contiguous in memory: from C++11 § [support.initlist] 18.9/1
+            _allocator.copy_from_host(_data, array.begin(), _shape);
         }
         catch(std::system_error const& err)
         {
-            _allocator.deallocate(buffer, _shape);
-            MGCPP_THROW(err);
+            _allocator.device_deallocate(_data, _capacity);
+            MGCPP_THROW_SYSTEM_ERROR(err);
         }
     }
 

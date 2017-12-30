@@ -9,6 +9,7 @@
 
 #include <mgcpp/kernels/kernel_status.hpp>
 
+#include <cuComplex.h>
 //#include <cuda_fp16.h>
 
 namespace mgcpp
@@ -18,6 +19,12 @@ namespace mgcpp
 
     kernel_status_t
     mgblas_Dfill(double* arr, double value, size_t n);
+
+    kernel_status_t
+    mgblas_Cfill(cuComplex* arr, cuComplex value, size_t n);
+
+    kernel_status_t
+    mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n);
 
     // kernel_status_t
     // mgblas_Hfill(__half* arr, __half value, size_t n);

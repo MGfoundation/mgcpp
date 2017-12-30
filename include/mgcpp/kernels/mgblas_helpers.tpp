@@ -32,4 +32,28 @@ namespace mgcpp
             return outcome::success();
 
     }
+
+    inline outcome::result<void>
+    mgblas_fill(cuComplex* arr, cuComplex value, size_t n)
+    {
+        std::error_code status = mgblas_Cfill(arr, value, n);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+
+    }
+
+    inline outcome::result<void>
+    mgblas_fill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n)
+    {
+        std::error_code status = mgblas_Zfill(arr, value, n);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+
+    }
 }

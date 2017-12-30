@@ -41,6 +41,36 @@ namespace mgcpp
 	arr[id] = shared[threadIdx.x];
     }
 
+    __global__  void
+    mgblas_Cfill_impl(cuComplex* arr, cuComplex value, size_t n)
+    {
+        int const id = blockIdx.x * blockDim.x + threadIdx.x;
+        __shared__ cuComplex shared[64];
+
+        if(id >= n)
+        return;
+
+        shared[threadIdx.x] = value;
+        __syncthreads();
+
+        arr[id] = shared[threadIdx.x];
+    }
+
+    __global__  void
+    mgblas_Zfill_impl(cuDoubleComplex* arr, cuDoubleComplex value, size_t n)
+    {
+        int const id = blockIdx.x * blockDim.x + threadIdx.x;
+        __shared__ cuDoubleComplex shared[64];
+
+        if(id >= n)
+        return;
+
+        shared[threadIdx.x] = value;
+        __syncthreads();
+
+        arr[id] = shared[threadIdx.x];
+    }
+
     // __global__  void
     // mgblas_Hfill_impl(__half* arr, __half value, size_t n)
     // {
@@ -72,6 +102,26 @@ namespace mgcpp
 	mgblas_Dfill_impl<<<BLK, grid_size>>>(arr, value, n);
 
 	return success;
+    }
+
+    kernel_status_t
+    mgblas_Cfill(cuComplex* arr, cuComplex value, size_t n)
+    {
+        int grid_size = static_cast<int>(
+            ceil(static_cast<float>(n)/ BLK ));
+        mgblas_Cfill_impl<<<BLK, grid_size>>>(arr, value, n);
+
+        return success;
+    }
+
+    kernel_status_t
+    mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n)
+    {
+        int grid_size = static_cast<int>(
+            ceil(static_cast<float>(n)/ BLK ));
+        mgblas_Zfill_impl<<<BLK, grid_size>>>(arr, value, n);
+
+        return success;
     }
 
     // kernel_status_t

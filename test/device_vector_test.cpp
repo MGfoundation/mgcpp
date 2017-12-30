@@ -117,8 +117,82 @@ TEST(device_vector, initializing_constructor)
 
     EXPECT_EQ(vec.shape(), size);
     EXPECT_NE(vec.data(), nullptr);
-    EXPECT_EQ(vec.context(), 
+    EXPECT_EQ(vec.context(),
               mgcpp::device_vector<float>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), init_val);
+            }
+        }while(false)
+        );
+}
+
+TEST(device_vector, initializing_constructor_complex)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    std::complex<float> init_val = {7, 1};
+    mgcpp::device_vector<mgcpp::complex<float>> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::complex<float>>(size, init_val));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::complex<float>>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), init_val);
+            }
+        }while(false)
+        );
+}
+
+TEST(device_vector, initializing_constructor_double_complex)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    std::complex<double> init_val = {7, 1};
+    mgcpp::device_vector<mgcpp::complex<double>> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::complex<double>>(size, init_val));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::complex<double>>().context());
 
     EXPECT_NO_THROW(
         do
@@ -163,6 +237,52 @@ TEST(device_vector, constructon_from_host_data)
     EXPECT_EQ(vec.shape(), size);
     EXPECT_EQ(vec.context(), 
               mgcpp::device_vector<float>().context());
+
+    counter = 0;
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), host[i]);
+                ++counter;
+            }
+        }while(false));
+    free(host);
+}
+
+TEST(device_vector, constructon_from_host_data_complex)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    std::complex<float>* host = (std::complex<float>*)malloc(sizeof(std::complex<float>) * size);
+
+    float counter = 0;
+    for(size_t i = 0; i < size; ++i)
+    {
+        host[i] = counter;
+        ++counter;
+    }
+
+    mgcpp::device_vector<std::complex<float>> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<std::complex<float>>(size, host));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<std::complex<float>>().context());
 
     counter = 0;
     EXPECT_NO_THROW(
