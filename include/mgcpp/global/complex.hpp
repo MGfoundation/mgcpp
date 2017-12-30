@@ -18,16 +18,12 @@ namespace mgcpp
     struct complex<float>
     {
         ~complex() = delete;
-    private:
-        float real, imag;
     };
 
     template<>
     struct complex<double>
     {
         ~complex() = delete;
-    private:
-        double real, imag;
     };
 }
 
