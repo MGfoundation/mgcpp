@@ -13,64 +13,41 @@
 
 namespace mgcpp
 {
-    template<typename OutputType, typename InputType>
-    OutputType
-    mgcpp_cast(InputType data)
-    { return data; }
-
-    template<>
-    inline std::complex<float>*
-    mgcpp_cast<>(cuComplex* data)
+    template<typename InputType, typename OutputType>
+    inline void
+    mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first)
     {
-        return reinterpret_cast<std::complex<float>*>(data);
+        if (first == d_first)
+            return;
+
+        std::copy(first, last, d_first);
     }
 
     template<>
-    inline std::complex<double>*
-    mgcpp_cast<>(cuDoubleComplex* data)
+    inline void
+    mgcpp_cast(std::complex<float> const* first, std::complex<float> const* last, cuComplex* d_first)
     {
-        return reinterpret_cast<std::complex<double>*>(data);
+        std::copy(first, last, reinterpret_cast<std::complex<float>*>(d_first));
     }
 
     template<>
-    inline std::complex<float> const*
-    mgcpp_cast<>(cuComplex const* data)
+    inline void
+    mgcpp_cast(cuComplex const* first, cuComplex const* last, std::complex<float>* d_first)
     {
-        return reinterpret_cast<std::complex<float> const*>(data);
+        std::copy(first, last, reinterpret_cast<cuComplex*>(d_first));
     }
 
     template<>
-    inline std::complex<double> const*
-    mgcpp_cast<>(cuDoubleComplex const* data)
+    inline void
+    mgcpp_cast(std::complex<double> const* first, std::complex<double> const* last, cuDoubleComplex* d_first)
     {
-        return reinterpret_cast<std::complex<double> const*>(data);
+        std::copy(first, last, reinterpret_cast<std::complex<double>*>(d_first));
     }
 
     template<>
-    inline cuComplex*
-    mgcpp_cast<>(std::complex<float>* data)
+    inline void
+    mgcpp_cast(cuDoubleComplex const* first, cuDoubleComplex const* last, std::complex<double>* d_first)
     {
-        return reinterpret_cast<cuComplex*>(data);
-    }
-
-    template<>
-    inline cuDoubleComplex*
-    mgcpp_cast<>(std::complex<double>* data)
-    {
-        return reinterpret_cast<cuDoubleComplex*>(data);
-    }
-
-    template<>
-    inline cuComplex const*
-    mgcpp_cast<>(std::complex<float> const* data)
-    {
-        return reinterpret_cast<cuComplex const*>(data);
-    }
-
-    template<>
-    inline cuDoubleComplex const*
-    mgcpp_cast<>(std::complex<double> const* data)
-    {
-        return reinterpret_cast<cuDoubleComplex const*>(data);
+        std::copy(first, last, reinterpret_cast<cuDoubleComplex*>(d_first));
     }
 }

@@ -67,8 +67,9 @@ namespace mgcpp
         pointer buffer = _allocator.allocate(_shape);
         std::fill(buffer, buffer + _shape, init);
 
-        auto dinit = mgcpp_cast<device_pointer>(&init);
-        auto status = mgblas_fill(_data, *dinit, _shape);
+        device_value_type dinit;
+        mgcpp_cast(&init, &init + 1, &dinit);
+        auto status = mgblas_fill(_data, dinit, _shape);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }

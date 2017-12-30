@@ -9,9 +9,9 @@
 
 namespace mgcpp
 {
-    template<typename OutputType, typename InputType>
-    inline OutputType
-    mgcpp_cast(InputType data);
+    template<typename InputType, typename OutputType>
+    inline void
+    mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first);
 }
 
 #include <mgcpp/system/type_cast.tpp>

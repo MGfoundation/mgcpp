@@ -230,7 +230,7 @@ TEST(device_vector, initializing_constructor_double_complex)
         }while(false)
         );
 }
-
+/*
 TEST(device_vector, initializing_constructor_half)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -266,7 +266,7 @@ TEST(device_vector, initializing_constructor_half)
             }
         }while(false)
         );
-}
+}*/
 
 TEST(device_vector, constructon_from_host_data)
 {
