@@ -24,6 +24,9 @@ namespace mgcpp
         using device_pointer = device_value_type*;
         using const_device_pointer = device_value_type const*;
 
+        template<typename NewType>
+        using rebind_alloc = default_allocator<NewType, DeviceId>;
+
         typedef std::allocator<value_type> Alloc;
         typedef std::allocator_traits<Alloc> _alloc_tr;
 
@@ -35,7 +38,8 @@ namespace mgcpp
 
         inline device_pointer device_allocate(size_t n) const;
 
-        inline void device_deallocate(device_pointer p, size_t n) const;
+        inline void
+        device_deallocate(device_pointer p, size_t n) const;
 
         inline void
         copy_from_host(device_pointer device, const_pointer host, size_t n) const;
