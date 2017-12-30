@@ -16,12 +16,13 @@ namespace mgcpp
              typename RhsDenseMat,
              typename Type,
              size_t DeviceId>
-    device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+    decltype(auto)
     strict::
     add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
         dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDenseMat::allocator_type;
+        using value_type = typename LhsDenseMat::value_type;
         
         auto const& lhs_mat = ~lhs;
         auto const& rhs_mat = ~rhs;
@@ -41,8 +42,8 @@ namespace mgcpp
         size_t m = shape.first;
         size_t n = shape.second;
 
-        Type const alpha = 1;
-        Type const beta = 1;
+        value_type const alpha = 1;
+        value_type const beta = 1;
 
         auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
         auto status = cublas_geam(handle,
@@ -65,13 +66,13 @@ namespace mgcpp
              typename Type,
              size_t DeviceId,
              alignment Align>
-    device_vector<Type, Align, DeviceId, 
-                  typename LhsDenseVec::allocator_type>
+    decltype(auto)
     strict::
     add(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
         dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDenseVec::allocator_type;
+        using value_type = typename LhsDenseVec::value_type;
 
         auto const& lhs_vec = ~lhs;
         auto const& rhs_vec = ~rhs;
@@ -88,7 +89,7 @@ namespace mgcpp
 
         auto size = lhs_vec.shape();
 
-        Type const alpha = 1;
+        value_type const alpha = 1;
 
         auto result = device_vector<Type,
                                     Align,

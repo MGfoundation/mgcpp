@@ -23,8 +23,7 @@ namespace mgcpp
                  typename Type,
                  alignment Align,
                  size_t DeviceId>
-        inline device_vector<Type, Align, DeviceId, 
-                             typename LhsDenseVec::allocator_type>
+        inline decltype(auto)
         sub(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
             dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs);
 
@@ -32,7 +31,7 @@ namespace mgcpp
                  typename RhsDenseMat,
                  typename Type,
                  size_t DeviceId>
-        inline device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+        inline decltype(auto)
         sub(dense_matrix<LhsDenseMat, Type, DeviceId> const& rhs,
             dense_matrix<RhsDenseMat, Type, DeviceId> const& lhs);
     }

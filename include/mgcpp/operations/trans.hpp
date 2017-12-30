@@ -16,7 +16,7 @@ namespace mgcpp
         template<typename T,
                  size_t Device,
                  storage_order SO>
-        device_matrix<T, Device, SO>
+        decltype(auto)
         trans(device_matrix<T, Device, SO> const& mat);
     }
 }

@@ -17,7 +17,7 @@ namespace mgcpp
              typename RhsDenseMat,
              typename Type,
              size_t DeviceId>
-    device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+    decltype(auto)
     strict::
     mult(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
          dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs)
@@ -69,8 +69,7 @@ namespace mgcpp
              typename VectorType,
              alignment Align,
              size_t DeviceId>
-    device_vector<VectorType, Align, DeviceId,
-                  typename DenseVec::allocator_type>
+    decltype(auto)
     strict::
     mult(ScalarType scalar,
          dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec)

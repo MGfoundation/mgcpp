@@ -16,7 +16,7 @@ namespace mgcpp
              typename Type,
              alignment Align,
              size_t DeviceId>
-    device_vector<Type, Align, DeviceId, typename DenseVec::allocator_type>
+    decltype(auto)
     strict::
     abs(dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
     {
@@ -44,7 +44,7 @@ namespace mgcpp
     template<typename DenseMat,
              typename Type,
              size_t DeviceId>
-    device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
+    decltype(auto)
     strict::
     abs(dense_matrix<DenseMat, Type, DeviceId> const& mat)
     {

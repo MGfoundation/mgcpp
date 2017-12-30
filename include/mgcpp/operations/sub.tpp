@@ -15,13 +15,13 @@ namespace mgcpp
              typename Type,
              alignment Align,
              size_t DeviceId>
-    device_vector<Type, Align, DeviceId, 
-                  typename LhsDeviceVec::allocator_type>
+    decltype(auto)
     strict::
     sub(dense_vector<LhsDeviceVec, Type, Align, DeviceId> const& lhs,
         dense_vector<RhsDeviceVec, Type, Align, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDeviceVec::allocator_type;
+        using value_type = typename LhsDeviceVec::value_type;
 
         auto const& lhs_vec = ~lhs;
         auto const& rhs_vec = ~rhs;
@@ -34,7 +34,7 @@ namespace mgcpp
 
         auto size = lhs_vec.shape();
 
-        Type const alpha = -1;
+        value_type const alpha = -1;
 
         auto result = device_vector<Type,
                                     Align,
@@ -54,12 +54,13 @@ namespace mgcpp
              typename RhsDenseMat,
              typename Type,
              size_t DeviceId>
-    device_matrix<Type, DeviceId, typename LhsDenseMat::allocator_type>
+    decltype(auto)
     strict::
     sub(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
         dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDenseMat::allocator_type;
+        using value_type = typename LhsDenseMat::value_type;
 
         auto const& lhs_mat = ~lhs;
         auto const& rhs_mat = ~rhs;
@@ -79,8 +80,8 @@ namespace mgcpp
         size_t m = shape.first;
         size_t n = shape.second;
 
-        Type const alpha = 1;
-        Type const beta = -1;
+        value_type const alpha = 1;
+        value_type const beta = -1;
 
         auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
 
