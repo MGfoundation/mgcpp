@@ -9,7 +9,9 @@
 
 namespace mgcpp
 {
-    enum class half : uint16_t { };
+    struct half {
+        ~half() = delete;
+    };
 }
 
 #endif
