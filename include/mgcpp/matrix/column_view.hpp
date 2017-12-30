@@ -9,7 +9,6 @@
 
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/matrix/dense_matrix.hpp>
-#include <mgcpp/type_traits/get_member_trait.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 
 #include <cstdlib>
@@ -30,7 +29,7 @@ namespace mgcpp
         using this_type = column_view<DenseMat, Type, DeviceId>;
         using value_type = Type;
         using result_type = this_type;
-        using allocator_type = typename get_allocator<DenseMat>::type;
+        using allocator_type = typename DenseMat::allocator_type;
 
     private:
         DenseMat* _matrix;
