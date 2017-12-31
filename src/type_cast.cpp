@@ -9,7 +9,7 @@
 #include <cstring>
 
 #ifdef __GNUC__
-#define F16C_TARGET __attribute__((target("sse4.2,f16c")))
+#define F16C_TARGET __attribute__((target("f16c")))
 #else
 #define F16C_TARGET
 #endif

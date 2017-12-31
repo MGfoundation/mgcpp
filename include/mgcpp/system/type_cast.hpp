@@ -10,7 +10,7 @@
 namespace mgcpp
 {
     template<typename InputType, typename OutputType>
-    inline void
+    inline OutputType*
     mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first);
 }
 

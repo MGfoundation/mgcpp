@@ -11,62 +11,67 @@
 #include <mgcpp/system/type_cast.hpp>
 
 #include <complex>
-#include <cstring>
 
 namespace mgcpp
 {
     template<typename InputType, typename OutputType>
-    inline void
+    inline OutputType*
     mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first)
     {
         if (first == d_first)
-            return;
+            return d_first + (last - first);
 
-        std::copy(first, last, d_first);
+        return std::copy(first, last, d_first);
     }
 
     template<>
-    inline void
+    inline cuComplex*
     mgcpp_cast(std::complex<float> const* first, std::complex<float> const* last, cuComplex* d_first)
     {
-        std::memcpy(d_first, first, (last - first) * sizeof(cuComplex));
+        return std::copy(reinterpret_cast<cuComplex const*>(first),
+                         reinterpret_cast<cuComplex const*>(last), d_first);
     }
 
     template<>
-    inline void
+    inline std::complex<float>*
     mgcpp_cast(cuComplex const* first, cuComplex const* last, std::complex<float>* d_first)
     {
-        std::memcpy(d_first, first, (last - first) * sizeof(cuComplex));
+        return reinterpret_cast<std::complex<float>*>(
+            std::copy(first, last, reinterpret_cast<cuComplex*>(d_first)));
     }
 
     template<>
-    inline void
+    inline cuDoubleComplex*
     mgcpp_cast(std::complex<double> const* first, std::complex<double> const* last, cuDoubleComplex* d_first)
     {
-        std::memcpy(d_first, first, (last - first) * sizeof(cuDoubleComplex));
+        return std::copy(reinterpret_cast<cuDoubleComplex const*>(first),
+                         reinterpret_cast<cuDoubleComplex const*>(last), d_first);
     }
 
     template<>
-    inline void
+    inline std::complex<double>*
     mgcpp_cast(cuDoubleComplex const* first, cuDoubleComplex const* last, std::complex<double>* d_first)
     {
-        std::memcpy(d_first, first, (last - first) * sizeof(cuDoubleComplex));
+        return reinterpret_cast<std::complex<double>*>(
+            std::copy(first, last, reinterpret_cast<cuDoubleComplex*>(d_first)));
     }
 
     void half_to_float_impl(__half const* first, __half const* last, float* d_first);
     void float_to_half_impl(float const* first, float const* last, __half* d_first);
 
     template<>
-    inline void
+    inline float*
     mgcpp_cast(__half const* first, __half const* last, float* d_first)
     {
         half_to_float_impl(first, last, d_first);
+        return d_first + (last - first);
     }
 
     template<>
-    inline void
+    inline __half*
     mgcpp_cast(float const* first, float const* last, __half* d_first)
     {
         float_to_half_impl(first, last, d_first);
+        return d_first + (last - first);
     }
 }
