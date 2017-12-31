@@ -35,6 +35,22 @@ void fft(carray &a, bool inv)
         a /= std::complex<double>(n);
     }
 }
+
+using cmat = std::valarray<carray>;
+void fft(cmat &c, int dir) {
+  int nx = c.size(), ny = c[0].size();
+  carray R(nx);
+  for (int j = 0; j < ny; j++) {
+    for (int i = 0; i < nx; i++)
+      R[i] = c[i][j];
+    fft(R, dir);
+    for (int i = 0; i < nx; i++)
+      c[i][j] = R[i];
+  }
+  for (int i = 0; i < nx; i++)
+    fft(c[i], dir);
+}
+
 std::default_random_engine rng;
 std::uniform_real_distribution<double> dist(0.0, 1.0);
 
@@ -59,6 +75,35 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
             EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
                 << "size = " << size << ", i = " << i;
             EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+                << "size = " << size << ", i = " << i;
+        }
+    }
+}
+
+TEST(fft_operation, float_real_to_complex_fwd_fft2)
+{
+    size_t size = 32;
+    mgcpp::device_matrix<float> mat(size, size);
+    for (auto i = 0u; i < size; ++i)
+        for (auto j = 0u; j < size; ++j)
+            mat.set_value(i, j, dist(rng));
+
+    cmat expected(carray(size), size);
+    for (auto i = 0u; i < mat.shape().first; ++i)
+        for (auto j = 0u; j < mat.shape().second; ++j)
+            expected[i][j] = {mat.check_value(i, j), 0};
+    fft(expected, false);
+
+    mgcpp::device_matrix<mgcpp::complex<float>> result;
+    EXPECT_NO_THROW({ result = mgcpp::strict::rfft(mat); });
+
+    EXPECT_EQ(result.shape().first, size / 2 + 1);
+    EXPECT_EQ(result.shape().second, size / 2 + 1);
+    for (auto i = 0u; i < result.shape().first; ++i) {
+        for (auto j = 0u; j < result.shape().second; ++j) {
+            EXPECT_NEAR(result.check_value(i, j).real(), expected[i][j].real(), 1e-4)
+                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i, j).imag(), expected[i][j].imag(), 1e-4)
                 << "size = " << size << ", i = " << i;
         }
     }

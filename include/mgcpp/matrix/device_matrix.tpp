@@ -445,7 +445,7 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer from = (_data + (i + _shape.first * j));
-        Type to;
+        value_type to;
         _allocator.copy_to_host(&to, from, 1);
 
         return to;

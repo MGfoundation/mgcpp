@@ -48,9 +48,24 @@ namespace mgcpp
      *      an array of n interleaved complex values.
      */
     inline outcome::result<void>
-    cublas_cfft(size_t n, cuComplex const* x, cuComplex* result, cublas::fft_direction direction);
+    cublas_cfft(size_t n, size_t m, cuComplex const* x, cuComplex* result, cublas::fft_direction direction);
     inline outcome::result<void>
-    cublas_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
+    cublas_cfft(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
+
+    inline outcome::result<void>
+    cublas_rfft2(size_t n, size_t m, float const* x, cuComplex* result);
+    inline outcome::result<void>
+    cublas_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result);
+
+    inline outcome::result<void>
+    cublas_irfft2(size_t n, size_t m, cuComplex const* x, float* result);
+    inline outcome::result<void>
+    cublas_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result);
+
+    inline outcome::result<void>
+    cublas_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cublas::fft_direction direction);
+    inline outcome::result<void>
+    cublas_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
 }
 
 #include <mgcpp/cublas/cufft_fft.tpp>

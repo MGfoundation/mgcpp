@@ -135,5 +135,25 @@ namespace mgcpp
     strict::
     rfft(dense_matrix<DeviceMat, Type, DeviceId> const& mat)
     {
+        using allocator_type = typename DeviceMat::allocator_type;
+        using result_allocator_type =
+            typename change_allocator_type<allocator_type, complex<Type>>::type;
+
+        auto const& dev_mat = ~mat;
+
+        auto fft_size = dev_mat.shape();
+        auto output_size = std::make_pair(fft_size.first / 2 + 1, fft_size.second / 2 + 1);
+
+        auto result = device_matrix<complex<Type>,
+                                    DeviceId,
+                                    result_allocator_type>(output_size.first, output_size.second);
+
+        auto status = mgcpp::cublas_rfft2(fft_size.first, fft_size.second,
+                                         dev_mat.data(),
+                                         result.data_mutable());
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
     }
 }

@@ -125,4 +125,23 @@ namespace mgcpp
         if (status != status_t::success) return status;
         return outcome::success();
     }
+
+    inline outcome::result<void>
+    cublas_rfft2(size_t n, size_t m, float const* x, cuComplex* result)
+    {
+        std::error_code status;
+        cufftHandle plan;
+
+        status = cufftPlan2d(&plan, n, m, CUFFT_R2C);
+        if (status != status_t::success) return status;
+
+        status = cufftExecR2C(plan,
+                              const_cast<float*>(x),
+                              result);
+        if (status != status_t::success) return status;
+
+        status = cufftDestroy(plan);
+        if (status != status_t::success) return status;
+        return outcome::success();
+    }
 }
