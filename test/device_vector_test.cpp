@@ -94,6 +94,32 @@ TEST(device_vector, size_constructor)
               mgcpp::device_vector<float>().context());
 }
 
+TEST(device_vector, size_constructor_half)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    mgcpp::device_vector<mgcpp::half, mgcpp::alignment::row> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::half>(size));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::half>().context());
+}
+
 TEST(device_vector, initializing_constructor)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -193,6 +219,43 @@ TEST(device_vector, initializing_constructor_double_complex)
     EXPECT_NE(vec.data(), nullptr);
     EXPECT_EQ(vec.context(),
               mgcpp::device_vector<mgcpp::complex<double>>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), init_val);
+            }
+        }while(false)
+        );
+}
+
+TEST(device_vector, initializing_constructor_half)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 128;
+    float init_val = 7;
+    mgcpp::device_vector<mgcpp::half> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::half>(size, init_val));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_NE(vec.data(), nullptr);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::half>().context());
 
     EXPECT_NO_THROW(
         do

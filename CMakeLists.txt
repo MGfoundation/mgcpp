@@ -70,7 +70,8 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/error_code.cpp
     ${SOURCE_DIR}/mgcpp_kernel_error.cpp
-    ${SOURCE_DIR}/thread_context.cpp)
+    ${SOURCE_DIR}/thread_context.cpp
+    ${SOURCE_DIR}/type_cast.cpp)
 
 if(BUILD_CUSTOM_KERNELS)
     mgcpp_display_elements("Source files for ${PROJECT_NAME}base"

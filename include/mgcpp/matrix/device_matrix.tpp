@@ -61,9 +61,10 @@ namespace mgcpp
     {
         size_t total_size = _shape.first * _shape.second;
 
-        auto dinit = mgcpp_cast<device_pointer>(&init);
+        device_value_type dinit;
+        mgcpp_cast(&init, &init + 1, &dinit);
         auto status = mgblas_fill(_data,
-                                  *dinit,
+                                  dinit,
                                   total_size);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
