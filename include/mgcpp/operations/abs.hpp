@@ -22,14 +22,13 @@ namespace mgcpp
                  typename Type,
                  alignment Align,
                  size_t DeviceId>
-        inline device_vector<Type, Align, DeviceId, 
-                             typename DenseVec::allocator_type>
+        inline decltype(auto)
         abs(dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename Type,
                  size_t DeviceId>
-        inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
+        inline decltype(auto)
         abs(dense_matrix<DenseMat, Type, DeviceId> const& mat);
     }
 }

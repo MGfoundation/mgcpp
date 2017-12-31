@@ -17,10 +17,12 @@ namespace mgcpp
              typename Type,
              alignment Align,
              size_t DeviceId>
-    Type
+    decltype(auto)
     strict::
     sum(dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
     {
+        using value_type = typename DenseVec::value_type; 
+
         auto const& original_vec = ~vec;
 
         auto set_device_status = cuda_set_device(DeviceId);
@@ -29,7 +31,7 @@ namespace mgcpp
 
         size_t size = original_vec.shape();
 
-        Type result;
+        value_type result;
             
         auto status = mgblas_vpr(original_vec.data(), &result, size);
         if(!status)
@@ -41,10 +43,12 @@ namespace mgcpp
     template<typename DenseMat,
              typename Type,
              size_t DeviceId>
-    inline Type
+    decltype(auto)
     strict::
     sum(dense_matrix<DenseMat, Type, DeviceId> const& mat)
     {
+        using value_type = typename DenseMat::value_type; 
+
         auto const& original_mat = ~mat;
 
         auto set_device_status = cuda_set_device(DeviceId);
@@ -53,7 +57,7 @@ namespace mgcpp
 
         auto shape = original_mat.shape();
 
-        Type result;
+        value_type result;
         auto status = mgblas_vpr(original_mat.data(),
                                  &result,
                                  shape.first * shape.second);

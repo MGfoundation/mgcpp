@@ -7,19 +7,23 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
 
-#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/system/concept.hpp>
-#include <mgcpp/type_traits/device_matrix.hpp>
+#include <mgcpp/system/concept.hpp>
+
+#include <cstdlib>
+#include <utility>
 
 namespace mgcpp
 {
     template<typename T>
     struct mat_expr {};
 
-    template<typename Matrix,
-             MGCPP_CONCEPT(is_device_matrix<Matrix>::value)>
-    inline Matrix
-    eval(Matrix&& device_mat);
+    template<typename DenseMatrix,
+             typename Type,
+             size_t DeviceId>
+    inline decltype(auto)
+    eval(dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
 }
 
 #include <mgcpp/expressions/mat_expr.tpp>
