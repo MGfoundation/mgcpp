@@ -22,13 +22,13 @@ namespace mgcpp
                  typename Type,
                  alignment Align,
                  size_t DeviceId>
-        inline Type
+        inline decltype(auto)
         sum(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename Type,
                  size_t DeviceId>
-        inline Type
+        inline decltype(auto)
         sum(dense_matrix<DenseMat, Type, DeviceId> const& mat);
     }
 }

@@ -16,8 +16,7 @@ namespace mgcpp
              typename Type,
              alignment Align,
              size_t DeviceId>
-    device_vector<Type, Align, DeviceId, 
-                  typename LhsDenseVec::allocator_type>
+    decltype(auto)
     strict::
     hdmd(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
          dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs)

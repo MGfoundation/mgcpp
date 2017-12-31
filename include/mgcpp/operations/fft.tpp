@@ -6,7 +6,6 @@
 #include <mgcpp/cublas/cufft_fft.hpp>
 #include <mgcpp/operations/fft.hpp>
 #include <mgcpp/operations/mult.hpp>
-#include <mgcpp/type_traits/allocator.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 
@@ -22,7 +21,7 @@ namespace mgcpp
     {
         using allocator_type = typename DeviceVec::allocator_type;
         using result_allocator_type =
-            typename change_allocator_type<allocator_type, complex<Type>>::type;
+            typename allocator_type::template rebind_alloc<complex<Type>>;
 
         auto const& dev_vec = ~vec;
 
@@ -53,7 +52,7 @@ namespace mgcpp
     {
         using allocator_type = typename DeviceVec::allocator_type;
         using result_allocator_type =
-            typename change_allocator_type<allocator_type, Type>::type;
+            typename allocator_type::template rebind_alloc<Type>;
 
         auto const& dev_vec = ~vec;
 
@@ -95,7 +94,7 @@ namespace mgcpp
     {
         using allocator_type = typename DeviceVec::allocator_type;
         using result_allocator_type =
-            typename change_allocator_type<allocator_type, complex<Type>>::type;
+            typename allocator_type::template rebind_alloc<complex<Type>>;
 
         auto const& dev_vec = ~vec;
 

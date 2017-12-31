@@ -8,10 +8,12 @@
 
 namespace mgcpp
 {
-    template<typename Matrix, typename>
-    Matrix
-    eval(Matrix&& device_mat)
+    template<typename DenseMatrix,
+             typename Type,
+             size_t DeviceId>
+    inline decltype(auto)
+    eval(dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat)
     {
-        return std::forward<Matrix>(device_mat);
+        return ~device_mat;
     }
 }
