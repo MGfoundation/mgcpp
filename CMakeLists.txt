@@ -60,8 +60,7 @@ set(BASE_SOURCE_FILES
     ${KERNELS_SOURCE_DIR}/hadamard.cu
     ${KERNELS_SOURCE_DIR}/absolute.cu
     ${KERNELS_SOURCE_DIR}/reduce.cu
-    ${KERNELS_SOURCE_DIR}/fill.cu
-    ${KERNELS_SOURCE_DIR}/fft.cu)
+    ${KERNELS_SOURCE_DIR}/fill.cu)
 
 set(MAIN_SOURCE_FILES 
     ${SOURCE_DIR}/init.cpp

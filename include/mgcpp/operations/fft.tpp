@@ -127,4 +127,13 @@ namespace mgcpp
 
         return result;
     }
+
+    template<typename DeviceMat,
+                typename Type,
+                size_t DeviceId>
+    decltype(auto)
+    strict::
+    rfft(dense_matrix<DeviceMat, Type, DeviceId> const& mat)
+    {
+    }
 }
