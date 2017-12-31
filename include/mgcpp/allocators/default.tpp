@@ -63,8 +63,10 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
+        std::vector<device_value_type> host_d(n);
+        mgcpp_cast(host, host + n, host_d.data());
         auto cpy_stat = cuda_memcpy(device,
-                                    mgcpp_cast<const_device_pointer>(host),
+                                    host_d.data(),
                                     n,
                                     cuda_memcpy_kind::host_to_device);
         if(!cpy_stat)
@@ -80,10 +82,13 @@ namespace mgcpp
         if(!set_device_stat)
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
-        auto cpy_stat = cuda_memcpy(mgcpp_cast<device_pointer>(host),
+        std::vector<device_value_type> host_d(n);
+        auto cpy_stat = cuda_memcpy(host_d.data(),
                                     device,
                                     n,
                                     cuda_memcpy_kind::device_to_host);
+        mgcpp_cast(host_d.data(), host_d.data() + n, host);
+
         if(!cpy_stat)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_stat.error()); }
     }
