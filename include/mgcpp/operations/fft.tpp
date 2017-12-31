@@ -136,7 +136,7 @@ namespace mgcpp
     {
         using allocator_type = typename DeviceMat::allocator_type;
         using result_allocator_type =
-            typename change_allocator_type<allocator_type, complex<Type>>::type;
+            typename allocator_type::template rebind_alloc<complex<Type>>;
 
         auto const& dev_mat = ~mat;
 
