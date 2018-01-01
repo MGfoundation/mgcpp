@@ -360,6 +360,52 @@ TEST(device_vector, constructon_from_host_data_complex)
     free(host);
 }
 
+
+TEST(device_vector, constructon_from_host_data_half)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    size_t size = 10;
+    std::vector<float> host(size);
+
+    float counter = 0;
+    for(size_t i = 0; i < size; ++i)
+    {
+        host[i] = counter;
+        ++counter;
+    }
+
+    mgcpp::device_vector<mgcpp::half> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::half>(size, host.data()));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), size);
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<float>().context());
+
+    counter = 0;
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(vec.check_value(i), host[i]);
+                ++counter;
+            }
+        }while(false));
+}
+
 TEST(device_vector, third_party_matrix_construction)
 {
     size_t size = 10;
@@ -449,6 +495,44 @@ TEST(device_vector, complex_vector_constructon_from_init_list)
     EXPECT_EQ(vec.shape(), init_list.size());
     EXPECT_EQ(vec.context(),
               mgcpp::device_vector<mgcpp::complex<float>>().context());
+
+    EXPECT_NO_THROW(
+        do
+        {
+            size_t it = 0;
+            for(auto i : init_list)
+            {
+                EXPECT_EQ(i, vec.check_value(it));
+                ++it;
+            }
+        }while(false));
+}
+
+
+TEST(device_vector, constructon_from_init_list_half)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    auto before = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(before);
+    auto before_memory = before.value().first;
+
+    auto init_list = std::initializer_list<float>({1, 2, 3, 4, 5});
+
+    mgcpp::device_vector<mgcpp::half> vec{};
+    EXPECT_NO_THROW(
+        vec = mgcpp::device_vector<mgcpp::half>(init_list));
+
+    auto after = mgcpp::cuda_mem_get_info();
+    EXPECT_TRUE(after);
+    auto after_memory = after.value().first;
+
+    EXPECT_GT(before_memory, after_memory);
+
+    EXPECT_EQ(vec.shape(), init_list.size());
+    EXPECT_EQ(vec.context(),
+              mgcpp::device_vector<mgcpp::half>().context());
 
     EXPECT_NO_THROW(
         do
@@ -623,6 +707,31 @@ TEST(device_vector, copy_to_host)
 
     size_t init_val = 7;
     mgcpp::device_vector<float> vec(size, init_val);
+
+    EXPECT_NO_THROW(vec.copy_to_host(host));
+
+    EXPECT_NO_THROW(
+        do
+        {
+            for(auto i = 0u; i < size; ++i)
+            {
+                EXPECT_EQ(host[i], init_val);
+            }
+        }while(false));
+
+    free(host);
+}
+
+TEST(device_vector, copy_to_host_half)
+{
+    auto set_device_stat = mgcpp::cuda_set_device(0);
+    EXPECT_TRUE(set_device_stat);
+
+    size_t size = 10;
+    float* host = (float*)malloc(sizeof(float) * size);
+
+    size_t init_val = 7;
+    mgcpp::device_vector<mgcpp::half> vec(size, init_val);
 
     EXPECT_NO_THROW(vec.copy_to_host(host));
 
