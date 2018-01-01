@@ -8,9 +8,11 @@
 #include <random>
 #include <valarray>
 #include <complex>
-using carray = std::valarray<std::complex<double>>;
+template<typename T>
+using carray = std::valarray<std::complex<T>>;
 constexpr double PI = 3.1415926535897932384626433832795028;
-void fft(carray &a, bool inv)
+template<typename T>
+void fft(carray<T> &a, bool inv)
 {
     int n = a.size();
     for (int i = 1, j = 0; i < n; i++){
@@ -20,9 +22,9 @@ void fft(carray &a, bool inv)
     }
     for (int i = 1; i < n; i <<= 1) {
         double x = inv ? PI / i : -PI / i;
-        auto w = std::polar(1., x);
+        auto w = std::polar<T>(1., x);
         for (int j = 0; j < n; j += i << 1) {
-            std::complex<double> th = {1, 0};
+            std::complex<T> th = {1, 0};
             for (int k = 0; k < i; k++) {
                 auto tmp = a[i + j + k] * th;
                 a[i + j + k] = a[j + k] - tmp;
@@ -32,14 +34,15 @@ void fft(carray &a, bool inv)
         }
     }
     if (inv) {
-        a /= std::complex<double>(n);
+        a /= std::complex<T>(n);
     }
 }
-
-using cmat = std::valarray<carray>;
-void fft(cmat &c, int dir) {
+template<typename T>
+using cmat = std::valarray<carray<T>>;
+template<typename T>
+void fft(cmat<T> &c, int dir) {
   int nx = c.size(), ny = c[0].size();
-  carray R(nx);
+  carray<T> R(nx);
   for (int j = 0; j < ny; j++) {
     for (int i = 0; i < nx; i++)
       R[i] = c[i][j];
@@ -62,7 +65,7 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
         mgcpp::device_vector<float> vec(size);
         for (auto i = 0u; i < size; ++i) vec.set_value(i, dist(rng));
 
-        carray expected(size);
+        carray<float> expected(size);
         for (auto i = 0u; i < vec.size(); ++i)
             expected[i] = {vec.check_value(i), 0};
         fft(expected, false);
@@ -72,23 +75,23 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size / 2 + 1);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-3)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-3)
                 << "size = " << size << ", i = " << i;
         }
     }
 }
 
-TEST(fft_operation, float_real_to_complex_fwd_fft2)
+TEST(fft_operation, float_real_to_complex_fwd_fft_2d)
 {
-    size_t size = 32;
-    mgcpp::device_matrix<float> mat(size, size);
-    for (auto i = 0u; i < size; ++i)
-        for (auto j = 0u; j < size; ++j)
+    auto shape = std::make_pair<size_t, size_t>(32, 16);
+    mgcpp::device_matrix<float> mat(shape.first, shape.second);
+    for (auto i = 0u; i < shape.first; ++i)
+        for (auto j = 0u; j < shape.second; ++j)
             mat.set_value(i, j, dist(rng));
 
-    cmat expected(carray(size), size);
+    cmat<float> expected(carray<float>(shape.second), shape.first);
     for (auto i = 0u; i < mat.shape().first; ++i)
         for (auto j = 0u; j < mat.shape().second; ++j)
             expected[i][j] = {mat.check_value(i, j), 0};
@@ -97,14 +100,15 @@ TEST(fft_operation, float_real_to_complex_fwd_fft2)
     mgcpp::device_matrix<mgcpp::complex<float>> result;
     EXPECT_NO_THROW({ result = mgcpp::strict::rfft(mat); });
 
-    EXPECT_EQ(result.shape().first, size / 2 + 1);
-    EXPECT_EQ(result.shape().second, size / 2 + 1);
+    EXPECT_EQ(result.shape().first, shape.first / 2 + 1);
+    EXPECT_EQ(result.shape().second, shape.second);
+
     for (auto i = 0u; i < result.shape().first; ++i) {
         for (auto j = 0u; j < result.shape().second; ++j) {
-            EXPECT_NEAR(result.check_value(i, j).real(), expected[i][j].real(), 1e-4)
-                << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i, j).imag(), expected[i][j].imag(), 1e-4)
-                << "size = " << size << ", i = " << i;
+            EXPECT_NEAR(result.check_value(i, j).real(), expected[i][j].real(), 1e-3)
+                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+            EXPECT_NEAR(result.check_value(i, j).imag(), expected[i][j].imag(), 1e-3)
+                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
         }
     }
 }
@@ -116,7 +120,7 @@ TEST(fft_operation, double_real_to_complex_fwd_fft)
         mgcpp::device_vector<double> vec(size);
         for (auto i = 0u; i < size; ++i) vec.set_value(i, dist(rng));
 
-        carray expected(size);
+        carray<double> expected(size);
         for (auto i = 0u; i < vec.size(); ++i)
             expected[i] = {vec.check_value(i), 0};
         fft(expected, false);
@@ -126,9 +130,9 @@ TEST(fft_operation, double_real_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size / 2 + 1);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-5)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-5)
                 << "size = " << size << ", i = " << i;
         }
     }
@@ -145,7 +149,7 @@ TEST(fft_operation, float_complex_to_real_inv_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<float> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -160,8 +164,32 @@ TEST(fft_operation, float_complex_to_real_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i), expected[i].real(), 1e-3)
                 << "size = " << size << ", i = " << i;
+        }
+    }
+}
+
+
+TEST(fft_operation, float_real_complex_real_roundtrip_2d)
+{
+    auto shape = std::make_pair<size_t, size_t>(32, 16);
+    mgcpp::device_matrix<float> mat(shape.first, shape.second);
+    for (auto i = 0u; i < shape.first; ++i)
+        for (auto j = 0u; j < shape.second; ++j)
+            mat.set_value(i, j, dist(rng));
+
+    mgcpp::device_matrix<mgcpp::complex<float>> F;
+    EXPECT_NO_THROW({ F = mgcpp::strict::rfft(mat); });
+
+    mgcpp::device_matrix<float> result;
+    EXPECT_NO_THROW({ result = mgcpp::strict::irfft(F); });
+
+    EXPECT_EQ(result.shape(), mat.shape());
+    for (auto i = 0u; i < result.shape().first; ++i) {
+        for (auto j = 0u; j < result.shape().second; ++j) {
+            EXPECT_NEAR(result.check_value(i, j), mat.check_value(i, j), 1e-3)
+                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
         }
     }
 }
@@ -176,7 +204,7 @@ TEST(fft_operation, double_complex_to_real_inv_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<double> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -191,7 +219,7 @@ TEST(fft_operation, double_complex_to_real_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i), expected[i].real(), 1e-5)
                 << "size = " << size << ", i = " << i;
         }
     }
@@ -208,7 +236,7 @@ TEST(fft_operation, float_complex_to_complex_fwd_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<float> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -219,9 +247,9 @@ TEST(fft_operation, float_complex_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-3)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-3)
                 << "size = " << size << ", i = " << i;
         }
     }
@@ -237,7 +265,7 @@ TEST(fft_operation, double_complex_to_complex_fwd_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<double> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -248,9 +276,9 @@ TEST(fft_operation, double_complex_to_complex_fwd_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-5)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-5)
                 << "size = " << size << ", i = " << i;
         }
     }
@@ -267,7 +295,7 @@ TEST(fft_operation, float_complex_to_complex_inv_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<float> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -278,9 +306,9 @@ TEST(fft_operation, float_complex_to_complex_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-3)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-3)
                 << "size = " << size << ", i = " << i;
         }
     }
@@ -296,7 +324,7 @@ TEST(fft_operation, double_complex_to_complex_inv_fft)
             vec.set_value(i, random_complex);
         }
 
-        carray expected(size);
+        carray<double> expected(size);
         for (auto i = 0u; i < vec.size(); ++i) {
             expected[i] = vec.check_value(i);
         }
@@ -307,10 +335,35 @@ TEST(fft_operation, double_complex_to_complex_inv_fft)
 
         EXPECT_EQ(result.size(), size);
         for (auto i = 0u; i < result.size(); ++i) {
-            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).real(), expected[i].real(), 1e-5)
                 << "size = " << size << ", i = " << i;
-            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-4)
+            EXPECT_NEAR(result.check_value(i).imag(), expected[i].imag(), 1e-5)
                 << "size = " << size << ", i = " << i;
+        }
+    }
+}
+
+TEST(fft_operation, float_complex_roundtrip_2d)
+{
+    auto shape = std::make_pair<size_t, size_t>(32, 16);
+    mgcpp::device_matrix<mgcpp::complex<float>> mat(shape.first, shape.second);
+    for (auto i = 0u; i < shape.first; ++i)
+        for (auto j = 0u; j < shape.second; ++j)
+            mat.set_value(i, j, std::complex<float>(dist(rng), dist(rng)));
+
+    mgcpp::device_matrix<mgcpp::complex<float>> F;
+    EXPECT_NO_THROW({ F = mgcpp::strict::cfft(mat, mgcpp::fft_direction::forward); });
+
+    mgcpp::device_matrix<mgcpp::complex<float>> result;
+    EXPECT_NO_THROW({ result = mgcpp::strict::cfft(F, mgcpp::fft_direction::inverse); });
+
+    EXPECT_EQ(result.shape(), mat.shape());
+    for (auto i = 0u; i < result.shape().first; ++i) {
+        for (auto j = 0u; j < result.shape().second; ++j) {
+            EXPECT_NEAR(result.check_value(i, j).real(), mat.check_value(i, j).real(), 1e-3)
+                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+            EXPECT_NEAR(result.check_value(i, j).imag(), mat.check_value(i, j).imag(), 1e-3)
+                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
         }
     }
 }

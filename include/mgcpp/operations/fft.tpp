@@ -141,18 +141,97 @@ namespace mgcpp
         auto const& dev_mat = ~mat;
 
         auto fft_size = dev_mat.shape();
-        auto output_size = std::make_pair(fft_size.first / 2 + 1, fft_size.second / 2 + 1);
+        auto output_size = std::make_pair(fft_size.first / 2 + 1, fft_size.second);
 
         auto result = device_matrix<complex<Type>,
                                     DeviceId,
                                     result_allocator_type>(output_size.first, output_size.second);
 
         auto status = mgcpp::cublas_rfft2(fft_size.first, fft_size.second,
-                                         dev_mat.data(),
-                                         result.data_mutable());
+                                          dev_mat.data(),
+                                          result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
+        return result;
+    }
+
+    template<typename DeviceMat,
+                typename Type,
+                size_t DeviceId>
+    decltype(auto)
+    strict::
+    irfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat, int n)
+    {
+        using allocator_type = typename DeviceMat::allocator_type;
+        using result_allocator_type =
+            typename allocator_type::template rebind_alloc<Type>;
+
+        auto const& dev_mat = ~mat;
+
+        std::pair<size_t, size_t> fft_size(n, dev_mat.shape().second);
+        if (n < 0)
+            fft_size.first = (dev_mat.shape().first - 1) * 2;
+        else if (fft_size.first / 2 + 1 > dev_mat.shape().first)
+        {
+            // FIXME: zero-pad input to length floor(n/2)+1
+            MGCPP_THROW_RUNTIME_ERROR("Zero-pad FFT unimplemented");
+        }
+        auto output_size = fft_size;
+
+        auto result = device_matrix<Type,
+                                    DeviceId,
+                                    result_allocator_type>(output_size.first, output_size.second);
+
+        auto status = mgcpp::cublas_irfft2(fft_size.first, fft_size.second,
+                                           dev_mat.data(),
+                                           result.data_mutable());
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        // Normalize the result
+        result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size.first / fft_size.second),
+                                     result);
+        return result;
+    }
+
+    template<typename DeviceMat,
+             typename Type,
+             size_t DeviceId>
+    decltype(auto)
+    strict::
+    cfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat, fft_direction direction)
+    {
+        using allocator_type = typename DeviceMat::allocator_type;
+        using result_allocator_type =
+            typename allocator_type::template rebind_alloc<complex<Type>>;
+
+        auto const& dev_mat = ~mat;
+
+        auto fft_size = dev_mat.shape();
+        auto output_size = fft_size;
+
+        auto result = device_matrix<complex<Type>,
+                                    DeviceId,
+                                    result_allocator_type>(output_size.first, output_size.second);
+
+        cublas::fft_direction dir;
+        if (direction == fft_direction::forward)
+            dir = cublas::fft_direction::forward;
+        else
+            dir = cublas::fft_direction::inverse;
+
+        auto status = mgcpp::cublas_cfft2(fft_size.first, fft_size.second,
+                                          dev_mat.data(),
+                                          result.data_mutable(),
+                                          dir);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        // Normalize the result
+        if (direction == fft_direction::inverse)
+            result = mgcpp::strict::mult(static_cast<Type>(1. / fft_size.first / fft_size.second),
+                                         result);
         return result;
     }
 }

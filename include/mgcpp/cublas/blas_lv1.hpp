@@ -30,11 +30,11 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
                 T const* x, size_t incx,
                 T* y, size_t incy) noexcept;
 
-    template<typename T>
+    template<typename ScalarType, typename VectorType>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
-                T const* alpha,
-                T* vec, size_t incvec) noexcept;
+                ScalarType const* alpha,
+                VectorType* vec, size_t incvec) noexcept;
 }
 
 #include <mgcpp/cublas/blas_lv1.tpp>

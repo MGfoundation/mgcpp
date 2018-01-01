@@ -53,14 +53,14 @@ namespace mgcpp
                  typename Type,
                  size_t DeviceId>
         inline decltype(auto)
-        irfft(dense_matrix<DeviceMat, Type, DeviceId> const& vec,
+        irfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
               int n = -1);
 
         template<typename DeviceMat,
                  typename Type,
                  size_t DeviceId>
         inline decltype(auto)
-        cfft(dense_matrix<DeviceMat, Type, DeviceId> const& vec,
+        cfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
              fft_direction direction);
     }
 }
