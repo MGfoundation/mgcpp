@@ -11,6 +11,7 @@
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 #include <cstdlib> 
 
@@ -45,6 +46,16 @@ namespace mgcpp
         mult(ScalarType scalar,
              dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec);
 
+        template<typename DenseMat,
+                typename ScalarType,
+                typename MatrixType,
+                size_t DeviceId>
+        typename std::enable_if_t<is_scalar<ScalarType>::value,
+                                  device_matrix<MatrixType,
+                                                DeviceId,
+                                                typename DenseMat::allocator_type>>
+        mult(ScalarType scalar,
+             dense_matrix<DenseMat, MatrixType, DeviceId> const& mat);
 
         // template<typename T, size_t Device, storage_order SO>
         // void

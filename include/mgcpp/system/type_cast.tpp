@@ -5,72 +5,49 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cuComplex.h>
+#include <cuda_fp16.h>
 #include <mgcpp/global/complex.hpp>
 #include <mgcpp/global/half_precision.hpp>
 #include <mgcpp/system/type_cast.hpp>
 
 #include <complex>
+#include <type_traits>
+#include <cstring>
 
 namespace mgcpp
 {
-    template<typename OutputType, typename InputType>
-    OutputType
-    mgcpp_cast(InputType data)
-    { return data; }
+
+    template<typename InputType, typename OutputType>
+    inline OutputType*
+    mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first)
+    {
+        static_assert(std::is_same<InputType, OutputType>::value ||
+                      (std::is_same<InputType, std::complex<float>>::value && std::is_same<OutputType, cuComplex>::value) ||
+                      (std::is_same<InputType, std::complex<double>>::value && std::is_same<OutputType, cuDoubleComplex>::value) ||
+                      (std::is_same<InputType, cuComplex>::value && std::is_same<OutputType, std::complex<float>>::value) ||
+                      (std::is_same<InputType, cuDoubleComplex>::value && std::is_same<OutputType, std::complex<double>>::value),
+                      "Types cannot be converted.");
+
+        std::memcpy(d_first, first, (last - first) * sizeof(InputType));
+        return d_first + (last - first);
+    }
+
+    void half_to_float_impl(__half const* first, __half const* last, float* d_first);
+    void float_to_half_impl(float const* first, float const* last, __half* d_first);
 
     template<>
-    inline std::complex<float>*
-    mgcpp_cast<>(cuComplex* data)
+    inline float*
+    mgcpp_cast(__half const* first, __half const* last, float* d_first)
     {
-        return reinterpret_cast<std::complex<float>*>(data);
+        half_to_float_impl(first, last, d_first);
+        return d_first + (last - first);
     }
 
     template<>
-    inline std::complex<double>*
-    mgcpp_cast<>(cuDoubleComplex* data)
+    inline __half*
+    mgcpp_cast(float const* first, float const* last, __half* d_first)
     {
-        return reinterpret_cast<std::complex<double>*>(data);
-    }
-
-    template<>
-    inline std::complex<float> const*
-    mgcpp_cast<>(cuComplex const* data)
-    {
-        return reinterpret_cast<std::complex<float> const*>(data);
-    }
-
-    template<>
-    inline std::complex<double> const*
-    mgcpp_cast<>(cuDoubleComplex const* data)
-    {
-        return reinterpret_cast<std::complex<double> const*>(data);
-    }
-
-    template<>
-    inline cuComplex*
-    mgcpp_cast<>(std::complex<float>* data)
-    {
-        return reinterpret_cast<cuComplex*>(data);
-    }
-
-    template<>
-    inline cuDoubleComplex*
-    mgcpp_cast<>(std::complex<double>* data)
-    {
-        return reinterpret_cast<cuDoubleComplex*>(data);
-    }
-
-    template<>
-    inline cuComplex const*
-    mgcpp_cast<>(std::complex<float> const* data)
-    {
-        return reinterpret_cast<cuComplex const*>(data);
-    }
-
-    template<>
-    inline cuDoubleComplex const*
-    mgcpp_cast<>(std::complex<double> const* data)
-    {
-        return reinterpret_cast<cuDoubleComplex const*>(data);
+        float_to_half_impl(first, last, d_first);
+        return d_first + (last - first);
     }
 }

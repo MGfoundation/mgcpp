@@ -11,6 +11,7 @@
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 #include <algorithm>
 
@@ -64,8 +65,9 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        auto dinit = mgcpp_cast<device_pointer>(&init);
-        auto status = mgblas_fill(_data, *dinit, _shape);
+        device_value_type dinit;
+        mgcpp_cast(&init, &init + 1, &dinit);
+        auto status = mgblas_fill(_data, dinit, _shape);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }

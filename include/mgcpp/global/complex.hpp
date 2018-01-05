@@ -15,10 +15,16 @@ namespace mgcpp
     struct complex;
 
     template<>
-    struct complex<float> { };
+    struct complex<float>
+    {
+        ~complex() = delete;
+    };
 
     template<>
-    struct complex<double> { };
+    struct complex<double>
+    {
+        ~complex() = delete;
+    };
 }
 
 #endif

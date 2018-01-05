@@ -32,6 +32,8 @@ namespace mgcpp
                               Type,
                               DeviceId>
     {
+        static_assert(is_scalar<Type>::value, "Element type not supported.");
+
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
         using value_type = typename value_type<Type>::type;
@@ -48,7 +50,7 @@ namespace mgcpp
         thread_context* _context;
         std::pair<size_t, size_t> _shape;
         Alloc _allocator;
-        pointer _data;
+        device_pointer _data;
         size_t _capacity;
 
         inline size_t

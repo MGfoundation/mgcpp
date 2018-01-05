@@ -94,4 +94,38 @@ namespace mgcpp
 
         return result;
     }
+
+
+    template<typename DenseMat,
+             typename ScalarType,
+             typename MatrixType,
+             size_t DeviceId>
+    typename std::enable_if_t<is_scalar<ScalarType>::value,
+                              device_matrix<MatrixType,
+                                            DeviceId,
+                                            typename DenseMat::allocator_type>>
+    strict::
+    mult(ScalarType scalar,
+            dense_matrix<DenseMat, MatrixType, DeviceId> const& mat)
+    {
+        using allocator_type = typename DenseMat::allocator_type;
+
+        auto const& original_mat = ~mat;
+
+        auto* context = original_mat.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        auto size = original_mat.shape();
+
+        auto result = device_matrix<MatrixType,
+                                    DeviceId,
+                                    allocator_type>(original_mat);
+        auto status = cublas_scal(handle, size.first * size.second,
+                                  &scalar,
+                                  result.data_mutable(), 1);
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
+    }
 }
