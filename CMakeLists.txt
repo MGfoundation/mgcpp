@@ -81,8 +81,7 @@ if(BUILD_CUSTOM_KERNELS)
 
     set(CUDA_VERBOSE_BUILD ON)
 
-    set(CUDA_NVCC_FLAGS
-	"${CUDA_NVCC_FLAGS}; ${CUDA_GEN_CODE}")
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}; ${CUDA_GEN_CODE}")
 
     message("build flags = ${CUDA_NVCC_FLAGS}")
 endif()
@@ -201,7 +200,6 @@ if(BUILD_TESTING)
 	${TEST_DIR}/cuda_error_test.cpp
 	${TEST_DIR}/cuda_memory_test.cpp
 	${TEST_DIR}/device_allocators_test.cpp
-	${TEST_DIR}/cublas_helpers_test.cpp
 	${TEST_DIR}/mgblas_helpers_test.cpp
 	${TEST_DIR}/device_matrix_test.cpp
 	${TEST_DIR}/device_matrix_test.cpp

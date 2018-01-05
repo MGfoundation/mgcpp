@@ -4,8 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cublas/blaslike_ext.hpp>
-#include <mgcpp/cublas/blas_lv1.hpp>
+#include <mgcpp/cuda_libs/cublas.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/system/assert.hpp>

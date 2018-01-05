@@ -4,12 +4,14 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cublas/blas_lv1.hpp>
+#include <mgcpp/cuda_libs/cublas.hpp>
 #include <mgcpp/system/error_code.hpp>
-#include <mgcpp/global/complex.hpp>
+
+#include <cublas_v2.h>
 
 namespace mgcpp
 {
+    // lv1
     inline outcome::result<void>
     cublas_dot(cublasHandle_t handle, size_t n,
                float const* x, size_t incx,
@@ -84,7 +86,7 @@ namespace mgcpp
     {
         std::error_code status = cublasSscal(handle, n,
                                              alpha,
-                                            vec, incvec); 
+                                             vec, incvec); 
 
         if(status != status_t::success)
             return status;
@@ -99,7 +101,7 @@ namespace mgcpp
     {
         std::error_code status = cublasDscal(handle, n,
                                              alpha,
-                                            vec, incvec); 
+                                             vec, incvec); 
 
         if(status != status_t::success)
             return status;
@@ -164,6 +166,104 @@ namespace mgcpp
 
         if(status != status_t::success)
             return status;
+        else
+            return outcome::success();
+    }
+
+
+    // lv3
+    inline outcome::result<void>
+    cublas_gemm(cublasHandle_t handle,
+                cublasOperation_t transa, cublasOperation_t transb,
+                size_t m, size_t n, size_t k,
+                float const* alpha,
+                float const* A, size_t lda,
+                float const* B, size_t ldb,
+                float const* beta,
+                float* C, size_t ldc) noexcept
+    {
+        std::error_code status =
+            cublasSgemm(handle, transa, transb,
+                        m, n, k, alpha, A, lda,
+                        B, ldb, beta, C, ldc);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_gemm(cublasHandle_t handle,
+                cublasOperation_t transa, cublasOperation_t transb,
+                size_t m, size_t n, size_t k,
+                double const* alpha,
+                double const* A, size_t lda,
+                double const* B, size_t ldb,
+                double const* beta,
+                double* C, size_t ldc) noexcept
+    {
+        std::error_code status =
+            cublasDgemm(handle, transa, transb,
+                        m, n, k, alpha, A, lda,
+                        B, ldb, beta, C, ldc);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    // blas-like cublas extensions
+    template<>
+    inline outcome::result<void>
+    cublas_geam(cublasHandle_t handle,
+                cublasOperation_t transa,
+                cublasOperation_t transb,
+                size_t m, size_t n,
+                float const* alpha,
+                float const* A, size_t lda,
+                float const* beta,
+                float const* B, size_t ldb,
+                float *C, size_t ldc) noexcept
+    {
+        std::error_code err = cublasSgeam(handle,
+                                          transa, transb,
+                                          m, n,
+                                          alpha,
+                                          A, lda,
+                                          beta,
+                                          B, ldb,
+                                          C, ldc);
+
+        if(err)
+            return err;
+        else
+            return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cublas_geam(cublasHandle_t handle,
+                cublasOperation_t transa,
+                cublasOperation_t transb,
+                size_t m, size_t n,
+                double const* alpha,
+                double const* A, size_t lda,
+                double const* beta,
+                double const* B, size_t ldb,
+                double* C, size_t ldc) noexcept
+    {
+        std::error_code err = cublasDgeam(handle,
+                                          transa, transb,
+                                          m, n,
+                                          alpha,
+                                          A, lda,
+                                          beta,
+                                          B, ldb,
+                                          C, ldc);
+
+        if(err)
+            return err;
         else
             return outcome::success();
     }

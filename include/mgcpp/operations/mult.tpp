@@ -5,8 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/context/thread_context.hpp>
-#include <mgcpp/cublas/blas_lv1.hpp>
-#include <mgcpp/cublas/blas_lv3.hpp>
+#include <mgcpp/cuda_libs/cublas.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/exception.hpp>
 #include <mgcpp/system/assert.hpp>

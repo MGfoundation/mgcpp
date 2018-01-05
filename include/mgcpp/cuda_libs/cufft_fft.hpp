@@ -1,6 +1,11 @@
 
-#ifndef _MGCPP_BLAS_FFT_HPP_
-#define _MGCPP_BLAS_FFT_HPP_
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef _MGCPP_CUDA_LIBS_FFT_HPP_
+#define _MGCPP_CUDA_LIBS_FFT_HPP_
 
 #include <mgcpp/global/complex.hpp>
 
@@ -53,6 +58,6 @@ namespace mgcpp
     cublas_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
 }
 
-#include <mgcpp/cublas/cufft_fft.tpp>
+#include <mgcpp/cuda_libs/cufft_fft.tpp>
 
 #endif

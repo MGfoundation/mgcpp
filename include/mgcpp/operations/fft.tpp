@@ -3,7 +3,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cublas/cufft_fft.hpp>
+#include <mgcpp/cuda_libs/cufft_fft.hpp>
 #include <mgcpp/operations/fft.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
