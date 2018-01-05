@@ -70,7 +70,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/cufft_error.cpp
     ${SOURCE_DIR}/cuda_error.cpp
     ${SOURCE_DIR}/error_code.cpp
-    ${SOURCE_DIR}/mgcpp_kernel_error.cpp
+    ${SOURCE_DIR}/mgblas_error.cpp
     ${SOURCE_DIR}/thread_context.cpp)
 
 if(BUILD_CUSTOM_KERNELS)

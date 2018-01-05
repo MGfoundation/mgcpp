@@ -84,7 +84,7 @@ namespace mgcpp
     // 	}
     // }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Sfill(float* arr, float value, size_t n)
     {
 	int grid_size = static_cast<int>(
@@ -94,7 +94,7 @@ namespace mgcpp
 	return success;
     }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Dfill(double* arr, double value, size_t n)
     {
 	int grid_size = static_cast<int>(
@@ -104,7 +104,7 @@ namespace mgcpp
 	return success;
     }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Cfill(cuComplex* arr, cuComplex value, size_t n)
     {
         int grid_size = static_cast<int>(
@@ -114,7 +114,7 @@ namespace mgcpp
         return success;
     }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n)
     {
         int grid_size = static_cast<int>(

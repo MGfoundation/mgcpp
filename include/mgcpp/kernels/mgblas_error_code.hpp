@@ -4,12 +4,12 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_KERNELS_KERNEL_STATUS_HPP_
-#define _MGCPP_KERNELS_KERNEL_STATUS_HPP_
+#ifndef _MGCPP_KERNELS_MGBLAS_ERROR_HPP_
+#define _MGCPP_KERNELS_MGBLAS_ERROR_HPP_
 
 namespace mgcpp
 {
-    enum kernel_status_t
+    enum mgblas_error_t
     {
         success = 0,
         index_out_of_range = 1,

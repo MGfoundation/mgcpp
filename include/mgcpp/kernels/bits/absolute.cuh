@@ -9,14 +9,14 @@
 
 #include <cuda_fp16.h>
 
-#include <mgcpp/kernels/kernel_status.hpp>
+#include <mgcpp/kernels/mgblas_error_code.hpp>
 
 namespace mgcpp
 {
-    kernel_status_t
+    mgblas_error_t
     mgblas_Svab(float* x, size_t n);
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Dvab(double* x, size_t n); 
 
     // kernel_status_t

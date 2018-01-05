@@ -8,7 +8,7 @@
 #include <mgcpp/kernels/bits/absolute.cuh>
 #include <mgcpp/kernels/bits/reduce.cuh>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
-#include <mgcpp/system/mgcpp_kernel_error.hpp>
+#include <mgcpp/system/mgblas_error.hpp>
 
 namespace mgcpp
 {

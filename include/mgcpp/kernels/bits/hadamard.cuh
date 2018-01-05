@@ -9,19 +9,19 @@
 
 #include <cuda_fp16.h>
 
-#include <mgcpp/kernels/kernel_status.hpp>
+#include <mgcpp/kernels/mgblas_error_code.hpp>
 
 namespace mgcpp
 {
-    kernel_status_t
+    mgblas_error_t
     mgblas_Svhp(float const* x, float const* y,
 		float* z, size_t size);
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Dvhp(double const* x, double const* y,
 		double* z, size_t size); 
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Hvhp(__half const* x, __half const* y,
 		__half* z, size_t size);
 }

@@ -15,88 +15,88 @@ namespace mgcpp
 {
     __device__ double double_cas_add(double* address, double val)
     {
-	unsigned long long int* address_as_ull = (unsigned long long int*)address;
-	unsigned long long int old = *address_as_ull, assumed;
-	do {
-	    assumed = old;
-	    old = atomicCAS(address_as_ull, assumed,
-			    __double_as_longlong(val + __longlong_as_double(assumed)));
-	} while (assumed != old);
-	return __longlong_as_double(old);
+        unsigned long long int* address_as_ull = (unsigned long long int*)address;
+        unsigned long long int old = *address_as_ull, assumed;
+        do {
+            assumed = old;
+            old = atomicCAS(address_as_ull, assumed,
+                            __double_as_longlong(val + __longlong_as_double(assumed)));
+        } while (assumed != old);
+        return __longlong_as_double(old);
     }
 
     __global__ void
     mgblas_Svpr_impl(float const* x, float* y, size_t n)
     {
-	__shared__ float shared[BLK];
+        __shared__ float shared[BLK];
 
-	size_t const tid = threadIdx.x;
-	size_t const id = blockIdx.x * blockDim.x + threadIdx.x;
+        size_t const tid = threadIdx.x;
+        size_t const id = blockIdx.x * blockDim.x + threadIdx.x;
 
-	if(id >= n)
-	    return;
+        if(id >= n)
+            return;
 
-	shared[tid] = x[id];
-	__syncthreads();
+        shared[tid] = x[id];
+        __syncthreads();
 
-	if(blockIdx.x == gridDim.x - 1)
-	{
-	    atomicAdd(y, shared[tid]);
-	    return;
-	}
-	__syncthreads();
+        if(blockIdx.x == gridDim.x - 1)
+        {
+            atomicAdd(y, shared[tid]);
+            return;
+        }
+        __syncthreads();
 
-	for(size_t stride = blockDim.x / 2; stride > 0u; stride >>= 1)
-	{
-	    if(tid < stride)
-		shared[tid] += shared[tid + stride];
-	    __syncthreads();
-	}
-			  
-	if(tid == 0u)
-	    atomicAdd(y, shared[0]); 
+        for(size_t stride = blockDim.x / 2; stride > 0u; stride >>= 1)
+        {
+            if(tid < stride)
+                shared[tid] += shared[tid + stride];
+            __syncthreads();
+        }
+              
+        if(tid == 0u)
+            atomicAdd(y, shared[0]); 
     }
 
     __global__ void
     mgblas_Dvpr_impl(double const* x, double* y, size_t n)
     {
-	__shared__ double shared[BLK];
+        __shared__ double shared[BLK];
 
-	size_t const tid = threadIdx.x;
-	size_t const id = blockIdx.x * blockDim.x + threadIdx.x;
+        size_t const tid = threadIdx.x;
+        size_t const id = blockIdx.x * blockDim.x + threadIdx.x;
 
-	if(id >= n)
-	    return;
+        if(id >= n)
+            return;
 
-	shared[tid] = x[id];
-	__syncthreads();
+        shared[tid] = x[id];
+        __syncthreads();
 
-	if(blockIdx.x == gridDim.x - 1)
-	{
+        if(blockIdx.x == gridDim.x - 1)
+        {
 #if __CUDA_ARCH__ < 600
-	    double_cas_add(y, shared[tid]);
+            double_cas_add(y, shared[tid]);
 #else
-	    atomicAdd(y, shared[tid]);
+            atomicAdd(y, shared[tid]);
 #endif
-	    return;
-	}
-	__syncthreads();
+            return;
+        }
+        __syncthreads();
 
-	for(size_t stride = blockDim.x / 2; stride > 0u; stride >>= 1)
-	{
-	    if(tid < stride)
-		shared[tid] += shared[tid + stride];
-	    __syncthreads();
-	}
-			  
-	if(tid == 0u)
-	{
+        for(size_t stride = blockDim.x / 2; stride > 0u; stride >>= 1)
+        {
+            if(tid < stride)
+                shared[tid] += shared[tid + stride];
+            __syncthreads();
+        }
+              
+        if(tid == 0u)
+        {
 #if __CUDA_ARCH__ < 600
-	    double_cas_add(y, shared[0]);
+            double_cas_add(y, shared[0]);
 #else
-	    atomicAdd(y, shared[0]);
+            atomicAdd(y, shared[0]);
 #endif
-	}
+        }
     }
 
     // __global__ void
@@ -121,48 +121,48 @@ namespace mgcpp
     // 	z[id] = shared_z[threadIdx.x];
     // }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Svpr(float const* x, float* y, size_t size)
     {
-	if(size == 0)
-	    return invalid_range;
+        if(size == 0)
+            return invalid_range;
 
-	float* result;
-	cudaError_t alloc_status =
-	    cudaMalloc((void**)&result, sizeof(float));
+        float* result;
+        cudaError_t alloc_status =
+            cudaMalloc((void**)&result, sizeof(float));
 
-	int grid_size =
-	    static_cast<int>(
-		ceil(static_cast<float>(size)/ BLK ));
-	mgblas_Svpr_impl<<<BLK, grid_size>>>(x, result, size);
+        int grid_size =
+            static_cast<int>(
+                ceil(static_cast<float>(size)/ BLK ));
+        mgblas_Svpr_impl<<<BLK, grid_size>>>(x, result, size);
 
-	cudaError_t copy_status =
-	    cudaMemcpy(y, result, sizeof(float), cudaMemcpyDeviceToHost);
+        cudaError_t copy_status =
+            cudaMemcpy(y, result, sizeof(float), cudaMemcpyDeviceToHost);
 
-	cudaFree(result);
-	return success;
+        cudaFree(result);
+        return success;
     }
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Dvpr(double const* x, double* y, size_t size)
     {
-	if(size == 0)
-	    return invalid_range;
+        if(size == 0)
+            return invalid_range;
 
-	double* result;
-	cudaError_t alloc_status =
-	    cudaMalloc((void**)&result, sizeof(double));
+        double* result;
+        cudaError_t alloc_status =
+            cudaMalloc((void**)&result, sizeof(double));
 
-	int grid_size =
-	    static_cast<int>(
-		ceil(static_cast<float>(size)/ BLK ));
-	mgblas_Dvpr_impl<<<BLK, grid_size>>>(x, result, size);
+        int grid_size =
+            static_cast<int>(
+                ceil(static_cast<float>(size)/ BLK ));
+        mgblas_Dvpr_impl<<<BLK, grid_size>>>(x, result, size);
 
-	cudaError_t copy_status =
-	    cudaMemcpy(y, result, sizeof(double), cudaMemcpyDeviceToHost);
+        cudaError_t copy_status =
+            cudaMemcpy(y, result, sizeof(double), cudaMemcpyDeviceToHost);
 
-	cudaFree(result);
-	return success;
+        cudaFree(result);
+        return success;
     }
 
     // kernel_status_t

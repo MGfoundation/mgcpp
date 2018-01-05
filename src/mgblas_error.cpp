@@ -4,12 +4,12 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/system/mgcpp_kernel_error.hpp>
+#include <mgcpp/system/mgblas_error.hpp>
 #include <string>
 
 namespace mgcpp
 {
-    class mgcpp_kernel_error_category_t
+    class mgblas_error_category_t
         : public std::error_category
     {
     public:
@@ -18,21 +18,21 @@ namespace mgcpp
 
         std::string
         message(int ev) const override;
-    } mgcpp_kernel_error_category;
+    } mgblas_error_category;
 
 
     const char*
-    mgcpp_kernel_error_category_t::
+    mgblas_error_category_t::
     name() const noexcept
     {
-        return "mgcpp kernel";
+        return "mgblas";
     }
 
     std::string
-    mgcpp_kernel_error_category_t::
+    mgblas_error_category_t::
     message(int ev) const
     {
-        switch(static_cast<kernel_status_t>(ev))
+        switch(static_cast<mgblas_error_t>(ev))
         {
         case success:
             return "Operation was executed without problem";
@@ -50,9 +50,9 @@ namespace mgcpp
     }
 
     std::error_code
-    make_error_code(mgcpp::kernel_status_t err) noexcept
+    make_error_code(mgcpp::mgblas_error_t err) noexcept
     {
         return {static_cast<int>(err),
-                mgcpp::mgcpp_kernel_error_category};
+                mgcpp::mgblas_error_category};
     }
 }

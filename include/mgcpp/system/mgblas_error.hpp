@@ -7,7 +7,7 @@
 #ifndef _MGCPP_SYSTEM_MGCPP_KERNEL_ERROR_HPP_
 #define _MGCPP_SYSTEM_MGCPP_KERNEL_ERROR_HPP_
 
-#include <mgcpp/kernels/kernel_status.hpp>
+#include <mgcpp/kernels/mgblas_error_code.hpp>
 
 #include <system_error>
 #include <type_traits>
@@ -15,13 +15,13 @@
 namespace mgcpp
 {
     std::error_code
-    make_error_code(mgcpp::kernel_status_t err) noexcept;
+    make_error_code(mgcpp::mgblas_error_t err) noexcept;
 }
 
 namespace std
 {
     template<>
-    struct is_error_code_enum<mgcpp::kernel_status_t>
+    struct is_error_code_enum<mgcpp::mgblas_error_t>
         : public std::true_type {};
 }
 
