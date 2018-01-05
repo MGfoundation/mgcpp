@@ -333,9 +333,9 @@ TEST(device_vector, constructon_from_host_data_complex)
         ++counter;
     }
 
-    mgcpp::device_vector<std::complex<float>> vec{};
+    mgcpp::device_vector<mgcpp::complex<float>> vec{};
     EXPECT_NO_THROW(
-        vec = mgcpp::device_vector<std::complex<float>>(size, host));
+        vec = mgcpp::device_vector<mgcpp::complex<float>>(size, host));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -345,7 +345,7 @@ TEST(device_vector, constructon_from_host_data_complex)
 
     EXPECT_EQ(vec.shape(), size);
     EXPECT_EQ(vec.context(),
-              mgcpp::device_vector<std::complex<float>>().context());
+              mgcpp::device_vector<mgcpp::complex<float>>().context());
 
     counter = 0;
     EXPECT_NO_THROW(

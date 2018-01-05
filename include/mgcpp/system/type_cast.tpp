@@ -11,49 +11,25 @@
 #include <mgcpp/system/type_cast.hpp>
 
 #include <complex>
+#include <type_traits>
+#include <cstring>
 
 namespace mgcpp
 {
+
     template<typename InputType, typename OutputType>
     inline OutputType*
     mgcpp_cast(InputType const* first, InputType const* last, OutputType* d_first)
     {
-        if (first == d_first)
-            return d_first + (last - first);
+        static_assert(std::is_same<InputType, OutputType>::value ||
+                      (std::is_same<InputType, std::complex<float>>::value && std::is_same<OutputType, cuComplex>::value) ||
+                      (std::is_same<InputType, std::complex<double>>::value && std::is_same<OutputType, cuDoubleComplex>::value) ||
+                      (std::is_same<InputType, cuComplex>::value && std::is_same<OutputType, std::complex<float>>::value) ||
+                      (std::is_same<InputType, cuDoubleComplex>::value && std::is_same<OutputType, std::complex<double>>::value),
+                      "Types cannot be converted.");
 
-        return std::copy(first, last, d_first);
-    }
-
-    template<>
-    inline cuComplex*
-    mgcpp_cast(std::complex<float> const* first, std::complex<float> const* last, cuComplex* d_first)
-    {
-        return std::copy(reinterpret_cast<cuComplex const*>(first),
-                         reinterpret_cast<cuComplex const*>(last), d_first);
-    }
-
-    template<>
-    inline std::complex<float>*
-    mgcpp_cast(cuComplex const* first, cuComplex const* last, std::complex<float>* d_first)
-    {
-        return reinterpret_cast<std::complex<float>*>(
-            std::copy(first, last, reinterpret_cast<cuComplex*>(d_first)));
-    }
-
-    template<>
-    inline cuDoubleComplex*
-    mgcpp_cast(std::complex<double> const* first, std::complex<double> const* last, cuDoubleComplex* d_first)
-    {
-        return std::copy(reinterpret_cast<cuDoubleComplex const*>(first),
-                         reinterpret_cast<cuDoubleComplex const*>(last), d_first);
-    }
-
-    template<>
-    inline std::complex<double>*
-    mgcpp_cast(cuDoubleComplex const* first, cuDoubleComplex const* last, std::complex<double>* d_first)
-    {
-        return reinterpret_cast<std::complex<double>*>(
-            std::copy(first, last, reinterpret_cast<cuDoubleComplex*>(d_first)));
+        std::memcpy(d_first, first, (last - first) * sizeof(InputType));
+        return d_first + (last - first);
     }
 
     void half_to_float_impl(__half const* first, __half const* last, float* d_first);

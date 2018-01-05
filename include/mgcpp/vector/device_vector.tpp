@@ -11,6 +11,7 @@
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 #include <algorithm>
 

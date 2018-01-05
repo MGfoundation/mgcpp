@@ -11,6 +11,7 @@
 #include <memory>
 #include <mgcpp/type_traits/device_value_type.hpp>
 #include <mgcpp/type_traits/host_value_type.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp
 {
@@ -41,11 +42,25 @@ namespace mgcpp
         inline void
         device_deallocate(device_pointer p, size_t n) const;
 
-        inline void
-        copy_from_host(device_pointer device, const_pointer host, size_t n) const;
+        template<typename = void>
+        inline auto
+        copy_from_host(device_pointer device, const_pointer host, size_t n) const
+            -> std::enable_if_t<!is_reinterpretable<Type>::value>;
 
-        inline void
-        copy_to_host(pointer host, const_device_pointer device, size_t n) const;
+        template<typename = void>
+        inline auto
+        copy_from_host(device_pointer device, const_pointer host, size_t n) const
+            -> std::enable_if_t<is_reinterpretable<Type>::value>;
+
+        template<typename = void>
+        inline auto
+        copy_to_host(pointer host, const_device_pointer device, size_t n) const
+            -> std::enable_if_t<!is_reinterpretable<Type>::value>;
+
+        template<typename = void>
+        inline auto
+        copy_to_host(pointer host, const_device_pointer device, size_t n) const
+            -> std::enable_if_t<is_reinterpretable<Type>::value>;
     };
 }
 
