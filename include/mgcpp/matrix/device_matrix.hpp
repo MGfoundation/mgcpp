@@ -32,6 +32,8 @@ namespace mgcpp
                               Type,
                               DeviceId>
     {
+        static_assert(is_scalar<Type>::value, "Element type not supported.");
+
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
         using value_type = typename value_type<Type>::type;

@@ -30,6 +30,8 @@ namespace mgcpp
                               Align,
                               DeviceId>
     {
+        static_assert(is_scalar<Type>::value, "Element type not supported.");
+
     public:
         using this_type = device_vector<Type, Align, DeviceId, Alloc>;
         using value_type = typename value_type<Type>::type;
