@@ -26,7 +26,7 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n);
 
-    kernel_status_t
+    mgblas_error_t
     mgblas_Hfill(__half* arr, __half value, size_t n);
 }
 
