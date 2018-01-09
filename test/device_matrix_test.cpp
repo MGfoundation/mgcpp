@@ -42,7 +42,7 @@ public:
     T* data() const
     { return _data; }
 
-    std::pair<size_t, size_t>
+    mgcpp::shape<2>
     shape() const
     { return {_m, _n}; }
 
@@ -61,8 +61,8 @@ namespace mgcpp
         {
             *out_p = mat.data();
             auto shape = mat.shape();
-            *m = shape.first;
-            *n = shape.second;
+            *m = shape[0];
+            *n = shape[1];
         }
     };
 }
@@ -72,8 +72,8 @@ TEST(device_matrix, default_constructor)
     mgcpp::device_matrix<float, 0> mat;
 
     auto shape = mat.shape();
-    EXPECT_EQ(shape.first, 0);
-    EXPECT_EQ(shape.second, 0);
+    EXPECT_EQ(shape[0], 0);
+    EXPECT_EQ(shape[1], 0);
     EXPECT_EQ(mat.data(), nullptr);
     EXPECT_EQ(mat.context(), mgcpp::device_matrix<float>().context());
 }
@@ -89,7 +89,7 @@ TEST(device_matrix, dimension_constructor)
 
     size_t row_dim = 10;
     size_t col_dim = 5;
-    mgcpp::device_matrix<float, 0> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float, 0> mat({row_dim, col_dim});
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -98,8 +98,8 @@ TEST(device_matrix, dimension_constructor)
     EXPECT_GT(before_memory, after_memory);
 
     auto shape = mat.shape();
-    EXPECT_EQ(shape.first, row_dim);
-    EXPECT_EQ(shape.second, col_dim);
+    EXPECT_EQ(shape[0], row_dim);
+    EXPECT_EQ(shape[1], col_dim);
     EXPECT_NE(mat.data(), nullptr);
 }
 
@@ -115,7 +115,7 @@ TEST(device_matrix, dimension_initializing_constructor)
     size_t row_dim = 5;
     size_t col_dim = 10;
     float init_val = 7;
-    mgcpp::device_matrix<float> mat(row_dim, col_dim, init_val);
+    mgcpp::device_matrix<float> mat({row_dim, col_dim}, init_val);
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -124,8 +124,8 @@ TEST(device_matrix, dimension_initializing_constructor)
     EXPECT_GT(before_memory, after_memory);
 
     auto shape = mat.shape();
-    EXPECT_EQ(shape.first, row_dim);
-    EXPECT_EQ(shape.second, col_dim);
+    EXPECT_EQ(shape[0], row_dim);
+    EXPECT_EQ(shape[1], col_dim);
 
     EXPECT_NO_THROW(
         do
@@ -205,7 +205,7 @@ TEST(device_matrix, matrix_init_from_host_data)
 
     mgcpp::device_matrix<float> mat{};
     EXPECT_NO_THROW(
-        mat = mgcpp::device_matrix<float>(row_dim, col_dim, data));
+        mat = mgcpp::device_matrix<float>({row_dim, col_dim}, data));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);
@@ -281,7 +281,7 @@ TEST(device_matrix, copy_construction)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
     mgcpp::device_matrix<float> copied{};
     EXPECT_NO_THROW(copied = mgcpp::device_matrix<float>(original));
 
@@ -309,8 +309,8 @@ TEST(device_matrix, reallocation_during_copy_assign)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
-    mgcpp::device_matrix<float> copied(row_dim /2, col_dim /2);
+    mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
+    mgcpp::device_matrix<float> copied({row_dim /2, col_dim /2});
     size_t before_capacity = copied.capacity();
     
     EXPECT_NO_THROW(copied = original);
@@ -335,8 +335,8 @@ TEST(device_matrix, no_reallocation_during_copy_assign)
     EXPECT_TRUE(before);
     auto before_freemem = before.value().first;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
-    mgcpp::device_matrix<float> copied(row_dim * 2, col_dim * 2);
+    mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
+    mgcpp::device_matrix<float> copied({row_dim * 2, col_dim * 2});
     EXPECT_NO_THROW(copied = original);
 
     EXPECT_EQ(copied.check_value(0,0), init); //supressing optimization
@@ -359,7 +359,7 @@ TEST(device_matrix, copy_to_host)
     size_t row_dim = 5;
     size_t col_dim = 10;
     float init = 7;
-    mgcpp::device_matrix<float> mat(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> mat({row_dim, col_dim}, init);
 
     float* host = (float*)malloc(sizeof(float) * row_dim * col_dim);
     EXPECT_NO_THROW(mat.copy_to_host(host));
@@ -383,7 +383,7 @@ TEST(device_matrix, move_constructor)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
+    mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
 
     auto before = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(before);
@@ -410,8 +410,8 @@ TEST(device_matrix, move_constructor)
         }while(false));
 
     EXPECT_EQ(original.data(), nullptr);
-    EXPECT_EQ(moved.shape().first, row_dim);
-    EXPECT_EQ(moved.shape().second, col_dim);
+    EXPECT_EQ(moved.shape()[0], row_dim);
+    EXPECT_EQ(moved.shape()[1], col_dim);
 }
 
 TEST(device_matrix, move_assign_operator)
@@ -423,8 +423,8 @@ TEST(device_matrix, move_assign_operator)
     size_t col_dim = 10;
     float init = 7;
 
-    mgcpp::device_matrix<float> original(row_dim, col_dim, init);
-    mgcpp::device_matrix<float> moved(row_dim * 2, col_dim * 2);
+    mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
+    mgcpp::device_matrix<float> moved({row_dim * 2, col_dim * 2});
     size_t before_capacity = moved.capacity();
 
     moved = std::move(original);
@@ -443,8 +443,8 @@ TEST(device_matrix, move_assign_operator)
         }while(false));
 
     EXPECT_EQ(original.data(), nullptr);
-    EXPECT_EQ(moved.shape().first, row_dim);
-    EXPECT_EQ(moved.shape().second, col_dim);
+    EXPECT_EQ(moved.shape()[0], row_dim);
+    EXPECT_EQ(moved.shape()[1], col_dim);
 }
 
 TEST(device_matrix, matrix_resize)
@@ -454,10 +454,10 @@ TEST(device_matrix, matrix_resize)
 
     size_t row_dim = 10;
     size_t col_dim = 10;
-    mgcpp::device_matrix<float> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> mat({row_dim, col_dim});
     size_t before_capacity = mat.capacity();
 
-    EXPECT_NO_THROW(mat.resize(row_dim * 2, col_dim * 2));
+    EXPECT_NO_THROW(mat.resize({row_dim * 2, col_dim * 2}));
 
     EXPECT_GT(mat.capacity(), before_capacity);
 }
@@ -469,13 +469,12 @@ TEST(device_matrix, matrix_resize_init)
 
     size_t row_dim = 10;
     size_t col_dim = 10;
-    mgcpp::device_matrix<float> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> mat({row_dim, col_dim});
     size_t before_capacity = mat.capacity();
 
     float init_val= 7;
 
-    EXPECT_NO_THROW(mat.resize(row_dim * 2,
-                               col_dim * 2,
+    EXPECT_NO_THROW(mat.resize({row_dim * 2, col_dim * 2},
                                init_val));
 
     EXPECT_GT(mat.capacity(), before_capacity);
@@ -501,7 +500,7 @@ TEST(device_matrix, matrix_zero_after_allocation)
 
     size_t row_dim = 5;
     size_t col_dim = 10;
-    mgcpp::device_matrix<float> mat(row_dim, col_dim);
+    mgcpp::device_matrix<float> mat({row_dim, col_dim});
     EXPECT_NO_THROW(mat.zero());
 
     EXPECT_NO_THROW(

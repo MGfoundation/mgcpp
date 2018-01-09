@@ -13,8 +13,8 @@ TEST(mult_expr, row_major_mat_mat_mult)
 {
     using matrix = mgcpp::device_matrix<float>;
 
-    matrix A_mat(2, 4, 2);
-    matrix B_mat(4, 3, 4);
+    matrix A_mat({2, 4}, 2);
+    matrix B_mat({4, 3}, 4);
 
     auto mult_expr = A_mat * B_mat;
 
@@ -22,12 +22,12 @@ TEST(mult_expr, row_major_mat_mat_mult)
     EXPECT_NO_THROW({C_mat = mult_expr.eval();});
     
     auto shape = C_mat.shape();
-    EXPECT_EQ(shape.first, 2);
-    EXPECT_EQ(shape.second, 3);
+    EXPECT_EQ(shape[0], 2);
+    EXPECT_EQ(shape[1], 3);
 
-    for(size_t i = 0; i < shape.first; ++i)
+    for(size_t i = 0; i < shape[0]; ++i)
     {
-        for(size_t j = 0; j < shape.second; ++j)
+        for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 32)
                 << "i: " << i << " j: " << j; 

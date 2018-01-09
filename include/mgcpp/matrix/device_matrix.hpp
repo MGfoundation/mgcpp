@@ -17,6 +17,7 @@
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
 #include <mgcpp/type_traits/host_value_type.hpp>
+#include <mgcpp/global/shape.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -44,11 +45,12 @@ namespace mgcpp
         using const_device_pointer = device_value_type const*;
         using result_type = this_type;
         using allocator_type = Alloc;
+        using shape_type = mgcpp::shape<2>;
         size_t const device_id = DeviceId;
 
     private:
         thread_context* _context;
-        std::pair<size_t, size_t> _shape;
+        shape_type _shape;
         Alloc _allocator;
         device_pointer _data;
         size_t _capacity;
@@ -67,15 +69,15 @@ namespace mgcpp
         device_matrix(Alloc const& alloc);
 
         inline
-        device_matrix(size_t i, size_t j,
+        device_matrix(shape_type shape,
                       Alloc const& alloc = Alloc());
 
         inline
-        device_matrix(size_t i, size_t j, value_type init,
+        device_matrix(shape_type shape, value_type init,
                       Alloc const& alloc = Alloc());
         
         inline
-        device_matrix(size_t i, size_t j, const_pointer data,
+        device_matrix(shape_type shape, const_pointer data,
                       Alloc const& alloc = Alloc());
 
         inline
@@ -113,10 +115,10 @@ namespace mgcpp
         zero();
 
         inline device_matrix<Type, DeviceId, Alloc>&
-        resize(size_t i, size_t j);
+        resize(shape_type new_shape);
 
         inline device_matrix<Type, DeviceId, Alloc>&
-        resize(size_t i, size_t j, value_type init);
+        resize(shape_type new_shape, value_type init);
 
         inline column_view<this_type, Type, DeviceId>
         column(size_t i) noexcept;
@@ -151,7 +153,7 @@ namespace mgcpp
         inline Alloc&
         allocator() noexcept;
 
-        inline std::pair<size_t, size_t> const&
+        inline shape_type const&
         shape() const noexcept;
     };
 }

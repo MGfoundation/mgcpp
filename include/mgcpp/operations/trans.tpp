@@ -24,8 +24,8 @@ namespace mgcpp
 
         auto shape = mat.shape();
 
-        auto m = shape.first;
-        auto n = shape.second;
+        auto m = shape[0];
+        auto n = shape[1];
 
         size_t alpha = 1;
         size_t beta = 0;

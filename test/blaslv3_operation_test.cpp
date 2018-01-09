@@ -20,18 +20,18 @@
 
 TEST(mat_mat_operation, row_major_multiplication)
 {
-    mgcpp::device_matrix<float> A_mat(2, 4, 2);
-    mgcpp::device_matrix<float> B_mat(4, 3, 4);
+    mgcpp::device_matrix<float> A_mat({2, 4}, 2);
+    mgcpp::device_matrix<float> B_mat({4, 3}, 4);
 
     auto C_mat = mgcpp::strict::mult(A_mat, B_mat);
 
     auto shape = C_mat.shape();
-    EXPECT_EQ(shape.first, 2);
-    EXPECT_EQ(shape.second, 3);
+    EXPECT_EQ(shape[0], 2);
+    EXPECT_EQ(shape[1], 3);
 
-    for(size_t i = 0; i < shape.first; ++i)
+    for(size_t i = 0; i < shape[0]; ++i)
     {
-        for(size_t j = 0; j < shape.second; ++j)
+        for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 32)
                 << "i: " << i << " j: " << j; 
@@ -41,18 +41,18 @@ TEST(mat_mat_operation, row_major_multiplication)
 
 TEST(mat_mat_operation , row_major_addition)
 {
-    mgcpp::device_matrix<float> A_mat(4, 2, 2);
-    mgcpp::device_matrix<float> B_mat(4, 2, 4);
+    mgcpp::device_matrix<float> A_mat({4, 2}, 2);
+    mgcpp::device_matrix<float> B_mat({4, 2}, 4);
 
     auto C_mat = mgcpp::strict::add(A_mat, B_mat);
 
     auto shape = C_mat.shape();
-    EXPECT_EQ(shape.first, 4);
-    EXPECT_EQ(shape.second, 2);
+    EXPECT_EQ(shape[0], 4);
+    EXPECT_EQ(shape[1], 2);
 
-    for(size_t i = 0; i < shape.first; ++i)
+    for(size_t i = 0; i < shape[0]; ++i)
     {
-        for(size_t j = 0; j < shape.second; ++j)
+        for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 6)
                 << "i: " << i << " j: " << j; 
@@ -62,18 +62,18 @@ TEST(mat_mat_operation , row_major_addition)
 
 TEST(mat_mat_operation , matrix_substraction)
 {
-    mgcpp::device_matrix<float> A_mat(4, 2, 4);
-    mgcpp::device_matrix<float> B_mat(4, 2, 2);
+    mgcpp::device_matrix<float> A_mat({4, 2}, 4);
+    mgcpp::device_matrix<float> B_mat({4, 2}, 2);
 
     auto C_mat = mgcpp::strict::sub(A_mat, B_mat);
 
     auto shape = C_mat.shape();
-    EXPECT_EQ(shape.first, 4);
-    EXPECT_EQ(shape.second, 2);
+    EXPECT_EQ(shape[0], 4);
+    EXPECT_EQ(shape[1], 2);
 
-    for(size_t i = 0; i < shape.first; ++i)
+    for(size_t i = 0; i < shape[0]; ++i)
     {
-        for(size_t j = 0; j < shape.second; ++j)
+        for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 2)
                 << "i: " << i << " j: " << j; 
@@ -103,7 +103,7 @@ TEST(mat_operation, mat_sum)
     size_t m = 5;
     size_t n = 5;
     size_t value = 5;
-    mgcpp::device_matrix<float> mat(m, n, value);
+    mgcpp::device_matrix<float> mat({m, n}, value);
 
     EXPECT_NO_THROW({
             float result = mgcpp::strict::sum(mat);

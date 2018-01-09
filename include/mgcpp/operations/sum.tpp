@@ -60,7 +60,7 @@ namespace mgcpp
         value_type result;
         auto status = mgblas_vpr(original_mat.data(),
                                  &result,
-                                 shape.first * shape.second);
+                                 shape[0] * shape[1]);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

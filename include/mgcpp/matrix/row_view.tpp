@@ -55,7 +55,7 @@ namespace mgcpp
     row_view<DenseMat, Type, DeviceId>::
     operator=(std::initializer_list<Type> const& init)
     {
-        size_t size = _matrix->shape().second;
+        size_t size = _matrix->shape()[1];
         MGCPP_ASSERT(size == init.size(),
                      "row view and assigned vector size doesn't match");
 
@@ -63,7 +63,7 @@ namespace mgcpp
         std::copy(init.begin(), init.end(), buffer);
 
         /* temporary stupid implementation */
-        size_t stride = _matrix->shape().first;
+        size_t stride = _matrix->shape()[0];
         for(size_t i = 0; i < size; ++i)
         {
             auto status = cuda_memcpy(data_mutable() + i * stride,
@@ -90,12 +90,12 @@ namespace mgcpp
     {
         auto const& dense_vec = ~vec;
 
-        size_t size = _matrix->shape().second;
+        size_t size = _matrix->shape()[1];
         MGCPP_ASSERT(size == dense_vec.shape(),
                      "row view and assigned vector size doesn't match");
 
         /* temporary stupid implementation */
-        size_t stride = _matrix->shape().first;
+        size_t stride = _matrix->shape()[0];
         for(size_t i = 0; i < size; ++i)
         {
             auto status = cuda_memcpy(data_mutable() + i * stride,
@@ -120,10 +120,10 @@ namespace mgcpp
         if(!host_p)
         { MGCPP_THROW_INVALID_ARGUMENT("provided pointer is null"); }
 
-        size_t size = _matrix->shape().second;
+        size_t size = _matrix->shape()[1];
 
         /* temporary stupid implementation */
-        size_t stride = _matrix->shape().first;
+        size_t stride = _matrix->shape()[0];
         for(size_t i = 0; i < size; ++i)
         {
             auto status = cuda_memcpy(host_p + i,
@@ -143,11 +143,11 @@ namespace mgcpp
     row_view<DenseMat, Type, DeviceId>::
     check_value(size_t i) const
     {
-        if(i >= _matrix->shape().second)
+        if(i >= _matrix->shape()[1])
         { MGCPP_THROW_OUT_OF_RANGE("index out of range"); }
 
         Type return_value;
-        size_t stride = _matrix->shape().first;
+        size_t stride = _matrix->shape()[0];
         auto status = cuda_memcpy(&return_value,
                                   data() + i * stride,
                                   1,
@@ -191,5 +191,5 @@ namespace mgcpp
     size_t 
     row_view<DenseMat, Type, DeviceId>::
     shape() const noexcept
-    { return _matrix->shape().second; }
+    { return _matrix->shape()[1]; }
 }

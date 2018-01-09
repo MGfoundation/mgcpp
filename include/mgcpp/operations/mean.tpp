@@ -53,7 +53,7 @@ namespace mgcpp
 
         auto shape = original_mat.shape();
 
-        size_t total_size = shape.first * shape.second;
+        size_t total_size = shape[0] * shape[1];
         value_type result;
             
         auto status = mgblas_vpr(original_mat.data(),

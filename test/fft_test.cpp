@@ -85,30 +85,30 @@ TEST(fft_operation, float_real_to_complex_fwd_fft)
 
 TEST(fft_operation, float_real_to_complex_fwd_fft_2d)
 {
-    auto shape = std::make_pair<size_t, size_t>(32, 16);
-    mgcpp::device_matrix<float> mat(shape.first, shape.second);
-    for (auto i = 0u; i < shape.first; ++i)
-        for (auto j = 0u; j < shape.second; ++j)
+    auto shape = mgcpp::make_shape(32, 16);
+    mgcpp::device_matrix<float> mat(shape);
+    for (auto i = 0u; i < shape[0]; ++i)
+        for (auto j = 0u; j < shape[1]; ++j)
             mat.set_value(i, j, dist(rng));
 
-    cmat<float> expected(carray<float>(shape.second), shape.first);
-    for (auto i = 0u; i < mat.shape().first; ++i)
-        for (auto j = 0u; j < mat.shape().second; ++j)
+    cmat<float> expected(carray<float>(shape[1]), shape[0]);
+    for (auto i = 0u; i < mat.shape()[0]; ++i)
+        for (auto j = 0u; j < mat.shape()[1]; ++j)
             expected[i][j] = {mat.check_value(i, j), 0};
     fft(expected, false);
 
     mgcpp::device_matrix<mgcpp::complex<float>> result;
     EXPECT_NO_THROW({ result = mgcpp::strict::rfft(mat); });
 
-    EXPECT_EQ(result.shape().first, shape.first / 2 + 1);
-    EXPECT_EQ(result.shape().second, shape.second);
+    EXPECT_EQ(result.shape()[0], shape[0] / 2 + 1);
+    EXPECT_EQ(result.shape()[1], shape[1]);
 
-    for (auto i = 0u; i < result.shape().first; ++i) {
-        for (auto j = 0u; j < result.shape().second; ++j) {
+    for (auto i = 0u; i < result.shape()[0]; ++i) {
+        for (auto j = 0u; j < result.shape()[1]; ++j) {
             EXPECT_NEAR(result.check_value(i, j).real(), expected[i][j].real(), 1e-3)
-                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+                << "size = (" << shape[0] << ", " << shape[1] << "), i = " << i << ", j = " << j;
             EXPECT_NEAR(result.check_value(i, j).imag(), expected[i][j].imag(), 1e-3)
-                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+                << "size = (" << shape[0] << ", " << shape[1] << "), i = " << i << ", j = " << j;
         }
     }
 }
@@ -173,10 +173,10 @@ TEST(fft_operation, float_complex_to_real_inv_fft)
 
 TEST(fft_operation, float_real_complex_real_roundtrip_2d)
 {
-    auto shape = std::make_pair<size_t, size_t>(32, 16);
-    mgcpp::device_matrix<float> mat(shape.first, shape.second);
-    for (auto i = 0u; i < shape.first; ++i)
-        for (auto j = 0u; j < shape.second; ++j)
+    auto shape = mgcpp::make_shape(32, 16);
+    mgcpp::device_matrix<float> mat(shape);
+    for (auto i = 0u; i < shape[0]; ++i)
+        for (auto j = 0u; j < shape[1]; ++j)
             mat.set_value(i, j, dist(rng));
 
     mgcpp::device_matrix<mgcpp::complex<float>> F;
@@ -186,10 +186,10 @@ TEST(fft_operation, float_real_complex_real_roundtrip_2d)
     EXPECT_NO_THROW({ result = mgcpp::strict::irfft(F); });
 
     EXPECT_EQ(result.shape(), mat.shape());
-    for (auto i = 0u; i < result.shape().first; ++i) {
-        for (auto j = 0u; j < result.shape().second; ++j) {
+    for (auto i = 0u; i < result.shape()[0]; ++i) {
+        for (auto j = 0u; j < result.shape()[1]; ++j) {
             EXPECT_NEAR(result.check_value(i, j), mat.check_value(i, j), 1e-3)
-                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+                << "size = (" << shape[0] << ", " << shape[1] << "), i = " << i << ", j = " << j;
         }
     }
 }
@@ -345,10 +345,10 @@ TEST(fft_operation, double_complex_to_complex_inv_fft)
 
 TEST(fft_operation, float_complex_roundtrip_2d)
 {
-    auto shape = std::make_pair<size_t, size_t>(32, 16);
-    mgcpp::device_matrix<mgcpp::complex<float>> mat(shape.first, shape.second);
-    for (auto i = 0u; i < shape.first; ++i)
-        for (auto j = 0u; j < shape.second; ++j)
+    auto shape = mgcpp::make_shape(32, 16);
+    mgcpp::device_matrix<mgcpp::complex<float>> mat(shape);
+    for (auto i = 0u; i < shape[0]; ++i)
+        for (auto j = 0u; j < shape[1]; ++j)
             mat.set_value(i, j, std::complex<float>(dist(rng), dist(rng)));
 
     mgcpp::device_matrix<mgcpp::complex<float>> F;
@@ -358,12 +358,12 @@ TEST(fft_operation, float_complex_roundtrip_2d)
     EXPECT_NO_THROW({ result = mgcpp::strict::cfft(F, mgcpp::fft_direction::inverse); });
 
     EXPECT_EQ(result.shape(), mat.shape());
-    for (auto i = 0u; i < result.shape().first; ++i) {
-        for (auto j = 0u; j < result.shape().second; ++j) {
+    for (auto i = 0u; i < result.shape()[0]; ++i) {
+        for (auto j = 0u; j < result.shape()[1]; ++j) {
             EXPECT_NEAR(result.check_value(i, j).real(), mat.check_value(i, j).real(), 1e-3)
-                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+                << "size = (" << shape[0] << ", " << shape[1] << "), i = " << i << ", j = " << j;
             EXPECT_NEAR(result.check_value(i, j).imag(), mat.check_value(i, j).imag(), 1e-3)
-                << "size = (" << shape.first << ", " << shape.second << "), i = " << i << ", j = " << j;
+                << "size = (" << shape[0] << ", " << shape[1] << "), i = " << i << ", j = " << j;
         }
     }
 }

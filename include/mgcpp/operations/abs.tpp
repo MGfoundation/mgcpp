@@ -59,7 +59,7 @@ namespace mgcpp
         auto shape = original_mat.shape();
 
         auto result = device_matrix<Type, DeviceId, allocator_type>(original_mat);
-        auto status = mgblas_vab(result.data_mutable(), shape.first * shape.second);
+        auto status = mgblas_vab(result.data_mutable(), shape[0] * shape[1]);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

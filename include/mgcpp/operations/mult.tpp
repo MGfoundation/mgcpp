@@ -26,7 +26,7 @@ namespace mgcpp
         auto const& lhs_mat = ~lhs;
         auto const& rhs_mat = ~rhs;
 
-        MGCPP_ASSERT(lhs_mat.shape().second == rhs_mat.shape().first,
+        MGCPP_ASSERT(lhs_mat.shape()[1] == rhs_mat.shape()[0],
                      "matrix dimensions didn't match");
 
         auto set_device_status = cuda_set_device(DeviceId);
@@ -39,14 +39,14 @@ namespace mgcpp
         auto lhs_shape = lhs_mat.shape();
         auto rhs_shape = rhs_mat.shape();
 
-        size_t m = lhs_shape.first;
-        size_t k = lhs_shape.second;
-        size_t n = rhs_shape.second;
+        size_t m = lhs_shape[0];
+        size_t k = lhs_shape[1];
+        size_t n = rhs_shape[1];
 
         Type const alpha = 1;
         Type const beta = 0;
 
-        auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
+        auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
 
         auto status = cublas_gemm(handle,
                                   CUBLAS_OP_N, CUBLAS_OP_N,
@@ -120,7 +120,7 @@ namespace mgcpp
         auto result = device_matrix<MatrixType,
                                     DeviceId,
                                     allocator_type>(original_mat);
-        auto status = cublas_scal(handle, size.first * size.second,
+        auto status = cublas_scal(handle, size[0] * size[1],
                                   &scalar,
                                   result.data_mutable(), 1);
         if(!status)

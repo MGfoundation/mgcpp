@@ -32,7 +32,7 @@ TEST(column_view, construction)
 
 TEST(column_view, copy_from_init_list)
 {
-    mgcpp::device_matrix<float> mat(2, 3);
+    mgcpp::device_matrix<float> mat({2, 3});
 
     auto first  = mat.column(0);
     auto second = mat.column(1);
@@ -56,7 +56,7 @@ TEST(column_view, copy_from_init_list)
 
 TEST(column_view, copy_from_device_vector)
 {
-    mgcpp::device_matrix<float> mat(3, 2);
+    mgcpp::device_matrix<float> mat({3, 2});
 
     auto first = mat.column(0);
     auto second = mat.column(1);
@@ -96,7 +96,7 @@ TEST(row_view, construction)
 
 TEST(row_view, copy_from_init_list)
 {
-    mgcpp::device_matrix<float> mat(2, 3);
+    mgcpp::device_matrix<float> mat({2, 3});
 
     auto first  = mat.row(0);
     auto second = mat.row(1);
@@ -118,7 +118,7 @@ TEST(row_view, copy_from_init_list)
 
 TEST(row_view, copy_from_device_vector)
 {
-    mgcpp::device_matrix<float> mat(2, 3);
+    mgcpp::device_matrix<float> mat({2, 3});
 
     auto first = mat.row(0);
     auto second = mat.row(1);

@@ -55,7 +55,7 @@ namespace mgcpp
     column_view<DenseMat, Type, DeviceId>::
     operator=(std::initializer_list<Type> const& init)
     {
-        size_t size = _matrix->shape().first;
+        size_t size = _matrix->shape()[0];
         MGCPP_ASSERT(size == init.size(),
                      "column view and assigned vector size doesn't match");
 
@@ -83,7 +83,7 @@ namespace mgcpp
     {
         auto const& dense_vec = ~vec;
 
-        size_t size = _matrix->shape().first;
+        size_t size = _matrix->shape()[0];
         MGCPP_ASSERT(size == dense_vec.shape(),
                      "column view and assigned vector size doesn't match");
 
@@ -107,7 +107,7 @@ namespace mgcpp
         if(!host_p)
         { MGCPP_THROW_INVALID_ARGUMENT("provided pointer is null"); }
 
-        size_t size = _matrix->shape().first;
+        size_t size = _matrix->shape()[0];
         auto status = cuda_memcpy(host_p,
                                   data(),
                                   size,
@@ -123,7 +123,7 @@ namespace mgcpp
     column_view<DenseMat, Type, DeviceId>::
     check_value(size_t i) const
     {
-        if(i >= _matrix->shape().first)
+        if(i >= _matrix->shape()[0])
         { MGCPP_THROW_OUT_OF_RANGE("index out of range"); }
 
         Type return_value;
@@ -145,7 +145,7 @@ namespace mgcpp
     data() const noexcept
     {
         auto shape = _matrix->shape();
-        size_t idx = _column_idx * shape.first;
+        size_t idx = _column_idx * shape[0];
 
         Type const* ptr = _matrix->data() + idx;
 
@@ -160,7 +160,7 @@ namespace mgcpp
     data_mutable() noexcept
     {
         auto shape = _matrix->shape();
-        size_t idx = _column_idx * shape.first;
+        size_t idx = _column_idx * shape[0];
 
         Type* ptr = _matrix->data_mutable() + idx;
 
@@ -181,5 +181,5 @@ namespace mgcpp
     size_t 
     column_view<DenseMat, Type, DeviceId>::
     shape() const noexcept
-    { return _matrix->shape().first; }
+    { return _matrix->shape()[0]; }
 }

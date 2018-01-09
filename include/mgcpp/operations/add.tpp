@@ -38,13 +38,13 @@ namespace mgcpp
 
         auto shape = lhs_mat.shape();
 
-        size_t m = shape.first;
-        size_t n = shape.second;
+        size_t m = shape[0];
+        size_t n = shape[1];
 
         value_type const alpha = 1;
         value_type const beta = 1;
 
-        auto result = device_matrix<Type, DeviceId, allocator_type>{m, n};
+        auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
         auto status = cublas_geam(handle,
                                   CUBLAS_OP_N,
                                   CUBLAS_OP_N,
