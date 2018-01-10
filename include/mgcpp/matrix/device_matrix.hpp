@@ -65,29 +65,29 @@ namespace mgcpp
         inline
         ~device_matrix() noexcept;
 
-        inline
+        inline explicit
         device_matrix(Alloc const& alloc);
 
-        inline
+        inline explicit
         device_matrix(shape_type shape,
                       Alloc const& alloc = Alloc());
 
-        inline
+        inline explicit
         device_matrix(shape_type shape, value_type init,
                       Alloc const& alloc = Alloc());
         
-        inline
+        inline explicit
         device_matrix(shape_type shape, const_pointer data,
                       Alloc const& alloc = Alloc());
 
-        inline
+        inline explicit
         device_matrix(std::initializer_list<
                       std::initializer_list<value_type>> const& array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostMat,
                  MGCPP_CONCEPT(adapter<HostMat>::value)>
-        inline 
+        inline explicit
         device_matrix(HostMat const& host_mat,
                       Alloc const& alloc = Alloc());
 

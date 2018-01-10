@@ -56,23 +56,27 @@ namespace mgcpp
 
         inline ~device_vector() noexcept;
 
-        inline device_vector(Alloc const& alloc) noexcept;
+        inline explicit
+        device_vector(Alloc const& alloc) noexcept;
 
-        inline device_vector(size_t size, Alloc const& alloc = Alloc());
+        inline explicit
+        device_vector(size_t size, Alloc const& alloc = Alloc());
 
-        inline device_vector(size_t size, value_type init,
+        inline explicit
+        device_vector(size_t size, value_type init,
                              Alloc const& alloc = Alloc());
 
-        inline device_vector(size_t size, const_pointer data,
+        inline explicit
+        device_vector(size_t size, const_pointer data,
                              Alloc const& alloc = Alloc());
 
-        inline
+        inline explicit
         device_vector(std::initializer_list<value_type> const& array,
                       Alloc const& alloc = Alloc());
 
         template<typename HostVec,
                  MGCPP_CONCEPT(adapter<HostVec>::value)>
-        inline 
+        inline explicit
         device_vector(HostVec const& host_mat,
                       Alloc const& alloc = Alloc());
 
