@@ -7,16 +7,7 @@
 namespace mgcpp
 {
     template<size_t Dims>
-    struct shape
-    {
-        size_t dims[Dims];
-
-        size_t operator[] (size_t i) const;
-
-        size_t &operator[] (size_t i);
-
-        bool operator==(shape<Dims> const &rhs) const;
-    };
+    using shape = std::array<size_t, Dims>;
 
     template<typename ... Types>
     shape<sizeof...(Types)> make_shape(Types ... args);
