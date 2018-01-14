@@ -68,18 +68,18 @@ namespace mgcpp
         if (is_reinterpretable<T>::value)
         {
             cpy_stat = cuda_memcpy(reinterpret_cast<pointer>(device),
-                                        host,
-                                        n,
-                                        cuda_memcpy_kind::host_to_device);
+                                   host,
+                                   n,
+                                   cuda_memcpy_kind::host_to_device);
         }
         else
         {
             std::vector<device_value_type> host_d(n);
             mgcpp_cast(host, host + n, host_d.data());
             cpy_stat = cuda_memcpy(device,
-                                        host_d.data(),
-                                        n,
-                                        cuda_memcpy_kind::host_to_device);
+                                   host_d.data(),
+                                   n,
+                                   cuda_memcpy_kind::host_to_device);
         }
         if(!cpy_stat)
         { MGCPP_THROW_SYSTEM_ERROR(cpy_stat.error()); }
@@ -99,17 +99,17 @@ namespace mgcpp
         if (is_reinterpretable<T>::value)
         {
             cpy_stat = cuda_memcpy(host,
-                                        reinterpret_cast<const_pointer>(device),
-                                        n,
-                                        cuda_memcpy_kind::device_to_host);
+                                   reinterpret_cast<const_pointer>(device),
+                                   n,
+                                   cuda_memcpy_kind::device_to_host);
         }
         else
         {
             std::vector<device_value_type> host_d(n);
             cpy_stat = cuda_memcpy(host_d.data(),
-                                        device,
-                                        n,
-                                        cuda_memcpy_kind::device_to_host);
+                                   device,
+                                   n,
+                                   cuda_memcpy_kind::device_to_host);
             mgcpp_cast(host_d.data(), host_d.data() + n, host);
         }
         if(!cpy_stat)

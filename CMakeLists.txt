@@ -228,8 +228,7 @@ if(BUILD_TESTING)
 	${PROJECT_NAME}
 	${GTEST_LIBRARIES})
 
-    set(TEST_BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} -std=c++14 -g -Wall -Wextra")
+    set(TEST_BUILD_FLAGS ${BUILD_FLAGS})
 
     message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 

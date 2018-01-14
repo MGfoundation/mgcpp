@@ -21,7 +21,7 @@ namespace mgcpp
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix() noexcept
     : _context(&global_context::get_thread_context()),
-        _shape{0, 0},
+        _shape(0, 0),
         _allocator(),
         _data(nullptr),
         _capacity(0) {}
@@ -32,7 +32,7 @@ namespace mgcpp
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix(Alloc const& alloc) 
         : _context(&global_context::get_thread_context()),
-          _shape{0, 0},
+          _shape(0, 0),
           _allocator(alloc),
           _data(nullptr),
           _capacity(0) {}
@@ -167,7 +167,7 @@ namespace mgcpp
     device_matrix<Type, DeviceId, Alloc>::
     device_matrix(HostMat const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
-         _shape{0, 0},
+         _shape(0, 0),
          _allocator(alloc),
          _data(nullptr),
          _capacity(0)
