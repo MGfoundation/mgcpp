@@ -4,10 +4,11 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
-#define _MGCPP_EXPRESSIONS_MAT_EXPR_HPP_
+#ifndef _MGCPP_EXPRESSIONS_DENSE_MAT_EXPR_HPP_
+#define _MGCPP_EXPRESSIONS_DENSE_MAT_EXPR_HPP_
 
-#include <mgcpp/matrix/dense_matrix.hpp>
+#include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/matrix/forward.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/system/concept.hpp>
 
@@ -16,8 +17,8 @@
 
 namespace mgcpp
 {
-    template<typename T>
-    struct mat_expr {};
+    template<typename Expr>
+    struct dmat_expr : public expression<Expr> {};
 
     template<typename DenseMatrix,
              typename Type,
@@ -26,5 +27,5 @@ namespace mgcpp
     eval(dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
 }
 
-#include <mgcpp/expressions/mat_expr.tpp>
+#include <mgcpp/expressions/dmat_expr.tpp>
 #endif

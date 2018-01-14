@@ -8,6 +8,7 @@
 #define _MGCPP_MATRIX_DENSE_MATRIX_HPP_
 
 #include <mgcpp/matrix/matrix_base.hpp>
+#include <mgcpp/expressions/dmat_expr.hpp>
 
 namespace mgcpp
 {
@@ -15,9 +16,10 @@ namespace mgcpp
              typename Type,
              size_t DeviceId>
     class dense_matrix :
-        public matrix_base<DenseMatType, Type, DeviceId>
+        public matrix_base<DenseMatType>,
+        public dmat_expr<DenseMatType>
     {
-
+        using result_type = DenseMatType;
     };
 }
 

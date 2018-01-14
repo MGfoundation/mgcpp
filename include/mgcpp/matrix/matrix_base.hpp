@@ -9,18 +9,9 @@
 
 namespace mgcpp
 {
-    template<typename MatrixType,
-             typename Type,
-             size_t DeviceId>
+    template<typename MatrixType>
     struct matrix_base
-    {
-        inline MatrixType const&
-        operator~() const noexcept;
-
-        inline MatrixType&
-        operator~() noexcept;
-    };
+    {};
 }
 
-#include <mgcpp/matrix/matrix_base.tpp>
 #endif

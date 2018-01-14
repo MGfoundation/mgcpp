@@ -4,7 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/expressions/mat_expr.hpp>
+#include <mgcpp/expressions/dmat_expr.hpp>
 
 namespace mgcpp
 {
