@@ -13,7 +13,7 @@ TEST(mult_expr, row_major_mat_mat_add)
 {
     using matrix = mgcpp::device_matrix<float>;
 
-    matrix A_mat({2, 4}, 2);
+    matrix A_mat({4, 3}, 2);
     matrix B_mat({4, 3}, 4);
 
     auto mult_expr = A_mat + B_mat;
@@ -38,7 +38,7 @@ TEST(mult_expr, row_major_mat_mat_add_func)
 {
     using matrix = mgcpp::device_matrix<float>;
 
-    matrix A_mat({2, 4}, 2);
+    matrix A_mat({4, 3}, 2);
     matrix B_mat({4, 3}, 4);
 
     auto mult_expr = mgcpp::add(A_mat, B_mat);
