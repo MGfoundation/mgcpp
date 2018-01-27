@@ -39,7 +39,16 @@ namespace mgcpp
 
     template<typename LhsExpr, typename RhsExpr>
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> 
-    operator*(dmat_expr<LhsExpr> const& lhs, dmat_expr<RhsExpr> const& rhs) noexcept
+    operator*(dmat_expr<LhsExpr> const& lhs,
+              dmat_expr<RhsExpr> const& rhs) noexcept
+    {
+        return dmat_dmat_mult_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+    }
+
+    template<typename LhsExpr, typename RhsExpr>
+    dmat_dmat_mult_expr<LhsExpr, RhsExpr> 
+    mult(dmat_expr<LhsExpr> const& lhs,
+         dmat_expr<RhsExpr> const& rhs) noexcept
     {
         return dmat_dmat_mult_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
     }
