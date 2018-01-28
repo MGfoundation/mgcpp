@@ -14,9 +14,9 @@
 
 TEST(column_view, construction)
 {
-    mgcpp::device_matrix<float> mat{
-        {1, 2, 3},
-        {4, 5, 6}};
+    auto mat = mgcpp::device_matrix<float>::from_list(
+        {{1, 2, 3},
+         {4, 5, 6}});
 
     auto view = mat.column(0);
 
@@ -77,9 +77,9 @@ TEST(column_view, copy_from_device_vector)
 
 TEST(row_view, construction)
 {
-    mgcpp::device_matrix<float> mat{
-        {1, 2, 3},
-        {4, 5, 6}};
+    auto mat = mgcpp::device_matrix<float>::from_list(
+        {{1, 2, 3},
+         {4, 5, 6}});
 
     auto view = mat.row(0);
 

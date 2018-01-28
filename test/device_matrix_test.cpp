@@ -248,7 +248,7 @@ TEST(device_matrix, matrix_init_from_init_list)
 
     mgcpp::device_matrix<float> mat{};
     EXPECT_NO_THROW(
-        mat = mgcpp::device_matrix<float>(init_list));
+        mat = mgcpp::device_matrix<float>::from_list(init_list));
 
     auto after = mgcpp::cuda_mem_get_info();
     EXPECT_TRUE(after);

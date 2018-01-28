@@ -98,7 +98,7 @@ namespace mgcpp
     size_t
     device_matrix<Type, DeviceId, Alloc>::
     determine_ndim(std::initializer_list<
-                       std::initializer_list<value_type>> const& list) const noexcept
+                       std::initializer_list<value_type>> const& list) noexcept
     {
         auto max_elem = std::max(list.begin(),
                                  list.end(),
@@ -115,22 +115,21 @@ namespace mgcpp
     template<typename Type,
              size_t DeviceId,
              typename Alloc>
+    device_matrix<Type, DeviceId, Alloc>
     device_matrix<Type, DeviceId, Alloc>::
-    device_matrix(std::initializer_list<
+    from_list(std::initializer_list<
                       std::initializer_list<value_type>> const& init_list,
                   Alloc const& alloc)
-        : _context(&global_context::get_thread_context()),
-          _shape{init_list.size(), determine_ndim(init_list)},
-          _allocator(alloc),
-          _data(_allocator.device_allocate(_shape[0] * _shape[1])),
-          _capacity(_shape[0] * _shape[1])
     {
-        size_t total_size = _shape[0] * _shape[1];
+        auto shape = make_shape(init_list.size(), determine_ndim(init_list));
 
-        pointer buffer = _allocator.allocate(total_size);
+        size_t total_size = shape[0] * shape[1];
+
+        Alloc allocator = alloc;
+        pointer buffer = allocator.allocate(total_size);
 
         size_t i = 0;
-        for(const auto& row_list : init_list)
+        for(const auto& row : init_list)
         {
             // std::fill(std::copy(row_list.begin(),
             //                     row_list.end(),
@@ -139,25 +138,19 @@ namespace mgcpp
             //           Type());
             // ++i;
             size_t j = 0;
-            for(Type elem : row_list)
+            for(Type elem : row)
             {
-                buffer[i + _shape[0] * j] = elem;
+                buffer[i + shape[0] * j] = elem;
                 ++j;
             }
             ++i;
         }
 
-        try
-        {
-            _allocator.copy_from_host(_data, buffer, total_size);
-            _allocator.deallocate(buffer, total_size);
-        }
-        catch(std::system_error const& err)
-        {
-            _allocator.deallocate(buffer, total_size);
-            _allocator.device_deallocate(_data, _capacity);
-            MGCPP_THROW(err);
-        }
+        device_matrix mat(shape, buffer, alloc);
+
+        allocator.deallocate(buffer, total_size);
+
+        return mat;
     }
 
     template<typename Type,
