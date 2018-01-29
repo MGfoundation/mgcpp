@@ -15,6 +15,7 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 #include <type_traits>
 #include <cstdlib>
 #include <new>
+#include <complex>
 
 namespace mgcpp
 {
@@ -46,6 +47,30 @@ namespace mgcpp
     template<typename ElemType>
     outcome::result<void>
     cuda_memcpy(ElemType* to, ElemType const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(cuComplex* to, std::complex<float> const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(std::complex<float>* to, cuComplex const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(cuDoubleComplex* to, std::complex<double> const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(std::complex<double>* to, cuDoubleComplex const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(__half* to, float const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept;
+
+    inline outcome::result<void>
+    cuda_memcpy(float* to, __half const* from,
                 size_t count, cuda_memcpy_kind kind) noexcept;
 
     using free_mem_t = size_t;

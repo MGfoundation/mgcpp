@@ -9,6 +9,7 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/system/error_code.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/kernels/mgblas_helpers.hpp>
 
 namespace mgcpp
 {
@@ -113,5 +114,73 @@ namespace mgcpp
             return status;
         else
             return outcome::success();
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(cuComplex* to, std::complex<float> const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        return cuda_memcpy(to, reinterpret_cast<cuComplex const*>(from), count, kind);
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(std::complex<float>* to, cuComplex const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        return cuda_memcpy(reinterpret_cast<cuComplex*>(to), from, count, kind);
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(cuDoubleComplex* to, std::complex<double> const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        return cuda_memcpy(to, reinterpret_cast<cuDoubleComplex const*>(from), count, kind);
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(std::complex<double>* to, cuDoubleComplex const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        return cuda_memcpy(reinterpret_cast<cuDoubleComplex*>(to), from, count, kind);
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(__half* to, float const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        auto ptr = cuda_malloc<float>(count);
+        if(!ptr)
+        { return ptr.error(); }
+
+        auto cpy_stat = cuda_memcpy(ptr.value(), from, count, kind);
+        if(!cpy_stat)
+        { return ptr.error(); }
+
+        // convert float -> half
+        auto conv_stat = mgblas_convert_copy(ptr.value(), to, count);
+        if (!conv_stat)
+        { return conv_stat.error(); }
+
+        return cuda_free(ptr.value());
+    }
+
+    inline outcome::result<void>
+    cuda_memcpy(float* to, __half const* from,
+                size_t count, cuda_memcpy_kind kind) noexcept
+    {
+        auto ptr = cuda_malloc<float>(count);
+        if(!ptr)
+        { return ptr.error(); }
+
+        // convert half -> float
+        auto conv_stat = mgblas_convert_copy(from, ptr.value(), count);
+        if (!conv_stat)
+        { return conv_stat.error(); }
+
+        auto cpy_stat = cuda_memcpy(to, ptr.value(), count, kind);
+        if (!cpy_stat)
+        { return cpy_stat.error(); }
+
+        return cuda_free(ptr.value());
     }
 }

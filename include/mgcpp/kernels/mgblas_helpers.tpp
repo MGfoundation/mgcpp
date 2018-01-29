@@ -5,8 +5,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/kernels/bits/fill.cuh>
+#include <mgcpp/kernels/bits/convert.cuh>
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/system/error_code.hpp>
+
+#include <complex>
 
 namespace mgcpp
 {
@@ -37,9 +40,9 @@ namespace mgcpp
 
     template<>
     inline outcome::result<void>
-    mgblas_fill(cuComplex* arr, cuComplex value, size_t n)
+    mgblas_fill(cuComplex* arr, std::complex<float> value, size_t n)
     {
-        std::error_code status = mgblas_Cfill(arr, value, n);
+        std::error_code status = mgblas_Cfill(arr, reinterpret_cast<cuComplex&>(value), n);
 
         if(status != status_t::success)
             return status;
@@ -50,9 +53,9 @@ namespace mgcpp
 
     template<>
     inline outcome::result<void>
-    mgblas_fill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n)
+    mgblas_fill(cuDoubleComplex* arr, std::complex<double> value, size_t n)
     {
-        std::error_code status = mgblas_Zfill(arr, value, n);
+        std::error_code status = mgblas_Zfill(arr, reinterpret_cast<cuDoubleComplex&>(value), n);
 
         if(status != status_t::success)
             return status;
@@ -63,7 +66,7 @@ namespace mgcpp
 
     template<>
     inline outcome::result<void>
-    mgblas_fill(__half* arr, __half value, size_t n)
+    mgblas_fill(__half* arr, float value, size_t n)
     {
         std::error_code status = mgblas_Hfill(arr, value, n);
 
@@ -72,5 +75,29 @@ namespace mgcpp
         else
             return outcome::success();
 
+    }
+
+    template<>
+    inline outcome::result<void>
+    mgblas_convert_copy(__half const* from, float* to, size_t n)
+    {
+        std::error_code status = mgblas_HFconvert(from, to, n);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    template<>
+    inline outcome::result<void>
+    mgblas_convert_copy(float const* from, __half* to, size_t n)
+    {
+        std::error_code status = mgblas_FHconvert(from, to, n);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
     }
 }

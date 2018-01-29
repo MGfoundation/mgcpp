@@ -42,11 +42,9 @@ namespace mgcpp
         inline void
         device_deallocate(device_pointer p, size_t n) const;
 
-        template<typename = void>
         inline void
         copy_from_host(device_pointer device, const_pointer host, size_t n) const;
 
-        template<typename = void>
         inline void
         copy_to_host(pointer host, const_device_pointer device, size_t n) const;
     };
