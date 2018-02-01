@@ -79,7 +79,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 float const* alpha,
@@ -95,7 +94,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 double const* alpha,
@@ -111,7 +109,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 cuComplex const* alpha,
@@ -128,7 +125,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 float const* alpha,
@@ -144,7 +140,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 cuDoubleComplex const* alpha,
@@ -160,7 +155,6 @@ namespace mgcpp
             return outcome::success();
     }
 
-    template<>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 double const* alpha,
