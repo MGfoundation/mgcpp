@@ -1,0 +1,131 @@
+
+//          Copyright RedPortal 2017 - 2017.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/cuda_libs/cublas.hpp>
+#include <mgcpp/operations/gemm.hpp>
+#include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/assert.hpp>
+
+namespace mgcpp
+{
+    template<typename ADense,
+             typename BDense,
+             typename CDense,
+             typename Type,
+             size_t DeviceId>
+    decltype(auto)
+    strict::
+    gemm(dense_matrix<ADense, Type, DeviceId> const& A,
+         dense_matrix<BDense, Type, DeviceId> const& B,
+         dense_matrix<CDense, Type, DeviceId> const& C)
+    {
+        using allocator_type = typename ADense::allocator_type;
+
+        auto const& A_mat = ~A;
+        auto const& B_mat = ~B;
+        auto const& C_mat = ~C;
+
+        MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
+                     "multiplied matrices' dimensions didn't match");
+
+        MGCPP_ASSERT(C_mat.shape()[0] == A_mat.shape()[0]
+                     && C_mat.shape()[1] == B_mat.shape()[1],
+                     "added matrix' dimension doesn't match");
+
+        auto set_device_status = cuda_set_device(DeviceId);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
+
+        auto* context = A_mat.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        auto A_shape = A_mat.shape();
+        auto B_shape = B_mat.shape();
+
+        size_t m = A_shape[0];
+        size_t k = A_shape[1];
+        size_t n = B_shape[1];
+
+        Type const alpha = 1;
+        Type const beta = 1;
+
+        auto result = device_matrix<Type, DeviceId, allocator_type>(C_mat);
+
+        auto status = cublas_gemm(handle,
+                                  CUBLAS_OP_N, CUBLAS_OP_N,
+                                  m, n, k,
+                                  &alpha,
+                                  A_mat.data(), m,
+                                  B_mat.data(), k,
+                                  &beta,
+                                  result.data_mutable(), m);
+
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
+    }
+
+    template<typename ADense,
+             typename BDense,
+             typename CDense,
+             typename Type,
+             size_t DeviceId,
+             typename ScalarType,
+             typename>
+    decltype(auto)
+    strict::
+    gemm(ScalarType alpha,
+         dense_matrix<ADense, Type, DeviceId> const& A,
+         dense_matrix<BDense, Type, DeviceId> const& B,
+         ScalarType beta,
+         dense_matrix<CDense, Type, DeviceId> const& C)
+    {
+        using allocator_type = typename ADense::allocator_type;
+
+        auto const& A_mat = ~A;
+        auto const& B_mat = ~B;
+        auto const& C_mat = ~C;
+
+        MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
+                     "multiplied matrices' dimensions didn't match");
+
+        MGCPP_ASSERT(C_mat.shape()[0] == A_mat.shape()[0]
+                     && C_mat.shape()[1] == B_mat.shape()[1],
+                     "added matrix' dimension doesn't match");
+
+        auto set_device_status = cuda_set_device(DeviceId);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
+
+        auto* context = A_mat.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        auto A_shape = A_mat.shape();
+        auto B_shape = B_mat.shape();
+
+        size_t m = A_shape[0];
+        size_t k = A_shape[1];
+        size_t n = B_shape[1];
+
+        auto result = device_matrix<Type, DeviceId, allocator_type>(C_mat);
+
+        auto status = cublas_gemm(handle,
+                                  CUBLAS_OP_N, CUBLAS_OP_N,
+                                  m, n, k,
+                                  &alpha,
+                                  A_mat.data(), m,
+                                  B_mat.data(), k,
+                                  &beta,
+                                  result.data_mutable(), m);
+
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
+    }
+}
