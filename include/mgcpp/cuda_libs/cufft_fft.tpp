@@ -15,7 +15,7 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 namespace mgcpp
 {
     inline outcome::result<void>
-    cublas_rfft(size_t n, float const* x, cuComplex* result)
+    cufft_rfft(size_t n, float const* x, cuComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -34,7 +34,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_rfft(size_t n, double const* x, cuDoubleComplex* result)
+    cufft_rfft(size_t n, double const* x, cuDoubleComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -53,7 +53,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_irfft(size_t n, cuComplex const* x, float* result)
+    cufft_irfft(size_t n, cuComplex const* x, float* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -72,7 +72,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_irfft(size_t n, cuDoubleComplex const* x, double* result)
+    cufft_irfft(size_t n, cuDoubleComplex const* x, double* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -92,7 +92,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_cfft(size_t n, cuComplex const* x, cuComplex* result, cublas::fft_direction direction)
+    cufft_cfft(size_t n, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -112,7 +112,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction)
+    cufft_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -132,7 +132,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_rfft2(size_t n, size_t m, float const* x, cuComplex* result)
+    cufft_rfft2(size_t n, size_t m, float const* x, cuComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -151,7 +151,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result)
+    cufft_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -170,7 +170,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_irfft2(size_t n, size_t m, cuComplex const* x, float* result)
+    cufft_irfft2(size_t n, size_t m, cuComplex const* x, float* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -189,7 +189,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result)
+    cufft_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -208,7 +208,7 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cublas_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cublas::fft_direction direction)
+    cufft_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -229,7 +229,7 @@ namespace mgcpp
 
 
     inline outcome::result<void>
-    cublas_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction)
+    cufft_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;

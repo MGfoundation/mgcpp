@@ -34,7 +34,7 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_rfft(fft_size,
+        auto status = mgcpp::cufft_rfft(fft_size,
                                          dev_vec.data(),
                                          result.data_mutable());
         if(!status)
@@ -72,7 +72,7 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_irfft(fft_size,
+        auto status = mgcpp::cufft_irfft(fft_size,
                                           dev_vec.data(),
                                           result.data_mutable());
         if(!status)
@@ -108,15 +108,15 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        cublas::fft_direction dir;
+        cufft::fft_direction dir;
         if (direction == fft_direction::forward)
-            dir = cublas::fft_direction::forward;
+            dir = cufft::fft_direction::forward;
         else
-            dir = cublas::fft_direction::inverse;
+            dir = cufft::fft_direction::inverse;
 
-        auto status = mgcpp::cublas_cfft(fft_size, dev_vec.data(),
-                                         result.data_mutable(),
-                                         dir);
+        auto status = mgcpp::cufft_cfft(fft_size, dev_vec.data(),
+                                        result.data_mutable(),
+                                        dir);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -148,7 +148,7 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_rfft2(fft_size[0], fft_size[1],
+        auto status = mgcpp::cufft_rfft2(fft_size[0], fft_size[1],
                                           dev_mat.data(),
                                           result.data_mutable());
         if(!status)
@@ -184,7 +184,7 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cublas_irfft2(fft_size[0], fft_size[1],
+        auto status = mgcpp::cufft_irfft2(fft_size[0], fft_size[1],
                                            dev_mat.data(),
                                            result.data_mutable());
         if(!status)
@@ -216,13 +216,13 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        cublas::fft_direction dir;
+        cufft::fft_direction dir;
         if (direction == fft_direction::forward)
-            dir = cublas::fft_direction::forward;
+            dir = cufft::fft_direction::forward;
         else
-            dir = cublas::fft_direction::inverse;
+            dir = cufft::fft_direction::inverse;
 
-        auto status = mgcpp::cublas_cfft2(fft_size[0], fft_size[1],
+        auto status = mgcpp::cufft_cfft2(fft_size[0], fft_size[1],
                                           dev_mat.data(),
                                           result.data_mutable(),
                                           dir);
