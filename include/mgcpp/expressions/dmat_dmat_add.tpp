@@ -17,7 +17,7 @@ namespace mgcpp
     namespace internal
     {
         template<typename LhsExpr, typename RhsExpr>
-        struct dmat_dmat_add_expr_switch
+        struct dmat_dmat_add_subgraph_matcher
         {
             template<typename Type>
             static decltype(auto) eval(Type const& expr)
@@ -30,7 +30,7 @@ namespace mgcpp
         }; 
 
         template<typename AType, typename BType, typename CType>
-        struct dmat_dmat_add_expr_switch<
+        struct dmat_dmat_add_subgraph_matcher<
             dmat_dmat_mult_expr<AType, BType>, CType>
         {
             template<typename Type>
@@ -44,7 +44,7 @@ namespace mgcpp
         };
 
         template<typename AType, typename BType, typename CType>
-        struct dmat_dmat_add_expr_switch<
+        struct dmat_dmat_add_subgraph_matcher<
             CType, dmat_dmat_mult_expr<AType, BType>>
         {
             template<typename Type>
@@ -69,7 +69,7 @@ namespace mgcpp
     dmat_dmat_add_expr<LhsExpr, RhsExpr>::
     eval() const
     {
-        return internal::dmat_dmat_add_expr_switch<LhsExpr, RhsExpr>
+        return internal::dmat_dmat_add_subgraph_matcher<LhsExpr, RhsExpr>
             ::eval(*this);
     }
 
