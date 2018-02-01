@@ -11,10 +11,10 @@ namespace mgcpp
     {
         inline Type&
         operator~()
-        { return *reinterpret_cast<Type*>(this); } 
+        { return *static_cast<Type*>(this); }
 
         inline Type const&
         operator~() const
-        { return *reinterpret_cast<Type const*>(this); } 
+        { return *static_cast<Type const*>(this); }
     };
 }
