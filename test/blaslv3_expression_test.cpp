@@ -8,8 +8,9 @@
 
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
+#include <mgcpp/expressions/dmat_dmat_add.hpp>
 
-TEST(mult_expr, row_major_mat_mat_mult)
+TEST(mult_expr, dmat_dmat_mult)
 {
     using matrix = mgcpp::device_matrix<float>;
 
@@ -36,7 +37,7 @@ TEST(mult_expr, row_major_mat_mat_mult)
 }
 
 
-TEST(mult_expr, row_major_mat_mat_mult_func)
+TEST(mult_expr, dmat_dmat_mult_func)
 {
     using matrix = mgcpp::device_matrix<float>;
 
@@ -57,6 +58,33 @@ TEST(mult_expr, row_major_mat_mat_mult_func)
         for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(C_mat.check_value(i, j), 32)
+                << "i: " << i << " j: " << j; 
+        } 
+    }
+}
+
+TEST(mult_expr, dmat_dmat_mult_add)
+{
+    using matrix = mgcpp::device_matrix<float>;
+
+    matrix A_mat({2, 4}, 2);
+    matrix B_mat({4, 3}, 4);
+    matrix C_mat({2, 3}, 3);
+
+    auto add_expr = (A_mat * B_mat) + C_mat;
+
+    matrix D_mat; 
+    EXPECT_NO_THROW({C_mat = add_expr.eval();});
+    
+    auto shape = D_mat.shape();
+    EXPECT_EQ(shape[0], 2);
+    EXPECT_EQ(shape[1], 3);
+
+    for(size_t i = 0; i < shape[0]; ++i)
+    {
+        for(size_t j = 0; j < shape[1]; ++j)
+        {
+            EXPECT_EQ(C_mat.check_value(i, j), 35)
                 << "i: " << i << " j: " << j; 
         } 
     }

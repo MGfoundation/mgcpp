@@ -31,7 +31,8 @@ namespace mgcpp
                 T const* x, size_t incx,
                 T* y, size_t incy) noexcept;
 
-    template<typename VectorType, typename ScalarType>
+    template<typename VectorType,
+             typename ScalarType>
     inline outcome::result<void>
     cublas_scal(cublasHandle_t handle, size_t n,
                 ScalarType const* alpha,

@@ -67,7 +67,8 @@ namespace mgcpp
              typename ScalarType,
              typename VectorType,
              alignment Align,
-             size_t DeviceId>
+             size_t DeviceId,
+             typename>
     decltype(auto)
     strict::
     mult(ScalarType scalar,
@@ -97,16 +98,14 @@ namespace mgcpp
 
 
     template<typename DenseMat,
-             typename ScalarType,
              typename MatrixType,
-             size_t DeviceId>
-    typename std::enable_if_t<is_scalar<ScalarType>::value,
-                              device_matrix<MatrixType,
-                                            DeviceId,
-                                            typename DenseMat::allocator_type>>
+             size_t DeviceId,
+             typename ScalarType,
+             typename>
+    inline decltype(auto)
     strict::
     mult(ScalarType scalar,
-            dense_matrix<DenseMat, MatrixType, DeviceId> const& mat)
+         dense_matrix<DenseMat, MatrixType, DeviceId> const& mat)
     {
         using allocator_type = typename DenseMat::allocator_type;
 

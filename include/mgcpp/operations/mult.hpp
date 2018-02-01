@@ -38,22 +38,23 @@ namespace mgcpp
         //      dense_vector<RhsDenseVec, Type, Device, Align> const& second);
 
         template<typename DenseVec,
-                typename ScalarType,
-                typename VectorType,
-                alignment Align,
-                size_t DeviceId>
+                 typename ScalarType,
+                 typename VectorType,
+                 alignment Align,
+                 size_t DeviceId,
+                 typename = typename
+                 std::enable_if<is_scalar<ScalarType>::value>::type>
         inline decltype(auto)
         mult(ScalarType scalar,
              dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec);
 
         template<typename DenseMat,
-                typename ScalarType,
-                typename MatrixType,
-                size_t DeviceId>
-        typename std::enable_if_t<is_scalar<ScalarType>::value,
-                                  device_matrix<MatrixType,
-                                                DeviceId,
-                                                typename DenseMat::allocator_type>>
+                 typename MatrixType,
+                 size_t DeviceId,
+                 typename ScalarType,
+                 typename = typename
+                 std::enable_if<is_scalar<ScalarType>::value>::type>
+        inline decltype(auto)
         mult(ScalarType scalar,
              dense_matrix<DenseMat, MatrixType, DeviceId> const& mat);
 

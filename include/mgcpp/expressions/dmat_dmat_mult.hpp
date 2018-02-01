@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
-#define _MGCPP_EXPRESSIONS_MAT_MAT_MULT_EXPR_HPP_
+#ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_MULT_EXPR_HPP_
+#define _MGCPP_EXPRESSIONS_DMAT_DMAT_MULT_EXPR_HPP_
 
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/expressions/expr_eval.hpp>
