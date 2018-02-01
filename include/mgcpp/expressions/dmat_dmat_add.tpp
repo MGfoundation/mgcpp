@@ -11,7 +11,6 @@
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/system/assert.hpp>
-#include <mgcpp/type_traits/is_dmat_dmat_mult_expr.hpp>
 
 namespace mgcpp
 {
