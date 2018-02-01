@@ -74,7 +74,7 @@ TEST(mult_expr, dmat_dmat_mult_add)
     auto add_expr = (A_mat * B_mat) + C_mat;
 
     matrix D_mat; 
-    EXPECT_NO_THROW({C_mat = add_expr.eval();});
+    EXPECT_NO_THROW({D_mat = add_expr.eval();});
     
     auto shape = D_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -84,7 +84,7 @@ TEST(mult_expr, dmat_dmat_mult_add)
     {
         for(size_t j = 0; j < shape[1]; ++j)
         {
-            EXPECT_EQ(C_mat.check_value(i, j), 35)
+            EXPECT_EQ(D_mat.check_value(i, j), 35)
                 << "i: " << i << " j: " << j; 
         } 
     }
