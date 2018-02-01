@@ -16,7 +16,7 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {
-    /** Performs real-to-complex forward FFT.
+    /** \fn Performs real-to-complex forward FFT.
      *  \param n fft size
      *  \param x input array of n real values
      *  \param result the fft result, which is an array of
@@ -27,7 +27,7 @@ namespace mgcpp
     inline outcome::result<void>
     cufft_rfft(size_t n, double const* x, cuDoubleComplex* result);
 
-    /** Performs complex-to-real inverse unnormalized FFT.
+    /** \fn Performs complex-to-real inverse unnormalized FFT.
      *  \param n fft size
      *  \param x input array of floor(n/2)+1 interleaved complex values
      *  \param result the fft result, which is an array of n real numbers.
@@ -46,7 +46,7 @@ namespace mgcpp
         };
     }
 
-    /** Performs complex-to-complex FFT.
+    /** \fn Performs complex-to-complex FFT.
      *  \param n fft size
      *  \param x input array of n interleaved complex values
      *  \param result the fft result, which is
