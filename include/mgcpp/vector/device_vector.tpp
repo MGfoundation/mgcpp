@@ -65,9 +65,7 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        device_value_type dinit;
-        mgcpp_cast(&init, &init + 1, &dinit);
-        auto status = mgblas_fill(_data, dinit, _shape);
+        auto status = mgblas_fill(_data, init, _shape);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }

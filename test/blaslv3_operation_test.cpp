@@ -83,7 +83,7 @@ TEST(mat_mat_operation , matrix_substraction)
 
 TEST(mat_operation, mat_abs)
 {
-         mgcpp::device_matrix<float> mat{{-1, -2, -3}, {-4, -5, -6}};
+         auto mat = mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
 
          mgcpp::device_matrix<float> result{};
          EXPECT_NO_THROW({
@@ -114,7 +114,7 @@ TEST(mat_operation, mat_sum)
 
 TEST(mat_operation, mat_mean)
 {
-    mgcpp::device_matrix<float> mat({{1, 2, 3}, {1, 2, 3}});
+    auto mat = mgcpp::device_matrix<float>::from_list({{1, 2, 3}, {1, 2, 3}});
 
     EXPECT_NO_THROW({
             float result = mgcpp::strict::mean(mat);

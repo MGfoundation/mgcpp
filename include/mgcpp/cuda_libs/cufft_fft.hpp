@@ -23,9 +23,9 @@ namespace mgcpp
      *       interleaved floor(n/2)+1 complex numbers.
      */
     inline outcome::result<void>
-    cublas_rfft(size_t n, float const* x, cuComplex* result);
+    cufft_rfft(size_t n, float const* x, cuComplex* result);
     inline outcome::result<void>
-    cublas_rfft(size_t n, double const* x, cuDoubleComplex* result);
+    cufft_rfft(size_t n, double const* x, cuDoubleComplex* result);
 
     /** Performs complex-to-real inverse unnormalized FFT.
      *  \param n fft size
@@ -33,11 +33,11 @@ namespace mgcpp
      *  \param result the fft result, which is an array of n real numbers.
      */
     inline outcome::result<void>
-    cublas_irfft(size_t n, cuComplex const* x, float* result);
+    cufft_irfft(size_t n, cuComplex const* x, float* result);
     inline outcome::result<void>
-    cublas_irfft(size_t n, cuDoubleComplex const* x, double* result);
+    cufft_irfft(size_t n, cuDoubleComplex const* x, double* result);
 
-    namespace cublas
+    namespace cufft
     {
         enum class fft_direction
         {
@@ -53,24 +53,24 @@ namespace mgcpp
      *      an array of n interleaved complex values.
      */
     inline outcome::result<void>
-    cublas_cfft(size_t n, size_t m, cuComplex const* x, cuComplex* result, cublas::fft_direction direction);
+    cufft_cfft(size_t n, cuComplex const* x, cuComplex* result, cufft::fft_direction direction);
     inline outcome::result<void>
-    cublas_cfft(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
+    cufft_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction);
 
     inline outcome::result<void>
-    cublas_rfft2(size_t n, size_t m, float const* x, cuComplex* result);
+    cufft_rfft2(size_t n, size_t m, float const* x, cuComplex* result);
     inline outcome::result<void>
-    cublas_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result);
+    cufft_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result);
 
     inline outcome::result<void>
-    cublas_irfft2(size_t n, size_t m, cuComplex const* x, float* result);
+    cufft_irfft2(size_t n, size_t m, cuComplex const* x, float* result);
     inline outcome::result<void>
-    cublas_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result);
+    cufft_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result);
 
     inline outcome::result<void>
-    cublas_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cublas::fft_direction direction);
+    cufft_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cufft::fft_direction direction);
     inline outcome::result<void>
-    cublas_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cublas::fft_direction direction);
+    cufft_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction);
 }
 
 #include <mgcpp/cuda_libs/cufft_fft.tpp>

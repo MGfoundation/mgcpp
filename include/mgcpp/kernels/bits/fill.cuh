@@ -27,7 +27,7 @@ namespace mgcpp
     mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n);
 
     mgblas_error_t
-    mgblas_Hfill(__half* arr, __half value, size_t n);
+    mgblas_Hfill(__half* arr, float value, size_t n);
 }
 
 #endif

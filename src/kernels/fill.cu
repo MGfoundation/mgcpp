@@ -72,7 +72,7 @@ namespace mgcpp
     }
 
     __global__  void
-    mgblas_Hfill_impl(__half* arr, __half value, size_t n)
+    mgblas_Hfill_impl(__half* arr, float value, size_t n)
     {
         int const id = blockIdx.x * blockDim.x + threadIdx.x;
         __shared__ __half shared[64];
@@ -80,7 +80,8 @@ namespace mgcpp
         if(id >= n)
         return;
 
-        shared[threadIdx.x] = value;
+        __half conv_val = __float2half(value);
+        shared[threadIdx.x] = conv_val;
         __syncthreads();
 
         arr[id] = shared[threadIdx.x];
@@ -127,7 +128,7 @@ namespace mgcpp
     }
 
     mgblas_error_t
-    mgblas_Hfill(__half* arr, __half value, size_t n)
+    mgblas_Hfill(__half* arr, float value, size_t n)
     {
     	int grid_size = static_cast<int>(
     	    ceil(static_cast<float>(n)/ BLK ));

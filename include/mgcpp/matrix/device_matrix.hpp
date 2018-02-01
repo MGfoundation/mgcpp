@@ -55,9 +55,9 @@ namespace mgcpp
         device_pointer _data;
         size_t _capacity;
 
-        inline size_t
+        static inline size_t
         determine_ndim(std::initializer_list<
-                       std::initializer_list<value_type>> const& list) const noexcept;
+                       std::initializer_list<value_type>> const& list) noexcept;
 
     public:
         inline device_matrix() noexcept;
@@ -80,8 +80,8 @@ namespace mgcpp
         device_matrix(shape_type shape, const_pointer data,
                       Alloc const& alloc = Alloc());
 
-        inline explicit
-        device_matrix(std::initializer_list<
+        static inline device_matrix
+        from_list(std::initializer_list<
                       std::initializer_list<value_type>> const& array,
                       Alloc const& alloc = Alloc());
 
