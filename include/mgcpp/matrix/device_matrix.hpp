@@ -1,5 +1,5 @@
 
-//          Copyright RedPortal 2017 - 2017.
+//          Copyright RedPortal, mujjingun 2017 - 2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -55,9 +55,9 @@ namespace mgcpp
         device_pointer _data;
         size_t _capacity;
 
-        static inline size_t
+        inline size_t
         determine_ndim(std::initializer_list<
-                       std::initializer_list<value_type>> const& list) noexcept;
+                       std::initializer_list<value_type>> const& list) const noexcept;
 
     public:
         inline device_matrix() noexcept;
@@ -80,8 +80,8 @@ namespace mgcpp
         device_matrix(shape_type shape, const_pointer data,
                       Alloc const& alloc = Alloc());
 
-        static inline device_matrix
-        from_list(std::initializer_list<
+        inline explicit
+        device_matrix(std::initializer_list<
                       std::initializer_list<value_type>> const& array,
                       Alloc const& alloc = Alloc());
 
