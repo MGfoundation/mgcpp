@@ -4,12 +4,13 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_EXPRESSIONS_MAT_MAT_ADD_EXPR_HPP_
-#define _MGCPP_EXPRESSIONS_MAT_MAT_ADD_EXPR_HPP_
+#ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
+#define _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 
-#include <mgcpp/matrix/device_matrix.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
+#include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
+#include <mgcpp/expressions/expr_eval.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp
 {
@@ -27,12 +28,12 @@ namespace mgcpp
 
         inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
 
-        inline result_type
+        inline decltype(auto)
         eval() const;
     };
 
     template<typename LhsExpr, typename RhsExpr>
-    inline typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type
+    inline decltype(auto)
     eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
 
     template<typename LhsExpr, typename RhsExpr>

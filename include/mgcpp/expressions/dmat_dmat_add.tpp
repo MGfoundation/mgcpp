@@ -9,28 +9,70 @@
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/operations/add.hpp>
+#include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/system/assert.hpp>
+#include <mgcpp/system/static_if.hpp>
+#include <mgcpp/type_traits/is_dmat_dmat_mult_expr.hpp>
 
 namespace mgcpp
 {
+    namespace internal
+    {
+        template<typename LhsExpr, typename RhsExpr>
+        struct dmat_dmat_add_expr_switch
+        {
+            template<typename Type>
+            static decltype(auto) eval(Type const& expr)
+            {
+                auto lhs = mgcpp::eval(expr._lhs);
+                auto rhs = mgcpp::eval(expr._rhs);
+
+                return strict::add(lhs, rhs);
+            }
+        }; 
+
+        template<typename AType, typename BType, typename CType>
+        struct dmat_dmat_add_expr_switch<
+            dmat_dmat_mult_expr<AType, BType>, CType>
+        {
+            template<typename Type>
+            static decltype(auto) eval(Type const& expr)
+            {
+                auto A = mgcpp::eval(expr._lhs._lhs);
+                auto B = mgcpp::eval(expr._lhs._rhs);
+                auto C = mgcpp::eval(expr._rhs);
+                return strict::gemm(A, B, C);
+            }
+        };
+
+        template<typename AType, typename BType, typename CType>
+        struct dmat_dmat_add_expr_switch<
+            CType, dmat_dmat_mult_expr<AType, BType>>
+        {
+            template<typename Type>
+            static decltype(auto) eval(Type const& expr)
+            {
+                auto A = mgcpp::eval(expr._rhs._lhs);
+                auto B = mgcpp::eval(expr._rhs._rhs);
+                auto C = mgcpp::eval(expr._lhs);
+                return strict::gemm(A, B, C);
+            }
+        };
+    }
+
     template<typename LhsExpr, typename RhsExpr>
     dmat_dmat_add_expr<LhsExpr, RhsExpr>::
     dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept
         : _lhs(lhs),
           _rhs(rhs) {}
-
+    
     template<typename LhsExpr, typename RhsExpr>
-    typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type
+    decltype(auto)
     dmat_dmat_add_expr<LhsExpr, RhsExpr>::
     eval() const
     {
-        auto lhs = mgcpp::eval(_lhs);
-        auto rhs = mgcpp::eval(_rhs);
-
-        MGCPP_ASSERT(lhs.shape() == rhs.shape(),
-                     "dimension doesn't match ");
-
-        return strict::add(lhs, rhs);
+        return internal::dmat_dmat_add_expr_switch<LhsExpr, RhsExpr>
+            ::eval(*this);
     }
 
     template<typename LhsExpr, typename RhsExpr>

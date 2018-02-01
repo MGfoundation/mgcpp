@@ -9,17 +9,17 @@
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 
-TEST(mult_expr, row_major_mat_mat_add)
+TEST(add_expr, row_major_mat_mat_add)
 {
     using matrix = mgcpp::device_matrix<float>;
 
     matrix A_mat({4, 3}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = A_mat + B_mat;
+    auto add_expr = A_mat + B_mat;
 
     matrix C_mat; 
-    EXPECT_NO_THROW({C_mat = mult_expr.eval();});
+    EXPECT_NO_THROW({C_mat = add_expr.eval();});
     
     auto shape = C_mat.shape();
     EXPECT_EQ(C_mat.shape(), A_mat.shape());
@@ -34,17 +34,17 @@ TEST(mult_expr, row_major_mat_mat_add)
     }
 }
 
-TEST(mult_expr, row_major_mat_mat_add_func)
+TEST(add_expr, row_major_mat_mat_add_func)
 {
     using matrix = mgcpp::device_matrix<float>;
 
     matrix A_mat({4, 3}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = mgcpp::add(A_mat, B_mat);
+    auto add_expr = mgcpp::add(A_mat, B_mat);
 
     matrix C_mat; 
-    EXPECT_NO_THROW({C_mat = mult_expr.eval();});
+    EXPECT_NO_THROW({C_mat = add_expr.eval();});
     
     auto shape = C_mat.shape();
     EXPECT_EQ(C_mat.shape(), A_mat.shape());
