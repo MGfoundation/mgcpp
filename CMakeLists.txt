@@ -151,13 +151,21 @@ cuda_add_cufft_to_target("${PROJECT_NAME}")
 target_link_libraries(${PROJECT_NAME}
     ${CUDA_cusparse_LIBRARIES})
 
-# add outcome library
+# outcome 
 find_package(Boost REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${Boost_INCLUDE_DIRS}
     ${THIRD_PARTY_DIR}/boost-outcome/include)
+
+# half
+if(USE_HALF)
+    set(HALF_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/third_party/half)
+    target_include_directories(${PROJECT_NAME}
+	PUBLIC
+	${HALF_INCLUDE_DIRS})
+endif()
 
 # cuBLAS, MAGMA dependency
 if(USE_MAGMA)

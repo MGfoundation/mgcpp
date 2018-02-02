@@ -1,3 +1,6 @@
 [submodule "third_party/boost-outcome"]
 	path = third_party/boost-outcome
 	url = https://github.com/ned14/boost-outcome
+[submodule "half"]
+	path = third_party/half
+	url = https://github.com/Melown/half.git
