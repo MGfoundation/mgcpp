@@ -22,10 +22,10 @@ It provides a standard C++ interface without any CUDA specific syntax. <br />
 ### Disclaimer 
 
 This library is heavily under development and in pre-alpha state.<br />
-msvc support is not properly tested and guarenteed to work.
-For contribution, please contact us personally or join our [discord server](https://discord.gg/k5bxQT)
+msvc support is not properly tested and guarenteed to work. <br />
+For contribution, please contact us personally or join our [discord server](https://discord.gg/k5bxQT) <br />
 
-If our library lacks a feature that you need, please leave an issue.
+If our library lacks a feature that you need, please leave an issue. <br />
 We can raise the priority for most needed features.
 
 
@@ -45,7 +45,7 @@ auto C = mgcpp::eval(A * B);
 
 ```
 
-The above code invokes cuBLAS's gemm function.
+The above code invokes cuBLAS's gemm function. <br />
 All mgcpp expressions are lazily computed and optimized using C++ expression template method.
 
 
@@ -69,7 +69,7 @@ make -j4
 make install
 ```
 
-The library probes your system cuda ```gpu-architecture``` and ```gpu-code``` code automatically.
+The library probes your system cuda ```gpu-architecture``` and ```gpu-code``` code automatically. <br />
 However if you want to specify the computability code, <br />
 add the argument below to the command line. 
 
@@ -84,7 +84,7 @@ provide the argument below.
 -DCUDA_HOST_COMPILER=<full path to compiler>
 ```
 
-You must provide the __FULL PATH__ to your cuda host compiler.
+You must provide the __FULL PATH__ to your cuda host compiler. <br />
 Different cuda versions have different C++ compiler constraints. <br />
 For example ```cuda 8.0``` only support gcc up to 5.3.
 
