@@ -23,7 +23,10 @@ It provides a standard C++ interface without any CUDA specific syntax. <br />
 
 This library is heavily under development and in pre-alpha state.<br />
 msvc support is not properly tested and guarenteed to work.
-For contribution, please refer to TODO or contact me.
+For contribution, please contact us personally or join our [discord server](https://discord.gg/k5bxQT)
+
+If our library lacks a feature that you need, please leave an issue.
+We can raise the priority for most needed features.
 
 
 <a id="orga8a25a1"></a>
@@ -57,11 +60,11 @@ make -j4
 make install
 ```
 
-for building without MAGMA or mgcpp native cuda kernels,
+for building without half type support,
 
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
-cmake -DUSE_MAGMA=OFF -DBUILD_CUSTOM_KERNELS=OFF -G "<Generator>"
+cmake -DUSE_HALF=OFF -G "<Generator>"
 make -j4
 make install
 ```
@@ -81,15 +84,15 @@ provide the argument below.
 -DCUDA_HOST_COMPILER=<full path to compiler>
 ```
 
-You must provide the __FULL PATH__ to the cuda host compiler in order to work.
+You must provide the __FULL PATH__ to your cuda host compiler.
 Different cuda versions have different C++ compiler constraints. <br />
 For example ```cuda 8.0``` only support gcc up to 5.3.
 
-So, for an example case that you want to use cuda 9.0 for cuda code, gcc-6 for native C++ code,
+So, for an example case that you want to use cuda 8.0 for cuda code, gcc-5.3 for native C++ code,
 
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
-cmake -DCUDA_HOST_COMPILER=/usr/bin/g++-6 -DCMAKE_CXX_COMPILER=g++7 -G "<Generator>"
+cmake -DCUDA_HOST_COMPILER=/usr/bin/g++-5.3 -DCMAKE_CXX_COMPILER=g++7 -G "<Generator>"
 make -j4
 make install
 ```
@@ -102,10 +105,11 @@ make install
 -   cmake 3.8 or later
 -   gcc 6, clang 3.9, Visual Studio 14.0 (2015) or later
 -   [boost-outcome](https://github.com/ned14/boost-outcome)
--   cuda 8.0 or later
--   [MAGMA](https://github.com/kjbartel/magma) (optional)
--   gtest (optional)
 -   boost
+-   cuda 8.0 or later
+-   [half](http://half.sourceforge.net/index.html)(optional)
+-   [magma](http://icl.cs.utk.edu/magma/)(optional)
+-   gtest (optional)
 
 
 <a id="org6fefac1"></a>
@@ -113,12 +117,11 @@ make install
 ## Planned Features
 
 - Fully tested msvc support.
-- Epression template optimization for all operations.
+- Expression template optimization for all operations.
 - Tensor type and tensor operations.
 - sparse matrix, sparse vector, sparse tensor types.
 - Batch matrix type and batch matrix operations.
 - cuSPARSE support.
-- Full cuFFT support.
 - Convolution operation.
 - half precision type support.
 - Full compatibility with [uBLAS](http://www.boost.org/doc/libs/1_59_0/libs/numeric/ublas/doc/), [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [blaze](https://bitbucket.org/blaze-lib/blaze)

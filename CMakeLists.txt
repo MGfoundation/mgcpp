@@ -25,31 +25,34 @@ set(CMAKE_MODULE_PATH
 
 # options && command line arguments
 option(USE_MAGMA "compile mgcpp with magma features" ON)
-option(USE_CUSPARSE "compile mgcpp with cusparse features" ON)
-option(BUILD_CUSTOM_KERNELS "compile mgcpp with mgcpp custom cuda kernels" ON)
+option(USE_HALF "compile mgcpp with half precision floating point features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 option(BUILD_DOC "Build documentation" ON)
 
 # cuda dependency
 find_package(CUDA REQUIRED)
 
-if(BUILD_CUSTOM_KERNELS)
-    if(NOT CUDA_HOST_COMPILER)
-	message(STATUS "separate cuda host compiler  wasn't provided, using default")
-    endif()
+if(NOT CUDA_HOST_COMPILER)
+    message(STATUS "separate cuda host compiler  wasn't provided, using default")
+endif()
 
-    if(NOT CUDA_ARCH)
-	message(STATUS "cuda arch wasn't provided, running feature test")
-	include(feature_test)
-    else()
-	set(CUDA_GEN_CODE "-gencode arch=compute_${CUDA_ARCH},code=sm_${CUDA_ARCH}")
-    endif()
+if(NOT CUDA_ARCH)
+    message(STATUS "cuda arch wasn't provided, running feature test")
+    include(feature_test)
+else()
+    set(CUDA_GEN_CODE "-gencode arch=compute_${CUDA_ARCH},code=sm_${CUDA_ARCH}")
 endif()
 
 if(WIN32)
     set(CUDA_NVCC_FLAGS "")
 else()
     set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
+endif()
+
+if(USE_HALF AND (CUDA_ARCH LESS 53))
+    message(FATAL_ERROR "cuda devices lower than 5.3 do not support half precision type")
+elseif(USE_HALF)
+    add_definitions(-DUSE_HALF)
 endif()
 
 
@@ -74,18 +77,16 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/mgblas_error.cpp
     ${SOURCE_DIR}/thread_context.cpp)
 
-if(BUILD_CUSTOM_KERNELS)
-    mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
-	"${BASE_SOURCE_FILES}")
+mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
+    "${BASE_SOURCE_FILES}")
 
-    cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
+cuda_add_library("${PROJECT_NAME}base" STATIC ${BASE_SOURCE_FILES})
 
-    set(CUDA_VERBOSE_BUILD ON)
+set(CUDA_VERBOSE_BUILD ON)
 
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}; ${CUDA_GEN_CODE}")
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS}; ${CUDA_GEN_CODE}")
 
-    message("build flags = ${CUDA_NVCC_FLAGS}")
-endif()
+message("build flags = ${CUDA_NVCC_FLAGS}")
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}"
     "${MAIN_SOURCE_FILES}")
@@ -111,13 +112,11 @@ set_target_properties(${PROJECT_NAME}
 
 
 # Include directories
-if(BUILD_CUSTOM_KERNELS)
-    target_include_directories("${PROJECT_NAME}base"
-	PUBLIC
-	${PROJECT_SOURCE_DIR}/include)
+target_include_directories("${PROJECT_NAME}base"
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/include)
 
-    set(CUDA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
-endif()
+set(CUDA_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -128,13 +127,11 @@ target_include_directories(${PROJECT_NAME}
 set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/third_party)
 
 # mgcpp base
-if(BUILD_CUSTOM_KERNELS)
-    target_link_libraries(${PROJECT_NAME}
-	"${PROJECT_NAME}base")
+target_link_libraries(${PROJECT_NAME}
+    "${PROJECT_NAME}base")
 
-    set(MGCPP_TARGETS ${MGCPP_TARGETS}
-	"${PROJECT_NAME}base")
-endif()
+set(MGCPP_TARGETS ${MGCPP_TARGETS}
+    "${PROJECT_NAME}base")
 
 # CUDA
 target_include_directories(${PROJECT_NAME}
@@ -151,10 +148,8 @@ cuda_add_cublas_to_target("${PROJECT_NAME}")
 cuda_add_cufft_to_target("${PROJECT_NAME}")
 
 # cuSPARSE
-if(USE_CUSPARSE)
-    target_link_libraries(${PROJECT_NAME}
-	${CUDA_cusparse_LIBRARIES})
-endif()
+target_link_libraries(${PROJECT_NAME}
+    ${CUDA_cusparse_LIBRARIES})
 
 # add outcome library
 find_package(Boost REQUIRED)
@@ -247,22 +242,22 @@ if (BUILD_DOC)
     # check if Doxygen is installed
     find_package(Doxygen)
     if (DOXYGEN_FOUND)
-        # set input and output files
-        set(DOXYGEN_IN ${PROJECT_SOURCE_DIR}/docs/Doxyfile.in)
-        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+	# set input and output files
+	set(DOXYGEN_IN ${PROJECT_SOURCE_DIR}/docs/Doxyfile.in)
+	set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
-        # request to configure the file
-        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-        message("Doxygen build started")
+	# request to configure the file
+	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+	message("Doxygen build started")
 
-        # note the option ALL which allows to build the docs together with the application
-        add_custom_target(doc_doxygen ALL
-            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            COMMENT "Generating API documentation with Doxygen"
-            VERBATIM)
+	# note the option ALL which allows to build the docs together with the application
+	add_custom_target(doc_doxygen ALL
+	    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+	    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	    COMMENT "Generating API documentation with Doxygen"
+	    VERBATIM)
     else (DOXYGEN_FOUND)
-    message("Doxygen need to be installed to generate the doxygen documentation")
+	message("Doxygen need to be installed to generate the doxygen documentation")
     endif (DOXYGEN_FOUND)
 endif (BUILD_DOC)
 
