@@ -37,10 +37,10 @@ namespace mgcpp
 
     public:
         using this_type = device_matrix<Type, DeviceId, Alloc>;
-        using value_type = typename value_type<Type>::type;
+        using value_type = Type;
         using pointer = value_type*;
         using const_pointer = value_type const*;
-        using device_value_type = typename device_value_type<Type>::type;
+        using device_value_type = Type;
         using device_pointer = device_value_type*;
         using const_device_pointer = device_value_type const*;
         using result_type = this_type;
