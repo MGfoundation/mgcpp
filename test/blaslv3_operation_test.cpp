@@ -83,19 +83,19 @@ TEST(mat_mat_operation , matrix_substraction)
 
 TEST(mat_operation, mat_abs)
 {
-         auto mat = mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
+    auto mat = mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
 
-         mgcpp::device_matrix<float> result{};
-         EXPECT_NO_THROW({
-                 result = mgcpp::strict::abs(mat);
+    mgcpp::device_matrix<float> result{};
+    EXPECT_NO_THROW({
+            result = mgcpp::strict::abs(mat);
 
-                 EXPECT_EQ(result.check_value(0, 0), 1);
-                 EXPECT_EQ(result.check_value(0, 1), 2);
-                 EXPECT_EQ(result.check_value(0, 2), 3);
-                 EXPECT_EQ(result.check_value(1, 0), 4);
-                 EXPECT_EQ(result.check_value(1, 1), 5);
-                 EXPECT_EQ(result.check_value(1, 2), 6);
-             });
+            EXPECT_EQ(result.check_value(0, 0), 1);
+            EXPECT_EQ(result.check_value(0, 1), 2);
+            EXPECT_EQ(result.check_value(0, 2), 3);
+            EXPECT_EQ(result.check_value(1, 0), 4);
+            EXPECT_EQ(result.check_value(1, 1), 5);
+            EXPECT_EQ(result.check_value(1, 2), 6);
+        });
 }
 
 TEST(mat_operation, mat_sum)

@@ -16,39 +16,28 @@ namespace mgcpp
 {
     namespace internal
     {
-        template<typename LhsExpr, typename RhsExpr>
         struct dmat_dmat_add_subgraph_matcher
         {
-            template<typename Type>
-            static decltype(auto) eval(Type const& expr)
+            template<typename LhsExpr, typename RhsExpr>
+            static decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr)
             {
                 auto lhs = mgcpp::eval(expr._lhs);
                 auto rhs = mgcpp::eval(expr._rhs);
 
                 return strict::add(lhs, rhs);
             }
-        }; 
 
-        template<typename AType, typename BType, typename CType>
-        struct dmat_dmat_add_subgraph_matcher<
-            dmat_dmat_mult_expr<AType, BType>, CType>
-        {
-            template<typename Type>
-            static decltype(auto) eval(Type const& expr)
+            template<typename AType, typename BType, typename CType>
+            static decltype(auto) eval(dmat_dmat_add_expr<dmat_dmat_mult_expr<AType, BType>, CType> const& expr)
             {
                 auto A = mgcpp::eval(expr._lhs._lhs);
                 auto B = mgcpp::eval(expr._lhs._rhs);
                 auto C = mgcpp::eval(expr._rhs);
                 return strict::gemm(A, B, C);
             }
-        };
 
-        template<typename AType, typename BType, typename CType>
-        struct dmat_dmat_add_subgraph_matcher<
-            CType, dmat_dmat_mult_expr<AType, BType>>
-        {
-            template<typename Type>
-            static decltype(auto) eval(Type const& expr)
+            template<typename AType, typename BType, typename CType>
+            static decltype(auto) eval(dmat_dmat_add_expr<CType, dmat_dmat_mult_expr<AType, BType>> const& expr)
             {
                 auto A = mgcpp::eval(expr._rhs._lhs);
                 auto B = mgcpp::eval(expr._rhs._rhs);
@@ -69,8 +58,7 @@ namespace mgcpp
     dmat_dmat_add_expr<LhsExpr, RhsExpr>::
     eval() const
     {
-        return internal::dmat_dmat_add_subgraph_matcher<LhsExpr, RhsExpr>
-            ::eval(*this);
+        return internal::dmat_dmat_add_subgraph_matcher::eval(*this);
     }
 
     template<typename LhsExpr, typename RhsExpr>
