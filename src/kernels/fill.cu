@@ -14,31 +14,31 @@ namespace mgcpp
     __global__  void
     mgblas_Sfill_impl(float* arr, float value, size_t n)
     {
-	int const id = blockIdx.x * blockDim.x + threadIdx.x;
-	__shared__ float shared[64];
+        int const id = blockIdx.x * blockDim.x + threadIdx.x;
+        __shared__ float shared[64];
 
-	if(id >= n)
-	    return;
+        if(id >= n)
+            return;
 
-	shared[threadIdx.x] = value;
-	__syncthreads();
+        shared[threadIdx.x] = value;
+        __syncthreads();
 
-	arr[id] = shared[threadIdx.x];
+        arr[id] = shared[threadIdx.x];
     }
 
     __global__  void
     mgblas_Dfill_impl(double* arr, double value, size_t n)
     {
-	int const id = blockIdx.x * blockDim.x + threadIdx.x;
-	__shared__ double shared[64];
+        int const id = blockIdx.x * blockDim.x + threadIdx.x;
+        __shared__ double shared[64];
 
-	if(id >= n)
-	    return;
+        if(id >= n)
+            return;
 
-	shared[threadIdx.x] = value;
-	__syncthreads();
+        shared[threadIdx.x] = value;
+        __syncthreads();
 
-	arr[id] = shared[threadIdx.x];
+        arr[id] = shared[threadIdx.x];
     }
 
     __global__  void
@@ -48,7 +48,7 @@ namespace mgcpp
         __shared__ cuComplex shared[64];
 
         if(id >= n)
-        return;
+            return;
 
         shared[threadIdx.x] = value;
         __syncthreads();
@@ -63,7 +63,7 @@ namespace mgcpp
         __shared__ cuDoubleComplex shared[64];
 
         if(id >= n)
-        return;
+            return;
 
         shared[threadIdx.x] = value;
         __syncthreads();
@@ -79,7 +79,7 @@ namespace mgcpp
         __shared__ __half shared[64];
 
         if(id >= n)
-        return;
+            return;
 
         //__half conv_val = __float2half(value);
         shared[threadIdx.x] = value;//conv_val;
@@ -92,21 +92,21 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Sfill(float* arr, float value, size_t n)
     {
-	int grid_size = static_cast<int>(
-	    ceil(static_cast<float>(n)/ BLK ));
-	mgblas_Sfill_impl<<<BLK, grid_size>>>(arr, value, n);
+        int grid_size = static_cast<int>(
+            ceil(static_cast<float>(n)/ BLK ));
+        mgblas_Sfill_impl<<<BLK, grid_size>>>(arr, value, n);
 
-	return success;
+        return success;
     }
 
     mgblas_error_t
     mgblas_Dfill(double* arr, double value, size_t n)
     {
-	int grid_size = static_cast<int>(
-	    ceil(static_cast<float>(n)/ BLK ));
-	mgblas_Dfill_impl<<<BLK, grid_size>>>(arr, value, n);
+        int grid_size = static_cast<int>(
+            ceil(static_cast<float>(n)/ BLK ));
+        mgblas_Dfill_impl<<<BLK, grid_size>>>(arr, value, n);
 
-	return success;
+        return success;
     }
 
     mgblas_error_t
@@ -133,7 +133,7 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Hfill(__half* arr, __half value, size_t n)
     {
-    	int grid_size = static_cast<int>(
+        int grid_size = static_cast<int>(
     	    ceil(static_cast<float>(n)/ BLK ));
     	mgblas_Hfill_impl<<<BLK, grid_size>>>(arr, value, n);
 
