@@ -29,7 +29,7 @@ TEST(mgblas_helpers, array_init)
 
     for(auto i = 0u; i < size; ++i)
     {
-        EXPECT_EQ(*host, value); 
+        EXPECT_EQ(host[i] , value); 
     }
 
     free(host);
