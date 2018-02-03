@@ -10,7 +10,9 @@
 #include <mgcpp/kernels/mgblas_error_code.hpp>
 
 #include <cuComplex.h>
-#include <cuda_fp16.h>
+#ifdef USE_HALF
+#    include <cuda_fp16.h>
+#endif
 
 namespace mgcpp
 {
@@ -26,8 +28,10 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Zfill(cuDoubleComplex* arr, cuDoubleComplex value, size_t n);
 
+#ifdef USE_HALF
     mgblas_error_t
-    mgblas_Hfill(__half* arr, float value, size_t n);
+    mgblas_Hfill(__half* arr, __half value, size_t n);
+#endif
 }
 
 #endif

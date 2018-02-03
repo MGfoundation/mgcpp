@@ -10,7 +10,6 @@
 #include <cstdlib>
 #include <memory>
 #include <mgcpp/type_traits/device_value_type.hpp>
-#include <mgcpp/type_traits/host_value_type.hpp>
 #include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp
@@ -18,7 +17,7 @@ namespace mgcpp
     template<typename Type, size_t DeviceId>
     struct default_allocator
     {
-        using value_type = typename value_type<Type>::type;
+        using value_type = Type;
         using pointer = value_type*;
         using const_pointer = value_type const*;
         using device_value_type = typename device_value_type<Type>::type;
@@ -43,10 +42,10 @@ namespace mgcpp
         device_deallocate(device_pointer p, size_t n) const;
 
         inline void
-        copy_from_host(device_pointer device, const_pointer host, size_t n) const;
+        copy_from_host(device_pointer device, const_device_pointer host, size_t n) const;
 
         inline void
-        copy_to_host(pointer host, const_device_pointer device, size_t n) const;
+        copy_to_host(device_pointer host, const_device_pointer device, size_t n) const;
     };
 }
 

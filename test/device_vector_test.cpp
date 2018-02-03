@@ -9,6 +9,7 @@
 #define ERROR_CHECK_EXCEPTION true
 
 #include <mgcpp/vector/device_vector.hpp>
+#include <half/half.hpp>
 
 template<typename T>
 class dummy_vector
@@ -241,7 +242,7 @@ TEST(device_vector, initializing_constructor_half)
     auto before_memory = before.value().first;
 
     size_t size = 128;
-    float init_val = 7;
+    mgcpp::half init_val(7.0);
     mgcpp::device_vector<mgcpp::half> vec{};
     EXPECT_NO_THROW(
         vec = mgcpp::device_vector<mgcpp::half>(size, init_val));
@@ -262,10 +263,10 @@ TEST(device_vector, initializing_constructor_half)
         {
             for(auto i = 0u; i < size; ++i)
             {
-                EXPECT_EQ(vec.check_value(i), init_val);
+                EXPECT_EQ(half_float::half_cast<float>(vec.check_value(i)),
+                          half_float::half_cast<float>(init_val));
             }
-        }while(false)
-        );
+        }while(false));
 }
 
 TEST(device_vector, constructon_from_host_data)
@@ -371,7 +372,7 @@ TEST(device_vector, constructon_from_host_data_half)
     auto before_memory = before.value().first;
 
     size_t size = 10;
-    std::vector<float> host(size);
+    std::vector<mgcpp::half> host(size);
 
     float counter = 0;
     for(size_t i = 0; i < size; ++i)
@@ -400,7 +401,8 @@ TEST(device_vector, constructon_from_host_data_half)
         {
             for(auto i = 0u; i < size; ++i)
             {
-                EXPECT_EQ(vec.check_value(i), host[i]);
+                EXPECT_EQ(half_float::half_cast<float>(vec.check_value(i)),
+                          half_float::half_cast<float>(host[i]));
                 ++counter;
             }
         }while(false));
@@ -511,6 +513,8 @@ TEST(device_vector, complex_vector_constructon_from_init_list)
 
 TEST(device_vector, constructon_from_init_list_half)
 {
+    using namespace half_float::literal;
+
     auto set_device_stat = mgcpp::cuda_set_device(0);
     EXPECT_TRUE(set_device_stat);
 
@@ -518,7 +522,7 @@ TEST(device_vector, constructon_from_init_list_half)
     EXPECT_TRUE(before);
     auto before_memory = before.value().first;
 
-    auto init_list = std::initializer_list<float>({1, 2, 3, 4, 5});
+    auto init_list = std::initializer_list<mgcpp::half>({1.0_h, 2.0_h, 3.0_h, 4.0_h, 5.0_h});
 
     mgcpp::device_vector<mgcpp::half> vec{};
     EXPECT_NO_THROW(
@@ -540,7 +544,8 @@ TEST(device_vector, constructon_from_init_list_half)
             size_t it = 0;
             for(auto i : init_list)
             {
-                EXPECT_EQ(i, vec.check_value(it));
+                EXPECT_EQ(half_float::half_cast<float>(vec.check_value(it)),
+                          half_float::half_cast<float>(i));
                 ++it;
             }
         }while(false));
@@ -728,10 +733,10 @@ TEST(device_vector, copy_to_host_half)
     EXPECT_TRUE(set_device_stat);
 
     size_t size = 10;
-    float* host = (float*)malloc(sizeof(float) * size);
+    mgcpp::half* host = (mgcpp::half*)malloc(sizeof(mgcpp::half) * size);
 
     size_t init_val = 7;
-    mgcpp::device_vector<mgcpp::half> vec(size, init_val);
+    mgcpp::device_vector<mgcpp::half> vec(size, half_float::half_cast<mgcpp::half>(init_val));
 
     EXPECT_NO_THROW(vec.copy_to_host(host));
 
@@ -740,7 +745,7 @@ TEST(device_vector, copy_to_host_half)
         {
             for(auto i = 0u; i < size; ++i)
             {
-                EXPECT_EQ(host[i], init_val);
+                EXPECT_EQ(half_float::half_cast<float>(host[i]), init_val);
             }
         }while(false));
 

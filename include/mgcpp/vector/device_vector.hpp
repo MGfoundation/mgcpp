@@ -13,7 +13,6 @@
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
-#include <mgcpp/type_traits/host_value_type.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -37,7 +36,7 @@ namespace mgcpp
         using value_type = Type;
         using pointer = value_type*;
         using const_pointer = value_type const*;
-        using device_value_type = Type;
+        using device_value_type = typename device_value_type<Type>::type;
         using device_pointer = device_value_type*;
         using const_device_pointer = device_value_type const*;
         using result_type = this_type;

@@ -11,13 +11,12 @@
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/global/shape.hpp>
 #include <mgcpp/matrix/column_view.hpp>
 #include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/matrix/row_view.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
-#include <mgcpp/type_traits/host_value_type.hpp>
-#include <mgcpp/global/shape.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -40,7 +39,7 @@ namespace mgcpp
         using value_type = Type;
         using pointer = value_type*;
         using const_pointer = value_type const*;
-        using device_value_type = Type;
+        using device_value_type = typename device_value_type<Type>::type;
         using device_pointer = device_value_type*;
         using const_device_pointer = device_value_type const*;
         using result_type = this_type;

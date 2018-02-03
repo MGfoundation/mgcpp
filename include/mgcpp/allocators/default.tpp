@@ -56,7 +56,7 @@ namespace mgcpp
     template<typename T, size_t DeviceId>
     void
     default_allocator<T, DeviceId>::
-    copy_from_host(device_pointer device, const_pointer host, size_t n) const
+    copy_from_host(device_pointer device, const_device_pointer host, size_t n) const
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)
@@ -74,7 +74,7 @@ namespace mgcpp
     template<typename T, size_t DeviceId>
     void
     default_allocator<T, DeviceId>::
-    copy_to_host(pointer host, const_device_pointer device, size_t n) const
+    copy_to_host(device_pointer host, const_device_pointer device, size_t n) const
     {
         auto set_device_stat = cuda_set_device(DeviceId);
         if(!set_device_stat)

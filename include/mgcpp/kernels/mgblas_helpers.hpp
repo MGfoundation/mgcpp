@@ -16,9 +16,9 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 namespace mgcpp
 {
-    template<typename T, typename ValueType>
+    template<typename Type>
     inline outcome::result<void>
-    mgblas_fill(T* arr, ValueType value, size_t n);
+    mgblas_fill(Type* arr, Type value, size_t n);
 
     template<typename From, typename To>
     inline outcome::result<void>

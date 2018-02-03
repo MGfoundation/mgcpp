@@ -9,6 +9,7 @@
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/pun_cast.hpp>
 
 #include <type_traits>
 #include <iostream>
@@ -62,7 +63,7 @@ namespace mgcpp
         size_t total_size = _shape[0] * _shape[1];
 
         auto status = mgblas_fill(_data,
-                                  init,
+                                  *mgcpp::pun_cast<device_pointer>(&init),
                                   total_size);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
@@ -82,7 +83,11 @@ namespace mgcpp
         size_t total_size = _shape[0] * _shape[1];
 
         try
-        { _allocator.copy_from_host(_data, data, total_size); }
+        {
+            _allocator.copy_from_host(_data,
+                                      pun_cast<const_device_pointer>(data),
+                                    total_size);
+        }
         catch(std::system_error const& err)
         {
             _allocator.device_deallocate(_data, total_size);
@@ -171,7 +176,9 @@ namespace mgcpp
         size_t total_size = _shape[0] * _shape[1];
         _data = _allocator.device_allocate(total_size);
         _capacity = total_size;
-        _allocator.copy_from_host(_data, host_p, total_size);
+        _allocator.copy_from_host(_data,
+                                  pun_cast<device_pointer>(host_p),
+                                  total_size);
     }
 
 
@@ -372,7 +379,9 @@ namespace mgcpp
 
         _shape = shape;
 
-        auto status = mgblas_fill(_data, init, total_size);
+        auto status = mgblas_fill(_data,
+                                  *pun_cast<device_pointer>(&init),
+                                  total_size);
 
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
@@ -438,7 +447,7 @@ namespace mgcpp
 
         device_pointer from = (_data + (i + _shape[0] * j));
         value_type to;
-        _allocator.copy_to_host(&to, from, 1);
+        _allocator.copy_to_host(pun_cast<device_pointer>(&to), from, 1);
 
         return to;
     }
@@ -459,7 +468,7 @@ namespace mgcpp
         { MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error()); }
 
         device_pointer to = (_data + (i + _shape[0] * j));
-        _allocator.copy_from_host(to, &value, 1);
+        _allocator.copy_from_host(to, pun_cast<const_device_pointer>(&value), 1);
     }
 
 
@@ -473,7 +482,7 @@ namespace mgcpp
         size_t total_size = _shape[0] * _shape[1];
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
-        _allocator.copy_to_host(host_p, _data, total_size);
+        _allocator.copy_to_host(pun_cast<device_pointer>(host_p), _data, total_size);
     }
 
     template<typename Type,

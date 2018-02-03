@@ -11,6 +11,7 @@
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/pun_cast.hpp>
 #include <mgcpp/type_traits/type_traits.hpp>
 
 #include <algorithm>
@@ -65,7 +66,9 @@ namespace mgcpp
           _data(_allocator.device_allocate(_shape)),
           _capacity(_shape)
     {
-        auto status = mgblas_fill(_data, init, _shape);
+        auto status = mgblas_fill(_data,
+                                  *mgcpp::pun_cast<device_pointer>(&init),
+                                  _shape);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
     }
@@ -83,7 +86,9 @@ namespace mgcpp
           _capacity(size)
     {
         try
-        { _allocator.copy_from_host(_data, data, _shape); }
+        { _allocator.copy_from_host(_data,
+                                    pun_cast<const_device_pointer>(data),
+                                    _shape); }
         catch(std::system_error const& err)
         {
             _allocator.device_deallocate(_data, _capacity);
@@ -108,7 +113,9 @@ namespace mgcpp
         {
             // std::initializer_list's members are guaranteed to be
             // contiguous in memory: from C++11 § [support.initlist] 18.9/1
-            _allocator.copy_from_host(_data, array.begin(), _shape);
+            _allocator.copy_from_host(_data,
+                                      pun_cast<const_device_pointer>(array.begin()),
+                                      _shape);
         }
         catch(std::system_error const& err)
         {
@@ -344,7 +351,7 @@ namespace mgcpp
     {
         if(!host_p)
         { MGCPP_THROW_RUNTIME_ERROR("provided pointer is null"); }
-        _allocator.copy_to_host(host_p, _data, _shape);
+        _allocator.copy_to_host(pun_cast<device_pointer>(host_p), _data, _shape);
     }
 
 
@@ -365,7 +372,7 @@ namespace mgcpp
 
         device_pointer from = (_data + i);
         value_type to;
-        _allocator.copy_to_host(&to, from, 1);
+        _allocator.copy_to_host(pun_cast<device_pointer>(&to), from, 1);
 
         return to;
     }
@@ -387,7 +394,7 @@ namespace mgcpp
 
         device_pointer to = (_data + i);
         value_type from = value;
-        _allocator.copy_from_host(to, &from, 1);
+        _allocator.copy_from_host(to, pun_cast<device_pointer>(&from), 1);
     }
 
 
