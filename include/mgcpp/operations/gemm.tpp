@@ -193,5 +193,4 @@ namespace mgcpp
 
         return C_mat;
     }
-
 }
