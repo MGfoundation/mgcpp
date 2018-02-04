@@ -104,7 +104,7 @@ TEST(mult_expr, scalar_dmat_mult)
     
     auto shape = B_mat.shape();
     EXPECT_EQ(shape[0], 2);
-    EXPECT_EQ(shape[1], 3);
+    EXPECT_EQ(shape[1], 4);
 
     for(size_t i = 0; i < shape[0]; ++i)
     {
