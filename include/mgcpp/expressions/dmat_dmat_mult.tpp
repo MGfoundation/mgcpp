@@ -37,7 +37,7 @@ namespace mgcpp
                  scalar_dmat_mult_expr<LhsScal, LhsMat>,
                  RhsExpr> const& expr)
         {
-            using value_type = typename RhsExpr::value_type();
+            using value_type = typename RhsExpr::value_type;
             using result_type = typename dmat_dmat_mult_expr<
                 scalar_dmat_mult_expr<LhsScal, LhsMat>,
                 RhsExpr>::result_type;
@@ -63,7 +63,7 @@ namespace mgcpp
                 LhsExpr,
                 scalar_dmat_mult_expr<RhsScal, RhsMat>> const& expr)
         {
-            using value_type = typename LhsExpr::value_type();
+            using value_type = typename LhsExpr::value_type;
             using result_type = typename dmat_dmat_mult_expr<
                 LhsExpr,
                 scalar_dmat_mult_expr<RhsScal, RhsMat>>::result_type;
