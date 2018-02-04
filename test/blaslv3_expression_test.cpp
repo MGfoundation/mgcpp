@@ -8,6 +8,7 @@
 
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 
 TEST(mult_expr, dmat_dmat_mult)
@@ -85,6 +86,31 @@ TEST(mult_expr, dmat_dmat_mult_add)
         for(size_t j = 0; j < shape[1]; ++j)
         {
             EXPECT_EQ(D_mat.check_value(i, j), 35)
+                << "i: " << i << " j: " << j; 
+        } 
+    }
+}
+
+TEST(mult_expr, scalar_dmat_mult)
+{
+    using matrix = mgcpp::device_matrix<float>;
+
+    matrix A_mat({2, 4}, 2);
+
+    auto expr = 7.0 * A_mat;
+
+    matrix B_mat; 
+    EXPECT_NO_THROW({B_mat = expr.eval();});
+    
+    auto shape = B_mat.shape();
+    EXPECT_EQ(shape[0], 2);
+    EXPECT_EQ(shape[1], 3);
+
+    for(size_t i = 0; i < shape[0]; ++i)
+    {
+        for(size_t j = 0; j < shape[1]; ++j)
+        {
+            EXPECT_EQ(B_mat.check_value(i, j), 14)
                 << "i: " << i << " j: " << j; 
         } 
     }
