@@ -8,11 +8,77 @@
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
+#include <mgcpp/global/shape.hpp>
+#include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/assert.hpp>
 
 namespace mgcpp
 {
+    namespace internal
+    {
+        template<typename LhsExpr, typename RhsExpr>
+        inline decltype(auto)
+        dmat_dmat_mult_subgraph_matcher(
+            dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr)
+        {
+            auto lhs = mgcpp::eval(expr._lhs);
+            auto rhs = mgcpp::eval(expr._rhs);
+
+            return strict::mult(lhs, rhs);
+        }
+
+        template<typename LhsScal,
+                 typename LhsMat,
+                 typename RhsExpr>
+        inline decltype(auto)
+        dmat_dmat_mult_subgraph_matcher(
+            dmat_dmat_mult_expr<
+                 scalar_dmat_mult_expr<LhsScal, LhsMat>,
+                 RhsExpr> const& expr)
+        {
+            using result_type = typename dmat_dmat_mult_expr<
+                scalar_dmat_mult_expr<LhsScal, LhsMat>,
+                RhsExpr>::result_type;
+
+            auto alpha = mgcpp::eval(expr._lhs._scal_expr);
+            auto A = mgcpp::eval(expr._lhs._dmat_expr);
+            auto B = mgcpp::eval(expr._rhs);
+
+            size_t m = A.shape()[0];
+            size_t n = B.shape()[1];
+
+            return strict::gemm(alpha, A, B,
+                                typename RhsExpr::value_type(),
+                                result_type(make_shape(m, n)));
+        }
+
+        template<typename RhsScal,
+                 typename RhsMat,
+                 typename LhsExpr>
+        inline decltype(auto)
+        dmat_dmat_mult_subgraph_matcher(
+            dmat_dmat_mult_expr<
+                LhsExpr,
+                scalar_dmat_mult_expr<RhsScal, RhsMat>> const& expr)
+        {
+            using result_type = typename dmat_dmat_mult_expr<
+                LhsExpr,
+                scalar_dmat_mult_expr<RhsScal, RhsMat>>::result_type;
+
+            auto alpha = mgcpp::eval(expr._rhs._scal_expr);
+            auto A = mgcpp::eval(expr._lhs);
+            auto B = mgcpp::eval(expr._rhs._dmat_expr);
+
+            size_t m = A.shape()[0];
+            size_t n = B.shape()[1];
+
+            return strict::gemm(alpha, A, B,
+                                typename LhsExpr::value_type(),
+                                result_type(make_shape(m, n)));
+        }
+    }
+
     template<typename LhsExpr, typename RhsExpr>
     dmat_dmat_mult_expr<LhsExpr, RhsExpr>::
     dmat_dmat_mult_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept
@@ -24,10 +90,7 @@ namespace mgcpp
     dmat_dmat_mult_expr<LhsExpr, RhsExpr>::
     eval() const
     {
-        auto lhs = mgcpp::eval(_lhs);
-        auto rhs = mgcpp::eval(_rhs);
-
-        return strict::mult(lhs, rhs);
+        return internal::dmat_dmat_mult_subgraph_matcher(*this);
     }
 
     template<typename LhsExpr, typename RhsExpr>

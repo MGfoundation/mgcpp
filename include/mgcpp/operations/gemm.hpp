@@ -32,14 +32,16 @@ namespace mgcpp
                  typename CDense,
                  typename Type,
                  size_t DeviceId,
-                 typename ScalarType,
+                 typename ScalarAlpha,
+                 typename ScalarBeta,
                  typename = typename
-                 std::enable_if<is_scalar<ScalarType>::value>::type>
+                 std::enable_if<is_scalar<ScalarAlpha>::value &&
+                                is_scalar<ScalarBeta>::value>::type>
         inline decltype(auto)
-        gemm(ScalarType alpha,
+        gemm(ScalarAlpha alpha,
              dense_matrix<ADense, Type, DeviceId> const& A,
              dense_matrix<BDense, Type, DeviceId> const& B,
-             ScalarType beta,
+             ScalarBeta beta,
              dense_matrix<CDense, Type, DeviceId> const& C);
 
         template<typename ADense,
@@ -47,14 +49,16 @@ namespace mgcpp
                  typename CDense,
                  typename Type,
                  size_t DeviceId,
-                 typename ScalarType,
+                 typename ScalarAlpha,
+                 typename ScalarBeta,
                  typename = typename
-                 std::enable_if<is_scalar<ScalarType>::value>::type>
+                 std::enable_if<is_scalar<ScalarAlpha>::value &&
+                                is_scalar<ScalarBeta>::value>::type>
         inline decltype(auto)
-        gemm(ScalarType alpha,
+        gemm(ScalarAlpha alpha,
              dense_matrix<ADense, Type, DeviceId> const& A,
              dense_matrix<BDense, Type, DeviceId> const& B,
-             ScalarType beta,
+             ScalarBeta beta,
              dense_matrix<CDense, Type, DeviceId>&& C);
     }
 }

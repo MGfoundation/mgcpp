@@ -7,8 +7,9 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/cuda_libs/cublas.hpp>
 #include <mgcpp/operations/gemm.hpp>
-#include <mgcpp/system/exception.hpp>
 #include <mgcpp/system/assert.hpp>
+#include <mgcpp/system/exception.hpp>
+#include <mgcpp/system/pun_cast.hpp>
 
 namespace mgcpp
 {
@@ -50,8 +51,8 @@ namespace mgcpp
         size_t k = A_shape[1];
         size_t n = B_shape[1];
 
-        Type const alpha = 1;
-        Type const beta = 1;
+        Type const alpha = Type(1);
+        Type const beta = Type(1);
 
         auto result = device_matrix<Type, DeviceId, allocator_type>(C_mat);
 
@@ -75,16 +76,18 @@ namespace mgcpp
              typename CDense,
              typename Type,
              size_t DeviceId,
-             typename ScalarType,
+             typename ScalarAlpha,
+             typename ScalarBeta,
              typename>
     decltype(auto)
     strict::
-    gemm(ScalarType alpha,
+    gemm(ScalarAlpha alpha,
          dense_matrix<ADense, Type, DeviceId> const& A,
          dense_matrix<BDense, Type, DeviceId> const& B,
-         ScalarType beta,
+         ScalarBeta beta,
          dense_matrix<CDense, Type, DeviceId> const& C)
     {
+        using device_pointer = typename ADense::device_pointer;
         using allocator_type = typename ADense::allocator_type;
 
         auto const& A_mat = ~A;
@@ -114,13 +117,15 @@ namespace mgcpp
 
         auto result = device_matrix<Type, DeviceId, allocator_type>(C_mat);
 
+        auto casted_alpha = Type(alpha);
+        auto casted_beta = Type(beta);
         auto status = cublas_gemm(handle,
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
-                                  &alpha,
+                                  pun_cast<device_pointer>(&casted_alpha),
                                   A_mat.data(), m,
                                   B_mat.data(), k,
-                                  &beta,
+                                  pun_cast<device_pointer>(&casted_beta),
                                   result.data_mutable(), m);
 
         if(!status)
@@ -134,21 +139,22 @@ namespace mgcpp
              typename CDense,
              typename Type,
              size_t DeviceId,
-             typename ScalarType,
+             typename ScalarAlpha,
+             typename ScalarBeta,
              typename>
     decltype(auto)
     strict::
-    gemm(ScalarType alpha,
+    gemm(ScalarAlpha alpha,
          dense_matrix<ADense, Type, DeviceId> const& A,
          dense_matrix<BDense, Type, DeviceId> const& B,
-         ScalarType beta,
+         ScalarBeta beta,
          dense_matrix<CDense, Type, DeviceId>&& C)
     {
-        using allocator_type = typename ADense::allocator_type;
+        using device_pointer = typename ADense::device_pointer;
 
         auto const& A_mat = ~A;
         auto const& B_mat = ~B;
-        auto const& C_mat = ~C;
+        auto&& C_mat = ~C;
 
         MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
                      "multiplied matrices' dimensions didn't match");
@@ -170,14 +176,16 @@ namespace mgcpp
         size_t m = A_shape[0];
         size_t k = A_shape[1];
         size_t n = B_shape[1];
-
+        
+        auto casted_alpha = Type(alpha);
+        auto casted_beta = Type(beta);
         auto status = cublas_gemm(handle,
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
-                                  &alpha,
+                                  pun_cast<device_pointer>(&casted_alpha),
                                   A_mat.data(), m,
                                   B_mat.data(), k,
-                                  &beta,
+                                  pun_cast<device_pointer>(&casted_beta),
                                   C_mat.data_mutable(), m);
 
         if(!status)
