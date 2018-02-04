@@ -117,34 +117,34 @@ TEST(mult_expr, scalar_dmat_mult)
         }
     }
 
-    {
-        using matrix = mgcpp::device_matrix<mgcpp::half>;
+    // {
+    //     using matrix = mgcpp::device_matrix<mgcpp::half>;
 
-        matrix A_mat({2, 4}, mgcpp::half(2.0));
+    //     matrix A_mat({2, 4}, mgcpp::half(2.0));
 
-        auto expr =  A_mat * 7.0;
+    //     auto expr =  A_mat * 7.0;
 
-        matrix B_mat; 
-        EXPECT_NO_THROW({B_mat = expr.eval();});
+    //     matrix B_mat; 
+    //     EXPECT_NO_THROW({B_mat = expr.eval();});
     
-        auto shape = B_mat.shape();
-        EXPECT_EQ(shape[0], 2);
-        EXPECT_EQ(shape[1], 4);
+    //     auto shape = B_mat.shape();
+    //     EXPECT_EQ(shape[0], 2);
+    //     EXPECT_EQ(shape[1], 4);
 
-        for(size_t i = 0; i < shape[0]; ++i)
-        {
-            for(size_t j = 0; j < shape[1]; ++j)
-            {
-                EXPECT_EQ(B_mat.check_value(i, j), 14)
-                    << "i: " << i << " j: " << j; 
-            } 
-        }
-    }
+    //     for(size_t i = 0; i < shape[0]; ++i)
+    //     {
+    //         for(size_t j = 0; j < shape[1]; ++j)
+    //         {
+    //             EXPECT_EQ(half_float::half_cast<int>(B_mat.check_value(i, j)), 14)
+    //                 << "i: " << i << " j: " << j; 
+    //         } 
+    //     }
+    // }
 
     {
         using matrix = mgcpp::device_matrix<mgcpp::complex<float>>;
 
-        matrix A_mat({2, 4}, std::complex<float>{1, 0});
+        matrix A_mat({2, 4}, std::complex<float>{1, 2});
 
         auto expr = mgcpp::mult(7.0, A_mat);
 
@@ -155,7 +155,7 @@ TEST(mult_expr, scalar_dmat_mult)
         EXPECT_EQ(shape[0], 2);
         EXPECT_EQ(shape[1], 4);
 
-        auto answer = std::complex<float>(7, 0);
+        auto answer = std::complex<float>(7, 14);
         for(size_t i = 0; i < shape[0]; ++i)
         {
             for(size_t j = 0; j < shape[1]; ++j)
@@ -167,9 +167,9 @@ TEST(mult_expr, scalar_dmat_mult)
     }
 
     {
-        using matrix = mgcpp::device_matrix<float>;
+        using matrix = mgcpp::device_matrix<mgcpp::complex<double>>;
 
-        matrix A_mat({2, 4}, 2);
+        matrix A_mat({2, 4}, std::complex<double>{1, 2});
 
         auto expr = mgcpp::mult(A_mat, 7.0);
 
@@ -180,11 +180,12 @@ TEST(mult_expr, scalar_dmat_mult)
         EXPECT_EQ(shape[0], 2);
         EXPECT_EQ(shape[1], 4);
 
+        auto answer = std::complex<double>(7, 14);
         for(size_t i = 0; i < shape[0]; ++i)
         {
             for(size_t j = 0; j < shape[1]; ++j)
             {
-                EXPECT_EQ(B_mat.check_value(i, j), 14)
+                EXPECT_EQ(B_mat.check_value(i, j), answer)
                     << "i: " << i << " j: " << j; 
             } 
         }
