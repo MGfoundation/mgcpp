@@ -34,7 +34,7 @@ namespace mgcpp
 
     template<typename Scalar, typename DMatExpr, typename>
     scalar_dmat_mult_expr<Scalar, DMatExpr> 
-    operator*(Scalar scalar,
+    operator*(Scalar const& scalar,
               dmat_expr<DMatExpr> const& mat_expr) noexcept
     {
         return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
@@ -43,7 +43,7 @@ namespace mgcpp
     template<typename Scalar, typename DMatExpr, typename>
     inline scalar_dmat_mult_expr<Scalar, DMatExpr> 
     operator*(dmat_expr<DMatExpr> const& mat_expr,
-              Scalar scalar) noexcept
+              Scalar const& scalar) noexcept
     {
         return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
     }
@@ -66,7 +66,8 @@ namespace mgcpp
 
     template<typename Scalar, typename DMatExpr, typename>
     scalar_dmat_mult_expr<Scalar, DMatExpr> 
-    mult(Scalar scalar, dmat_expr<DMatExpr> const& mat_expr) noexcept
+    mult(Scalar const& scalar,
+         dmat_expr<DMatExpr> const& mat_expr) noexcept
     {
         return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
     }
@@ -74,7 +75,7 @@ namespace mgcpp
     template<typename Scalar, typename DMatExpr, typename>
     inline scalar_dmat_mult_expr<Scalar, DMatExpr> 
     mult(dmat_expr<DMatExpr> const& mat_expr,
-         Scalar scalar) noexcept
+         Scalar const& scalar) noexcept
     {
         return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
     }

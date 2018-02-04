@@ -19,8 +19,8 @@ namespace mgcpp
              typename = typename std::enable_if<
                  is_scalar<Scalar>::value>::type>
     inline Scalar
-    eval(Scalar expr)
-    { return expr; }
+    eval(Scalar scalar)
+    { return Scalar(scalar); }
 }
 
 #endif
