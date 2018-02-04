@@ -154,7 +154,7 @@ namespace mgcpp
 
         auto const& A_mat = ~A;
         auto const& B_mat = ~B;
-        auto& C_mat = *static_cast<CDense*>(&C);
+        auto C_mat = std::move(*static_cast<CDense*>(&C));
 
         MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
                      "multiplied matrices' dimensions didn't match");
@@ -183,14 +183,14 @@ namespace mgcpp
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
                                   pun_cast<device_pointer>(&casted_alpha),
-                                  A_mat.data(), m,
-                                  B_mat.data(), k,
-                                  pun_cast<device_pointer>(&casted_beta),
-                                  C_mat.data_mutable(), m);
+                                                         A_mat.data(), m,
+                                                         B_mat.data(), k,
+                                                         pun_cast<device_pointer>(&casted_beta),
+                                                         C_mat.data_mutable(), m);
 
-        if(!status)
-        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+                               if(!status)
+                               { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-        return *static_cast<CDense*>(&C);
+                               return C_mat;
     }
 }
