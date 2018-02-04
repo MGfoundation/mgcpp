@@ -128,4 +128,62 @@ namespace mgcpp
 
         return result;
     }
+
+    template<typename ADense,
+             typename BDense,
+             typename CDense,
+             typename Type,
+             size_t DeviceId,
+             typename ScalarType,
+             typename>
+    decltype(auto)
+    strict::
+    gemm(ScalarType alpha,
+         dense_matrix<ADense, Type, DeviceId> const& A,
+         dense_matrix<BDense, Type, DeviceId> const& B,
+         ScalarType beta,
+         dense_matrix<CDense, Type, DeviceId>&& C)
+    {
+        using allocator_type = typename ADense::allocator_type;
+
+        auto const& A_mat = ~A;
+        auto const& B_mat = ~B;
+        auto const& C_mat = ~C;
+
+        MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
+                     "multiplied matrices' dimensions didn't match");
+
+        MGCPP_ASSERT(C_mat.shape()[0] == A_mat.shape()[0]
+                     && C_mat.shape()[1] == B_mat.shape()[1],
+                     "added matrix' dimension doesn't match");
+
+        auto set_device_status = cuda_set_device(DeviceId);
+        if(!set_device_status)
+        { MGCPP_THROW_SYSTEM_ERROR(set_device_status.error()); }
+
+        auto* context = A_mat.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        auto A_shape = A_mat.shape();
+        auto B_shape = B_mat.shape();
+
+        size_t m = A_shape[0];
+        size_t k = A_shape[1];
+        size_t n = B_shape[1];
+
+        auto status = cublas_gemm(handle,
+                                  CUBLAS_OP_N, CUBLAS_OP_N,
+                                  m, n, k,
+                                  &alpha,
+                                  A_mat.data(), m,
+                                  B_mat.data(), k,
+                                  &beta,
+                                  C_mat.data_mutable(), m);
+
+        if(!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return C_mat;
+    }
+
 }

@@ -41,6 +41,21 @@ namespace mgcpp
              dense_matrix<BDense, Type, DeviceId> const& B,
              ScalarType beta,
              dense_matrix<CDense, Type, DeviceId> const& C);
+
+        template<typename ADense,
+                 typename BDense,
+                 typename CDense,
+                 typename Type,
+                 size_t DeviceId,
+                 typename ScalarType,
+                 typename = typename
+                 std::enable_if<is_scalar<ScalarType>::value>::type>
+        inline decltype(auto)
+        gemm(ScalarType alpha,
+             dense_matrix<ADense, Type, DeviceId> const& A,
+             dense_matrix<BDense, Type, DeviceId> const& B,
+             ScalarType beta,
+             dense_matrix<CDense, Type, DeviceId>&& C);
     }
 }
 
