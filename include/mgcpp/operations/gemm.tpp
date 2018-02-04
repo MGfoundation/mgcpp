@@ -154,7 +154,7 @@ namespace mgcpp
 
         auto const& A_mat = ~A;
         auto const& B_mat = ~B;
-        auto&& C_mat = ~C;
+        auto&& C_mat = std::move(*static_cast<CDense*>(&C));
 
         MGCPP_ASSERT(A_mat.shape()[1] == B_mat.shape()[0],
                      "multiplied matrices' dimensions didn't match");

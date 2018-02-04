@@ -10,11 +10,11 @@ namespace mgcpp
     struct expression
     {
         inline Type&
-        operator~()
+        operator~() noexcept
         { return *static_cast<Type*>(this); }
 
         inline Type const&
-        operator~() const
+        operator~() const noexcept
         { return *static_cast<Type const*>(this); }
     };
 }
