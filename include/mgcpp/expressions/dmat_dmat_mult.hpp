@@ -25,7 +25,8 @@ namespace mgcpp
         LhsExpr const& _lhs;
         RhsExpr const& _rhs;
 
-        inline dmat_dmat_mult_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
+        inline dmat_dmat_mult_expr(LhsExpr const& lhs,
+                                   RhsExpr const& rhs) noexcept;
 
         inline result_type
         eval() const;

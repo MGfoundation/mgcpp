@@ -7,6 +7,7 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/assert.hpp>
 
@@ -26,16 +27,13 @@ namespace mgcpp
         auto lhs = mgcpp::eval(_lhs);
         auto rhs = mgcpp::eval(_rhs);
 
-        MGCPP_ASSERT(lhs.shape()[1] == rhs.shape()[0],
-                     "dimension doesn't match ");
-
         return strict::mult(lhs, rhs);
     }
 
     template<typename LhsExpr, typename RhsExpr>
     typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type
-    eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr>&& expr)
-    { expr.eval(); }
+    eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr)
+    { return expr.eval(); }
 
     template<typename LhsExpr, typename RhsExpr>
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> 
