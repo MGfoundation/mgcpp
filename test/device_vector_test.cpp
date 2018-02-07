@@ -9,7 +9,10 @@
 #define ERROR_CHECK_EXCEPTION true
 
 #include <mgcpp/vector/device_vector.hpp>
+
+#ifdef USE_HALF
 #include <half/half.hpp>
+#endif
 
 template<typename T>
 class dummy_vector
@@ -95,6 +98,7 @@ TEST(device_vector, size_constructor)
               mgcpp::device_vector<float>().context());
 }
 
+#ifdef USE_HALF
 TEST(device_vector, size_constructor_half)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -120,6 +124,7 @@ TEST(device_vector, size_constructor_half)
     EXPECT_EQ(vec.context(),
               mgcpp::device_vector<mgcpp::half>().context());
 }
+#endif
 
 TEST(device_vector, initializing_constructor)
 {
@@ -232,6 +237,7 @@ TEST(device_vector, initializing_constructor_double_complex)
         );
 }
 
+#ifdef USE_HALF
 TEST(device_vector, initializing_constructor_half)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -268,6 +274,7 @@ TEST(device_vector, initializing_constructor_half)
             }
         }while(false));
 }
+#endif
 
 TEST(device_vector, constructon_from_host_data)
 {
@@ -361,7 +368,7 @@ TEST(device_vector, constructon_from_host_data_complex)
     free(host);
 }
 
-
+#ifdef USE_HALF
 TEST(device_vector, constructon_from_host_data_half)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -407,6 +414,7 @@ TEST(device_vector, constructon_from_host_data_half)
             }
         }while(false));
 }
+#endif
 
 TEST(device_vector, third_party_matrix_construction)
 {
@@ -510,7 +518,7 @@ TEST(device_vector, complex_vector_constructon_from_init_list)
         }while(false));
 }
 
-
+#ifdef USE_HALF
 TEST(device_vector, constructon_from_init_list_half)
 {
     using namespace half_float::literal;
@@ -550,6 +558,7 @@ TEST(device_vector, constructon_from_init_list_half)
             }
         }while(false));
 }
+#endif
 
 TEST(device_vector, cpy_constructor)
 {
@@ -727,6 +736,7 @@ TEST(device_vector, copy_to_host)
     free(host);
 }
 
+#ifdef USE_HALF
 TEST(device_vector, copy_to_host_half)
 {
     auto set_device_stat = mgcpp::cuda_set_device(0);
@@ -751,3 +761,4 @@ TEST(device_vector, copy_to_host_half)
 
     free(host);
 }
+#endif

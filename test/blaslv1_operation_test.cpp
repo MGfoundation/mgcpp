@@ -14,6 +14,7 @@
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/operations/sum.hpp>
+#include <mgcpp/operations/pad.hpp>
 
 TEST(vec_vec_operation, vec_sum)
 {
@@ -125,5 +126,31 @@ TEST(vec_vec_operation, vec_hadamard_product)
     for(auto i = 0u; i < size; ++i)
     {
         EXPECT_EQ(result.check_value(i), first_val * second_val);
+    }
+}
+
+TEST(vec_operation, vec_pad)
+{
+    size_t size = 5;
+    float init_val = 3;
+    mgcpp::device_vector<float> vec(size, init_val);
+
+    size_t left_pad = 10;
+    size_t right_pad = 30;
+    mgcpp::device_vector<float> result{};
+    EXPECT_NO_THROW({result = mgcpp::strict::pad(vec, {left_pad, right_pad});});
+
+    EXPECT_EQ(result.size(), left_pad + size + right_pad);
+    for(auto i = 0u; i < left_pad; ++i)
+    {
+        EXPECT_EQ(result.check_value(i), 0);
+    }
+    for(auto i = left_pad; i < left_pad + size; ++i)
+    {
+        EXPECT_EQ(result.check_value(i), init_val);
+    }
+    for(auto i = left_pad + size; i < left_pad + size + right_pad; ++i)
+    {
+        EXPECT_EQ(result.check_value(i), 0);
     }
 }
