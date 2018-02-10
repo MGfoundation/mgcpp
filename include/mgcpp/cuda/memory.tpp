@@ -144,6 +144,7 @@ namespace mgcpp
         return cuda_memcpy(reinterpret_cast<cuDoubleComplex*>(to), from, count, kind);
     }
 
+#ifdef USE_HALF
     inline outcome::result<void>
     cuda_memcpy(__half* to, float const* from,
                 size_t count, cuda_memcpy_kind kind) noexcept
@@ -183,4 +184,5 @@ namespace mgcpp
 
         return cuda_free(ptr.value());
     }
+#endif
 }

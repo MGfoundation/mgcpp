@@ -22,9 +22,13 @@ namespace mgcpp
     struct value_type<complex<Type>>
     { using type = std::complex<Type>; };
 
+
+#ifdef USE_HALF
     template<>
     struct value_type<mgcpp::half>
     { using type = float; };
+#endif
+
 }
 
 #endif
