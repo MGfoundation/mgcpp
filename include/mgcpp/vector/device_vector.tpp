@@ -306,12 +306,16 @@ namespace mgcpp
     {
         if(size > _capacity)
         {
+            auto new_data = _allocator.device_allocate(size);
             if(_data)
             {
+                auto cpy_result = cuda_memcpy(new_data, _data, _shape, cuda_memcpy_kind::device_to_device);
+                if (!cpy_result)
+                { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
                 _allocator.device_deallocate(_data, _capacity);
                 _capacity = 0;
             }
-            _data = _allocator.device_allocate(size); 
+            _data = new_data;
             _capacity = size;
         }
         _shape = size;
