@@ -302,14 +302,17 @@ namespace mgcpp
              typename Alloc>
     device_vector<Type, Align, DeviceId, Alloc>&
     device_vector<Type, Align, DeviceId, Alloc>::
-    resize(size_t size)
+    resize(size_t size, value_type pad_value)
     {
         if(size > _capacity)
         {
             auto new_data = _allocator.device_allocate(size);
             if(_data)
             {
-                auto cpy_result = cuda_memcpy(new_data, _data, _shape, cuda_memcpy_kind::device_to_device);
+                auto cpy_result = cuda_memcpy(new_data,
+                                              _data,
+                                              _shape,
+                                              cuda_memcpy_kind::device_to_device);
                 if (!cpy_result)
                 { MGCPP_THROW_SYSTEM_ERROR(cpy_result.error()); }
                 _allocator.device_deallocate(_data, _capacity);
@@ -317,6 +320,14 @@ namespace mgcpp
             }
             _data = new_data;
             _capacity = size;
+        }
+        if (size > _shape)
+        {
+            auto fill_result = mgblas_fill(_data + _shape,
+                                           *mgcpp::pun_cast<device_pointer>(&pad_value),
+                                           size - _shape);
+            if (!fill_result)
+            { MGCPP_THROW_SYSTEM_ERROR(fill_result.error()); }
         }
         _shape = size;
 

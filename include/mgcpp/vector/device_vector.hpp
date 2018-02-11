@@ -103,7 +103,7 @@ namespace mgcpp
         zero();
 
         inline device_vector<Type, Align, DeviceId, Alloc>&
-        resize(size_t size);
+        resize(size_t size, value_type pad_value = value_type{});
 
         inline void 
         copy_to_host(pointer host_p) const;

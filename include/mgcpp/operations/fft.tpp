@@ -9,6 +9,7 @@
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 #include <mgcpp/vector/device_vector.hpp>
+#include <mgcpp/kernels/mgblas_helpers.hpp>
 
 namespace mgcpp
 {
@@ -55,15 +56,19 @@ namespace mgcpp
         using result_allocator_type =
             typename allocator_type::template rebind_alloc<Type>;
 
-        auto const& dev_vec = ~vec;
+        auto const &dev_vec = ~vec;
 
         size_t fft_size = n;
         if (n < 0)
+        {
             fft_size = (dev_vec.shape() - 1) * 2;
+        }
         else if (fft_size / 2 + 1 > dev_vec.shape())
         {
-            // FIXME: zero-pad input to length floor(n/2)+1
-            MGCPP_THROW_RUNTIME_ERROR("Zero-pad FFT unimplemented");
+            // Pad vector with zeroes
+            auto new_shape = fft_size / 2 + 1;
+            auto padded = dev_vec;
+            padded.resize(new_shape);
         }
         size_t output_size = fft_size;
 
@@ -73,8 +78,8 @@ namespace mgcpp
                                     result_allocator_type>(output_size);
 
         auto status = mgcpp::cufft_irfft(fft_size,
-                                          dev_vec.data(),
-                                          result.data_mutable());
+                                         dev_vec.data(),
+                                         result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 

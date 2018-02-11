@@ -9,6 +9,7 @@
 #include <mgcpp/kernels/mgblas_helpers.hpp>
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/cuda/device.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 
 TEST(mgblas_helpers, array_init)
 {

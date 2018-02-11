@@ -137,13 +137,14 @@ TEST(vec_operation, vec_pad)
 
     size_t left_pad = 10;
     size_t right_pad = 30;
+    float pad_val = -1;
     mgcpp::device_vector<float> result{};
-    EXPECT_NO_THROW({result = mgcpp::strict::pad(vec, {left_pad, right_pad});});
+    EXPECT_NO_THROW({result = mgcpp::strict::pad(vec, {left_pad, right_pad}, pad_val);});
 
     EXPECT_EQ(result.size(), left_pad + size + right_pad);
     for(auto i = 0u; i < left_pad; ++i)
     {
-        EXPECT_EQ(result.check_value(i), 0);
+        EXPECT_EQ(result.check_value(i), pad_val);
     }
     for(auto i = left_pad; i < left_pad + size; ++i)
     {
@@ -151,6 +152,6 @@ TEST(vec_operation, vec_pad)
     }
     for(auto i = left_pad + size; i < left_pad + size + right_pad; ++i)
     {
-        EXPECT_EQ(result.check_value(i), 0);
+        EXPECT_EQ(result.check_value(i), pad_val);
     }
 }

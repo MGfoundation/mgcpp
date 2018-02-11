@@ -225,6 +225,34 @@ TEST(fft_operation, double_complex_to_real_inv_fft)
     }
 }
 
+TEST(fft_operation, double_upsampling_fft_even)
+{
+    size_t size = 16, new_size = 32;
+    mgcpp::device_vector<mgcpp::complex<double>> vec(size / 2 + 1);
+    for (auto i = 0u; i < vec.size(); ++i) {
+        std::complex<double> random_complex(dist(rng), dist(rng));
+        vec.set_value(i, random_complex);
+    }
+
+    carray<double> expected(new_size);
+    for (auto i = 0u; i < vec.size(); ++i) {
+        expected[i] = vec.check_value(i);
+    }
+    for (auto i = new_size - vec.size() + 1; i < new_size; ++i) {
+        expected[i] = std::conj(expected[new_size - i]);
+    }
+    fft(expected, true);
+
+    mgcpp::device_vector<double> result;
+    EXPECT_NO_THROW({ result = mgcpp::strict::irfft(vec, new_size); });
+
+    EXPECT_EQ(result.size(), new_size);
+    for (auto i = 0u; i < result.size(); ++i) {
+        EXPECT_NEAR(result.check_value(i), expected[i].real(), 1e-5)
+            << "size = " << size << ", i = " << i;
+    }
+}
+
 // forward cfft
 TEST(fft_operation, float_complex_to_complex_fwd_fft)
 {
