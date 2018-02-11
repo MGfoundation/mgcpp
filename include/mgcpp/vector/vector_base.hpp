@@ -23,11 +23,6 @@ namespace mgcpp
              size_t DeviceId>
     struct vector_base
     {
-        inline VectorType const&
-        operator~() const noexcept;
-
-        inline VectorType&
-        operator~() noexcept;
     };
 }
 

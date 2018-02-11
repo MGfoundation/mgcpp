@@ -4,24 +4,17 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_VECTOR_DENSE_VECTOR_HPP_
-#define _MGCPP_VECTOR_DENSE_VECTOR_HPP_
-
-#include <mgcpp/vector/vector_base.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
 
 namespace mgcpp
 {
-    template<typename DenseVecType,
+    template<typename DenseMatrix,
              typename Type,
              alignment Align,
              size_t DeviceId>
-    class dense_vector :
-        public vector_base<DenseVecType, Type, Align, DeviceId>,
-        public dvec_expr<DenseVecType>
+    inline decltype(auto)
+    eval(dense_vector<DenseMatrix, Type, Align, DeviceId> const& device_mat)
     {
-
-    };
+        return ~device_mat;
+    }
 }
-
-#endif

@@ -4,6 +4,9 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
+#define _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
+
 namespace mgcpp
 {
     template<typename Type>
@@ -18,3 +21,5 @@ namespace mgcpp
         { return *static_cast<Type const*>(this); }
     };
 }
+
+#endif
