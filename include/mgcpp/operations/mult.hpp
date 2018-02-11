@@ -37,6 +37,15 @@ namespace mgcpp
         // mult(dense_vector<LhsDenseVec, Type, Device, Align> const& first,
         //      dense_vector<RhsDenseVec, Type, Device, Align> const& second);
 
+        template<typename DenseMat,
+                 typename DenseVec,
+                 typename Type,
+                 alignment Align,
+                 size_t DeviceId>
+        inline decltype(auto)
+        mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
+             dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
+
         template<typename DenseVec,
                  typename ScalarType,
                  typename VectorType,

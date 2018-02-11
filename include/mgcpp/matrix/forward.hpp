@@ -7,6 +7,8 @@
 #ifndef _MGCPP_MATRIX_FORWARD_HPP_
 #define _MGCPP_MATRIX_FORWARD_HPP_
 
+#include <cstddef>
+
 namespace mgcpp
 {
     template <typename MatrixType,

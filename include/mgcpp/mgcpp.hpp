@@ -7,7 +7,7 @@
 #ifndef _MGCPP_MGCPP_HPP_
 #define _MGCPP_MGCPP_HPP_
 
-#include <mgcpp/device/matrix.hpp>
-#include <mgcpp/device/vector.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/vector/device_vector.hpp>
 
 #endif

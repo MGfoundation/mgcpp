@@ -64,6 +64,51 @@ namespace mgcpp
         return result;
     }
     
+    template<typename DenseMat,
+             typename DenseVec,
+             typename Type,
+             alignment Align,
+             size_t DeviceId>
+    inline decltype(auto)
+    strict::
+    mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
+         dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
+    {
+        using allocator_type = typename DenseVec::allocator_type;
+
+        auto const& dmat = ~mat;
+        auto const& dvec = ~vec;
+
+        auto *context = dmat.context();
+        auto handle = context->get_cublas_context(DeviceId);
+
+        MGCPP_ASSERT(dmat.shape()[1] == dvec.shape,
+                     "Matrix.shape[1] != Vector.shape");
+
+        auto n = dmat.shape()[0];
+        auto k = dmat.shape()[1];
+        auto m = dvec.shape;
+
+        auto result = device_vector<Type, DeviceId, Align, allocator_type>(m);
+
+        Type const alpha = 1;
+        Type const beta = 0;
+
+        auto status = cublas_gemv(handle,
+                                  CUBLAS_OP_N,
+                                  n, k,
+                                  &alpha,
+                                  mat.data(), n,
+                                  vec.data(), 1,
+                                  &beta,
+                                  result.data_mutable(), 1);
+
+        if (!status)
+        { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+
+        return result;
+    }
+
     template<typename DenseVec,
              typename ScalarType,
              typename VectorType,

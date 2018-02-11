@@ -28,6 +28,7 @@ option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_HALF "compile mgcpp with half precision floating point features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 option(BUILD_DOC "Build documentation" ON)
+option(BUILD_EXAMPLES "Build API example code" OFF)
 
 # cuda dependency
 find_package(CUDA REQUIRED)
@@ -268,6 +269,11 @@ if (BUILD_DOC)
 	message("Doxygen need to be installed to generate the doxygen documentation")
     endif (DOXYGEN_FOUND)
 endif (BUILD_DOC)
+
+# Build Example code
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif(BUILD_EXAMPLES)
 
 # install
 install(TARGETS ${MGCPP_TARGETS}

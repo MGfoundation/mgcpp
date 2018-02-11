@@ -171,6 +171,112 @@ namespace mgcpp
     }
 
 
+    // lv2
+
+    template<>
+    inline outcome::result<void>
+    cublas_gemv(cublasHandle_t handle,
+                cublasOperation_t trans,
+                int m, int n,
+                float const* alpha,
+                float const* A, int lda,
+                float const* x, int incx,
+                float const* beta,
+                float *y, int incy)
+    {
+        std::error_code status =
+            cublasSgemv(handle, trans,
+                        m, n,
+                        alpha,
+                        A, lda,
+                        x, incx,
+                        beta,
+                        y, incy);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    template<>
+    inline outcome::result<void>
+    cublas_gemv(cublasHandle_t handle,
+                cublasOperation_t trans,
+                int m, int n,
+                double const* alpha,
+                double const* A, int lda,
+                double const* x, int incx,
+                double const* beta,
+                double *y, int incy)
+    {
+        std::error_code status =
+            cublasDgemv(handle, trans,
+                        m, n,
+                        alpha,
+                        A, lda,
+                        x, incx,
+                        beta,
+                        y, incy);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    template<>
+    inline outcome::result<void>
+    cublas_gemv(cublasHandle_t handle,
+                cublasOperation_t trans,
+                int m, int n,
+                cuComplex const* alpha,
+                cuComplex const* A, int lda,
+                cuComplex const* x, int incx,
+                cuComplex const* beta,
+                cuComplex *y, int incy)
+    {
+        std::error_code status =
+            cublasCgemv(handle, trans,
+                        m, n,
+                        alpha,
+                        A, lda,
+                        x, incx,
+                        beta,
+                        y, incy);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
+    template<>
+    inline outcome::result<void>
+    cublas_gemv(cublasHandle_t handle,
+                cublasOperation_t trans,
+                int m, int n,
+                cuDoubleComplex const* alpha,
+                cuDoubleComplex const* A, int lda,
+                cuDoubleComplex const* x, int incx,
+                cuDoubleComplex const* beta,
+                cuDoubleComplex *y, int incy)
+    {
+        std::error_code status =
+            cublasZgemv(handle, trans,
+                        m, n,
+                        alpha,
+                        A, lda,
+                        x, incx,
+                        beta,
+                        y, incy);
+
+        if(status != status_t::success)
+            return status;
+        else
+            return outcome::success();
+    }
+
     // lv3
     inline outcome::result<void>
     cublas_gemm(cublasHandle_t handle,

@@ -38,6 +38,33 @@ namespace mgcpp
                 ScalarType const* alpha,
                 VectorType* vec, size_t incvec) noexcept;
 
+    // lv2
+
+    /// matrix-vector multiplication
+    /// y = alpha * op(A) * x + beta * y
+    /// @param handle handle to the cuBLAS library context
+    /// @param trans operation op(A) that is non- or (conj.) transpose.
+    /// @param m number of rows of matrix A.
+    /// @param n number of columns of matrix A.
+    /// @param alpha scalar used for multiplication.
+    /// @param A array of dimension (lda, n)
+    /// @param lda leading dimension of two-dimensional array used to store matrix A. lda must be at least max{1, m}
+    /// @param x vector at least (1+(n-1)*abs(incx)) elements if transa==CUBLAS_OP_N and at least (1+(m-1)*abs(incx)) elements otherwise.
+    /// @param incx stride between consecutive elements of x.
+    /// @param beta scalar used for multiplication, if beta==0 then y does not have to be a valid input.
+    /// @param y vector at least (1+(m-1)*abs(incy)) elements if transa==CUBLAS_OP_N and at least (1+(n-1)*abs(incy)) elements otherwise.
+    /// @param incy stride between consecutive elements of y.
+    template<typename T>
+    inline outcome::result<void>
+    cublas_gemv(cublasHandle_t handle,
+                cublasOperation_t trans,
+                int m, int n,
+                T const* alpha,
+                T const* A, int lda,
+                T const* x, int incx,
+                T const* beta,
+                T *y, int incy);
+
     // lv3
 
     template<typename T>
