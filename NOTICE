@@ -67,8 +67,8 @@ THE SOFTWARE.
 
 related files:
 Aptfile
-procfile
-webapp.py
+ProcFile
+run_format.py
 requirements.txt
 
 Copyright (c) 2017 Isuru Fernando
