@@ -70,7 +70,6 @@ Aptfile
 procfile
 webapp.py
 
-
 Copyright (c) 2017 Isuru Fernando
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
