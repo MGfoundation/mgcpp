@@ -22,25 +22,22 @@ namespace mgcpp
     {
         template<typename DeviceVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
+        rfft(dense_vector<DeviceVec, Type, DeviceId> const& vec);
 
         template<typename DeviceVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec,
+        irfft(dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
               int n = -1);
 
         template<typename DeviceVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        cfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec,
+        cfft(dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
              fft_direction direction);
 
         template<typename DeviceMat,

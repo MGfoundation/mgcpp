@@ -20,10 +20,9 @@ namespace mgcpp
     {
         template<typename DeviceVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        sum(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec);
+        sum(dense_vector<DeviceVec, Type, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename Type,

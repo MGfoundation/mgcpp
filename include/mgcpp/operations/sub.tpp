@@ -1,4 +1,3 @@
-
 //          Copyright RedPortal, mujjingun 2017 - 2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE or copy at
@@ -13,12 +12,11 @@ namespace mgcpp
     template<typename LhsDeviceVec,
              typename RhsDeviceVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    sub(dense_vector<LhsDeviceVec, Type, Align, DeviceId> const& lhs,
-        dense_vector<RhsDeviceVec, Type, Align, DeviceId> const& rhs)
+    sub(dense_vector<LhsDeviceVec, Type, DeviceId> const& lhs,
+        dense_vector<RhsDeviceVec, Type, DeviceId> const& rhs)
     {
         using allocator_type = typename LhsDeviceVec::allocator_type;
         using value_type = typename LhsDeviceVec::value_type;
@@ -37,7 +35,6 @@ namespace mgcpp
         value_type const alpha = -1;
 
         auto result = device_vector<Type,
-                                    Align,
                                     DeviceId,
                                     allocator_type>(lhs_vec);
         auto status = cublas_axpy(handle, size,

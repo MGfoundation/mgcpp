@@ -11,22 +11,17 @@
 
 namespace mgcpp
 {
-    enum alignment : bool;
-
     template<typename VectorType,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     struct vector_base;
 
     template<typename DenseVecType,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     class dense_vector;
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     class device_vector;

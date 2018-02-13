@@ -67,12 +67,11 @@ namespace mgcpp
     template<typename DenseMat,
              typename DenseVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     inline decltype(auto)
     strict::
     mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
-         dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
+         dense_vector<DenseVec, Type, DeviceId> const& vec)
     {
         using allocator_type = typename DenseVec::allocator_type;
 
@@ -88,7 +87,7 @@ namespace mgcpp
         auto n = dmat.shape()[0];
         auto k = dmat.shape()[1];
 
-        auto result = device_vector<Type, Align, DeviceId, allocator_type>(n);
+        auto result = device_vector<Type, DeviceId, allocator_type>(n);
 
         Type const alpha = 1;
         Type const beta = 0;
@@ -111,13 +110,12 @@ namespace mgcpp
     template<typename DenseVec,
              typename ScalarType,
              typename VectorType,
-             alignment Align,
              size_t DeviceId,
              typename>
     decltype(auto)
     strict::
     mult(ScalarType scalar,
-         dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec)
+         dense_vector<DenseVec, VectorType, DeviceId> const& vec)
     {
         using allocator_type = typename DenseVec::allocator_type;
         using device_pointer = typename DenseVec::device_pointer;
@@ -132,7 +130,6 @@ namespace mgcpp
         // complex scalar x real vector will need something
         auto casted_scalar = VectorType(scalar);
         auto result = device_vector<VectorType,
-                                    Align,
                                     DeviceId,
                                     allocator_type>(original_vec);
         auto status = cublas_scal(handle, size,

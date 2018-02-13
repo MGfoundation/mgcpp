@@ -19,10 +19,9 @@
 namespace mgcpp
 {
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector() noexcept
     :_context(&global_context::get_thread_context()),
         _shape(0),
@@ -31,10 +30,9 @@ namespace mgcpp
         _capacity(0) {}
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(Alloc const& alloc) noexcept
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -43,10 +41,9 @@ namespace mgcpp
          _capacity(0) {}
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(size_t size, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(size),
@@ -55,10 +52,9 @@ namespace mgcpp
          _capacity(_shape) {}
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(size_t size, value_type init, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
@@ -74,10 +70,9 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(size_t size, const_pointer data, Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
           _shape(size),
@@ -97,10 +92,9 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(std::initializer_list<value_type> const& array,
                   Alloc const& alloc)
         : _context(&global_context::get_thread_context()),
@@ -125,11 +119,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     template<typename HostVec, typename>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     device_vector(HostVec const& host_mat, Alloc const& alloc)
         :_context(&global_context::get_thread_context()),
          _shape(0),
@@ -148,11 +141,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
-    device_vector(device_vector<Type, Align, DeviceId, Alloc> const& other)
+    device_vector<Type, DeviceId, Alloc>::
+    device_vector(device_vector<Type, DeviceId, Alloc> const& other)
         :_context(&global_context::get_thread_context()),
          _shape(other._shape),
          _allocator(),
@@ -170,12 +162,11 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     template<typename DenseVec>
-    device_vector<Type, Align, DeviceId, Alloc>::
-    device_vector(dense_vector<DenseVec, Type, Align, DeviceId> const& other)
+    device_vector<Type, DeviceId, Alloc>::
+    device_vector(dense_vector<DenseVec, Type, DeviceId> const& other)
         :_context(&global_context::get_thread_context()),
          _shape((~other)._shape),
          _allocator(),
@@ -193,11 +184,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
-    device_vector(device_vector<Type, Align, DeviceId, Alloc>&& other) noexcept
+    device_vector<Type, DeviceId, Alloc>::
+    device_vector(device_vector<Type, DeviceId, Alloc>&& other) noexcept
         : _context(&global_context::get_thread_context()),
           _shape(std::move(other._shape)),
           _allocator(std::move(other._allocator)),
@@ -209,13 +199,12 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     template<typename DenseVec>
-    device_vector<Type, Align, DeviceId, Alloc>&
-    device_vector<Type, Align, DeviceId, Alloc>::
-    operator=(dense_vector<DenseVec, Type, Align, DeviceId> const& other)
+    device_vector<Type, DeviceId, Alloc>&
+    device_vector<Type, DeviceId, Alloc>::
+    operator=(dense_vector<DenseVec, Type, DeviceId> const& other)
     {
         auto const& other_densevec = ~other;
 
@@ -243,12 +232,11 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>&
-    device_vector<Type, Align, DeviceId, Alloc>::
-    operator=(device_vector<Type, Align, DeviceId, Alloc> const& other)
+    device_vector<Type, DeviceId, Alloc>&
+    device_vector<Type, DeviceId, Alloc>::
+    operator=(device_vector<Type, DeviceId, Alloc> const& other)
     {
         if(other._shape > _capacity)
         {
@@ -274,12 +262,11 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>&
-    device_vector<Type, Align, DeviceId, Alloc>::
-    operator=(device_vector<Type, Align, DeviceId, Alloc>&& other) noexcept
+    device_vector<Type, DeviceId, Alloc>&
+    device_vector<Type, DeviceId, Alloc>::
+    operator=(device_vector<Type, DeviceId, Alloc>&& other) noexcept
     {
         if(_data)
         { 
@@ -297,11 +284,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>&
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>&
+    device_vector<Type, DeviceId, Alloc>::
     resize(size_t size, value_type pad_value)
     {
         if(size > _capacity)
@@ -335,11 +321,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>&
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>&
+    device_vector<Type, DeviceId, Alloc>::
     zero()
     {
         if(!_data)
@@ -357,11 +342,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     void
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     copy_to_host(pointer host_p) const
     {
         if(!host_p)
@@ -371,11 +355,10 @@ namespace mgcpp
 
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    typename device_vector<Type, Align, DeviceId, Alloc>::value_type
-    device_vector<Type, Align, DeviceId, Alloc>::
+    typename device_vector<Type, DeviceId, Alloc>::value_type
+    device_vector<Type, DeviceId, Alloc>::
     check_value(size_t i) const
     {
         if(i >= _shape)
@@ -393,11 +376,10 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     void
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     set_value(size_t i, value_type value) 
     {
         if(i >= _shape)
@@ -414,11 +396,10 @@ namespace mgcpp
 
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    typename device_vector<Type, Align, DeviceId, Alloc>::device_pointer
-    device_vector<Type, Align, DeviceId, Alloc>::
+    typename device_vector<Type, DeviceId, Alloc>::device_pointer
+    device_vector<Type, DeviceId, Alloc>::
     release_data() noexcept
     {
         device_pointer temp = _data;
@@ -428,73 +409,65 @@ namespace mgcpp
     }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     thread_context*
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     context() const noexcept
     { return _context; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     size_t 
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     capacity() const noexcept
     { return _capacity; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    typename device_vector<Type, Align, DeviceId, Alloc>::const_device_pointer
-    device_vector<Type, Align, DeviceId, Alloc>::
+    typename device_vector<Type, DeviceId, Alloc>::const_device_pointer
+    device_vector<Type, DeviceId, Alloc>::
     data() const noexcept
     { return _data; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    typename device_vector<Type, Align, DeviceId, Alloc>::device_pointer
-    device_vector<Type, Align, DeviceId, Alloc>::
+    typename device_vector<Type, DeviceId, Alloc>::device_pointer
+    device_vector<Type, DeviceId, Alloc>::
     data_mutable() noexcept
     { return _data; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     shape() const noexcept
     { return _shape; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     size_t
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     size() const noexcept
     { return _shape; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
     Alloc& 
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     allocator() noexcept
     { return _allocator; }
 
     template<typename Type,
-             alignment Align,
              size_t DeviceId,
              typename Alloc>
-    device_vector<Type, Align, DeviceId, Alloc>::
+    device_vector<Type, DeviceId, Alloc>::
     ~device_vector() noexcept
     {
         if(_data)

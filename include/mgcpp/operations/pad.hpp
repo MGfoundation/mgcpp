@@ -25,10 +25,9 @@ namespace mgcpp
     {
         template<typename DenseVec,
                  typename Type,
-                 size_t Device,
-                 alignment Align>
+                 size_t Device>
         inline decltype(auto)
-        pad(dense_vector<DenseVec, Type, Align, Device> const& vec,
+        pad(dense_vector<DenseVec, Type, Device> const& vec,
             pad_size_t pad,
             typename value_type<Type>::type pad_constant = typename value_type<Type>::type{});
     }

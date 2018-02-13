@@ -122,8 +122,8 @@ namespace mgcpp
         inline column_view<this_type, Type, DeviceId>
         column(size_t i) noexcept;
 
-        inline row_view<this_type, Type, DeviceId>
-        row(size_t i) noexcept;
+        // inline row_view<this_type, Type, DeviceId>
+        // row(size_t i) noexcept;
 
         inline void
         copy_to_host(pointer host_p) const;

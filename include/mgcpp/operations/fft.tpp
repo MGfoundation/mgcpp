@@ -15,11 +15,10 @@ namespace mgcpp
 {
     template<typename DeviceVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    rfft(dense_vector<DeviceVec, Type, Align, DeviceId> const& vec)
+    rfft(dense_vector<DeviceVec, Type, DeviceId> const& vec)
     {
         using allocator_type = typename DeviceVec::allocator_type;
         using result_allocator_type =
@@ -31,7 +30,6 @@ namespace mgcpp
         size_t output_size = fft_size / 2 + 1;
 
         auto result = device_vector<complex<Type>,
-                                    Align,
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
@@ -46,11 +44,10 @@ namespace mgcpp
 
     template<typename DeviceVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    irfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec, int n)
+    irfft(dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec, int n)
     {
         using allocator_type = typename DeviceVec::allocator_type;
         using result_allocator_type =
@@ -73,7 +70,6 @@ namespace mgcpp
         size_t output_size = fft_size;
 
         auto result = device_vector<Type,
-                                    Align,
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
@@ -91,11 +87,10 @@ namespace mgcpp
 
     template<typename DeviceVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    cfft(dense_vector<DeviceVec, complex<Type>, Align, DeviceId> const& vec,
+    cfft(dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
          fft_direction direction)
     {
         using allocator_type = typename DeviceVec::allocator_type;
@@ -109,7 +104,6 @@ namespace mgcpp
 
 
         auto result = device_vector<complex<Type>,
-                                    Align,
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
@@ -134,8 +128,8 @@ namespace mgcpp
     }
 
     template<typename DeviceMat,
-                typename Type,
-                size_t DeviceId>
+             typename Type,
+             size_t DeviceId>
     decltype(auto)
     strict::
     rfft(dense_matrix<DeviceMat, Type, DeviceId> const& mat)
@@ -163,8 +157,8 @@ namespace mgcpp
     }
 
     template<typename DeviceMat,
-                typename Type,
-                size_t DeviceId>
+             typename Type,
+             size_t DeviceId>
     decltype(auto)
     strict::
     irfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat, int n)
@@ -206,7 +200,8 @@ namespace mgcpp
              size_t DeviceId>
     decltype(auto)
     strict::
-    cfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat, fft_direction direction)
+    cfft(dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
+         fft_direction direction)
     {
         using allocator_type = typename DeviceMat::allocator_type;
         using result_allocator_type =
