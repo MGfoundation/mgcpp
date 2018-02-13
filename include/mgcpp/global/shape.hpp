@@ -32,7 +32,7 @@ namespace mgcpp
 namespace std
 {
     template<size_t Dims>
-    struct tuple_size<mgcpp::shape<Dims>>
+    class tuple_size<mgcpp::shape<Dims>>
         : std::integral_constant<std::size_t, Dims> {};
 
     template<std::size_t N, size_t Dims>

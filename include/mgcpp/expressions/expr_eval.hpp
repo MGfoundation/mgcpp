@@ -9,6 +9,7 @@
 
 namespace mgcpp
 {
+    /// Evaluates the expression.
     template<typename... Args>
     void
     eval();
