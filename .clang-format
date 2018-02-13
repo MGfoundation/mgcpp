@@ -4,6 +4,7 @@
 # include: *.tpp
 # include: *.ipp
 # include: *.cpp
+# include: *.cxx
 # exclude: tpl/*
 # exlcude: third_party/*
 
