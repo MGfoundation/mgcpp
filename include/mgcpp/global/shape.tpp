@@ -6,6 +6,17 @@
 namespace mgcpp
 {
     template<size_t Dims>
+    shape<Dims>::shape ()
+        : dims{}
+    {}
+
+    template<size_t Dims>
+    shape<Dims>::shape (std::initializer_list<size_t> list)
+    {
+        std::copy(list.begin(), list.end(), dims);
+    }
+
+    template<size_t Dims>
     size_t shape<Dims>::operator[] (size_t idx) const
     {
         return dims[idx];
