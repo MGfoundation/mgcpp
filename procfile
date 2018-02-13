@@ -19,11 +19,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-clang-format-3.3
-clang-format-3.4
-clang-format-3.5
-clang-format-3.6
-clang-format-3.7
-clang-format-3.8
-clang-format-3.9
-git
+web: python webapp.py
