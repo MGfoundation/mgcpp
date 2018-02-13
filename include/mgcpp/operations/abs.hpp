@@ -20,10 +20,9 @@ namespace mgcpp
     {
         template<typename DenseVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        abs(dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
+        abs(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename Type,

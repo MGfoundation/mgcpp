@@ -40,22 +40,20 @@ namespace mgcpp
         template<typename DenseMat,
                  typename DenseVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
         mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
-             dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
+             dense_vector<DenseVec, Type, DeviceId> const& vec);
 
         template<typename DenseVec,
                  typename ScalarType,
                  typename VectorType,
-                 alignment Align,
                  size_t DeviceId,
                  typename = typename
                  std::enable_if<is_scalar<ScalarType>::value>::type>
         inline decltype(auto)
         mult(ScalarType scalar,
-             dense_vector<DenseVec, VectorType, Align, DeviceId> const& vec);
+             dense_vector<DenseVec, VectorType, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename MatrixType,

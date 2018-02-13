@@ -12,11 +12,10 @@ namespace mgcpp
 {
     template<typename DenseVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    mean(dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
+    mean(dense_vector<DenseVec, Type, DeviceId> const& vec)
     {
         using value_type = typename DenseVec::value_type;
 

@@ -15,11 +15,10 @@ namespace mgcpp
 {
     template<typename DenseVec,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     decltype(auto)
     strict::
-    sum(dense_vector<DenseVec, Type, Align, DeviceId> const& vec)
+    sum(dense_vector<DenseVec, Type, DeviceId> const& vec)
     {
         using value_type = typename DenseVec::value_type; 
 

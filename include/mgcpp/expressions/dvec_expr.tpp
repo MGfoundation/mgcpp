@@ -10,11 +10,10 @@ namespace mgcpp
 {
     template<typename DenseMatrix,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     inline decltype(auto)
-    eval(dense_vector<DenseMatrix, Type, Align, DeviceId> const& device_mat)
+    eval(dense_vector<DenseMatrix, Type, DeviceId> const& device_vec)
     {
-        return ~device_mat;
+        return ~device_vec;
     }
 }

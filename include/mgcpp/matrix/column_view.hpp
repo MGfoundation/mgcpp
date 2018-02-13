@@ -22,7 +22,6 @@ namespace mgcpp
     class column_view
         : public dense_vector<column_view<DenseMat, Type, DeviceId>,
                               Type,
-                              column,
                               DeviceId>
     {
     public:
@@ -61,7 +60,7 @@ namespace mgcpp
 
         template<typename DenseVec>
         inline column_view<DenseMat, Type, DeviceId>&
-        operator=(dense_vector<DenseVec, Type, column, DeviceId> const& vec);
+        operator=(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
         inline void
         copy_to_host(Type* host_p) const;

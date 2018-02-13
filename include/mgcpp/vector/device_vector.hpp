@@ -20,19 +20,17 @@
 namespace mgcpp
 {
     template<typename Type,
-             alignment Align = row,
              size_t DeviceId = 0,
              typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
     class device_vector
-        : public dense_vector<device_vector<Type, Align, DeviceId, Alloc>,
+        : public dense_vector<device_vector<Type, DeviceId, Alloc>,
                               Type,
-                              Align,
                               DeviceId>
     {
         static_assert(is_scalar<Type>::value, "Element type not supported.");
 
     public:
-        using this_type = device_vector<Type, Align, DeviceId, Alloc>;
+        using this_type = device_vector<Type, DeviceId, Alloc>;
         using value_type = Type;
         using pointer = value_type*;
         using const_pointer = value_type const*;
@@ -80,29 +78,29 @@ namespace mgcpp
                       Alloc const& alloc = Alloc());
 
         inline
-        device_vector(device_vector<Type, Align, DeviceId, Alloc> const& other);
+        device_vector(device_vector<Type, DeviceId, Alloc> const& other);
 
         template<typename DenseVec>
         inline
-        device_vector(dense_vector<DenseVec, Type, Align, DeviceId> const& other);
+        device_vector(dense_vector<DenseVec, Type, DeviceId> const& other);
 
         inline
-        device_vector(device_vector<Type, Align, DeviceId, Alloc>&& other) noexcept;
+        device_vector(device_vector<Type, DeviceId, Alloc>&& other) noexcept;
 
         template<typename DenseVec>
-        inline device_vector<Type, Align, DeviceId, Alloc>&
-        operator=(dense_vector<DenseVec, Type, Align, DeviceId> const& other);
+        inline device_vector<Type, DeviceId, Alloc>&
+        operator=(dense_vector<DenseVec, Type, DeviceId> const& other);
 
-        inline device_vector<Type, Align, DeviceId, Alloc>&
-        operator=(device_vector<Type, Align, DeviceId, Alloc> const& other);
+        inline device_vector<Type, DeviceId, Alloc>&
+        operator=(device_vector<Type, DeviceId, Alloc> const& other);
 
-        inline device_vector<Type, Align, DeviceId, Alloc>&
-        operator=(device_vector<Type, Align, DeviceId, Alloc>&& other) noexcept;
+        inline device_vector<Type, DeviceId, Alloc>&
+        operator=(device_vector<Type, DeviceId, Alloc>&& other) noexcept;
 
-        inline device_vector<Type, Align, DeviceId, Alloc>&
+        inline device_vector<Type, DeviceId, Alloc>&
         zero();
 
-        inline device_vector<Type, Align, DeviceId, Alloc>&
+        inline device_vector<Type, DeviceId, Alloc>&
         resize(size_t size, value_type pad_value = value_type{});
 
         inline void 

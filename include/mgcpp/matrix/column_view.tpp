@@ -79,7 +79,7 @@ namespace mgcpp
     template<typename DenseVec>
     column_view<DenseMat, Type, DeviceId>&
     column_view<DenseMat, Type, DeviceId>::
-    operator=(dense_vector<DenseVec, Type, column, DeviceId> const& vec)
+    operator=(dense_vector<DenseVec, Type, DeviceId> const& vec)
     {
         auto const& dense_vec = ~vec;
 

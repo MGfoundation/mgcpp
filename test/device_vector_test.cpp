@@ -82,7 +82,7 @@ TEST(device_vector, size_constructor)
     auto before_memory = before.value().first;
 
     size_t size = 10;
-    mgcpp::device_vector<float, mgcpp::alignment::row> vec{};
+    mgcpp::device_vector<float> vec{};
     EXPECT_NO_THROW(
         vec = mgcpp::device_vector<float>(size));
 
@@ -109,7 +109,7 @@ TEST(device_vector, size_constructor_half)
     auto before_memory = before.value().first;
 
     size_t size = 10;
-    mgcpp::device_vector<mgcpp::half, mgcpp::alignment::row> vec{};
+    mgcpp::device_vector<mgcpp::half> vec{};
     EXPECT_NO_THROW(
         vec = mgcpp::device_vector<mgcpp::half>(size));
 

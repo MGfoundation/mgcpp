@@ -11,15 +11,8 @@
 
 namespace mgcpp
 {
-    enum alignment : bool
-    {
-        row = true,
-        column = false
-    };
-
     template<typename VectorType,
              typename Type,
-             alignment Align,
              size_t DeviceId>
     struct vector_base
     {

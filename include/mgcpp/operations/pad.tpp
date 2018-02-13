@@ -13,11 +13,10 @@ namespace mgcpp
 {
     template<typename DenseVec,
              typename Type,
-             size_t Device,
-             alignment Align>
+             size_t Device>
     inline decltype(auto)
     strict::
-    pad(dense_vector<DenseVec, Type, Align, Device> const& vec,
+    pad(dense_vector<DenseVec, Type, Device> const& vec,
         pad_size_t pad,
         typename value_type<Type>::type pad_constant)
     {
@@ -46,7 +45,6 @@ namespace mgcpp
         else
         {
             auto result = device_vector<Type,
-                                        Align,
                                         Device,
                                         allocator_type>(new_size, pad_constant);
 

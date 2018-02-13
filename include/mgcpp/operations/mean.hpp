@@ -20,10 +20,9 @@ namespace mgcpp
     {
         template<typename DenseVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        mean(dense_vector<DenseVec, Type, Align, DeviceId> const& vec);
+        mean(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
         template<typename DenseMat,
                  typename Type,

@@ -29,11 +29,10 @@ namespace mgcpp
         template<typename LhsDenseVec,
                  typename RhsDenseVec,
                  typename Type,
-                 size_t Device,
-                 alignment Align>
+                 size_t Device>
         inline decltype(auto)
-        add(dense_vector<LhsDenseVec, Type, Align, Device> const& first,
-            dense_vector<RhsDenseVec, Type, Align, Device> const& second);
+        add(dense_vector<LhsDenseVec, Type, Device> const& first,
+            dense_vector<RhsDenseVec, Type, Device> const& second);
     }
 }
 

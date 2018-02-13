@@ -21,11 +21,10 @@ namespace mgcpp
         template<typename LhsDenseVec,
                  typename RhsDenseVec,
                  typename Type,
-                 alignment Align,
                  size_t DeviceId>
         inline decltype(auto)
-        sub(dense_vector<LhsDenseVec, Type, Align, DeviceId> const& lhs,
-            dense_vector<RhsDenseVec, Type, Align, DeviceId> const& rhs);
+        sub(dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
+            dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
 
         template<typename LhsDenseMat,
                  typename RhsDenseMat,
