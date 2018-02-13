@@ -74,6 +74,24 @@ namespace mgcpp
         template<typename AlphaType,
                  typename AType,
                  typename BType,
+                 typename CType>
+        inline decltype(auto)
+        dmat_dmat_subgraph_matcher(
+            dmat_dmat_add_expr<
+            CType,
+            scalar_dmat_mult_expr<AlphaType, dmat_dmat_mult_expr<AType, BType>>> const& expr)
+        {
+            auto alpha = mgcpp::eval(expr._lhs._scal_expr);
+            auto A     = mgcpp::eval(expr._lhs._dmat_expr._lhs);
+            auto B     = mgcpp::eval(expr._lhs._dmat_expr._rhs);
+            float beta  = 1.0;
+            auto C     = mgcpp::eval(expr._rhs._dmat_expr);
+            return strict::gemm(alpha, A, B, beta, C);
+        }
+
+        template<typename AlphaType,
+                 typename AType,
+                 typename BType,
                  typename BetaType,
                  typename CType>
         inline decltype(auto)
@@ -87,6 +105,25 @@ namespace mgcpp
             auto B     = mgcpp::eval(expr._rhs._dmat_expr._rhs);
             auto beta  = mgcpp::eval(expr._lhs._scal_expr);
             auto C     = mgcpp::eval(expr._lhs._dmat_expr);
+            return strict::gemm(alpha, A, B, beta, C);
+        }
+
+        template<typename AlphaType,
+                 typename AType,
+                 typename BType,
+                 typename BetaType,
+                 typename CType>
+        inline decltype(auto)
+        dmat_dmat_subgraph_matcher(
+            dmat_dmat_add_expr<
+            scalar_dmat_mult_expr<BetaType, CType>,
+            scalar_dmat_mult_expr<AlphaType, dmat_dmat_mult_expr<AType, BType>>> const& expr)
+        {
+            auto alpha = mgcpp::eval(expr._lhs._scal_expr);
+            auto A     = mgcpp::eval(expr._lhs._dmat_expr._lhs);
+            auto B     = mgcpp::eval(expr._lhs._dmat_expr._rhs);
+            auto beta  = mgcpp::eval(expr._rhs._scal_expr);
+            auto C     = mgcpp::eval(expr._rhs._dmat_expr);
             return strict::gemm(alpha, A, B, beta, C);
         }
     }
