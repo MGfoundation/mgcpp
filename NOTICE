@@ -69,6 +69,7 @@ related files:
 Aptfile
 procfile
 webapp.py
+requirements.txt
 
 Copyright (c) 2017 Isuru Fernando
 
