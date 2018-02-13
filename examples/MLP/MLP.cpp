@@ -15,21 +15,25 @@ struct HiddenLayer {
   mgcpp::device_matrix<float> W;
   mgcpp::device_vector<float> b;
 
-  HiddenLayer(int id) {
+  HiddenLayer(int id)
+    : W(mgcpp::make_shape(28 * 28, 500)),
+      b(500)
+  {
     // TODO: retrieve model from a file
-    W.resize(mgcpp::make_shape(28 * 28, 500));
-    b.resize(500);
   }
 
   template <typename T>
   auto operator()(T const& input) {
-    return W * input + b;
+    return mgcpp::relu(W * input + b);
   }
 };
 
 int main() {
   mgcpp::device_vector<float> input(28 * 28);
-
   HiddenLayer hidden_0(0);
-  auto result = hidden_0(input);
+  auto y1 = hidden_0(input);
+  HiddenLayer hidden_1(1);
+  auto y2 = hidden_1(y1);
+  auto result = mgcpp::softmax(y2);
+  auto ans = result.eval();
 }

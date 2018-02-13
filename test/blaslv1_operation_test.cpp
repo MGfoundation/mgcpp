@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/operations/abs.hpp>
+#include <mgcpp/operations/elemwise.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/operations/mean.hpp>
@@ -75,7 +75,7 @@ TEST(vec_operation, vec_scalar_mult) {
 }
 
 TEST(vec_operation, vec_abs) {
-  mgcpp::device_vector<float> vec{-1, -2, -3};
+  mgcpp::device_vector<float> vec{-1, 2, -3};
 
   mgcpp::device_vector<float> result{};
   EXPECT_NO_THROW({
@@ -84,6 +84,97 @@ TEST(vec_operation, vec_abs) {
     EXPECT_EQ(result.check_value(0), 1);
     EXPECT_EQ(result.check_value(1), 2);
     EXPECT_EQ(result.check_value(2), 3);
+  });
+}
+
+TEST(vec_operation, vec_sin) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::sin(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), -0.841470985f);
+    EXPECT_FLOAT_EQ(result.check_value(1), -0.909297427f);
+    EXPECT_FLOAT_EQ(result.check_value(2), -0.141120008f);
+  });
+}
+
+TEST(vec_operation, vec_cos) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::cos(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), 0.540302306);
+    EXPECT_FLOAT_EQ(result.check_value(1), -0.416146837);
+    EXPECT_FLOAT_EQ(result.check_value(2), -0.989992497);
+  });
+}
+
+TEST(vec_operation, vec_tan) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::tan(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), -1.557407725);
+    EXPECT_FLOAT_EQ(result.check_value(1), 2.185039863);
+    EXPECT_FLOAT_EQ(result.check_value(2), 0.142546543);
+  });
+}
+
+TEST(vec_operation, vec_sinh) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::sinh(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), -1.175201194);
+    EXPECT_FLOAT_EQ(result.check_value(1), -3.626860408);
+    EXPECT_FLOAT_EQ(result.check_value(2), -10.017874927);
+  });
+}
+
+TEST(vec_operation, vec_cosh) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::cosh(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), 1.543080635);
+    EXPECT_FLOAT_EQ(result.check_value(1), 3.762195691);
+    EXPECT_FLOAT_EQ(result.check_value(2), 10.067661996);
+  });
+}
+
+TEST(vec_operation, vec_tanh) {
+  mgcpp::device_vector<float> vec{-1, -2, -3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::tanh(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), -0.761594156);
+    EXPECT_FLOAT_EQ(result.check_value(1), -0.96402758);
+    EXPECT_FLOAT_EQ(result.check_value(2), -0.995054754);
+  });
+}
+
+TEST(vec_operation, vec_relu) {
+  mgcpp::device_vector<float> vec{-1, -2, 3};
+
+  mgcpp::device_vector<float> result{};
+  EXPECT_NO_THROW({
+    result = mgcpp::strict::relu(vec);
+
+    EXPECT_FLOAT_EQ(result.check_value(0), 0);
+    EXPECT_FLOAT_EQ(result.check_value(1), 0);
+    EXPECT_FLOAT_EQ(result.check_value(2), 3);
   });
 }
 
