@@ -16,8 +16,8 @@ template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseVec,
           size_t DeviceId>
-inline decltype(auto) strict::elemwise(
-    dense_vector<DenseVec, Type, DeviceId> const& vec) {
+inline device_vector<Type, DeviceId, typename DenseVec::allocator_type>
+strict::elemwise(dense_vector<DenseVec, Type, DeviceId> const& vec) {
   using allocator_type = typename DenseVec::allocator_type;
 
   auto const& original_vec = ~vec;
@@ -29,8 +29,7 @@ inline decltype(auto) strict::elemwise(
 
   size_t n = original_vec.shape();
 
-  auto result =
-      mgcpp::device_vector<Type, DeviceId, allocator_type>(original_vec);
+  auto result = device_vector<Type, DeviceId, allocator_type>(original_vec);
   auto status = Function(result.data_mutable(), n);
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
@@ -43,8 +42,8 @@ template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseMat,
           size_t DeviceId>
-inline decltype(auto) strict::elemwise(
-    dense_matrix<DenseMat, Type, DeviceId> const& mat) {
+inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
+strict::elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
 
   auto const& original_mat = ~mat;

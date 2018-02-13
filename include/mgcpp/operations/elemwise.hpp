@@ -17,11 +17,19 @@
 namespace mgcpp {
 namespace strict {
 
-template <typename Type, outcome::result<void> (*Function)(Type*, size_t), typename DenseVec, size_t DeviceId>
-inline decltype(auto) elemwise(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename Type,
+          outcome::result<void> (*Function)(Type*, size_t),
+          typename DenseVec,
+          size_t DeviceId>
+inline device_vector<Type, DeviceId, typename DenseVec::allocator_type>
+elemwise(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
-template <typename Type, outcome::result<void> (*Function)(Type*, size_t), typename DenseMat, size_t DeviceId>
-inline decltype(auto) elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename Type,
+          outcome::result<void> (*Function)(Type*, size_t),
+          typename DenseMat,
+          size_t DeviceId>
+inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
+elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat);
 
 /** Computes the absolute value of each element.
  * \param vec vector to calculate the absolute value of.

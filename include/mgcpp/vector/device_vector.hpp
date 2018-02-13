@@ -36,6 +36,8 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   using const_device_pointer = device_value_type const*;
   using result_type = this_type;
   using allocator_type = Alloc;
+  using parent_type =
+      dense_vector<device_vector<Type, DeviceId, Alloc>, Type, DeviceId>;
   size_t const device_id = DeviceId;
 
  private:
