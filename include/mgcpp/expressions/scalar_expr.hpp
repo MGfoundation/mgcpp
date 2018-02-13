@@ -7,20 +7,18 @@
 #ifndef _MGCPP_EXPRESSIONS_SCALAR_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_SCALAR_EXPR_HPP_
 
-#include <type_traits>
 #include <mgcpp/type_traits/type_traits.hpp>
+#include <type_traits>
 
-namespace mgcpp
-{
-    template<typename Type>
-    struct scalar_expr;
+namespace mgcpp {
+template <typename Type>
+struct scalar_expr;
 
-    template<typename Scalar,
-             typename = typename std::enable_if<
-                 is_scalar<Scalar>::value>::type>
-    inline Scalar
-    eval(Scalar scalar)
-    { return Scalar(scalar); }
+template <typename Scalar,
+          typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
+inline Scalar eval(Scalar scalar) {
+  return Scalar(scalar);
 }
+}  // namespace mgcpp
 
 #endif

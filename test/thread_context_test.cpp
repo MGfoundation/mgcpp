@@ -11,29 +11,26 @@
 
 #include <gtest/gtest.h>
 
-TEST(thread_context, request_cublas_handle)
-{
+TEST(thread_context, request_cublas_handle) {
+  auto* context = &mgcpp::global_context::get_thread_context();
+
+  auto cublas_context_one = context->get_cublas_context(0);
+  auto cublas_context_two = context->get_cublas_context(0);
+
+  EXPECT_EQ(cublas_context_one, cublas_context_two);
+
+  mgcpp::global_context::reference_cnt_decr();
+}
+
+TEST(thread_context, request_cublas_handle_different_device) {
+  if (mgcpp::test_policy::get_policy().device_num() >= 2) {
     auto* context = &mgcpp::global_context::get_thread_context();
 
     auto cublas_context_one = context->get_cublas_context(0);
-    auto cublas_context_two = context->get_cublas_context(0);
+    auto cublas_context_two = context->get_cublas_context(1);
 
-    EXPECT_EQ(cublas_context_one, cublas_context_two);
+    EXPECT_NE(cublas_context_one, cublas_context_two);
 
     mgcpp::global_context::reference_cnt_decr();
-}
-
-TEST(thread_context, request_cublas_handle_different_device)
-{
-    if(mgcpp::test_policy::get_policy().device_num() >= 2)
-    {
-        auto* context = &mgcpp::global_context::get_thread_context();
-
-        auto cublas_context_one = context->get_cublas_context(0);
-        auto cublas_context_two = context->get_cublas_context(1);
-
-        EXPECT_NE(cublas_context_one, cublas_context_two);
-
-        mgcpp::global_context::reference_cnt_decr();
-    }
+  }
 }

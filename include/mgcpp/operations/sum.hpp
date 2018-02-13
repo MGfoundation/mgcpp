@@ -14,23 +14,15 @@
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    namespace strict
-    {
-        template<typename DeviceVec,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        sum(dense_vector<DeviceVec, Type, DeviceId> const& vec);
+namespace mgcpp {
+namespace strict {
+template <typename DeviceVec, typename Type, size_t DeviceId>
+inline decltype(auto) sum(dense_vector<DeviceVec, Type, DeviceId> const& vec);
 
-        template<typename DenseMat,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        sum(dense_matrix<DenseMat, Type, DeviceId> const& mat);
-    }
-}
+template <typename DenseMat, typename Type, size_t DeviceId>
+inline decltype(auto) sum(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+}  // namespace strict
+}  // namespace mgcpp
 
 #include <mgcpp/operations/sum.tpp>
 #endif

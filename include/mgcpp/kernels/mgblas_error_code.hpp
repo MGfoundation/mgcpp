@@ -7,14 +7,8 @@
 #ifndef _MGCPP_KERNELS_MGBLAS_ERROR_HPP_
 #define _MGCPP_KERNELS_MGBLAS_ERROR_HPP_
 
-namespace mgcpp
-{
-    enum mgblas_error_t
-    {
-        success = 0,
-        index_out_of_range = 1,
-        invalid_range = 2
-    };
+namespace mgcpp {
+enum mgblas_error_t { success = 0, index_out_of_range = 1, invalid_range = 2 };
 }
 
 #endif

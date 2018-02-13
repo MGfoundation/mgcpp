@@ -12,23 +12,24 @@
 
 #include <complex>
 
-namespace mgcpp
-{
-    template<typename Type>
-    struct value_type
-    { using type = Type; };
+namespace mgcpp {
+template <typename Type>
+struct value_type {
+  using type = Type;
+};
 
-    template<typename Type>
-    struct value_type<complex<Type>>
-    { using type = std::complex<Type>; };
-
+template <typename Type>
+struct value_type<complex<Type>> {
+  using type = std::complex<Type>;
+};
 
 #ifdef USE_HALF
-    template<>
-    struct value_type<mgcpp::half>
-    { using type = float; };
+template <>
+struct value_type<mgcpp::half> {
+  using type = float;
+};
 #endif
 
-}
+}  // namespace mgcpp
 
 #endif

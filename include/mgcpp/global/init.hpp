@@ -7,9 +7,8 @@
 #ifndef _MGCPP_GLOBAL_INIT_HPP_
 #define _MGCPP_GLOBAL_INIT_HPP_
 
-namespace mgcpp
-{
-    void init(bool print_system_info = true);
+namespace mgcpp {
+void init(bool print_system_info = true);
 }
 
 #endif

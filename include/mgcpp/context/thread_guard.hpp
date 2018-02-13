@@ -10,20 +10,17 @@
 #include <cstdlib>
 #include <initializer_list>
 
-namespace mgcpp
-{
-    class thread_guard
-    {
-    public:
-        inline explicit
-        thread_guard(std::initializer_list<size_t> device, bool cublas);
-        
-        inline explicit
-        thread_guard(size_t device, bool cublas);
+namespace mgcpp {
+class thread_guard {
+ public:
+  inline explicit thread_guard(std::initializer_list<size_t> device,
+                               bool cublas);
 
-        inline ~thread_guard();
-    };
-}
+  inline explicit thread_guard(size_t device, bool cublas);
+
+  inline ~thread_guard();
+};
+}  // namespace mgcpp
 
 #include <mgcpp/context/thread_guard.ipp>
 #endif

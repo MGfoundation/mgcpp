@@ -12,17 +12,13 @@
 #include <system_error>
 #include <type_traits>
 
-namespace mgcpp
-{
-    std::error_code
-    make_error_code(mgcpp::mgblas_error_t err) noexcept;
+namespace mgcpp {
+std::error_code make_error_code(mgcpp::mgblas_error_t err) noexcept;
 }
 
-namespace std
-{
-    template<>
-    struct is_error_code_enum<mgcpp::mgblas_error_t>
-        : public std::true_type {};
-}
+namespace std {
+template <>
+struct is_error_code_enum<mgcpp::mgblas_error_t> : public std::true_type {};
+}  // namespace std
 
 #endif

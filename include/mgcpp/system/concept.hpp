@@ -7,7 +7,7 @@
 #ifndef _MGCPP_SYSTEM_CONCEPT_HPP_
 #define _MGCPP_SYSTEM_CONCEPT_HPP_
 
-#define MGCPP_CONCEPT(...)                                      \
-    typename = typename std::enable_if<(__VA_ARGS__)>::type 
+#define MGCPP_CONCEPT(...) \
+  typename = typename std::enable_if<(__VA_ARGS__)>::type
 
 #endif

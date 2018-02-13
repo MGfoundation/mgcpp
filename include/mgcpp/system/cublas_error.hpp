@@ -9,23 +9,19 @@
 
 #include <cublas_v2.h>
 
-#include <system_error>
 #include <string>
+#include <system_error>
 #include <type_traits>
 
-namespace mgcpp
-{
-    typedef cublasStatus_t cublas_error_t;
+namespace mgcpp {
+typedef cublasStatus_t cublas_error_t;
 }
 
-std::error_code
-make_error_code(mgcpp::cublas_error_t err) noexcept;
+std::error_code make_error_code(mgcpp::cublas_error_t err) noexcept;
 
-namespace std
-{
-    template<>
-    struct is_error_code_enum<mgcpp::cublas_error_t>
-        : public std::true_type {};
-}
+namespace std {
+template <>
+struct is_error_code_enum<mgcpp::cublas_error_t> : public std::true_type {};
+}  // namespace std
 
 #endif

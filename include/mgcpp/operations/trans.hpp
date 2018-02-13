@@ -9,17 +9,12 @@
 
 #include <mgcpp/device/forward.hpp>
 
-namespace mgcpp
-{
-    namespace strict
-    {
-        template<typename T,
-                 size_t Device,
-                 storage_order SO>
-        decltype(auto)
-        trans(device_matrix<T, Device, SO> const& mat);
-    }
+namespace mgcpp {
+namespace strict {
+template <typename T, size_t Device, storage_order SO>
+decltype(auto) trans(device_matrix<T, Device, SO> const& mat);
 }
+}  // namespace mgcpp
 
 #include <mgcpp/operations/trans.tpp>
 #endif

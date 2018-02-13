@@ -9,22 +9,15 @@
 
 #include <cstddef>
 
-namespace mgcpp
-{
-    template<typename VectorType,
-             typename Type,
-             size_t DeviceId>
-    struct vector_base;
+namespace mgcpp {
+template <typename VectorType, typename Type, size_t DeviceId>
+struct vector_base;
 
-    template<typename DenseVecType,
-             typename Type,
-             size_t DeviceId>
-    class dense_vector;
+template <typename DenseVecType, typename Type, size_t DeviceId>
+class dense_vector;
 
-    template<typename Type,
-             size_t DeviceId,
-             typename Alloc>
-    class device_vector;
-}
+template <typename Type, size_t DeviceId, typename Alloc>
+class device_vector;
+}  // namespace mgcpp
 
 #endif

@@ -7,20 +7,13 @@
 #ifndef _MGCPP_VECTOR_DENSE_VECTOR_HPP_
 #define _MGCPP_VECTOR_DENSE_VECTOR_HPP_
 
-#include <mgcpp/vector/vector_base.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
+#include <mgcpp/vector/vector_base.hpp>
 
-namespace mgcpp
-{
-    template<typename DenseVecType,
-             typename Type,
-             size_t DeviceId>
-    class dense_vector :
-        public vector_base<DenseVecType, Type, DeviceId>,
-        public dvec_expr<DenseVecType>
-    {
-
-    };
-}
+namespace mgcpp {
+template <typename DenseVecType, typename Type, size_t DeviceId>
+class dense_vector : public vector_base<DenseVecType, Type, DeviceId>,
+                     public dvec_expr<DenseVecType> {};
+}  // namespace mgcpp
 
 #endif

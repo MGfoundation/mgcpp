@@ -6,14 +6,10 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 
-namespace mgcpp
-{
-    template<typename DenseMatrix,
-             typename Type,
-             size_t DeviceId>
-    inline decltype(auto)
-    eval(dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat)
-    {
-        return ~device_mat;
-    }
+namespace mgcpp {
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+inline decltype(auto) eval(
+    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat) {
+  return ~device_mat;
 }
+}  // namespace mgcpp

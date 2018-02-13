@@ -14,39 +14,35 @@
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    namespace strict
-    {
-        /**
-         * Vector Subtraction.
-         * \param lhs the left-hand side
-         * \param rhs the right-hand side
-         * \returns lhs - rhs
-         */
-        template<typename LhsDenseVec,
-                 typename RhsDenseVec,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        sub(dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-            dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
+namespace mgcpp {
+namespace strict {
+/**
+ * Vector Subtraction.
+ * \param lhs the left-hand side
+ * \param rhs the right-hand side
+ * \returns lhs - rhs
+ */
+template <typename LhsDenseVec,
+          typename RhsDenseVec,
+          typename Type,
+          size_t DeviceId>
+inline decltype(auto) sub(dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
+                          dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
 
-        /**
-         * Matrix Subtraction.
-         * \param lhs the left-hand side
-         * \param rhs the right-hand side
-         * \returns lhs - rhs
-         */
-        template<typename LhsDenseMat,
-                 typename RhsDenseMat,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        sub(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-            dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
-    }
-}
+/**
+ * Matrix Subtraction.
+ * \param lhs the left-hand side
+ * \param rhs the right-hand side
+ * \returns lhs - rhs
+ */
+template <typename LhsDenseMat,
+          typename RhsDenseMat,
+          typename Type,
+          size_t DeviceId>
+inline decltype(auto) sub(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
+                          dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
+}  // namespace strict
+}  // namespace mgcpp
 
 #include <mgcpp/operations/sub.tpp>
 #endif

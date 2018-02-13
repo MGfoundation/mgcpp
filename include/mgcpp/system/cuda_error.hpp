@@ -9,23 +9,19 @@
 
 #include <cuda_runtime.h>
 
+#include <string>
 #include <system_error>
 #include <type_traits>
-#include <string>
 
-namespace mgcpp
-{
-    typedef cudaError_t cuda_error_t;
+namespace mgcpp {
+typedef cudaError_t cuda_error_t;
 }
 
-std::error_code
-make_error_code(mgcpp::cuda_error_t err) noexcept;
+std::error_code make_error_code(mgcpp::cuda_error_t err) noexcept;
 
-namespace std
-{
-    template<>
-    struct is_error_code_enum<mgcpp::cuda_error_t>
-        : public std::true_type {};
-}
+namespace std {
+template <>
+struct is_error_code_enum<mgcpp::cuda_error_t> : public std::true_type {};
+}  // namespace std
 
 #endif

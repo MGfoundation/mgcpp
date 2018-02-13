@@ -9,22 +9,15 @@
 
 #include <cstddef>
 
-namespace mgcpp
-{
-    template <typename MatrixType,
-              typename Type,
-              size_t DeviceId>
-    class matrix;
+namespace mgcpp {
+template <typename MatrixType, typename Type, size_t DeviceId>
+class matrix;
 
-    template <typename DenseMatrixType,
-              typename Type,
-              size_t DeviceId>
-    class dense_matrix;
+template <typename DenseMatrixType, typename Type, size_t DeviceId>
+class dense_matrix;
 
-    template <typename Type,
-              size_t DeviceId,
-              typename Alloc>
-    class device_matrix;
-}
+template <typename Type, size_t DeviceId, typename Alloc>
+class device_matrix;
+}  // namespace mgcpp
 
 #endif

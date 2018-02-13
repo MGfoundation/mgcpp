@@ -6,6 +6,4 @@
 
 #include <mgcpp/vector/vector_base.hpp>
 
-namespace mgcpp
-{
-}
+namespace mgcpp {}

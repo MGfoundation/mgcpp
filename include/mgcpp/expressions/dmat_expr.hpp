@@ -10,22 +10,18 @@
 #include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/matrix/forward.hpp>
 #include <mgcpp/system/concept.hpp>
-#include <mgcpp/system/concept.hpp>
 
 #include <cstdlib>
 #include <utility>
 
-namespace mgcpp
-{
-    template<typename Expr>
-    struct dmat_expr : public expression<Expr> {};
+namespace mgcpp {
+template <typename Expr>
+struct dmat_expr : public expression<Expr> {};
 
-    template<typename DenseMatrix,
-             typename Type,
-             size_t DeviceId>
-    inline decltype(auto)
-    eval(dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
-}
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+inline decltype(auto) eval(
+    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
+}  // namespace mgcpp
 
 #include <mgcpp/expressions/dmat_expr.tpp>
 #endif

@@ -12,20 +12,16 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    template<typename T>
-    inline outcome::result<void>
-    mgblas_vhp(T const* x, T const* y, T* z, size_t n);
+namespace mgcpp {
+template <typename T>
+inline outcome::result<void> mgblas_vhp(T const* x, T const* y, T* z, size_t n);
 
-    template<typename T>
-    inline outcome::result<void>
-    mgblas_vab(T* x, size_t n);
+template <typename T>
+inline outcome::result<void> mgblas_vab(T* x, size_t n);
 
-    template<typename T>
-    inline outcome::result<void>
-    mgblas_vpr(T const* x, T* y, size_t n);
-}
+template <typename T>
+inline outcome::result<void> mgblas_vpr(T const* x, T* y, size_t n);
+}  // namespace mgcpp
 
 #include <mgcpp/kernels/mgblas_lv1.tpp>
 #endif

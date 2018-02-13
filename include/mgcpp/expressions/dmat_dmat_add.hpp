@@ -12,40 +12,36 @@
 #include <mgcpp/expressions/expr_eval.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
 
-namespace mgcpp
-{
-    template<typename LhsExpr, typename RhsExpr>
-    struct dmat_dmat_add_expr
-        : public dmat_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>>
-    {
-        using lhs_expr_type = typename std::decay<LhsExpr>::type;
-        using rhs_expr_type = typename std::decay<RhsExpr>::type;
+namespace mgcpp {
+template <typename LhsExpr, typename RhsExpr>
+struct dmat_dmat_add_expr
+    : public dmat_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>> {
+  using lhs_expr_type = typename std::decay<LhsExpr>::type;
+  using rhs_expr_type = typename std::decay<RhsExpr>::type;
 
-        using result_type = typename lhs_expr_type::result_type;
+  using result_type = typename lhs_expr_type::result_type;
 
-        LhsExpr const& _lhs;
-        RhsExpr const& _rhs;
+  LhsExpr const& _lhs;
+  RhsExpr const& _rhs;
 
-        inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
+  inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
 
-        inline decltype(auto)
-        eval() const;
-    };
+  inline decltype(auto) eval() const;
+};
 
-    template<typename LhsExpr, typename RhsExpr>
-    inline decltype(auto)
-    eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
+template <typename LhsExpr, typename RhsExpr>
+inline decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
 
-    template<typename LhsExpr, typename RhsExpr>
-    inline dmat_dmat_add_expr<LhsExpr, RhsExpr> 
-    operator+(dmat_expr<LhsExpr> const& lhs,
-              dmat_expr<RhsExpr> const& rhs) noexcept;
+template <typename LhsExpr, typename RhsExpr>
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
 
-    template<typename LhsExpr, typename RhsExpr>
-    inline dmat_dmat_add_expr<LhsExpr, RhsExpr> 
-    add(dmat_expr<LhsExpr> const& lhs,
-        dmat_expr<RhsExpr> const& rhs) noexcept;
-}
+template <typename LhsExpr, typename RhsExpr>
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
+}  // namespace mgcpp
 
 #include <mgcpp/expressions/dmat_dmat_add.tpp>
 #endif

@@ -7,12 +7,10 @@
 #ifndef _MGCPP_EXPRESSIONS_EXPR_EVAL_HPP_
 #define _MGCPP_EXPRESSIONS_EXPR_EVAL_HPP_
 
-namespace mgcpp
-{
-    /// Evaluates the expression.
-    template<typename... Args>
-    void
-    eval();
-}
+namespace mgcpp {
+/// Evaluates the expression.
+template <typename... Args>
+void eval();
+}  // namespace mgcpp
 
 #endif

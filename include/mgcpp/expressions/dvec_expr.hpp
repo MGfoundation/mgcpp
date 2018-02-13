@@ -8,24 +8,20 @@
 #define _MGCPP_EXPRESSIONS_DENSE_VEC_EXPR_HPP_
 
 #include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/system/concept.hpp>
 #include <mgcpp/vector/forward.hpp>
-#include <mgcpp/system/concept.hpp>
-#include <mgcpp/system/concept.hpp>
 
 #include <cstdlib>
 #include <utility>
 
-namespace mgcpp
-{
-    template<typename Expr>
-    struct dvec_expr : public expression<Expr> {};
+namespace mgcpp {
+template <typename Expr>
+struct dvec_expr : public expression<Expr> {};
 
-    template<typename DenseMatrix,
-             typename Type,
-             size_t DeviceId>
-    inline decltype(auto)
-    eval(dense_vector<DenseMatrix, Type, DeviceId> const& device_vec);
-}
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+inline decltype(auto) eval(
+    dense_vector<DenseMatrix, Type, DeviceId> const& device_vec);
+}  // namespace mgcpp
 
 #include <mgcpp/expressions/dvec_expr.tpp>
 #endif

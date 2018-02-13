@@ -6,40 +6,29 @@
 
 #include <initializer_list>
 
-#include <mgcpp/context/thread_guard.hpp>
 #include <mgcpp/context/global_context.hpp>
+#include <mgcpp/context/thread_guard.hpp>
 
-namespace mgcpp
-{
-    thread_guard::
-    thread_guard(std::initializer_list<size_t> device,
-                 bool cublas)
-    {
-        auto& ctx = global_context::get_thread_context();
+namespace mgcpp {
+thread_guard::thread_guard(std::initializer_list<size_t> device, bool cublas) {
+  auto& ctx = global_context::get_thread_context();
 
-        if(cublas)
-        {
-            for(auto i : device)
-            {
-                (void)ctx.get_cublas_context(i);
-            }
-        }
+  if (cublas) {
+    for (auto i : device) {
+      (void)ctx.get_cublas_context(i);
     }
-
-    thread_guard::
-    thread_guard(size_t device, bool cublas)
-    {
-        auto& ctx = global_context::get_thread_context();
-
-        if(cublas)
-        {
-            (void)ctx.get_cublas_context(device);
-        }
-    }
-
-    thread_guard::
-    ~thread_guard()
-    {
-        global_context::reference_cnt_decr();
-    }
+  }
 }
+
+thread_guard::thread_guard(size_t device, bool cublas) {
+  auto& ctx = global_context::get_thread_context();
+
+  if (cublas) {
+    (void)ctx.get_cublas_context(device);
+  }
+}
+
+thread_guard::~thread_guard() {
+  global_context::reference_cnt_decr();
+}
+}  // namespace mgcpp

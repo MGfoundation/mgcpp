@@ -12,73 +12,75 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <mgcpp/system/error_code.hpp>
 
-#include <type_traits>
+#include <complex>
 #include <cstdlib>
 #include <new>
-#include <complex>
+#include <type_traits>
 
-namespace mgcpp
-{
-    
-    template<typename ElemType,
-             typename = std::enable_if<
-                 std::is_arithmetic<ElemType>::value>>
-    outcome::result<ElemType*>
-    cuda_malloc(size_t size) noexcept;
+namespace mgcpp {
 
-    template<typename ElemType>
-    outcome::result<void>
-    cuda_free(ElemType* ptr) noexcept;
+template <typename ElemType,
+          typename = std::enable_if<std::is_arithmetic<ElemType>::value>>
+outcome::result<ElemType*> cuda_malloc(size_t size) noexcept;
 
-    template<typename ElemType>
-    outcome::result<void>
-    cuda_memset(ElemType* ptr, ElemType value, size_t count) noexcept;
+template <typename ElemType>
+outcome::result<void> cuda_free(ElemType* ptr) noexcept;
 
-    template<typename ElemType>
-    outcome::result<ElemType*>
-    malloc_pinned(size_t count) noexcept;
+template <typename ElemType>
+outcome::result<void> cuda_memset(ElemType* ptr,
+                                  ElemType value,
+                                  size_t count) noexcept;
 
-    template<typename ElemType>
-    outcome::result<void>
-    free_pinned(ElemType* ptr) noexcept;
+template <typename ElemType>
+outcome::result<ElemType*> malloc_pinned(size_t count) noexcept;
 
-    enum class cuda_memcpy_kind;
+template <typename ElemType>
+outcome::result<void> free_pinned(ElemType* ptr) noexcept;
 
-    template<typename ElemType>
-    outcome::result<void>
-    cuda_memcpy(ElemType* to, ElemType const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+enum class cuda_memcpy_kind;
 
-    inline outcome::result<void>
-    cuda_memcpy(cuComplex* to, std::complex<float> const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+template <typename ElemType>
+outcome::result<void> cuda_memcpy(ElemType* to,
+                                  ElemType const* from,
+                                  size_t count,
+                                  cuda_memcpy_kind kind) noexcept;
 
-    inline outcome::result<void>
-    cuda_memcpy(std::complex<float>* to, cuComplex const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+inline outcome::result<void> cuda_memcpy(cuComplex* to,
+                                         std::complex<float> const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    inline outcome::result<void>
-    cuda_memcpy(cuDoubleComplex* to, std::complex<double> const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+inline outcome::result<void> cuda_memcpy(std::complex<float>* to,
+                                         cuComplex const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    inline outcome::result<void>
-    cuda_memcpy(std::complex<double>* to, cuDoubleComplex const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+inline outcome::result<void> cuda_memcpy(cuDoubleComplex* to,
+                                         std::complex<double> const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    inline outcome::result<void>
-    cuda_memcpy(__half* to, float const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+inline outcome::result<void> cuda_memcpy(std::complex<double>* to,
+                                         cuDoubleComplex const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    inline outcome::result<void>
-    cuda_memcpy(float* to, __half const* from,
-                size_t count, cuda_memcpy_kind kind) noexcept;
+inline outcome::result<void> cuda_memcpy(__half* to,
+                                         float const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    using free_mem_t = size_t;
-    using total_mem_t = size_t;
+inline outcome::result<void> cuda_memcpy(float* to,
+                                         __half const* from,
+                                         size_t count,
+                                         cuda_memcpy_kind kind) noexcept;
 
-    outcome::result<std::pair<free_mem_t, total_mem_t>>
-    inline cuda_mem_get_info() noexcept;
-}
+using free_mem_t = size_t;
+using total_mem_t = size_t;
+
+outcome::result<
+    std::pair<free_mem_t, total_mem_t>> inline cuda_mem_get_info() noexcept;
+}  // namespace mgcpp
 
 #include <mgcpp/cuda/memory.tpp>
 #endif

@@ -6,6 +6,4 @@
 
 #include <mgcpp/matrix/matrix_base.hpp>
 
-namespace mgcpp
-{
-}
+namespace mgcpp {}

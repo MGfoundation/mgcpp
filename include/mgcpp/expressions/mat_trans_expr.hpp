@@ -9,28 +9,23 @@
 
 #include <mgcpp/gpu/forward.hpp>
 
-namespace mgcpp
-{
-    template<typename GpuMat>
-    struct trans_expr<GpuMat>
-    {
-        using result_type = typename std::decay<GpuMat>::type;
+namespace mgcpp {
+template <typename GpuMat>
+struct trans_expr<GpuMat> {
+  using result_type = typename std::decay<GpuMat>::type;
 
-        GpuMat&& _mat;
+  GpuMat&& _mat;
 
-        inline trans_expr(GpuMat&& mat) noexcept;
+  inline trans_expr(GpuMat&& mat) noexcept;
 
-        inline result_type
-        eval();
-    };
+  inline result_type eval();
+};
 
-    template<typename GpuMat>
-    using mat_trans_expr = trans_expr<GpuMat>;
+template <typename GpuMat>
+using mat_trans_expr = trans_expr<GpuMat>;
 
-    template<typename GpuMat,
-             MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
-    inline mat_trans_expr<GpuMat>
-    trans(GpuMat&& mat) noexcept;
-}
+template <typename GpuMat, MGCPP_CONCEPT(assert_gpu_matrix<GpuMat>)>
+inline mat_trans_expr<GpuMat> trans(GpuMat&& mat) noexcept;
+}  // namespace mgcpp
 
 #endif

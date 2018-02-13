@@ -14,16 +14,15 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    template<typename Type>
-    inline outcome::result<void>
-    mgblas_fill(Type* arr, Type value, size_t n);
+namespace mgcpp {
+template <typename Type>
+inline outcome::result<void> mgblas_fill(Type* arr, Type value, size_t n);
 
-    template<typename From, typename To>
-    inline outcome::result<void>
-    mgblas_convert_copy(From const* from, To* to, size_t n);
-}
+template <typename From, typename To>
+inline outcome::result<void> mgblas_convert_copy(From const* from,
+                                                 To* to,
+                                                 size_t n);
+}  // namespace mgcpp
 
 #include <mgcpp/kernels/mgblas_helpers.tpp>
 #endif

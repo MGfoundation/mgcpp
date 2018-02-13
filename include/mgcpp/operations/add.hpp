@@ -14,35 +14,32 @@
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    namespace strict
-    {
-        /** Adds two same-sized matrices together.
-         * \param lhs the left-hand side
-         * \param rhs the right-hand side
-         */
-        template<typename LhsDenseMat,
-                 typename RhsDenseMat,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-            dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
+namespace mgcpp {
+namespace strict {
+/** Adds two same-sized matrices together.
+ * \param lhs the left-hand side
+ * \param rhs the right-hand side
+ */
+template <typename LhsDenseMat,
+          typename RhsDenseMat,
+          typename Type,
+          size_t DeviceId>
+inline decltype(auto) add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
+                          dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
 
-        /** Adds two same-sized vectors together.
-         * \param first the left-hand side
-         * \param second the right-hand side
-         */
-        template<typename LhsDenseVec,
-                 typename RhsDenseVec,
-                 typename Type,
-                 size_t Device>
-        inline decltype(auto)
-        add(dense_vector<LhsDenseVec, Type, Device> const& first,
-            dense_vector<RhsDenseVec, Type, Device> const& second);
-    }
-}
+/** Adds two same-sized vectors together.
+ * \param first the left-hand side
+ * \param second the right-hand side
+ */
+template <typename LhsDenseVec,
+          typename RhsDenseVec,
+          typename Type,
+          size_t Device>
+inline decltype(auto) add(
+    dense_vector<LhsDenseVec, Type, Device> const& first,
+    dense_vector<RhsDenseVec, Type, Device> const& second);
+}  // namespace strict
+}  // namespace mgcpp
 
 #include <mgcpp/operations/add.tpp>
 #endif

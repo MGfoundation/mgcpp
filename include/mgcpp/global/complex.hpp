@@ -10,10 +10,9 @@
 #include <cuComplex.h>
 #include <complex>
 
-namespace mgcpp
-{
-    template<typename Type>
-    using complex = std::complex<Type>;
+namespace mgcpp {
+template <typename Type>
+using complex = std::complex<Type>;
 }
 
 #endif

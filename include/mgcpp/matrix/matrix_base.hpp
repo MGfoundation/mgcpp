@@ -7,11 +7,9 @@
 #ifndef _MGCPP_MATRIX_MATRIX_BASE_HPP_
 #define _MGCPP_MATRIX_MATRIX_BASE_HPP_
 
-namespace mgcpp
-{
-    template<typename MatrixType>
-    struct matrix_base
-    {};
-}
+namespace mgcpp {
+template <typename MatrixType>
+struct matrix_base {};
+}  // namespace mgcpp
 
 #endif

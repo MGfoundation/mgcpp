@@ -14,10 +14,8 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    inline outcome::result<void>
-    cuda_set_device(size_t device_id) noexcept;
+namespace mgcpp {
+inline outcome::result<void> cuda_set_device(size_t device_id) noexcept;
 }
 
 #include <mgcpp/cuda/device.ipp>

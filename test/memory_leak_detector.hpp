@@ -14,19 +14,14 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/system/exception.hpp>
 
-namespace mgcpp
-{
-    class memory_leak_detector
-        : public ::testing::EmptyTestEventListener
-    {
-        std::vector<size_t> device_free_memory;
+namespace mgcpp {
+class memory_leak_detector : public ::testing::EmptyTestEventListener {
+  std::vector<size_t> device_free_memory;
 
-        void OnTestStart(
-            ::testing::TestInfo const& test_info) override;
+  void OnTestStart(::testing::TestInfo const& test_info) override;
 
-        void OnTestEnd(
-            ::testing::TestInfo const& test_info) override;
-    };
-}
+  void OnTestEnd(::testing::TestInfo const& test_info) override;
+};
+}  // namespace mgcpp
 
 #endif

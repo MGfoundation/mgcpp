@@ -11,16 +11,14 @@
 #include <mgcpp/cuda/memory.hpp>
 #include <mgcpp/system/exception.hpp>
 
-TEST(mgcpp_exception, mgcpp_error_check)
-{
-    size_t free_memory = 0;
-    cudaMemGetInfo(&free_memory, nullptr);
+TEST(mgcpp_exception, mgcpp_error_check) {
+  size_t free_memory = 0;
+  cudaMemGetInfo(&free_memory, nullptr);
 
-    EXPECT_EXIT(
-        {
-            mgcpp_error_check(
-                auto rst = mgcpp::cuda_malloc<float>(free_memory * 2);
-                if(!rst)
-                    MGCPP_THROW_SYSTEM_ERROR(rst.error()));
-        }, ::testing::ExitedWithCode(1), "");
+  EXPECT_EXIT(
+      {
+        mgcpp_error_check(auto rst = mgcpp::cuda_malloc<float>(free_memory * 2);
+                          if (!rst) MGCPP_THROW_SYSTEM_ERROR(rst.error()));
+      },
+      ::testing::ExitedWithCode(1), "");
 }

@@ -9,15 +9,10 @@
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    template<typename VectorType,
-             typename Type,
-             size_t DeviceId>
-    struct vector_base
-    {
-    };
-}
+namespace mgcpp {
+template <typename VectorType, typename Type, size_t DeviceId>
+struct vector_base {};
+}  // namespace mgcpp
 
 #include <mgcpp/vector/vector_base.tpp>
 #endif

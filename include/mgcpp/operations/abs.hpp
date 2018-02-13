@@ -14,29 +14,21 @@
 
 #include <cstdlib>
 
-namespace mgcpp
-{
-    namespace strict
-    {
-        /** Computes the absolute value of each element.
-         * \param vec vector to calculate the absolute value of.
-         */
-        template<typename DenseVec,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        abs(dense_vector<DenseVec, Type, DeviceId> const& vec);
+namespace mgcpp {
+namespace strict {
+/** Computes the absolute value of each element.
+ * \param vec vector to calculate the absolute value of.
+ */
+template <typename DenseVec, typename Type, size_t DeviceId>
+inline decltype(auto) abs(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
-        /** Computes the absolute value of each element.
-         * \param mat matrix to calculate the absolute value of.
-         */
-        template<typename DenseMat,
-                 typename Type,
-                 size_t DeviceId>
-        inline decltype(auto)
-        abs(dense_matrix<DenseMat, Type, DeviceId> const& mat);
-    }
-}
+/** Computes the absolute value of each element.
+ * \param mat matrix to calculate the absolute value of.
+ */
+template <typename DenseMat, typename Type, size_t DeviceId>
+inline decltype(auto) abs(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+}  // namespace strict
+}  // namespace mgcpp
 
 #include <mgcpp/operations/abs.tpp>
 #endif

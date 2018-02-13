@@ -7,19 +7,15 @@
 #ifndef _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
 #define _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
 
-namespace mgcpp
-{
-    template<typename Type>
-    struct expression
-    {
-        inline Type&
-        operator~() noexcept
-        { return *static_cast<Type*>(this); }
+namespace mgcpp {
+template <typename Type>
+struct expression {
+  inline Type& operator~() noexcept { return *static_cast<Type*>(this); }
 
-        inline Type const&
-        operator~() const noexcept
-        { return *static_cast<Type const*>(this); }
-    };
-}
+  inline Type const& operator~() const noexcept {
+    return *static_cast<Type const*>(this);
+  }
+};
+}  // namespace mgcpp
 
 #endif

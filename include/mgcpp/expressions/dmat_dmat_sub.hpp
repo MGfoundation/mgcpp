@@ -12,19 +12,18 @@
 #ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_SUB_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_SUB_EXPR_HPP_
 
-namespace mgcpp
-{
-    template<typename LhsExpr, typename RhsExpr>
-    inline dmat_dmat_add_expr<LhsExpr, RhsExpr> 
-    operator-(dmat_expr<LhsExpr> const& lhs,
-              dmat_expr<RhsExpr> const& rhs) noexcept;
+namespace mgcpp {
+template <typename LhsExpr, typename RhsExpr>
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator-(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
 
-    template<typename LhsExpr, typename RhsExpr>
-    inline dmat_dmat_add_expr<LhsExpr, RhsExpr> 
-    sub(dmat_expr<LhsExpr> const& lhs,
-        dmat_expr<RhsExpr> const& rhs) noexcept;
-    
-}
+template <typename LhsExpr, typename RhsExpr>
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> sub(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
+
+}  // namespace mgcpp
 
 #include <mgcpp/expressions/dmat_dmat_sub.tpp>
 #endif

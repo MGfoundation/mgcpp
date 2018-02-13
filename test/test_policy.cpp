@@ -10,40 +10,27 @@
 #include <mgcpp/system/exception.hpp>
 #include "test_policy.hpp"
 
-namespace mgcpp
-{
-    test_policy&
-    test_policy::
-    get_policy()
-    {
-        static test_policy _policy;
-        return _policy;
-    }
-
-    test_policy::
-    test_policy()
-    {
-        int device_number = 0;
-        std::error_code status = cudaGetDeviceCount(&device_number);
-        if(status != status_t::success)
-            MGCPP_THROW_SYSTEM_ERROR(status);
-
-        _device_num = static_cast<size_t>(device_number);
-        _detect_memory_leak = true;
-    }
-
-    size_t
-    test_policy::
-    device_num() const noexcept
-    {
-        return _device_num;
-    }
-
-    bool
-    test_policy::
-    detect_memory_leak() const noexcept
-    {
-        return _detect_memory_leak; 
-    }
+namespace mgcpp {
+test_policy& test_policy::get_policy() {
+  static test_policy _policy;
+  return _policy;
 }
 
+test_policy::test_policy() {
+  int device_number = 0;
+  std::error_code status = cudaGetDeviceCount(&device_number);
+  if (status != status_t::success)
+    MGCPP_THROW_SYSTEM_ERROR(status);
+
+  _device_num = static_cast<size_t>(device_number);
+  _detect_memory_leak = true;
+}
+
+size_t test_policy::device_num() const noexcept {
+  return _device_num;
+}
+
+bool test_policy::detect_memory_leak() const noexcept {
+  return _detect_memory_leak;
+}
+}  // namespace mgcpp

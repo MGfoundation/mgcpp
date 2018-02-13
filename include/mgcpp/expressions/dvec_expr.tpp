@@ -6,14 +6,10 @@
 
 #include <mgcpp/expressions/dvec_expr.hpp>
 
-namespace mgcpp
-{
-    template<typename DenseMatrix,
-             typename Type,
-             size_t DeviceId>
-    inline decltype(auto)
-    eval(dense_vector<DenseMatrix, Type, DeviceId> const& device_vec)
-    {
-        return ~device_vec;
-    }
+namespace mgcpp {
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+inline decltype(auto) eval(
+    dense_vector<DenseMatrix, Type, DeviceId> const& device_vec) {
+  return ~device_vec;
 }
+}  // namespace mgcpp

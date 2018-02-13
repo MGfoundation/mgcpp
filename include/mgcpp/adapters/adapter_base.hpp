@@ -9,10 +9,9 @@
 
 #include <type_traits>
 
-namespace mgcpp
-{
-    template<typename T>
-    struct adapter : std::false_type {};
-}
+namespace mgcpp {
+template <typename T>
+struct adapter : std::false_type {};
+}  // namespace mgcpp
 
 #endif

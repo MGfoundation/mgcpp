@@ -8,102 +8,94 @@
 
 #include <mgcpp/cuda/memory.hpp>
 
-TEST(cuda_malloc, cuda_malloc_success)
-{
-    size_t free_memory_before_malloc = 0;
-    cudaMemGetInfo(&free_memory_before_malloc, nullptr);
+TEST(cuda_malloc, cuda_malloc_success) {
+  size_t free_memory_before_malloc = 0;
+  cudaMemGetInfo(&free_memory_before_malloc, nullptr);
 
-    auto rst = mgcpp::cuda_malloc<float>(10);
-    EXPECT_TRUE(rst);
+  auto rst = mgcpp::cuda_malloc<float>(10);
+  EXPECT_TRUE(rst);
 
-    size_t free_memory_after_malloc = 0;
-    cudaMemGetInfo(&free_memory_after_malloc, nullptr);
+  size_t free_memory_after_malloc = 0;
+  cudaMemGetInfo(&free_memory_after_malloc, nullptr);
 
-    EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
+  EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
-    (void)mgcpp::cuda_free(rst.value());
+  (void)mgcpp::cuda_free(rst.value());
 }
 
-TEST(cuda_malloc, cuda_malloc_failure)
-{
-    size_t free_memory= 0;
-    cudaMemGetInfo(&free_memory, nullptr);
+TEST(cuda_malloc, cuda_malloc_failure) {
+  size_t free_memory = 0;
+  cudaMemGetInfo(&free_memory, nullptr);
 
-    auto ptr = mgcpp::cuda_malloc<float>(free_memory * 2);
-    EXPECT_FALSE(ptr);
+  auto ptr = mgcpp::cuda_malloc<float>(free_memory * 2);
+  EXPECT_FALSE(ptr);
 }
 
-TEST(cuda_free, cuda_free_success)
-{
-    size_t free_memory_before_malloc = 0;
-    cudaMemGetInfo(&free_memory_before_malloc, nullptr);
+TEST(cuda_free, cuda_free_success) {
+  size_t free_memory_before_malloc = 0;
+  cudaMemGetInfo(&free_memory_before_malloc, nullptr);
 
-    auto result = mgcpp::cuda_malloc<float>(10);;
-    EXPECT_TRUE(result);
+  auto result = mgcpp::cuda_malloc<float>(10);
+  ;
+  EXPECT_TRUE(result);
 
-    size_t free_memory_after_malloc = 0;
-    cudaMemGetInfo(&free_memory_after_malloc, nullptr);
+  size_t free_memory_after_malloc = 0;
+  cudaMemGetInfo(&free_memory_after_malloc, nullptr);
 
-    EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
+  EXPECT_GT(free_memory_before_malloc, free_memory_after_malloc);
 
-    auto free_result = mgcpp::cuda_free(result.value());
-    EXPECT_TRUE(free_result); 
+  auto free_result = mgcpp::cuda_free(result.value());
+  EXPECT_TRUE(free_result);
 
-    size_t free_memory_after_free = 0;
-    cudaMemGetInfo(&free_memory_after_free, nullptr);
+  size_t free_memory_after_free = 0;
+  cudaMemGetInfo(&free_memory_after_free, nullptr);
 
-    EXPECT_EQ(free_memory_after_free, free_memory_before_malloc);
+  EXPECT_EQ(free_memory_after_free, free_memory_before_malloc);
 }
 
-TEST(cuda_free, cuda_free_failure)
-{
-    float* ptr = (float*)10u;
-    auto result = mgcpp::cuda_free(ptr);
-    EXPECT_FALSE(result);
+TEST(cuda_free, cuda_free_failure) {
+  float* ptr = (float*)10u;
+  auto result = mgcpp::cuda_free(ptr);
+  EXPECT_FALSE(result);
 }
 
-TEST(cuda_memcpy, memcpy_to_and_from_host)
-{
-    size_t size = 1;
-    auto device = mgcpp::cuda_malloc<float>(size);
-    float host = 7;
+TEST(cuda_memcpy, memcpy_to_and_from_host) {
+  size_t size = 1;
+  auto device = mgcpp::cuda_malloc<float>(size);
+  float host = 7;
 
-    host = 7;
-    auto to_device_stat = mgcpp::cuda_memcpy(
-        device.value(), &host, size, mgcpp::cuda_memcpy_kind::host_to_device);
-    EXPECT_TRUE(to_device_stat);
+  host = 7;
+  auto to_device_stat = mgcpp::cuda_memcpy(
+      device.value(), &host, size, mgcpp::cuda_memcpy_kind::host_to_device);
+  EXPECT_TRUE(to_device_stat);
 
-    host = 0;
-    auto to_host_stat = mgcpp::cuda_memcpy(
-        &host, device.value(), size, mgcpp::cuda_memcpy_kind::device_to_host);
-    EXPECT_TRUE(to_host_stat);
+  host = 0;
+  auto to_host_stat = mgcpp::cuda_memcpy(
+      &host, device.value(), size, mgcpp::cuda_memcpy_kind::device_to_host);
+  EXPECT_TRUE(to_host_stat);
 
-    EXPECT_EQ(host, 7);
-    (void)mgcpp::cuda_free(device.value());
+  EXPECT_EQ(host, 7);
+  (void)mgcpp::cuda_free(device.value());
 }
 
-TEST(cuda_memset, memset_to_zero)
-{
-    size_t size = 1;
-    auto memory = mgcpp::cuda_malloc<float>(size);
+TEST(cuda_memset, memset_to_zero) {
+  size_t size = 1;
+  auto memory = mgcpp::cuda_malloc<float>(size);
 
-    float host = 7;
+  float host = 7;
 
-    auto to_device_stat = mgcpp::cuda_memcpy(
-        memory.value(), &host, size,
-        mgcpp::cuda_memcpy_kind::host_to_device);
-    EXPECT_TRUE(to_device_stat);
+  auto to_device_stat = mgcpp::cuda_memcpy(
+      memory.value(), &host, size, mgcpp::cuda_memcpy_kind::host_to_device);
+  EXPECT_TRUE(to_device_stat);
 
-    auto status = mgcpp::cuda_memset(memory.value(), 0.0f, size);
-    EXPECT_TRUE(status);
+  auto status = mgcpp::cuda_memset(memory.value(), 0.0f, size);
+  EXPECT_TRUE(status);
 
-    host = 7;
-    auto to_host_stat =
-        mgcpp::cuda_memcpy(&host, memory.value(), size,
-                           mgcpp::cuda_memcpy_kind::device_to_host);
-    EXPECT_TRUE(to_host_stat);
-    EXPECT_EQ(host, 0);
+  host = 7;
+  auto to_host_stat = mgcpp::cuda_memcpy(
+      &host, memory.value(), size, mgcpp::cuda_memcpy_kind::device_to_host);
+  EXPECT_TRUE(to_host_stat);
+  EXPECT_EQ(host, 0);
 
-    (void)mgcpp::cuda_free(memory.value());
+  (void)mgcpp::cuda_free(memory.value());
 }
-

@@ -9,24 +9,19 @@
 
 #include <cufft.h>
 
+#include <string>
 #include <system_error>
 #include <type_traits>
-#include <string>
 
-namespace mgcpp
-{
-    using cufft_error_t = cufftResult;
+namespace mgcpp {
+using cufft_error_t = cufftResult;
 }
 
-std::error_code
-make_error_code(mgcpp::cufft_error_t err) noexcept;
+std::error_code make_error_code(mgcpp::cufft_error_t err) noexcept;
 
-namespace std
-{
-    template<>
-    struct is_error_code_enum<mgcpp::cufft_error_t>
-        : public std::true_type {};
-}
+namespace std {
+template <>
+struct is_error_code_enum<mgcpp::cufft_error_t> : public std::true_type {};
+}  // namespace std
 
 #endif
-

@@ -10,15 +10,13 @@
 
 #include "memory_leak_detector.hpp"
 
-int main(int argc, char* argv[])
-{
-    ::testing::InitGoogleTest(&argc, argv);
+int main(int argc, char* argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
 
-    ::testing::UnitTest::GetInstance()
-          ->listeners()
-          .Append(new mgcpp::memory_leak_detector());
+  ::testing::UnitTest::GetInstance()->listeners().Append(
+      new mgcpp::memory_leak_detector());
 
-    mgcpp::init(true);
+  mgcpp::init(true);
 
-    return RUN_ALL_TESTS();
+  return RUN_ALL_TESTS();
 }
