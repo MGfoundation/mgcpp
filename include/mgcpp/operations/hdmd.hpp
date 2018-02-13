@@ -18,6 +18,12 @@ namespace mgcpp
 {
     namespace strict
     {
+        /**
+         * Element-wise multiplication of two equal-sized vectors. (Hadamard Product)
+         * \param lhs left-hand side
+         * \param rhs right-hand side
+         * \returns the element-wise multiplication of lhs and rhs
+         */
         template<typename LhsDenseVec,
                  typename RhsDenseVec,
                  typename Type,

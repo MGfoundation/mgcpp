@@ -18,6 +18,10 @@ namespace mgcpp
 {
     namespace strict
     {
+        /** Adds two same-sized matrices together.
+         * \param lhs the left-hand side
+         * \param rhs the right-hand side
+         */
         template<typename LhsDenseMat,
                  typename RhsDenseMat,
                  typename Type,
@@ -26,6 +30,10 @@ namespace mgcpp
         add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
             dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
 
+        /** Adds two same-sized vectors together.
+         * \param first the left-hand side
+         * \param second the right-hand side
+         */
         template<typename LhsDenseVec,
                  typename RhsDenseVec,
                  typename Type,

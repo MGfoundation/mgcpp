@@ -183,14 +183,14 @@ namespace mgcpp
                                   CUBLAS_OP_N, CUBLAS_OP_N,
                                   m, n, k,
                                   pun_cast<device_pointer>(&casted_alpha),
-                                                         A_mat.data(), m,
-                                                         B_mat.data(), k,
-                                                         pun_cast<device_pointer>(&casted_beta),
-                                                         C_mat.data_mutable(), m);
+                                  A_mat.data(), m,
+                                  B_mat.data(), k,
+                                  pun_cast<device_pointer>(&casted_beta),
+                                  C_mat.data_mutable(), m);
 
-                               if(!status)
-                               { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
+       if(!status)
+       { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
-                               return C_mat;
+       return C_mat;
     }
 }

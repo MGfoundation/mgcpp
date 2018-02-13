@@ -19,6 +19,12 @@ namespace mgcpp
 {
     namespace strict
     {
+        /**
+         * Matrix-matrix multiplication.
+         * \param lhs left-hand side matrix
+         * \param rhs right-hand side matrix
+         * \returns lhs * rhs
+         */
         template<typename LhsDenseMat,
                  typename RhsDenseMat,
                  typename Type,
@@ -37,6 +43,14 @@ namespace mgcpp
         // mult(dense_vector<LhsDenseVec, Type, Device, Align> const& first,
         //      dense_vector<RhsDenseVec, Type, Device, Align> const& second);
 
+        /**
+         * Matrix-vector multiplication.
+         * If matrix is size (n x m), then vector's size must be m.
+         * The resulting vector is of size n.
+         * \param mat left-hand side matrix
+         * \param vec right-hand side vector
+         * \returns mat * vec
+         */
         template<typename DenseMat,
                  typename DenseVec,
                  typename Type,
@@ -45,6 +59,12 @@ namespace mgcpp
         mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
              dense_vector<DenseVec, Type, DeviceId> const& vec);
 
+        /**
+         * Scalar-vector multiplication.
+         * \param scalar the scalar multiplier
+         * \param vec vector to be multiplied by the scalar
+         * \returns scalar * vec
+         */
         template<typename DenseVec,
                  typename ScalarType,
                  typename VectorType,
@@ -55,6 +75,12 @@ namespace mgcpp
         mult(ScalarType scalar,
              dense_vector<DenseVec, VectorType, DeviceId> const& vec);
 
+        /**
+         * Scalar-matrix multiplication.
+         * \param scalar the scalar multiplier
+         * \param mat matrix to be multiplied by the scalar
+         * \returns scalar * mat
+         */
         template<typename DenseMat,
                  typename MatrixType,
                  size_t DeviceId,

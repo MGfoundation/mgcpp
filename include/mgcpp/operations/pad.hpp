@@ -23,6 +23,13 @@ namespace mgcpp
 
     namespace strict
     {
+        /**
+         * Applies padding to a vector.
+         * \param vec the vector to be padded.
+         * \param pad the padding size.
+         * \param pad_constant the value of the padding cells. If not specified, the default padding is zero.
+         * \return the padded result
+         */
         template<typename DenseVec,
                  typename Type,
                  size_t Device>
