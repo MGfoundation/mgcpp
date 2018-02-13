@@ -4,6 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <mgcpp/cuda_libs/cufft_fft.hpp>
 #include <mgcpp/global/complex.hpp>
 
 #include <boost/outcome.hpp>
@@ -15,7 +16,8 @@ namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
 namespace mgcpp
 {
     inline outcome::result<void>
-    cufft_rfft(size_t n, float const* x, cuComplex* result)
+    cufft::
+    rfft(size_t n, float const* x, cuComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -34,7 +36,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_rfft(size_t n, double const* x, cuDoubleComplex* result)
+    cufft::
+    rfft(size_t n, double const* x, cuDoubleComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -53,7 +56,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_irfft(size_t n, cuComplex const* x, float* result)
+    cufft::
+    irfft(size_t n, cuComplex const* x, float* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -72,7 +76,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_irfft(size_t n, cuDoubleComplex const* x, double* result)
+    cufft::
+    irfft(size_t n, cuDoubleComplex const* x, double* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -92,7 +97,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_cfft(size_t n, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
+    cufft::
+    cfft(size_t n, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -112,7 +118,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
+    cufft::
+    cfft(size_t n, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -132,7 +139,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_rfft2(size_t n, size_t m, float const* x, cuComplex* result)
+    cufft::
+    rfft2(size_t n, size_t m, float const* x, cuComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -151,7 +159,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result)
+    cufft::
+    rfft2(size_t n, size_t m, double const* x, cuDoubleComplex* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -170,7 +179,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_irfft2(size_t n, size_t m, cuComplex const* x, float* result)
+    cufft::
+    irfft2(size_t n, size_t m, cuComplex const* x, float* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -189,7 +199,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result)
+    cufft::
+    irfft2(size_t n, size_t m, cuDoubleComplex const* x, double* result)
     {
         std::error_code status;
         cufftHandle plan;
@@ -208,7 +219,8 @@ namespace mgcpp
     }
 
     inline outcome::result<void>
-    cufft_cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
+    cufft::
+    cfft2(size_t n, size_t m, cuComplex const* x, cuComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;
@@ -229,7 +241,8 @@ namespace mgcpp
 
 
     inline outcome::result<void>
-    cufft_cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
+    cufft::
+    cfft2(size_t n, size_t m, cuDoubleComplex const* x, cuDoubleComplex* result, cufft::fft_direction direction)
     {
         std::error_code status;
         cufftHandle plan;

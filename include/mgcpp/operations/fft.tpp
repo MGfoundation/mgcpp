@@ -33,9 +33,9 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cufft_rfft(fft_size,
-                                        dev_vec.data(),
-                                        result.data_mutable());
+        auto status = mgcpp::cufft::rfft(fft_size,
+                                         dev_vec.data(),
+                                         result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -73,7 +73,7 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cufft_irfft(fft_size,
+        auto status = mgcpp::cufft::irfft(fft_size,
                                          dev_vec.data(),
                                          result.data_mutable());
         if(!status)
@@ -113,7 +113,7 @@ namespace mgcpp
         else
             dir = cufft::fft_direction::inverse;
 
-        auto status = mgcpp::cufft_cfft(fft_size, dev_vec.data(),
+        auto status = mgcpp::cufft::cfft(fft_size, dev_vec.data(),
                                         result.data_mutable(),
                                         dir);
         if(!status)
@@ -147,9 +147,9 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cufft_rfft2(fft_size[0], fft_size[1],
-                                         dev_mat.data(),
-                                         result.data_mutable());
+        auto status = mgcpp::cufft::rfft2(fft_size[0], fft_size[1],
+                                          dev_mat.data(),
+                                          result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -183,9 +183,9 @@ namespace mgcpp
                                     DeviceId,
                                     result_allocator_type>(output_size);
 
-        auto status = mgcpp::cufft_irfft2(fft_size[0], fft_size[1],
-                                          dev_mat.data(),
-                                          result.data_mutable());
+        auto status = mgcpp::cufft::irfft2(fft_size[0], fft_size[1],
+                                           dev_mat.data(),
+                                           result.data_mutable());
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
@@ -222,10 +222,10 @@ namespace mgcpp
         else
             dir = cufft::fft_direction::inverse;
 
-        auto status = mgcpp::cufft_cfft2(fft_size[0], fft_size[1],
-                                         dev_mat.data(),
-                                         result.data_mutable(),
-                                         dir);
+        auto status = mgcpp::cufft::cfft2(fft_size[0], fft_size[1],
+                                          dev_mat.data(),
+                                          result.data_mutable(),
+                                          dir);
         if(!status)
         { MGCPP_THROW_SYSTEM_ERROR(status.error()); }
 
