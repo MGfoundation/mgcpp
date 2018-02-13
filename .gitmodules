@@ -4,3 +4,6 @@
 [submodule "half"]
 	path = third_party/half
 	url = https://github.com/Melown/half.git
+[submodule "github-clang-format"]
+	path = github-clang-format
+	url = https://github.com/isuruf/github-clang-format
