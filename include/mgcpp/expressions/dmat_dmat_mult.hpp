@@ -8,8 +8,6 @@
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_MULT_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
@@ -29,8 +27,7 @@ struct dmat_dmat_mult_expr
 };
 
 template <typename LhsExpr, typename RhsExpr>
-inline typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type eval(
-    dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr);
+inline decltype(auto) eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr);
 
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(

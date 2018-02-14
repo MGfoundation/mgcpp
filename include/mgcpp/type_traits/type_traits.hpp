@@ -20,8 +20,11 @@ struct is_scalar {
   static const bool value =
       std::is_same<T, float>::value || std::is_same<T, double>::value ||
       std::is_same<T, complex<float>>::value ||
-      std::is_same<T, complex<double>>::value || std::is_same<T, half>::value ||
-      std::is_same<T, complex<half>>::value;
+      std::is_same<T, complex<double>>::value
+#ifdef USE_HALF
+      || std::is_same<T, half>::value || std::is_same<T, complex<half>>::value
+#endif
+      ;
 };
 }  // namespace mgcpp
 

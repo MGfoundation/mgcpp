@@ -8,8 +8,6 @@
 #define _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
-#include <mgcpp/vector/device_vector.hpp>
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>

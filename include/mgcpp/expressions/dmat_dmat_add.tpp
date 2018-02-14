@@ -8,6 +8,7 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/system/assert.hpp>

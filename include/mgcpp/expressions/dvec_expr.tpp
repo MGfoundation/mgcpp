@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_expr.hpp>
+#include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
 template <typename DenseMatrix, typename Type, size_t DeviceId>

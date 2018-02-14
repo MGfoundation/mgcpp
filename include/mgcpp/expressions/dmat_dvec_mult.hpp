@@ -9,8 +9,6 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp {
 template <typename MatExpr, typename VecExpr>

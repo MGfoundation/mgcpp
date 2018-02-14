@@ -7,8 +7,6 @@
 #ifndef _MGCPP_EXPRESSIONS_MAT_TRANS_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_MAT_TRANS_EXPR_HPP_
 
-#include <mgcpp/gpu/forward.hpp>
-
 namespace mgcpp {
 template <typename GpuMat>
 struct trans_expr<GpuMat> {

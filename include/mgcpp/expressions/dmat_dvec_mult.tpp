@@ -1,5 +1,5 @@
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/mult.hpp>
 
 namespace mgcpp {

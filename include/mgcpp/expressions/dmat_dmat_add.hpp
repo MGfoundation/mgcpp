@@ -7,10 +7,7 @@
 #ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 
-#include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>

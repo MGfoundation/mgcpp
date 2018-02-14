@@ -6,8 +6,6 @@
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
 
 #ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_SUB_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_SUB_EXPR_HPP_

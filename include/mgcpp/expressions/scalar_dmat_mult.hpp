@@ -10,9 +10,7 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/expr_eval.hpp>
 #include <mgcpp/expressions/scalar_expr.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
 
 namespace mgcpp {
 template <typename ScalExpr, typename DMatExpr>

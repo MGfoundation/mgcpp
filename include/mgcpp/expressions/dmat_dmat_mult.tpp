@@ -7,7 +7,7 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
@@ -77,7 +77,7 @@ dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval() const {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type eval(
+decltype(auto) eval(
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
   return expr.eval();
 }
