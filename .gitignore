@@ -73,3 +73,4 @@ CTestTestfile.cmake
 
 # cuda_gencode
 cmake/feature_test/cuda_gencode
+/CMakeDoxyfile.in
