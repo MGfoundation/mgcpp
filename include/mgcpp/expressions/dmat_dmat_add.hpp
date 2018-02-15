@@ -23,11 +23,13 @@ struct dmat_dmat_add_expr
 
   inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
 
-  inline decltype(auto) eval() const;
+  inline result_type eval(bool eval_trans = true) const;
 };
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
+inline typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type eval(
+    dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
+    bool eval_trans);
 
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(

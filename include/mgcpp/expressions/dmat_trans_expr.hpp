@@ -10,27 +10,30 @@
 #include <mgcpp/expressions/dmat_expr.hpp>
 
 namespace mgcpp {
-    template <typename Expr>
-    struct dmat_trans_expr
-        :  dmat_expr<dmat_trans_expr<Expr>>
-    {
-        using expr_type = typename std::decay<Expr>::type;
-        using result_type = typename expr_type;
+template <typename Expr>
+struct dmat_trans_expr : dmat_expr<dmat_trans_expr<Expr>> {
+  using expr_type = typename std::decay<Expr>::type;
+  using result_type = typename expr_type;
 
-        Expr const& _mat;
+  Expr const& _expr;
 
-        inline dmat_trans_expr(Expr&& mat) noexcept;
+  inline dmat_trans_expr(Expr const& mat) noexcept;
 
-        inline decltype(auto) eval();
-    };
+  inline decltype(auto) eval(bool eval_trans = true);
+};
 
-    template <typename Expr>
-    inline dmat_trans_expr<Expr> trans(
-        dmat_expr<Expr> const& dense_mat_expr) noexcept;
+template <typename Expr>
+inline decltype(auto) eval(dmat_trans_expr<Expr> trans_expr,
+                           bool eval_trans = true);
 
-    template <typename Expr>
-    inline dmat_trans_expr<Expr> operator!(
-        dmat_expr<Expr> const& dense_mat_expr) noexcept;
+template <typename Expr>
+inline dmat_trans_expr<Expr> trans(
+    dmat_expr<Expr> const& dense_mat_expr) noexcept;
+
+template <typename Expr>
+inline dmat_trans_expr<Expr> operator!(
+    dmat_expr<Expr> const& dense_mat_expr) noexcept;
 }  // namespace mgcpp
 
+#include <dmat_trans_expr.tpp>
 #endif

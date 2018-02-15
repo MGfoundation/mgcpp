@@ -27,12 +27,14 @@ struct scalar_dmat_mult_expr
   inline scalar_dmat_mult_expr(ScalExpr const& scal_expr,
                                DMatExpr const& dmat_expr) noexcept;
 
-  inline result_type eval() const;
+  inline typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
+      bool eval_trans = true) const;
 };
 
 template <typename ScalExpr, typename DMatExpr>
 inline typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
-    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr);
+    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr,
+    bool eval_trans);
 
 template <typename Scalar,
           typename DMatExpr,

@@ -8,19 +8,19 @@
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/forward.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/assert.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 namespace mgcpp {
 namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
-  auto const& lhs = mgcpp::eval(expr._lhs);
-  auto const& rhs = mgcpp::eval(expr._rhs);
+  auto const& lhs = mgcpp::eval(expr._lhs, false);
+  auto const& rhs = mgcpp::eval(expr._rhs, false);
 
   return strict::mult(lhs, rhs);
 }
@@ -35,8 +35,8 @@ inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
                                    RhsExpr>::result_type;
 
   auto const& alpha = mgcpp::eval(expr._lhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._lhs._dmat_expr);
-  auto const& B = mgcpp::eval(expr._rhs);
+  auto const& A = mgcpp::eval(expr._lhs._dmat_expr, false);
+  auto const& B = mgcpp::eval(expr._rhs, false);
 
   size_t m = A.shape()[0];
   size_t n = B.shape()[1];
@@ -54,8 +54,8 @@ inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
       LhsExpr, scalar_dmat_mult_expr<RhsScal, RhsMat>>::result_type;
 
   auto const& alpha = mgcpp::eval(expr._rhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._lhs);
-  auto const& B = mgcpp::eval(expr._rhs._dmat_expr);
+  auto const& A = mgcpp::eval(expr._lhs, false);
+  auto const& B = mgcpp::eval(expr._rhs._dmat_expr, false);
 
   size_t m = A.shape()[0];
   size_t n = B.shape()[1];
@@ -73,14 +73,16 @@ dmat_dmat_mult_expr<LhsExpr, RhsExpr>::dmat_dmat_mult_expr(
 
 template <typename LhsExpr, typename RhsExpr>
 typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type
-dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval() const {
+dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval(bool eval_trans) const {
+  (void)eval_trans;
   return internal::dmat_dmat_mult_subgraph_matcher(*this);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) eval(
-    dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
-  return expr.eval();
+typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type eval(
+    dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
+    bool eval_trans) {
+  return expr.eval(eval_trans);
 }
 
 template <typename LhsExpr, typename RhsExpr>

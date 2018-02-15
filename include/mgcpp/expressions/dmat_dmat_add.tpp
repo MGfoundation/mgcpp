@@ -19,8 +19,8 @@ namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_add_subgraph_matcher(
     dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr) {
-  auto const& lhs = mgcpp::eval(expr._lhs);
-  auto const& rhs = mgcpp::eval(expr._rhs);
+  auto const& lhs = mgcpp::eval(expr._lhs, false);
+  auto const& rhs = mgcpp::eval(expr._rhs, false);
 
   return strict::add(lhs, rhs);
 }
@@ -28,8 +28,8 @@ inline decltype(auto) dmat_dmat_add_subgraph_matcher(
 template <typename AType, typename BType, typename CType>
 inline decltype(auto) dmat_dmat_subgraph_matcher(
     dmat_dmat_add_expr<dmat_dmat_mult_expr<AType, BType>, CType> const& expr) {
-  auto const& A = mgcpp::eval(expr._lhs._lhs);
-  auto const& B = mgcpp::eval(expr._lhs._rhs);
+  auto const& A = mgcpp::eval(expr._lhs._lhs, false);
+  auto const& B = mgcpp::eval(expr._lhs._rhs, false);
   auto const& C = mgcpp::eval(expr._rhs);
   return strict::gemm(A, B, C);
 }
@@ -37,8 +37,8 @@ inline decltype(auto) dmat_dmat_subgraph_matcher(
 template <typename AType, typename BType, typename CType>
 inline decltype(auto) dmat_dmat_subgraph_matcher(
     dmat_dmat_add_expr<CType, dmat_dmat_mult_expr<AType, BType>> const& expr) {
-  auto const& A = mgcpp::eval(expr._rhs._lhs);
-  auto const& B = mgcpp::eval(expr._rhs._rhs);
+  auto const& A = mgcpp::eval(expr._rhs._lhs, false);
+  auto const& B = mgcpp::eval(expr._rhs._rhs, false);
   auto const& C = mgcpp::eval(expr._lhs);
   return strict::gemm(A, B, C);
 }
@@ -49,8 +49,8 @@ inline decltype(auto) dmat_dmat_subgraph_matcher(
         scalar_dmat_mult_expr<AlphaType, dmat_dmat_mult_expr<AType, BType>>,
         CType> const& expr) {
   auto const& alpha = mgcpp::eval(expr._rhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._rhs._dmat_expr._lhs);
-  auto const& B = mgcpp::eval(expr._rhs._dmat_expr._rhs);
+  auto const& A = mgcpp::eval(expr._rhs._dmat_expr._lhs, false);
+  auto const& B = mgcpp::eval(expr._rhs._dmat_expr._rhs, false);
   float beta = 1.0;
   auto const& C = mgcpp::eval(expr._lhs._dmat_expr);
   return strict::gemm(alpha, A, B, beta, C);
@@ -63,8 +63,8 @@ inline decltype(auto) dmat_dmat_subgraph_matcher(
         scalar_dmat_mult_expr<AlphaType,
                               dmat_dmat_mult_expr<AType, BType>>> const& expr) {
   auto const& alpha = mgcpp::eval(expr._lhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._lhs._dmat_expr._lhs);
-  auto const& B = mgcpp::eval(expr._lhs._dmat_expr._rhs);
+  auto const& A = mgcpp::eval(expr._lhs._dmat_expr._lhs, false);
+  auto const& B = mgcpp::eval(expr._lhs._dmat_expr._rhs, false);
   float beta = 1.0;
   auto const& C = mgcpp::eval(expr._rhs._dmat_expr);
   return strict::gemm(alpha, A, B, beta, C);
@@ -80,8 +80,8 @@ inline decltype(auto) dmat_dmat_subgraph_matcher(
         scalar_dmat_mult_expr<AlphaType, dmat_dmat_mult_expr<AType, BType>>,
         scalar_dmat_mult_expr<BetaType, CType>> const& expr) {
   auto const& alpha = mgcpp::eval(expr._rhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._rhs._dmat_expr._lhs);
-  auto const& B = mgcpp::eval(expr._rhs._dmat_expr._rhs);
+  auto const& A = mgcpp::eval(expr._rhs._dmat_expr._lhs, false);
+  auto const& B = mgcpp::eval(expr._rhs._dmat_expr._rhs, false);
   auto beta = mgcpp::eval(expr._lhs._scal_expr);
   auto const& C = mgcpp::eval(expr._lhs._dmat_expr);
   return strict::gemm(alpha, A, B, beta, C);
@@ -98,10 +98,10 @@ inline decltype(auto) dmat_dmat_subgraph_matcher(
         scalar_dmat_mult_expr<AlphaType,
                               dmat_dmat_mult_expr<AType, BType>>> const& expr) {
   auto const& alpha = mgcpp::eval(expr._lhs._scal_expr);
-  auto const& A = mgcpp::eval(expr._lhs._dmat_expr._lhs);
-  auto const& B = mgcpp::eval(expr._lhs._dmat_expr._rhs);
+  auto const& A = mgcpp::eval(expr._lhs._dmat_expr._lhs, false);
+  auto const& B = mgcpp::eval(expr._lhs._dmat_expr._rhs, false);
   auto beta = mgcpp::eval(expr._rhs._scal_expr);
-  auto const& C = mgcpp::eval(expr._rhs._dmat_expr);
+  auto const& C = mgcpp::eval(expr._rhs._dmat_expr, false);
   return strict::gemm(alpha, A, B, beta, C);
 }
 }  // namespace internal
@@ -113,14 +113,17 @@ dmat_dmat_add_expr<LhsExpr, RhsExpr>::dmat_dmat_add_expr(
     : _lhs(lhs), _rhs(rhs) {}
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
+typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type
+dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval(bool eval_trans) const {
+  (void)eval_trans;
   return internal::dmat_dmat_add_subgraph_matcher(*this);
 }
 
 template <typename LhsExpr, typename RhsExpr>
 typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type eval(
-    dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr) {
-  expr.eval();
+    dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
+    bool eval_trans) {
+  expr.eval(eval_trans);
 }
 
 template <typename LhsExpr, typename RhsExpr>

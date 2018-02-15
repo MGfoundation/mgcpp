@@ -11,9 +11,9 @@
 #define _MGCPP_EXPRESSIONS_FORWARD_HPP_
 
 #include <mgcpp/matrix/forward.hpp>
+#include <mgcpp/type_traits/type_traits.hpp>
 #include <mgcpp/vector/forward.hpp>
 #include <type_traits>
-#include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp {
 
@@ -22,10 +22,6 @@ struct expression;
 
 template <typename Expr>
 struct dmat_expr;
-
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
 
 template <typename Expr>
 struct dvec_expr;
@@ -38,20 +34,25 @@ template <typename LhsExpr, typename RhsExpr>
 struct dmat_dmat_add_expr;
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
+inline typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type eval(
+    dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
+    bool eval_trans = true);
 
 template <typename LhsExpr, typename RhsExpr>
 struct dmat_dmat_mult_expr;
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr);
+inline typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type eval(
+    dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
+    bool eval_trans = true);
 
 template <typename ScalExpr, typename DMatExpr>
 struct scalar_dmat_mult_expr;
 
 template <typename ScalExpr, typename DMatExpr>
 inline typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
-    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr);
+    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr,
+    bool eval_trans = true);
 
 template <typename LhsExpr, typename RhsExpr>
 struct dvec_dvec_add_expr;
@@ -79,5 +80,5 @@ struct scalar_expr;
 template <typename Scalar>
 inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
     Scalar scalar);
-}
+}  // namespace mgcpp
 #endif

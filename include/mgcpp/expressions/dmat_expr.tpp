@@ -8,9 +8,11 @@
 #include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat) {
-  return ~device_mat;
+template <typename Type, size_t DeviceId, typename Alloc>
+device_matrix<Type, DeviceId, Alloc> const& eval(
+    device_matrix<Type, DeviceId, Alloc> const& device_mat,
+    bool eval_trans) {
+  (void)eval_trans;
+  return device_mat;
 }
 }  // namespace mgcpp
