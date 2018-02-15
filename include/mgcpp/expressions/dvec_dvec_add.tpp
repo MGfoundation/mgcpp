@@ -17,8 +17,8 @@ dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
 
 template <typename LhsExpr, typename RhsExpr>
 decltype(auto) dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {
-  auto lhs = mgcpp::eval(_lhs);
-  auto rhs = mgcpp::eval(_rhs);
+  auto const& lhs = mgcpp::eval(_lhs);
+  auto const& rhs = mgcpp::eval(_rhs);
 
   return strict::add(lhs, rhs);
 }

@@ -17,8 +17,8 @@ scalar_dmat_mult_expr<ScalExpr, DMatExpr>::scalar_dmat_mult_expr(
 template <typename ScalExpr, typename DMatExpr>
 typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type
 scalar_dmat_mult_expr<ScalExpr, DMatExpr>::eval() const {
-  auto scal = mgcpp::eval(_scal_expr);
-  auto dmat = mgcpp::eval(_dmat_expr);
+  auto const& scal = mgcpp::eval(_scal_expr);
+  auto const& dmat = mgcpp::eval(_dmat_expr);
 
   return strict::mult(scal, dmat);
 }

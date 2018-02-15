@@ -4,32 +4,36 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/cublas/blaslike_ext.hpp>
-#include <mgcpp/device/device.hpp>
-#include <mgcpp/device/matrix.hpp>
 #include <mgcpp/operations/trans.hpp>
-#include <mgcpp/system/exception.hpp>
+#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/cuda_libs/cublas.hpp>
 
 namespace mgcpp {
-template <typename T, size_t Device, storage_order SO>
-gpu::matrix<T, Device, SO> strict::trans(
-    gpu::matrix<T, Device, SO> const& mat) {
-  auto* thread_context = mat.get_thread_context();
-  auto handle = thread_context->get_cublas_context(Device);
 
-  auto shape = mat.shape();
+template <typename DenseMat, typename Type, size_t DeviceId>
+decltype(auto) strict::trans(
+    dense_matrix<DenseMat, Type, DeviceId> const& mat) {
+  using allocator_type = typename DenseMat::allocator_type;
+
+  auto const& dmat = ~mat;
+  auto* context = dmat.context();
+  auto handle = context->get_cublas_context(DeviceId);
+
+  auto shape = dmat.shape();
 
   auto m = shape[0];
   auto n = shape[1];
 
-  size_t alpha = 1;
-  size_t beta = 0;
+  Type alpha = 1;
+  Type beta = 0;
 
-  gpu::matrix<T, Device, SO> result{m, n};
+  // switch places
+  auto result = device_matrix<Type, DeviceId, allocator_type>({n, m});
 
-  auto status = cublas_geam(handle, CUBLAS_OP_T, CUBLAS_OP_N, m, n, &alpha,
-                            mat.get_data(), n, &beta, nullptr, m,
-                            result.get_data_mutable(), m);
+  Type *null = nullptr;
+  auto status = cublas_geam(handle, CUBLAS_OP_T, CUBLAS_OP_N, n, m, &alpha,
+                            dmat.data(), m, &beta, null, n,
+                            result.data_mutable(), n);
 
   if (!status)
     MGCPP_THROW_SYSTEM_ERROR(status.error());

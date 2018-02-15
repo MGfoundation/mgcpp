@@ -7,8 +7,8 @@ namespace internal {
 template <typename MatExpr, typename VecExpr>
 inline decltype(auto) dmat_dvec_mult_subgraph_matcher(
     dmat_dvec_mult_expr<MatExpr, VecExpr> const& expr) {
-  auto mat = mgcpp::eval(expr._mat);
-  auto vec = mgcpp::eval(expr._vec);
+  auto const& mat = mgcpp::eval(expr._mat);
+  auto const& vec = mgcpp::eval(expr._vec);
 
   return strict::mult(mat, vec);
 }

@@ -7,12 +7,12 @@
 #ifndef _MGCPP_OPERATIONS_TRANS_HPP_
 #define _MGCPP_OPERATIONS_TRANS_HPP_
 
-#include <mgcpp/device/forward.hpp>
+#include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 namespace strict {
-template <typename T, size_t Device, storage_order SO>
-decltype(auto) trans(device_matrix<T, Device, SO> const& mat);
+template <typename DenseMat, typename Type, size_t DeviceId>
+decltype(auto) trans(dense_matrix<DenseMat, Type, DeviceId> const& mat);
 }
 }  // namespace mgcpp
 

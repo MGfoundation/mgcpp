@@ -12,14 +12,15 @@
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/assert.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 namespace mgcpp {
 namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
-  auto lhs = mgcpp::eval(expr._lhs);
-  auto rhs = mgcpp::eval(expr._rhs);
+  auto const& lhs = mgcpp::eval(expr._lhs);
+  auto const& rhs = mgcpp::eval(expr._rhs);
 
   return strict::mult(lhs, rhs);
 }
@@ -33,9 +34,9 @@ inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
       typename dmat_dmat_mult_expr<scalar_dmat_mult_expr<LhsScal, LhsMat>,
                                    RhsExpr>::result_type;
 
-  auto alpha = mgcpp::eval(expr._lhs._scal_expr);
-  auto A = mgcpp::eval(expr._lhs._dmat_expr);
-  auto B = mgcpp::eval(expr._rhs);
+  auto const& alpha = mgcpp::eval(expr._lhs._scal_expr);
+  auto const& A = mgcpp::eval(expr._lhs._dmat_expr);
+  auto const& B = mgcpp::eval(expr._rhs);
 
   size_t m = A.shape()[0];
   size_t n = B.shape()[1];
@@ -52,9 +53,9 @@ inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
   using result_type = typename dmat_dmat_mult_expr<
       LhsExpr, scalar_dmat_mult_expr<RhsScal, RhsMat>>::result_type;
 
-  auto alpha = mgcpp::eval(expr._rhs._scal_expr);
-  auto A = mgcpp::eval(expr._lhs);
-  auto B = mgcpp::eval(expr._rhs._dmat_expr);
+  auto const& alpha = mgcpp::eval(expr._rhs._scal_expr);
+  auto const& A = mgcpp::eval(expr._lhs);
+  auto const& B = mgcpp::eval(expr._rhs._dmat_expr);
 
   size_t m = A.shape()[0];
   size_t n = B.shape()[1];

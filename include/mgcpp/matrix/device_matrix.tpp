@@ -129,6 +129,32 @@ device_matrix<Type, DeviceId, Alloc>::from_list(
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>
+template <size_t S1, size_t S2>
+inline device_matrix<Type, DeviceId, Alloc>
+device_matrix<Type, DeviceId, Alloc>::from_c_array(Type (&arr)[S1][S2],
+                                                   Alloc const& alloc) {
+  auto shape = make_shape(S1, S2);
+
+  size_t total_size = shape[0] * shape[1];
+
+  Alloc allocator = alloc;
+  pointer buffer = allocator.allocate(total_size);
+
+  for (size_t i = 0; i < S1; ++i)
+  {
+      for (size_t j = 0; j < S2; ++j)
+      {
+          buffer[i + shape[0] * j] = arr[i][j];
+      }
+  }
+  device_matrix mat(shape, buffer, alloc);
+
+  allocator.deallocate(buffer, total_size);
+
+  return mat;
+}
+
+template <typename Type, size_t DeviceId, typename Alloc>
 template <typename HostMat, typename>
 device_matrix<Type, DeviceId, Alloc>::device_matrix(HostMat const& host_mat,
                                                     Alloc const& alloc)

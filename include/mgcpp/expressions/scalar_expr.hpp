@@ -14,9 +14,9 @@ namespace mgcpp {
 template <typename Type>
 struct scalar_expr;
 
-template <typename Scalar,
-          typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline Scalar eval(Scalar scalar) {
+template <typename Scalar>
+inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
+    Scalar scalar) {
   return Scalar(scalar);
 }
 }  // namespace mgcpp

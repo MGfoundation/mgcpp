@@ -103,7 +103,11 @@ else()
 	    "${CMAKE_CXX_FLAGS} -std=c++14 -g -Wall -Wextra")
     else()
 	set(BUILD_FLAGS
-	    "${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
+            "${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
+    endif()
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(BUILD_FLAGS
+            "${BUILD_FLAGS} -Wno-mismatched-tags")
     endif()
 endif()
 message("C++ flags = ${BUILD_FLAGS}")

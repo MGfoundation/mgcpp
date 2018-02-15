@@ -17,6 +17,7 @@
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/sub.hpp>
 #include <mgcpp/operations/sum.hpp>
+#include <mgcpp/operations/trans.hpp>
 
 TEST(mat_mat_operation, row_major_multiplication) {
   mgcpp::device_matrix<float> A_mat({2, 4}, 2);
@@ -107,4 +108,17 @@ TEST(mat_operation, mat_mean) {
 
     EXPECT_EQ(result, 2);
   });
+}
+
+TEST(mat_operation, mat_trans) {
+  auto mat =
+      mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
+
+  mgcpp::device_matrix<float> result{};
+  EXPECT_NO_THROW({ result = mgcpp::strict::trans(mat); });
+  EXPECT_EQ(result.shape()[0], 3);
+  EXPECT_EQ(result.shape()[1], 2);
+  EXPECT_EQ(result.check_value(0, 0), -1); EXPECT_EQ(result.check_value(0, 1), -4);
+  EXPECT_EQ(result.check_value(1, 0), -2); EXPECT_EQ(result.check_value(1, 1), -5);
+  EXPECT_EQ(result.check_value(2, 0), -3); EXPECT_EQ(result.check_value(2, 1), -6);
 }

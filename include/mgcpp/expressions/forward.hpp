@@ -10,8 +10,10 @@
 #ifndef _MGCPP_EXPRESSIONS_FORWARD_HPP_
 #define _MGCPP_EXPRESSIONS_FORWARD_HPP_
 
-#include <mgcpp/type_traits/type_traits.hpp>
+#include <mgcpp/matrix/forward.hpp>
+#include <mgcpp/vector/forward.hpp>
 #include <type_traits>
+#include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp {
 
@@ -21,23 +23,28 @@ struct expression;
 template <typename Expr>
 struct dmat_expr;
 
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+inline decltype(auto) eval(
+    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
+
 template <typename Expr>
 struct dvec_expr;
 
-template <typename Type>
-struct scalar_expr;
+template <typename DenseMatrix, typename Type, size_t DeviceId>
+decltype(auto) eval(
+    dense_vector<DenseMatrix, Type, DeviceId> const& device_vec);
 
 template <typename LhsExpr, typename RhsExpr>
 struct dmat_dmat_add_expr;
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
+inline decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
 
 template <typename LhsExpr, typename RhsExpr>
 struct dmat_dmat_mult_expr;
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr);
+inline decltype(auto) eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr);
 
 template <typename ScalExpr, typename DMatExpr>
 struct scalar_dmat_mult_expr;
@@ -46,15 +53,14 @@ template <typename ScalExpr, typename DMatExpr>
 inline typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
     scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr);
 
-template <typename Scalar,
-          typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline Scalar eval(Scalar scalar);
-
 template <typename LhsExpr, typename RhsExpr>
 struct dvec_dvec_add_expr;
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr);
+inline decltype(auto) eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr);
+
+template <typename LhsExpr, typename RhsExpr>
+inline decltype(auto) eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr);
 
 template <typename Expr,
           typename VectorType,
@@ -64,8 +70,14 @@ struct dvec_elemwise_expr;
 template <typename Expr,
           typename VectorType,
           VectorType (*Function)(typename VectorType::parent_type const& vec)>
-decltype(auto) eval(
+inline decltype(auto) eval(
     dvec_elemwise_expr<Expr, VectorType, Function> const& expr);
 
+template <typename Type>
+struct scalar_expr;
+
+template <typename Scalar>
+inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
+    Scalar scalar);
 }
 #endif
