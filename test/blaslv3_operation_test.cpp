@@ -11,8 +11,8 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/matrix/device_matrix.hpp>
-#include <mgcpp/operations/elemwise.hpp>
 #include <mgcpp/operations/add.hpp>
+#include <mgcpp/operations/elemwise.hpp>
 #include <mgcpp/operations/mean.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/sub.hpp>
@@ -118,7 +118,10 @@ TEST(mat_operation, mat_trans) {
   EXPECT_NO_THROW({ result = mgcpp::strict::trans(mat); });
   EXPECT_EQ(result.shape()[0], 3);
   EXPECT_EQ(result.shape()[1], 2);
-  EXPECT_EQ(result.check_value(0, 0), -1); EXPECT_EQ(result.check_value(0, 1), -4);
-  EXPECT_EQ(result.check_value(1, 0), -2); EXPECT_EQ(result.check_value(1, 1), -5);
-  EXPECT_EQ(result.check_value(2, 0), -3); EXPECT_EQ(result.check_value(2, 1), -6);
+  EXPECT_EQ(result.check_value(0, 0), -1);
+  EXPECT_EQ(result.check_value(0, 1), -4);
+  EXPECT_EQ(result.check_value(1, 0), -2);
+  EXPECT_EQ(result.check_value(1, 1), -5);
+  EXPECT_EQ(result.check_value(2, 0), -3);
+  EXPECT_EQ(result.check_value(2, 1), -6);
 }

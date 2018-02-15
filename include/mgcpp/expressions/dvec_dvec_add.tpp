@@ -24,8 +24,7 @@ decltype(auto) dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(
-    dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr) {
+inline decltype(auto) eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr) {
   return expr.eval();
 }
 

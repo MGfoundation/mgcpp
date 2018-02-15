@@ -79,4 +79,4 @@ inline decltype(auto) relu(dvec_expr<Expr> const& expr) noexcept {
   using VectorType = typename std::decay<Expr>::type::result_type;
   return dvec_elemwise_expr<Expr, VectorType, strict::relu>(~expr);
 }
-}
+}  // namespace mgcpp

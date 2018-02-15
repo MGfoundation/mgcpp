@@ -76,8 +76,9 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
       std::initializer_list<std::initializer_list<value_type>> const& array,
       Alloc const& alloc = Alloc());
 
-  template<size_t S1, size_t S2>
-  static inline device_matrix from_c_array(Type (&arr)[S1][S2], Alloc const& alloc = Alloc());
+  template <size_t S1, size_t S2>
+  static inline device_matrix from_c_array(Type (&arr)[S1][S2],
+                                           Alloc const& alloc = Alloc());
 
   template <typename HostMat, MGCPP_CONCEPT(adapter<HostMat>::value)>
   inline explicit device_matrix(HostMat const& host_mat,
