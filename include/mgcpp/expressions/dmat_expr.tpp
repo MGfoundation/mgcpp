@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
 template <typename Type, size_t DeviceId, typename Alloc>

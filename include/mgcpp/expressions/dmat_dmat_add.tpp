@@ -1,5 +1,4 @@
 
-
 //          Copyright RedPortal, mujjingun 2017 - 2018.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE or copy at
@@ -9,7 +8,6 @@
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/system/assert.hpp>

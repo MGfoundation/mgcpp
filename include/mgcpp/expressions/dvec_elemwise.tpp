@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_elemwise.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/elemwise.hpp>
 
 namespace mgcpp {

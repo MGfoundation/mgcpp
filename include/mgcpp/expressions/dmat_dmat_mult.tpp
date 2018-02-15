@@ -7,7 +7,6 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/operations/gemm.hpp>
