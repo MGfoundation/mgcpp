@@ -74,9 +74,13 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   inline device_vector(device_vector<Type, DeviceId, Alloc> const& other);
 
   template <typename DenseVec>
-  inline device_vector(dense_vector<DenseVec, Type, DeviceId> const& other);
+  inline explicit device_vector(dense_vector<DenseVec, Type, DeviceId> const& other);
 
   inline device_vector(device_vector<Type, DeviceId, Alloc>&& other) noexcept;
+
+  template <size_t S>
+  static inline device_vector from_c_array(Type (&arr)[S],
+                                           Alloc const& alloc = Alloc());
 
   template <typename DenseVec>
   inline device_vector<Type, DeviceId, Alloc>& operator=(
