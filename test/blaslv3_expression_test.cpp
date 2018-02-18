@@ -220,7 +220,39 @@ TEST(mat_expression, mat_trans) {
   EXPECT_NO_THROW({ result = expr.eval(); });
   EXPECT_EQ(result.shape()[0], 3);
   EXPECT_EQ(result.shape()[1], 2);
-  EXPECT_EQ(result.check_value(0, 0), -1); EXPECT_EQ(result.check_value(0, 1), -4);
-  EXPECT_EQ(result.check_value(1, 0), -2); EXPECT_EQ(result.check_value(1, 1), -5);
-  EXPECT_EQ(result.check_value(2, 0), -3); EXPECT_EQ(result.check_value(2, 1), -6);
+  EXPECT_EQ(result.check_value(0, 0), -1);
+  EXPECT_EQ(result.check_value(0, 1), -4);
+  EXPECT_EQ(result.check_value(1, 0), -2);
+  EXPECT_EQ(result.check_value(1, 1), -5);
+  EXPECT_EQ(result.check_value(2, 0), -3);
+  EXPECT_EQ(result.check_value(2, 1), -6);
+}
+
+TEST(mat_expression, mat_trans_gemm_add) {
+  auto mat =
+      mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
+
+  auto mat2 =
+      mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
+
+  auto mat3 = mgcpp::device_matrix<float>::from_list(
+      {{-1, -2, -3}, {-4, -5, -6}, {-7, -8, -9}});
+
+  auto expr = mgcpp::trans(mat) * mat2 + mat3;
+
+  mgcpp::device_matrix<float> result{};
+  EXPECT_NO_THROW({ result = expr.eval(); });
+
+  EXPECT_EQ(result.shape()[0], 3);
+  EXPECT_EQ(result.shape()[1], 3);
+
+  EXPECT_EQ(result.check_value(0, 0), 16);
+  EXPECT_EQ(result.check_value(0, 1), 20);
+  EXPECT_EQ(result.check_value(0, 2), 24);
+  EXPECT_EQ(result.check_value(1, 0), 18);
+  EXPECT_EQ(result.check_value(1, 1), 24);
+  EXPECT_EQ(result.check_value(1, 2), 30);
+  EXPECT_EQ(result.check_value(2, 0), 20);
+  EXPECT_EQ(result.check_value(2, 1), 28);
+  EXPECT_EQ(result.check_value(2, 2), 36);
 }
