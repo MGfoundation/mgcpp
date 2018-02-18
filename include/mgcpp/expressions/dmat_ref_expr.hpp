@@ -8,6 +8,9 @@ namespace mgcpp {
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
 struct dmat_ref_expr : dmat_expr<dmat_ref_expr<DenseMatrix, Type, DeviceId>> {
+  using value_type = Type;
+  using result_type = DenseMatrix;
+
   DenseMatrix const& _mat;
   inline dmat_ref_expr(DenseMatrix const& mat);
   inline DenseMatrix const& eval() const;

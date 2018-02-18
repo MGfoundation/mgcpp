@@ -16,7 +16,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     matrix A_mat({2, 4}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = A_mat * B_mat;
+    auto mult_expr = mgcpp::ref(A_mat) * mgcpp::ref(B_mat);
 
     matrix C_mat;
     EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
@@ -37,7 +37,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     matrix A_mat({2, 4}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = mgcpp::mult(A_mat, B_mat);
+    auto mult_expr = mgcpp::mult(mgcpp::ref(A_mat), mgcpp::ref(B_mat));
 
     matrix C_mat;
     EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
@@ -58,7 +58,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     matrix A_mat({2, 4}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = 1.0 * A_mat * B_mat;
+    auto mult_expr = 1.0 * mgcpp::ref(A_mat) * mgcpp::ref(B_mat);
 
     matrix C_mat;
     EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
@@ -79,7 +79,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     matrix A_mat({2, 4}, 2);
     matrix B_mat({4, 3}, 4);
 
-    auto mult_expr = A_mat * B_mat * 1.0;
+    auto mult_expr = mgcpp::ref(A_mat) * mgcpp::ref(B_mat) * 1.0;
 
     matrix C_mat;
     EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
@@ -103,7 +103,7 @@ TEST(mult_expr, dmat_dmat_add) {
   matrix B_mat({4, 3}, 4);
   matrix C_mat({2, 3}, 3);
 
-  auto add_expr = (A_mat * B_mat) + C_mat;
+  auto add_expr = (mgcpp::ref(A_mat) * mgcpp::ref(B_mat)) + mgcpp::ref(C_mat);
 
   matrix D_mat;
   EXPECT_NO_THROW({ D_mat = add_expr.eval(); });
@@ -125,7 +125,7 @@ TEST(mult_expr, scalar_dmat_mult) {
 
     matrix A_mat({2, 4}, 2);
 
-    auto expr = 7.0 * A_mat;
+    auto expr = 7.0 * mgcpp::ref(A_mat);
 
     matrix B_mat;
     EXPECT_NO_THROW({ B_mat = expr.eval(); });
@@ -171,7 +171,7 @@ TEST(mult_expr, scalar_dmat_mult) {
 
     matrix A_mat({2, 4}, std::complex<float>{1, 2});
 
-    auto expr = mgcpp::mult(7.0, A_mat);
+    auto expr = mgcpp::mult(7.0, mgcpp::ref(A_mat));
 
     matrix B_mat;
     EXPECT_NO_THROW({ B_mat = expr.eval(); });
@@ -193,7 +193,7 @@ TEST(mult_expr, scalar_dmat_mult) {
 
     matrix A_mat({2, 4}, std::complex<double>{1, 2});
 
-    auto expr = mgcpp::mult(A_mat, 7.0);
+    auto expr = mgcpp::mult(mgcpp::ref(A_mat), 7.0);
 
     matrix B_mat;
     EXPECT_NO_THROW({ B_mat = expr.eval(); });
@@ -215,7 +215,7 @@ TEST(mat_expression, mat_trans) {
   auto mat =
       mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
 
-  auto expr = mgcpp::trans(mat);
+  auto expr = mgcpp::trans(mgcpp::ref(mat));
   mgcpp::device_matrix<float> result{};
   EXPECT_NO_THROW({ result = expr.eval(); });
   EXPECT_EQ(result.shape()[0], 3);
@@ -238,7 +238,7 @@ TEST(mat_expression, mat_trans_gemm_add) {
   auto mat3 = mgcpp::device_matrix<float>::from_list(
       {{-1, -2, -3}, {-4, -5, -6}, {-7, -8, -9}});
 
-  auto expr = mgcpp::trans(mat) * mat2 + mat3;
+  auto expr = mgcpp::trans(mgcpp::ref(mat)) * mgcpp::ref(mat2) + mgcpp::ref(mat3);
 
   mgcpp::device_matrix<float> result{};
   EXPECT_NO_THROW({ result = expr.eval(); });

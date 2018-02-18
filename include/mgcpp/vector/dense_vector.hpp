@@ -12,8 +12,7 @@
 
 namespace mgcpp {
 template <typename DenseVecType, typename Type, size_t DeviceId>
-class dense_vector : public vector_base<DenseVecType, Type, DeviceId>,
-                     public dvec_expr<DenseVecType> {};
+class dense_vector : public vector_base<DenseVecType, Type, DeviceId> {};
 }  // namespace mgcpp
 
 #endif

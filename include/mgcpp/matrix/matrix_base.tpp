@@ -6,4 +6,15 @@
 
 #include <mgcpp/matrix/matrix_base.hpp>
 
-namespace mgcpp {}
+namespace mgcpp {
+template <typename MatrixType, typename Type, size_t DeviceId>
+MatrixType const& matrix_base<MatrixType, Type, DeviceId>::operator~() const
+    noexcept {
+  return *static_cast<MatrixType const*>(this);
+};
+
+template <typename MatrixType, typename Type, size_t DeviceId>
+MatrixType& matrix_base<MatrixType, Type, DeviceId>::operator~() noexcept {
+  return *static_cast<MatrixType*>(this);
+};
+}

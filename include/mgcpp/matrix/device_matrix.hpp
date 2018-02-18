@@ -86,7 +86,7 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
   inline device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);
 
   template <typename DenseMatrix>
-  inline device_matrix(dense_matrix<DenseMatrix, Type, DeviceId> const& other);
+  inline explicit device_matrix(dense_matrix<DenseMatrix, Type, DeviceId> const& other);
 
   inline device_matrix(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
 

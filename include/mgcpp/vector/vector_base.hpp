@@ -11,7 +11,11 @@
 
 namespace mgcpp {
 template <typename VectorType, typename Type, size_t DeviceId>
-struct vector_base {};
+struct vector_base {
+  inline VectorType const& operator~() const noexcept;
+
+  inline VectorType& operator~() noexcept;
+};
 }  // namespace mgcpp
 
 #include <mgcpp/vector/vector_base.tpp>

@@ -18,7 +18,7 @@ TEST(lv2_expr, mat_vec_mult) {
       {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}});  // (4, 3)
   vector v({1, 2, 3});
 
-  auto mult_expr = M * v;
+  auto mult_expr = mgcpp::ref(M) * mgcpp::ref(v);
 
   vector result;
   EXPECT_NO_THROW({ result = mult_expr.eval(); });

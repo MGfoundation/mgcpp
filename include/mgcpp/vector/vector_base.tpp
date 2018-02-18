@@ -6,4 +6,15 @@
 
 #include <mgcpp/vector/vector_base.hpp>
 
-namespace mgcpp {}
+namespace mgcpp {
+template <typename VectorType, typename Type, size_t DeviceId>
+VectorType const& vector_base<VectorType, Type, DeviceId>::operator~() const
+    noexcept {
+  return *static_cast<VectorType const*>(this);
+};
+
+template <typename VectorType, typename Type, size_t DeviceId>
+VectorType& vector_base<VectorType, Type, DeviceId>::operator~() noexcept {
+  return *static_cast<VectorType*>(this);
+};
+}

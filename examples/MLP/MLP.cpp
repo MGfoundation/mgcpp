@@ -70,7 +70,7 @@ int main() {
   };
   // clang-format on
   Layer<28 * 28, 256, w1, b1> l_input;
-  auto y1 = l_input(input);
+  auto y1 = l_input(mgcpp::ref(input));
   Layer<256, 256, w2, b2> l_hidden;
   auto y2 = l_hidden(y1);
   Layer<256, 10, w3, b3> l_output;

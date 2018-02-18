@@ -7,9 +7,16 @@
 #ifndef _MGCPP_MATRIX_MATRIX_BASE_HPP_
 #define _MGCPP_MATRIX_MATRIX_BASE_HPP_
 
+#include <cstddef>
+
 namespace mgcpp {
-template <typename MatrixType>
-struct matrix_base {};
+template <typename MatrixType, typename Type, size_t DeviceId>
+struct matrix_base {
+  inline MatrixType const& operator~() const noexcept;
+
+  inline MatrixType& operator~() noexcept;
+};
 }  // namespace mgcpp
 
+#include <mgcpp/matrix/matrix_base.tpp>
 #endif
