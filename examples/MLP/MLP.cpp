@@ -13,36 +13,19 @@
 #include <mgcpp/operations/trans.hpp>
 #include <mgcpp/mgcpp.hpp>
 
-#include "model.h"
+//#include "model.h"
 
-template <size_t NIn, size_t NOut, float (&Weights)[NIn][NOut], float (&Bias)[NOut]>
-struct Layer {
-  using matrix = mgcpp::device_matrix<float>;
-  using vector = mgcpp::device_vector<float>;
-  matrix W;
-  vector b;
+using vector = mgcpp::device_vector<float>;
+vector b;
 
-  Layer()
-  {
-      W = mgcpp::strict::trans(matrix::from_c_array(Weights));
-      b = vector(NOut, Bias);
-  }
-
-  template <typename T>
-  auto operator()(T const& input) {
-    return mgcpp::relu(W * input + b);
-  }
-};
+auto f ()
+{
+    return b + b + b + b + b + b + b;
+}
 
 int main() {
-  mgcpp::device_vector<float> input(28 * 28);
-  Layer<28*28, 256, w1, b1> l_input;
-  auto y1 = l_input(input);
-  Layer<256, 256, w2, b2> l_hidden;
-  auto y2 = l_hidden(y1);
-  Layer<256, 10, w3, b3> l_output;
-  auto result = l_output(y2);
-  auto ans = result.eval();
-  for (int i = 0; i < 10; ++i)
-      std::cout << i << ": " << ans.check_value(i) << std::endl;
+  b = vector(256);
+  auto y1 = f();
+
+  auto ans = mgcpp::eval(y1);
 }

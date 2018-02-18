@@ -19,8 +19,8 @@ namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_add_subgraph_matcher(
     dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr) {
-  auto const& lhs = mgcpp::eval(expr._lhs);
-  auto const& rhs = mgcpp::eval(expr._rhs);
+  auto lhs = mgcpp::eval(expr._lhs);
+  auto rhs = mgcpp::eval(expr._rhs);
 
   return strict::add(lhs, rhs);
 }
