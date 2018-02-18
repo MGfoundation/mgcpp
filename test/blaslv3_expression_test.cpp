@@ -210,3 +210,17 @@ TEST(mult_expr, scalar_dmat_mult) {
     }
   }
 }
+
+TEST(mat_expression, mat_trans) {
+  auto mat =
+      mgcpp::device_matrix<float>::from_list({{-1, -2, -3}, {-4, -5, -6}});
+
+  auto expr = mgcpp::trans(mat);
+  mgcpp::device_matrix<float> result{};
+  EXPECT_NO_THROW({ result = expr.eval(); });
+  EXPECT_EQ(result.shape()[0], 3);
+  EXPECT_EQ(result.shape()[1], 2);
+  EXPECT_EQ(result.check_value(0, 0), -1); EXPECT_EQ(result.check_value(0, 1), -4);
+  EXPECT_EQ(result.check_value(1, 0), -2); EXPECT_EQ(result.check_value(1, 1), -5);
+  EXPECT_EQ(result.check_value(2, 0), -3); EXPECT_EQ(result.check_value(2, 1), -6);
+}

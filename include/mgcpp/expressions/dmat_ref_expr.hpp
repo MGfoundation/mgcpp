@@ -2,7 +2,7 @@
 #define _MGCPP_EXPRESSIONS_DMAT_REF_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/matrix/dense_matrix.hpp>
+#include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 
