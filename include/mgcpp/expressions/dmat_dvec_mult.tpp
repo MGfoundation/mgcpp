@@ -1,5 +1,10 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/mult.hpp>
 
 namespace mgcpp {
@@ -15,10 +20,16 @@ inline decltype(auto) dmat_dvec_mult_subgraph_matcher(
 }  // namespace internal
 
 template <typename MatExpr, typename VecExpr>
-dmat_dvec_mult_expr<MatExpr, VecExpr>::dmat_dvec_mult_expr(
+inline dmat_dvec_mult_expr<MatExpr, VecExpr>::dmat_dvec_mult_expr(
     MatExpr const& mat,
     VecExpr const& vec) noexcept
     : _mat(mat), _vec(vec) {}
+
+template <typename MatExpr, typename VecExpr>
+inline dmat_dvec_mult_expr<MatExpr, VecExpr>::dmat_dvec_mult_expr(
+    MatExpr&& mat,
+    VecExpr&& vec) noexcept
+    : _mat(std::move(mat)), _vec(std::move(vec)) {}
 
 template <typename MatExpr, typename VecExpr>
 inline typename dmat_dvec_mult_expr<MatExpr, VecExpr>::result_type

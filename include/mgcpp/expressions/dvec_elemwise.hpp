@@ -19,9 +19,10 @@ struct dvec_elemwise_expr
 
   using result_type = typename expr_type::result_type;
 
-  Expr const& _expr;
+  Expr _expr;
 
-  inline dvec_elemwise_expr(Expr const& expr) noexcept;
+  inline explicit dvec_elemwise_expr(Expr const& expr) noexcept;
+  inline explicit dvec_elemwise_expr(Expr&& expr) noexcept;
 
   inline decltype(auto) eval() const;
 };
@@ -57,5 +58,4 @@ template <typename Expr>
 inline decltype(auto) relu(dvec_expr<Expr> const& expr) noexcept;
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dvec_elemwise.tpp>
 #endif

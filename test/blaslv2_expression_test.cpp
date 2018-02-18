@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/expressions/dmat_dvec_mult.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
 

@@ -6,9 +6,8 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/expressions/dmat_dmat_add.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
-#include <mgcpp/expressions/dvec_elemwise.hpp>
 
 #include <cmath>
 

@@ -7,7 +7,6 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
@@ -66,10 +65,16 @@ inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
 }  // namespace internal
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_mult_expr<LhsExpr, RhsExpr>::dmat_dmat_mult_expr(
+inline dmat_dmat_mult_expr<LhsExpr, RhsExpr>::dmat_dmat_mult_expr(
     LhsExpr const& lhs,
     RhsExpr const& rhs) noexcept
     : _lhs(lhs), _rhs(rhs) {}
+
+template <typename LhsExpr, typename RhsExpr>
+inline dmat_dmat_mult_expr<LhsExpr, RhsExpr>::dmat_dmat_mult_expr(
+    LhsExpr&& lhs,
+    RhsExpr&& rhs) noexcept
+    : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
 
 template <typename LhsExpr, typename RhsExpr>
 typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type

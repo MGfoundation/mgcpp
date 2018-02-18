@@ -7,6 +7,10 @@
 #ifndef _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
 #define _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+
 namespace mgcpp {
 template <typename Type>
 struct expression {

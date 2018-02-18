@@ -18,10 +18,11 @@ struct dmat_dmat_add_expr
 
   using result_type = typename lhs_expr_type::result_type;
 
-  LhsExpr const& _lhs;
-  RhsExpr const& _rhs;
+  LhsExpr _lhs;
+  RhsExpr _rhs;
 
   inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
+  inline dmat_dmat_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
   inline decltype(auto) eval() const;
 };
@@ -40,5 +41,4 @@ inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
     dmat_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dmat_dmat_add.tpp>
 #endif

@@ -23,5 +23,4 @@ inline dmat_dmat_add_expr<LhsExpr, RhsExpr> sub(
 
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dmat_dmat_sub.tpp>
 #endif

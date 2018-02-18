@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_elemwise.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/elemwise.hpp>
 
 namespace mgcpp {
@@ -16,6 +15,13 @@ template <typename Expr,
 dvec_elemwise_expr<Expr, VectorType, Function>::dvec_elemwise_expr(
     Expr const& expr) noexcept
     : _expr(expr) {}
+
+template <typename Expr,
+          typename VectorType,
+          VectorType (*Function)(typename VectorType::parent_type const& vec)>
+dvec_elemwise_expr<Expr, VectorType, Function>::dvec_elemwise_expr(
+    Expr&& expr) noexcept
+    : _expr(std::move(expr)) {}
 
 template <typename Expr,
           typename VectorType,

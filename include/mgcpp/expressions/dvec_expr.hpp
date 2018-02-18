@@ -13,14 +13,15 @@
 
 #include <cstdlib>
 #include <utility>
+#include <string>
 
 namespace mgcpp {
 template <typename Expr>
 struct dvec_expr : public expression<Expr> {};
 
-template <typename DenseMatrix, typename Type, size_t DeviceId>
+template <typename DenseVector, typename Type, size_t DeviceId>
 inline decltype(auto) eval(
-    dense_vector<DenseMatrix, Type, DeviceId> const& device_vec);
+    dense_vector<DenseVector, Type, DeviceId> const& device_vec);
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/dvec_expr.tpp>

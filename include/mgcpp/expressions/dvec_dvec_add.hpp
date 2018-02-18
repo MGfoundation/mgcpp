@@ -18,10 +18,11 @@ struct dvec_dvec_add_expr
 
   using result_type = typename lhs_expr_type::result_type;
 
-  LhsExpr const& _lhs;
-  RhsExpr const& _rhs;
+  LhsExpr _lhs;
+  RhsExpr _rhs;
 
   inline dvec_dvec_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
+  inline dvec_dvec_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
   inline decltype(auto) eval() const;
 };
@@ -40,5 +41,4 @@ inline dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
     dvec_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dvec_dvec_add.tpp>
 #endif  // _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_

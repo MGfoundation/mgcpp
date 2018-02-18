@@ -9,5 +9,6 @@
 
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
+#include <mgcpp/expressions/forward.hpp>
 
 #endif

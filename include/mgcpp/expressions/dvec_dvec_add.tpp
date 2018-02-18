@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
-#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/operations/add.hpp>
 
 namespace mgcpp {
@@ -14,6 +13,12 @@ dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
     LhsExpr const& lhs,
     RhsExpr const& rhs) noexcept
     : _lhs(lhs), _rhs(rhs) {}
+
+template <typename LhsExpr, typename RhsExpr>
+dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
+    LhsExpr&& lhs,
+    RhsExpr&& rhs) noexcept
+    : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
 
 template <typename LhsExpr, typename RhsExpr>
 decltype(auto) dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {

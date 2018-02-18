@@ -6,9 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/expressions/dmat_dmat_add.hpp>
-#include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
 
 TEST(mult_expr, dmat_dmat_mult) {

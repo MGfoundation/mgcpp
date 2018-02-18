@@ -19,10 +19,11 @@ struct dmat_dvec_mult_expr
 
   using result_type = typename rhs_expr_type::result_type;
 
-  MatExpr const& _mat;
-  VecExpr const& _vec;
+  MatExpr _mat;
+  VecExpr _vec;
 
   inline dmat_dvec_mult_expr(MatExpr const& mat, VecExpr const& vec) noexcept;
+  inline dmat_dvec_mult_expr(MatExpr&& mat, VecExpr&& vec) noexcept;
 
   inline result_type eval() const;
 };
@@ -42,5 +43,4 @@ inline dmat_dvec_mult_expr<MatExpr, VecExpr> mult(
     dvec_expr<VecExpr> const& vec) noexcept;
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dmat_dvec_mult.tpp>
 #endif
