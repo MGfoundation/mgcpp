@@ -20,7 +20,7 @@ template <typename ADense,
 decltype(auto) strict::gemm(dense_matrix<ADense, Type, DeviceId> const& A,
                             dense_matrix<BDense, Type, DeviceId> const& B,
                             dense_matrix<CDense, Type, DeviceId> const& C) {
-  return strict::gemm(Type(1), A, B, Type(B), C);
+  return strict::gemm(Type(1), A, B, Type(1), C);
 }
 
 template <typename ADense,
