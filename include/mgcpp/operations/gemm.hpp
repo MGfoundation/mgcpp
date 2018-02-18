@@ -36,7 +36,7 @@ inline decltype(auto) gemm(dense_matrix<ADense, Type, DeviceId> const& A,
  * \param alpha scalar constant to multiply to A
  * \param A left-hand side matrix operand
  * \param B right-hand side matrix operand
- * \param beta scalar constant to multiply to B
+ * \param beta scalar constant to multiply to C
  * \param C matrix to add after the multiplication
  * \returns alpha * A * B + beta * C
  */
@@ -61,7 +61,7 @@ inline decltype(auto) gemm(ScalarAlpha alpha,
  * \param alpha scalar constant to multiply to A
  * \param A left-hand side matrix operand
  * \param B right-hand side matrix operand
- * \param beta scalar constant to multiply to B
+ * \param beta scalar constant to multiply to C
  * \param C matrix to add after the multiplication. It is moved instead of
  * copied.
  * \returns alpha * A * B + beta * C
@@ -96,7 +96,7 @@ enum class trans_mode {
  * strict::trans_mode::conj_trans.
  * \param A left-hand side matrix operand
  * \param B right-hand side matrix operand
- * \param beta scalar constant to multiply to B
+ * \param beta scalar constant to multiply to C
  * \param mode_B transposition mode to apply to B before the operation. The
  * accepted values are the same as mode_A.
  * \param C matrix to add after the multiplication.
@@ -114,10 +114,10 @@ template <
                                        is_scalar<ScalarBeta>::value>::type>
 inline decltype(auto) gemm(ScalarAlpha alpha,
                            trans_mode mode_A,
+                           trans_mode mode_B,
                            dense_matrix<ADense, Type, DeviceId> const& A,
                            dense_matrix<BDense, Type, DeviceId> const& B,
                            ScalarBeta beta,
-                           trans_mode mode_B,
                            dense_matrix<CDense, Type, DeviceId> const& C);
 
 /**
@@ -128,7 +128,7 @@ inline decltype(auto) gemm(ScalarAlpha alpha,
  * strict::trans_mode::conj_trans.
  * \param A left-hand side matrix operand
  * \param B right-hand side matrix operand
- * \param beta scalar constant to multiply to B
+ * \param beta scalar constant to multiply to C
  * \param mode_B transposition mode to apply to B before the operation. The
  * accepted values are the same as mode_A.
  * \param C matrix to add after the multiplication. It is moved instead of
@@ -147,10 +147,10 @@ template <
                                        is_scalar<ScalarBeta>::value>::type>
 inline decltype(auto) gemm(ScalarAlpha alpha,
                            trans_mode mode_A,
+                           trans_mode mode_B,
                            dense_matrix<ADense, Type, DeviceId> const& A,
                            dense_matrix<BDense, Type, DeviceId> const& B,
                            ScalarBeta beta,
-                           trans_mode mode_B,
                            dense_matrix<CDense, Type, DeviceId>&& C);
 }  // namespace strict
 }  // namespace mgcpp

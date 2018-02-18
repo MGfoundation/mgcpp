@@ -36,7 +36,7 @@ decltype(auto) strict::gemm(ScalarAlpha alpha,
                             dense_matrix<BDense, Type, DeviceId> const& B,
                             ScalarBeta beta,
                             dense_matrix<CDense, Type, DeviceId> const& C) {
-  return strict::gemm(alpha, trans_mode::same, A, B, beta, trans_mode::same, C);
+  return strict::gemm(alpha, trans_mode::same, trans_mode::same, A, B, beta, C);
 }
 
 template <typename ADense,
@@ -52,7 +52,7 @@ decltype(auto) strict::gemm(ScalarAlpha alpha,
                             dense_matrix<BDense, Type, DeviceId> const& B,
                             ScalarBeta beta,
                             dense_matrix<CDense, Type, DeviceId>&& C) {
-  return strict::gemm(alpha, trans_mode::same, A, B, beta, trans_mode::same, std::move(C));
+  return strict::gemm(alpha, trans_mode::same, trans_mode::same, A, B, beta, std::move(C));
 }
 
 template <typename ADense,
@@ -66,10 +66,10 @@ template <typename ADense,
 inline decltype(auto) strict::gemm(
     ScalarAlpha alpha,
     trans_mode mode_A,
+        trans_mode mode_B,
     dense_matrix<ADense, Type, DeviceId> const& A,
     dense_matrix<BDense, Type, DeviceId> const& B,
     ScalarBeta beta,
-    trans_mode mode_B,
     dense_matrix<CDense, Type, DeviceId> const& C) {
   using device_pointer = typename ADense::device_pointer;
   using allocator_type = typename ADense::allocator_type;
@@ -137,10 +137,10 @@ template <typename ADense,
 inline decltype(auto) strict::gemm(
     ScalarAlpha alpha,
     trans_mode mode_A,
+        trans_mode mode_B,
     dense_matrix<ADense, Type, DeviceId> const& A,
     dense_matrix<BDense, Type, DeviceId> const& B,
     ScalarBeta beta,
-    trans_mode mode_B,
     dense_matrix<CDense, Type, DeviceId>&& C) {
   using device_pointer = typename ADense::device_pointer;
 
