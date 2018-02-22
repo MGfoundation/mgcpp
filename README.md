@@ -12,7 +12,10 @@
 
 ![logo](https://github.com/MGfoundation/mgcpp/blob/master/docs/logo.png)
 
-# mgcpp [![Build Status](https://travis-ci.org/MGfoundation/mgcpp.svg?branch=master)](https://travis-ci.org/MGfoundation/mgcpp)
+# mgcpp
+[![Build Status](https://travis-ci.org/MGfoundation/mgcpp.svg?branch=master)](https://travis-ci.org/MGfoundation/mgcpp)
+[![Documentation](https://codedocs.xyz/MGfoundation/mgcpp.svg)](https://codedocs.xyz/MGfoundation/mgcpp/)
+
 <a id="org9dd78d2"></a>
 
 ## Introduction
