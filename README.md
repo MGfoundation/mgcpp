@@ -10,6 +10,8 @@
 
 <a id="org8251436"></a>
 
+[logo](https://github.com/MGfoundation/mgcpp/blob/master/docs/logo.png)
+
 # mgcpp [![Build Status](https://travis-ci.org/MGfoundation/mgcpp.svg?branch=master)](https://travis-ci.org/MGfoundation/mgcpp)
 <a id="org9dd78d2"></a>
 
