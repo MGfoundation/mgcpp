@@ -16,12 +16,6 @@ decltype(auto) dmat_trans_expr<Expr>::eval() const
 }
 
 template <typename Expr>
-inline decltype(auto) eval(dmat_trans_expr<Expr> const& expr)
-{
-    return expr.eval();
-}
-
-template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept
 {
     return dmat_trans_expr<Expr>(~expr);

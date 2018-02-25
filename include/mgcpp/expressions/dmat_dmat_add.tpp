@@ -143,12 +143,6 @@ decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-typename dmat_dmat_add_expr<LhsExpr, RhsExpr>::result_type eval(
-    dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr) {
-  return expr.eval();
-}
-
-template <typename LhsExpr, typename RhsExpr>
 dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {

@@ -12,16 +12,12 @@
 #include <mgcpp/vector/forward.hpp>
 
 #include <cstdlib>
-#include <utility>
 #include <string>
+#include <utility>
 
 namespace mgcpp {
 template <typename Expr>
 struct dvec_expr : public expression<Expr> {};
-
-template <typename DenseVector, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dense_vector<DenseVector, Type, DeviceId> const& device_vec);
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/dvec_expr.tpp>

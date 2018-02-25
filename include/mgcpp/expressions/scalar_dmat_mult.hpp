@@ -33,10 +33,6 @@ struct scalar_dmat_mult_expr
   inline result_type eval() const;
 };
 
-template <typename ScalExpr, typename DMatExpr>
-inline typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
-    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr);
-
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>

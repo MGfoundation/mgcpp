@@ -20,9 +20,6 @@ struct dmat_trans_expr : public dmat_expr<dmat_trans_expr<Expr>> {
 };
 
 template <typename Expr>
-inline decltype(auto) eval(dmat_trans_expr<Expr> const& expr);
-
-template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;
 }
 

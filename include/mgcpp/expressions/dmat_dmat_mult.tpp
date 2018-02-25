@@ -83,12 +83,6 @@ dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval() const {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) eval(
-    dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
-  return expr.eval();
-}
-
-template <typename LhsExpr, typename RhsExpr>
 dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {

@@ -28,9 +28,6 @@ struct dmat_dmat_add_expr
 };
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr);
-
-template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;

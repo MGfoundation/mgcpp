@@ -28,9 +28,6 @@ struct dvec_dvec_add_expr
 };
 
 template <typename LhsExpr, typename RhsExpr>
-inline decltype(auto) eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr);
-
-template <typename LhsExpr, typename RhsExpr>
 inline dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;

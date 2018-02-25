@@ -20,6 +20,12 @@ struct expression {
     return *static_cast<Type const*>(this);
   }
 };
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr) {
+  return (~expr).eval();
+}
+
 }  // namespace mgcpp
 
 #endif

@@ -15,12 +15,6 @@ inline DenseMatrix const& dmat_ref_expr<DenseMatrix, Type, DeviceId>::eval()
 }
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dmat_ref_expr<DenseMatrix, Type, DeviceId> const& mat) {
-  return mat.eval();
-}
-
-template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix, Type, DeviceId> ref(
     dense_matrix<DenseMatrix, Type, DeviceId> const& mat) {
   return dmat_ref_expr<DenseMatrix, Type, DeviceId>(~mat);

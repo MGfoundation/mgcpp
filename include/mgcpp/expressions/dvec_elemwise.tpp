@@ -30,14 +30,6 @@ decltype(auto) dvec_elemwise_expr<Expr, VectorType, Function>::eval() const {
   return Function(mgcpp::eval(_expr));
 }
 
-template <typename Expr,
-          typename VectorType,
-          VectorType (*Function)(typename VectorType::parent_type const& vec)>
-inline decltype(auto) eval(
-    dvec_elemwise_expr<Expr, VectorType, Function> const& expr) {
-  return expr.eval();
-}
-
 template <typename Expr>
 inline decltype(auto) abs(dvec_expr<Expr> const& expr) noexcept {
   using VectorType = typename std::decay<Expr>::type::result_type;

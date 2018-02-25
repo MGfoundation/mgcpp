@@ -29,12 +29,6 @@ scalar_dmat_mult_expr<ScalExpr, DMatExpr>::eval() const {
   return strict::mult(scal, dmat);
 }
 
-template <typename ScalExpr, typename DMatExpr>
-typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type eval(
-    scalar_dmat_mult_expr<ScalExpr, DMatExpr> const& expr) {
-  return expr.eval();
-}
-
 template <typename Scalar, typename DMatExpr, typename>
 scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
     Scalar const& scalar,

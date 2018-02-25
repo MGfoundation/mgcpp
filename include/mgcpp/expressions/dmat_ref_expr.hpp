@@ -17,10 +17,6 @@ struct dmat_ref_expr : dmat_expr<dmat_ref_expr<DenseMatrix, Type, DeviceId>> {
 };
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dmat_ref_expr<DenseMatrix, Type, DeviceId> const& mat);
-
-template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix, Type, DeviceId> ref(
     dense_matrix<DenseMatrix, Type, DeviceId> const& mat);
 }

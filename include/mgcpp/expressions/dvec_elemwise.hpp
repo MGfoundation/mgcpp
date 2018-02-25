@@ -27,12 +27,6 @@ struct dvec_elemwise_expr
   inline decltype(auto) eval() const;
 };
 
-template <typename Expr,
-          typename VectorType,
-          VectorType (*Function)(typename VectorType::parent_type const& vec)>
-inline decltype(auto) eval(
-    dvec_elemwise_expr<Expr, VectorType, Function> const& expr);
-
 template <typename Expr>
 inline decltype(auto) abs(dvec_expr<Expr> const& expr) noexcept;
 

@@ -17,10 +17,6 @@
 namespace mgcpp {
 template <typename Expr>
 struct dmat_expr : public expression<Expr> {};
-
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dense_matrix<DenseMatrix, Type, DeviceId> const& device_mat);
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/dmat_expr.tpp>

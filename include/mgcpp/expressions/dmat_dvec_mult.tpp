@@ -38,12 +38,6 @@ dmat_dvec_mult_expr<MatExpr, VecExpr>::eval() const {
 }
 
 template <typename MatExpr, typename VecExpr>
-inline typename dmat_dvec_mult_expr<MatExpr, VecExpr>::result_type eval(
-    dmat_dvec_mult_expr<MatExpr, VecExpr> const& expr) {
-  return expr.eval();
-}
-
-template <typename MatExpr, typename VecExpr>
 inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept {

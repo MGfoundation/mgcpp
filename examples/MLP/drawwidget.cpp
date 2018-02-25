@@ -62,7 +62,7 @@ void DrawWidget::predict() {
   mgcpp::device_vector<float> input(28 * 28, data.data());
 
   Layer<28 * 28, 200, w1, b1> l_input;
-  auto y1 = mgcpp::relu(l_input(mgcpp::ref(input)));
+  auto y1 = mgcpp::relu(l_input(ref(input)));
 
   Layer<200, 100, w2, b2> l_hidden1;
   auto y2 = mgcpp::relu(l_hidden1(y1));

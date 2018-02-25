@@ -17,10 +17,6 @@ struct dvec_ref_expr : dvec_expr<dvec_ref_expr<DenseVector, Type, DeviceId>> {
 };
 
 template <typename DenseVector, typename Type, size_t DeviceId>
-inline decltype(auto) eval(
-    dvec_ref_expr<DenseVector, Type, DeviceId> const& vec);
-
-template <typename DenseVector, typename Type, size_t DeviceId>
 inline dvec_ref_expr<DenseVector, Type, DeviceId> ref(
     dense_vector<DenseVector, Type, DeviceId> const& vec);
 }
