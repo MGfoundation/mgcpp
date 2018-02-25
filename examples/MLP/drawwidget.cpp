@@ -9,6 +9,8 @@
 #include <mgcpp/mgcpp.hpp>
 #include <mgcpp/operations/trans.hpp>
 
+#include <chrono>
+
 template <size_t NIn,
           size_t NOut,
           float (&Weights)[NIn][NOut],
@@ -76,10 +78,10 @@ void DrawWidget::predict() {
   auto output = result.eval();
 
   std::vector<float> pr(10);
-  for (int i = 0; i < 10; ++i)
-    pr[i] = output.check_value(i);
+  output.copy_to_host(pr.data());
 
   int answer = std::max_element(pr.begin(), pr.end()) - pr.begin();
+
   emit predictNumber(answer);
 }
 
