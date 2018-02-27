@@ -53,42 +53,36 @@ TEST(add_expr, row_major_mat_mat_add_func) {
   }
 }
 
-TEST(elemwise_expr, abs_expr)
-{
-    using vector = mgcpp::device_vector<float>;
+TEST(elemwise_expr, abs_expr) {
+  using vector = mgcpp::device_vector<float>;
 
-    vector v{1, -2, 3, -4, 5};
-    auto abs_expr = mgcpp::abs(mgcpp::ref(v));
+  vector v{1, -2, 3, -4, 5};
+  auto abs_expr = mgcpp::abs(mgcpp::ref(v));
 
-    vector result;
-    EXPECT_NO_THROW({ result = abs_expr.eval(); });
+  vector result;
+  EXPECT_NO_THROW({ result = abs_expr.eval(); });
 
-    EXPECT_EQ(result.shape(), 5);
+  EXPECT_EQ(result.shape(), 5);
 
-    float expected[] = {1, 2, 3, 4, 5};
-    for (size_t i = 0; i < result.shape(); ++i)
-        EXPECT_FLOAT_EQ(result.check_value(i), expected[i]) << "i : " << i;
+  float expected[] = {1, 2, 3, 4, 5};
+  for (size_t i = 0; i < result.shape(); ++i)
+    EXPECT_FLOAT_EQ(result.check_value(i), expected[i]) << "i : " << i;
 }
 
-TEST(elemwise_expr, sin_expr)
-{
-    using vector = mgcpp::device_vector<float>;
+TEST(elemwise_expr, sin_expr) {
+  using vector = mgcpp::device_vector<float>;
 
-    vector v{1, -2, 3, -4, 5};
-    auto sin_expr = mgcpp::sin(mgcpp::ref(v));
+  vector v{1, -2, 3, -4, 5};
+  auto sin_expr = mgcpp::sin(mgcpp::ref(v));
 
-    vector result;
-    EXPECT_NO_THROW({ result = sin_expr.eval(); });
+  vector result;
+  EXPECT_NO_THROW({ result = sin_expr.eval(); });
 
-    EXPECT_EQ(result.shape(), 5);
+  EXPECT_EQ(result.shape(), 5);
 
-    float expected[] = {
-        float(std::sin( 1)),
-        float(std::sin(-2)),
-        float(std::sin( 3)),
-        float(std::sin(-4)),
-        float(std::sin( 5))
-    };
-    for (size_t i = 0; i < result.shape(); ++i)
-        EXPECT_FLOAT_EQ(result.check_value(i), expected[i]) << "i : " << i;
+  float expected[] = {float(std::sin(1)), float(std::sin(-2)),
+                      float(std::sin(3)), float(std::sin(-4)),
+                      float(std::sin(5))};
+  for (size_t i = 0; i < result.shape(); ++i)
+    EXPECT_FLOAT_EQ(result.check_value(i), expected[i]) << "i : " << i;
 }

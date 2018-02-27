@@ -17,4 +17,4 @@ template <typename VectorType, typename Type, size_t DeviceId>
 VectorType& vector_base<VectorType, Type, DeviceId>::operator~() noexcept {
   return *static_cast<VectorType*>(this);
 };
-}
+}  // namespace mgcpp

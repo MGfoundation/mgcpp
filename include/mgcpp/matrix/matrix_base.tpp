@@ -17,4 +17,4 @@ template <typename MatrixType, typename Type, size_t DeviceId>
 MatrixType& matrix_base<MatrixType, Type, DeviceId>::operator~() noexcept {
   return *static_cast<MatrixType*>(this);
 };
-}
+}  // namespace mgcpp

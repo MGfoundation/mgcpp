@@ -1,8 +1,8 @@
 #ifndef _MGCPP_EXPRESSIONS_DMAT_TRANS_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_TRANS_EXPR_HPP_
 
-#include <mgcpp/matrix/forward.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
+#include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 template <typename Expr>
@@ -21,6 +21,6 @@ struct dmat_trans_expr : public dmat_expr<dmat_trans_expr<Expr>> {
 
 template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;
-}
+}  // namespace mgcpp
 
 #endif

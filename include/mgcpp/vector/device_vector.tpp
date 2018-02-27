@@ -165,11 +165,9 @@ device_vector<Type, DeviceId, Alloc>::device_vector(
 template <typename Type, size_t DeviceId, typename Alloc>
 template <size_t S>
 inline device_vector<Type, DeviceId, Alloc>
-device_vector<Type, DeviceId, Alloc>::from_c_array(
-    Type (&arr)[S],
-    Alloc const& alloc)
-{
-    return device_vector<Type, DeviceId, Alloc>(S, arr, alloc);
+device_vector<Type, DeviceId, Alloc>::from_c_array(Type (&arr)[S],
+                                                   Alloc const& alloc) {
+  return device_vector<Type, DeviceId, Alloc>(S, arr, alloc);
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>

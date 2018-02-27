@@ -238,7 +238,8 @@ TEST(mat_expression, mat_trans_gemm_add) {
   auto mat3 = mgcpp::device_matrix<float>::from_list(
       {{-1, -2, -3}, {-4, -5, -6}, {-7, -8, -9}});
 
-  auto expr = mgcpp::trans(mgcpp::ref(mat)) * mgcpp::ref(mat2) + mgcpp::ref(mat3);
+  auto expr =
+      mgcpp::trans(mgcpp::ref(mat)) * mgcpp::ref(mat2) + mgcpp::ref(mat3);
 
   mgcpp::device_matrix<float> result{};
   EXPECT_NO_THROW({ result = expr.eval(); });

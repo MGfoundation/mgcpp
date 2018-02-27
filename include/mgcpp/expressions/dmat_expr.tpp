@@ -6,5 +6,4 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 
-namespace mgcpp {
-}  // namespace mgcpp
+namespace mgcpp {}  // namespace mgcpp

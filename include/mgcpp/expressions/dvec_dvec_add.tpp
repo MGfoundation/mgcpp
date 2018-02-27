@@ -15,9 +15,8 @@ dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
     : _lhs(lhs), _rhs(rhs) {}
 
 template <typename LhsExpr, typename RhsExpr>
-dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
-    LhsExpr&& lhs,
-    RhsExpr&& rhs) noexcept
+dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(LhsExpr&& lhs,
+                                                         RhsExpr&& rhs) noexcept
     : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
 
 template <typename LhsExpr, typename RhsExpr>

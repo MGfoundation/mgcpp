@@ -1,7 +1,6 @@
 #include <mgcpp/expressions/dmat_ref_expr.hpp>
 
-namespace mgcpp
-{
+namespace mgcpp {
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix, Type, DeviceId>::dmat_ref_expr(
@@ -20,4 +19,4 @@ inline dmat_ref_expr<DenseMatrix, Type, DeviceId> ref(
   return dmat_ref_expr<DenseMatrix, Type, DeviceId>(~mat);
 }
 
-}
+}  // namespace mgcpp
