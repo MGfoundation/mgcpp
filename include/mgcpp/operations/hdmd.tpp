@@ -8,6 +8,7 @@
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/system/assert.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/operations/hdmd.hpp>
 
 namespace mgcpp {
 template <typename LhsDenseVec,
