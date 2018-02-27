@@ -17,6 +17,7 @@
 #include <mgcpp/matrix/row_view.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
+#include <mgcpp/type_traits/is_supported_type.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -29,7 +30,7 @@ template <typename Type,
 class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
                                           Type,
                                           DeviceId> {
-  static_assert(is_scalar<Type>::value, "Element type not supported.");
+  static_assert(is_supported_type<Type>::value, "Element type not supported.");
 
  public:
   using this_type = device_matrix<Type, DeviceId, Alloc>;
@@ -76,8 +77,9 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
       std::initializer_list<std::initializer_list<value_type>> const& array,
       Alloc const& alloc = Alloc());
 
-  template<size_t S1, size_t S2>
-  static inline device_matrix from_c_array(Type (&arr)[S1][S2], Alloc const& alloc = Alloc());
+  template <size_t S1, size_t S2>
+  static inline device_matrix from_c_array(Type (&arr)[S1][S2],
+                                           Alloc const& alloc = Alloc());
 
   template <typename HostMat, MGCPP_CONCEPT(adapter<HostMat>::value)>
   inline explicit device_matrix(HostMat const& host_mat,
@@ -86,7 +88,8 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
   inline device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);
 
   template <typename DenseMatrix>
-  inline explicit device_matrix(dense_matrix<DenseMatrix, Type, DeviceId> const& other);
+  inline explicit device_matrix(
+      dense_matrix<DenseMatrix, Type, DeviceId> const& other);
 
   inline device_matrix(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
 

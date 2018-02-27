@@ -8,24 +8,12 @@
 #define _MGCPP_TYPE_TRAITS_TYPE_TRAITS_HPP_
 
 #include <mgcpp/global/complex.hpp>
-#include <mgcpp/global/half_precision.hpp>
 #include <type_traits>
 
 namespace mgcpp {
 template <typename... Args>
 using void_t = void;
 
-template <typename T>
-struct is_scalar {
-  static const bool value =
-      std::is_same<T, float>::value || std::is_same<T, double>::value ||
-      std::is_same<T, complex<float>>::value ||
-      std::is_same<T, complex<double>>::value
-#ifdef USE_HALF
-      || std::is_same<T, half>::value || std::is_same<T, complex<half>>::value
-#endif
-      ;
-};
 }  // namespace mgcpp
 
 #endif

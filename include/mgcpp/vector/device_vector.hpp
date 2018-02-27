@@ -12,6 +12,7 @@
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
+#include <mgcpp/type_traits/is_supported_type.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
 
 #include <cstdlib>
@@ -24,7 +25,7 @@ template <typename Type,
 class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
                                           Type,
                                           DeviceId> {
-  static_assert(is_scalar<Type>::value, "Element type not supported.");
+  static_assert(is_supported_type<Type>::value, "Element type not supported.");
 
  public:
   using this_type = device_vector<Type, DeviceId, Alloc>;
@@ -74,7 +75,8 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   inline device_vector(device_vector<Type, DeviceId, Alloc> const& other);
 
   template <typename DenseVec>
-  inline explicit device_vector(dense_vector<DenseVec, Type, DeviceId> const& other);
+  inline explicit device_vector(
+      dense_vector<DenseVec, Type, DeviceId> const& other);
 
   inline device_vector(device_vector<Type, DeviceId, Alloc>&& other) noexcept;
 
