@@ -7,11 +7,11 @@
 // Example code for executing Multi-layer perception model
 // for the MNIST dataset.
 
-#include <vector>
 #include <algorithm>
-#include <cmath>
 #include <climits>
+#include <cmath>
 #include <cstdio>
+#include <vector>
 
 #include <QApplication>
 

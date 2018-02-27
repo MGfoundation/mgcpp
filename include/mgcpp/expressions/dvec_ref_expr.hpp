@@ -19,6 +19,6 @@ struct dvec_ref_expr : dvec_expr<dvec_ref_expr<DenseVector, Type, DeviceId>> {
 template <typename DenseVector, typename Type, size_t DeviceId>
 inline dvec_ref_expr<DenseVector, Type, DeviceId> ref(
     dense_vector<DenseVector, Type, DeviceId> const& vec);
-}
+}  // namespace mgcpp
 
 #endif

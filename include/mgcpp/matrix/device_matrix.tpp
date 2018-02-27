@@ -140,12 +140,10 @@ device_matrix<Type, DeviceId, Alloc>::from_c_array(Type (&arr)[S1][S2],
   Alloc allocator = alloc;
   pointer buffer = allocator.allocate(total_size);
 
-  for (size_t i = 0; i < S1; ++i)
-  {
-      for (size_t j = 0; j < S2; ++j)
-      {
-          buffer[i + shape[0] * j] = arr[i][j];
-      }
+  for (size_t i = 0; i < S1; ++i) {
+    for (size_t j = 0; j < S2; ++j) {
+      buffer[i + shape[0] * j] = arr[i][j];
+    }
   }
   device_matrix mat(shape, buffer, alloc);
 

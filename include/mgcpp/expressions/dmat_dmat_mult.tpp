@@ -7,11 +7,11 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/system/assert.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 namespace mgcpp {
 namespace internal {

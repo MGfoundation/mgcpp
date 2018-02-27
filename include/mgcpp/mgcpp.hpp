@@ -7,8 +7,8 @@
 #ifndef _MGCPP_MGCPP_HPP_
 #define _MGCPP_MGCPP_HPP_
 
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
 #include <mgcpp/vector/device_vector.hpp>
-#include <mgcpp/expressions/forward.hpp>
 
 #endif

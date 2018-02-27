@@ -18,4 +18,4 @@ inline dvec_ref_expr<DenseVector, Type, DeviceId> ref(
     dense_vector<DenseVector, Type, DeviceId> const& vec) {
   return dvec_ref_expr<DenseVector, Type, DeviceId>(~vec);
 }
-}
+}  // namespace mgcpp

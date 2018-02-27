@@ -9,8 +9,8 @@
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/system/assert.hpp>
@@ -67,16 +67,16 @@ inline decltype(auto) dmat_dmat_add_subgraph_matcher(
 template <typename AType, typename BType, typename CType>
 inline decltype(auto) dmat_dmat_add_subgraph_matcher(
     dmat_dmat_add_expr<CType, dmat_dmat_mult_expr<AType, BType>> const& expr) {
-    auto const& tA = get_trans_mode(expr._rhs._lhs);
-    auto A_trans_mode = tA.first;
-    auto const& A = mgcpp::eval(tA.second);
+  auto const& tA = get_trans_mode(expr._rhs._lhs);
+  auto A_trans_mode = tA.first;
+  auto const& A = mgcpp::eval(tA.second);
 
-    auto const& tB = get_trans_mode(expr._rhs._rhs);
-    auto B_trans_mode = tB.first;
-    auto const& B = mgcpp::eval(tB.second);
+  auto const& tB = get_trans_mode(expr._rhs._rhs);
+  auto B_trans_mode = tB.first;
+  auto const& B = mgcpp::eval(tB.second);
 
-    auto const& C = mgcpp::eval(expr._lhs);
-    return strict::gemm(1.0f, A_trans_mode, B_trans_mode, A, B, 1.0f, C);
+  auto const& C = mgcpp::eval(expr._lhs);
+  return strict::gemm(1.0f, A_trans_mode, B_trans_mode, A, B, 1.0f, C);
 }
 
 template <typename AlphaType, typename AType, typename BType, typename CType>
