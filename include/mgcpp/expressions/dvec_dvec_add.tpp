@@ -20,7 +20,8 @@ dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(LhsExpr&& lhs,
     : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
 
 template <typename LhsExpr, typename RhsExpr>
-decltype(auto) dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {
+typename dvec_dvec_add_expr<LhsExpr, RhsExpr>::result_type
+dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {
   auto const& lhs = mgcpp::eval(_lhs);
   auto const& rhs = mgcpp::eval(_rhs);
 

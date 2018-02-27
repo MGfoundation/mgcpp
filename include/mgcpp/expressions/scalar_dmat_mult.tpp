@@ -37,21 +37,21 @@ scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
 }
 
 template <typename Scalar, typename DMatExpr, typename>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
+scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& mat_expr,
     Scalar const& scalar) noexcept {
   return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>
-inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
+scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
     scalar_expr<ScalExpr> const& scalar,
     dmat_expr<DMatExpr> const& mat_expr) noexcept {
   return scalar_dmat_mult_expr<ScalExpr, DMatExpr>(~scalar, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>
-inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
+scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& mat_expr,
     scalar_expr<ScalExpr> const& scalar) noexcept {
   return scalar_dmat_mult_expr<ScalExpr, DMatExpr>(~scalar, ~mat_expr);
@@ -65,21 +65,21 @@ scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
 }
 
 template <typename Scalar, typename DMatExpr, typename>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
+scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_expr,
     Scalar const& scalar) noexcept {
   return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>
-inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
+scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
     scalar_expr<ScalExpr> const& scalar,
     dmat_expr<DMatExpr> const& mat_expr) noexcept {
   return scalar_dmat_mult_expr<ScalExpr, DMatExpr>(~scalar, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>
-inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
+scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_expr,
     scalar_expr<ScalExpr> const& scalar) noexcept {
   return scalar_dmat_mult_expr<ScalExpr, DMatExpr>(~scalar, ~mat_expr);

@@ -24,14 +24,24 @@ struct dmat_dmat_add_expr
   inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
   inline dmat_dmat_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
+  /** Evaluates the compuational graph starting from this expression.
+   */
   inline decltype(auto) eval() const;
 };
 
+/** Returns a dense matrix add expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
+/** Returns a dense matrix add expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,

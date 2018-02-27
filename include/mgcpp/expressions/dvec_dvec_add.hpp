@@ -24,14 +24,24 @@ struct dvec_dvec_add_expr
   inline dvec_dvec_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
   inline dvec_dvec_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
-  inline decltype(auto) eval() const;
+  /** Evaluates the compuational graph starting from this expression.
+   */
+  inline result_type eval() const;
 };
 
+/** Returns a dense vector addition expression.
+ * \param lhs the left-hand side dense vector
+ * \param rhs the right-hand side dense vector
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 
+/** Returns a dense vector addition expression.
+ * \param lhs the left-hand side dense vector
+ * \param rhs the right-hand side dense vector
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,

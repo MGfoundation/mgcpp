@@ -25,14 +25,24 @@ struct dmat_dvec_mult_expr
   inline dmat_dvec_mult_expr(MatExpr const& mat, VecExpr const& vec) noexcept;
   inline dmat_dvec_mult_expr(MatExpr&& mat, VecExpr&& vec) noexcept;
 
+  /** Evaluates the compuational graph starting from this expression.
+   */
   inline result_type eval() const;
 };
 
+/** Returns a dense matrix vector product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense vector
+ */
 template <typename MatExpr, typename VecExpr>
 inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept;
 
+/** Returns a dense matrix add expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense vector
+ */
 template <typename MatExpr, typename VecExpr>
 inline dmat_dvec_mult_expr<MatExpr, VecExpr> mult(
     dmat_expr<MatExpr> const& mat,

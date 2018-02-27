@@ -30,9 +30,15 @@ struct scalar_dmat_mult_expr
   inline scalar_dmat_mult_expr(ScalExpr&& scal_expr,
                                DMatExpr&& dmat_expr) noexcept;
 
+  /** Evaluates the compuational graph starting from this expression.
+   */
   inline result_type eval() const;
 };
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side scalar variable
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
@@ -40,6 +46,10 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& exp) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side scalar variable
+ */
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
@@ -47,16 +57,28 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& exp,
     Scalar const& scalar) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side scalar expression
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename ScalExpr, typename DMatExpr>
 inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
     scalar_expr<ScalExpr> const& scalar,
     dmat_expr<DMatExpr> const& exp) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side scalar expression
+ */
 template <typename ScalExpr, typename DMatExpr>
 inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& exp,
     scalar_expr<ScalExpr> const& scalar) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side scalar variable
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
@@ -64,6 +86,10 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& mat_exp) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side scalar variable
+ */
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
@@ -71,11 +97,19 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_exp,
     Scalar const& scalar) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side scalar expression
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename ScalExpr, typename DMatExpr>
 inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
     scalar_expr<ScalExpr> const& scalar,
     dmat_expr<DMatExpr> const& mat_exp) noexcept;
 
+/** Returns a scalar, dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side expression
+ */
 template <typename ScalExpr, typename DMatExpr>
 inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_exp,

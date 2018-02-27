@@ -24,14 +24,24 @@ struct dmat_dmat_mult_expr
   inline dmat_dmat_mult_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
   inline dmat_dmat_mult_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
 
+  /** Evaluates the compuational graph starting from this expression.
+   */
   inline result_type eval() const;
 };
 
+/** Returns a dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
+/** Returns a dense matrix product expression.
+ * \param lhs the left-hand side dense matrix
+ * \param rhs the right-hand side dense matrix
+ */
 template <typename LhsExpr, typename RhsExpr>
 inline dmat_dmat_mult_expr<LhsExpr, RhsExpr> mult(
     dmat_expr<LhsExpr> const& lhs,
