@@ -9,7 +9,7 @@
 
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
-#include <mgcpp/expressions/dvec_elemwise.hpp>
+#include <mgcpp/expressions/dvec_map.hpp>
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_sub.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
@@ -21,7 +21,7 @@
 
 #include <mgcpp/expressions/dvec_dvec_add.tpp>
 #include <mgcpp/expressions/dvec_ref_expr.tpp>
-#include <mgcpp/expressions/dvec_elemwise.tpp>
+#include <mgcpp/expressions/dvec_map.tpp>
 #include <mgcpp/expressions/dmat_dmat_add.tpp>
 #include <mgcpp/expressions/dmat_dmat_sub.tpp>
 #include <mgcpp/expressions/dmat_dmat_mult.tpp>

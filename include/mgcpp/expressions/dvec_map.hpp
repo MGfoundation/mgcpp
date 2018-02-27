@@ -15,7 +15,7 @@ template <
     typename Expr,
     typename Expr::result_type (*Function)(
         typename Expr::result_type::parent_type const& vec)>
-struct dvec_elemwise_expr : public dvec_expr<dvec_elemwise_expr<Expr, Function>>
+struct dvec_map_expr : public dvec_expr<dvec_map_expr<Expr, Function>>
 {
     using expr_type = typename std::decay<Expr>::type;
 
@@ -23,8 +23,8 @@ struct dvec_elemwise_expr : public dvec_expr<dvec_elemwise_expr<Expr, Function>>
 
     Expr _expr;
 
-    inline explicit dvec_elemwise_expr(Expr const& expr) noexcept;
-    inline explicit dvec_elemwise_expr(Expr&& expr) noexcept;
+    inline explicit dvec_map_expr(Expr const& expr) noexcept;
+    inline explicit dvec_map_expr(Expr&& expr) noexcept;
 
     inline decltype(auto) eval() const;
 };

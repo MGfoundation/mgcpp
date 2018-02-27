@@ -5,7 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/kernels/mgblas_lv1.hpp>
-#include <mgcpp/operations/elemwise.hpp>
+#include <mgcpp/operations/map.hpp>
 #include <mgcpp/system/exception.hpp>
 
 #include <cstdlib>
@@ -17,7 +17,7 @@ template <typename Type,
           typename DenseVec,
           size_t DeviceId>
 inline device_vector<Type, DeviceId, typename DenseVec::allocator_type>
-strict::elemwise(dense_vector<DenseVec, Type, DeviceId> const& vec) {
+strict::map(dense_vector<DenseVec, Type, DeviceId> const& vec) {
   using allocator_type = typename DenseVec::allocator_type;
 
   auto const& original_vec = ~vec;
@@ -43,7 +43,7 @@ template <typename Type,
           typename DenseMat,
           size_t DeviceId>
 inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
-strict::elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
+strict::map(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
 
   auto const& original_mat = ~mat;
@@ -66,81 +66,81 @@ strict::elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::abs(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vab>(vec);
+  return map<Type, mgblas_vab>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::abs(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vab>(mat);
+  return map<Type, mgblas_vab>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::sin(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vsin>(vec);
+  return map<Type, mgblas_vsin>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::sin(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vsin>(mat);
+  return map<Type, mgblas_vsin>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::cos(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vcos>(vec);
+  return map<Type, mgblas_vcos>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::cos(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vcos>(mat);
+  return map<Type, mgblas_vcos>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::tan(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vtan>(vec);
+  return map<Type, mgblas_vtan>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::tan(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vtan>(mat);
+  return map<Type, mgblas_vtan>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::sinh(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vsinh>(vec);
+  return map<Type, mgblas_vsinh>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::sinh(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vsinh>(mat);
+  return map<Type, mgblas_vsinh>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::cosh(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vcosh>(vec);
+  return map<Type, mgblas_vcosh>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::cosh(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vcosh>(mat);
+  return map<Type, mgblas_vcosh>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::tanh(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vtanh>(vec);
+  return map<Type, mgblas_vtanh>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::tanh(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vtanh>(mat);
+  return map<Type, mgblas_vtanh>(mat);
 }
 
 template <typename DenseVec, typename Type, size_t DeviceId>
 decltype(auto) strict::relu(dense_vector<DenseVec, Type, DeviceId> const& vec) {
-  return elemwise<Type, mgblas_vrelu>(vec);
+  return map<Type, mgblas_vrelu>(vec);
 }
 
 template <typename DenseMat, typename Type, size_t DeviceId>
 decltype(auto) strict::relu(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
-  return elemwise<Type, mgblas_vrelu>(mat);
+  return map<Type, mgblas_vrelu>(mat);
 }
 }  // namespace mgcpp

@@ -63,7 +63,7 @@ set(KERNELS_SOURCE_DIR ${SOURCE_DIR}/kernels)
 
 set(BASE_SOURCE_FILES
     ${KERNELS_SOURCE_DIR}/hadamard.cu
-    ${KERNELS_SOURCE_DIR}/elemwise.cu
+    ${KERNELS_SOURCE_DIR}/map.cu
     ${KERNELS_SOURCE_DIR}/reduce.cu
     ${KERNELS_SOURCE_DIR}/fill.cu
     ${KERNELS_SOURCE_DIR}/convert.cu)

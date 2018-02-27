@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/operations/elemwise.hpp>
+#include <mgcpp/operations/map.hpp>
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/hdmd.hpp>
 #include <mgcpp/operations/mean.hpp>
