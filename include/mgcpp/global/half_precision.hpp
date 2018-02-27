@@ -8,7 +8,7 @@
 #define _MGCPP_GLOBAL_HALF_PRECISION_HPP_
 
 #ifdef USE_HALF
-#include <cuda_fp16.h>
+#include <cuda_fp16.hpp>
 #include <half/half.hpp>
 namespace mgcpp {
 using half = half_float::half;
