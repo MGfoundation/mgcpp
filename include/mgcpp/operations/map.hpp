@@ -22,14 +22,14 @@ template <typename Type,
           typename DenseVec,
           size_t DeviceId>
 inline device_vector<Type, DeviceId, typename DenseVec::allocator_type>
-elemwise(dense_vector<DenseVec, Type, DeviceId> const& vec);
+map(dense_vector<DenseVec, Type, DeviceId> const& vec);
 
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseMat,
           size_t DeviceId>
 inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type>
-elemwise(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+map(dense_matrix<DenseMat, Type, DeviceId> const& mat);
 
 /** Computes the absolute value of each element.
  * \param vec vector to calculate the absolute value of.
@@ -87,5 +87,5 @@ inline decltype(auto) relu(dense_matrix<DenseMat, Type, DeviceId> const& mat);
 }  // namespace strict
 }  // namespace mgcpp
 
-#include <mgcpp/operations/elemwise.tpp>
+#include <mgcpp/operations/map.tpp>
 #endif

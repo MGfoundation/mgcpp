@@ -4,14 +4,14 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/kernels/bits/elemwise.cuh>
+#include <mgcpp/kernels/bits/map.cuh>
 #include <cmath>
 
 #define BLK 64
 
 namespace mgcpp
 {
-#define MGCPP_DEFINE_ELEMWISE_FUNCTION(fname, cudaname) \
+#define MGCPP_DEFINE_MAP_FUNCTION(fname, cudaname) \
     __global__ void \
     mgblas_S ## fname ## _impl(float* x, size_t n) \
     { \
@@ -49,15 +49,15 @@ namespace mgcpp
         return success; \
     }
 
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vab, fabs)
+    MGCPP_DEFINE_MAP_FUNCTION(vab, fabs)
 
     // define trig functions
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vsin, sin)
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vcos, cos)
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vtan, tan)
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vsinh, sinh)
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vcosh, cosh)
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vtanh, tanh)
+    MGCPP_DEFINE_MAP_FUNCTION(vsin, sin)
+    MGCPP_DEFINE_MAP_FUNCTION(vcos, cos)
+    MGCPP_DEFINE_MAP_FUNCTION(vtan, tan)
+    MGCPP_DEFINE_MAP_FUNCTION(vsinh, sinh)
+    MGCPP_DEFINE_MAP_FUNCTION(vcosh, cosh)
+    MGCPP_DEFINE_MAP_FUNCTION(vtanh, tanh)
 
     __device__ float reluf(float f)
     {
@@ -69,7 +69,7 @@ namespace mgcpp
         return fmax(f, 0.);
     }
 
-    MGCPP_DEFINE_ELEMWISE_FUNCTION(vrelu, relu)
+    MGCPP_DEFINE_MAP_FUNCTION(vrelu, relu)
 
-#undef MGCPP_DEFINE_ELEMWISE_FUNCTION
+#undef MGCPP_DEFINE_MAP_FUNCTION
 }

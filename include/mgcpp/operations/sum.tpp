@@ -10,6 +10,7 @@
 #include <mgcpp/cuda/device.hpp>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/exception.hpp>
+#include <mgcpp/operations/sum.hpp>
 
 namespace mgcpp {
 template <typename DenseVec, typename Type, size_t DeviceId>

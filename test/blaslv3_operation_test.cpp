@@ -11,8 +11,8 @@
 #include <gtest/gtest.h>
 
 #include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/operations/map.hpp>
 #include <mgcpp/operations/add.hpp>
-#include <mgcpp/operations/elemwise.hpp>
 #include <mgcpp/operations/mean.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/sub.hpp>

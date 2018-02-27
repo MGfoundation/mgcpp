@@ -9,22 +9,24 @@
 
 #include <mgcpp/expressions/dvec_expr.hpp>
 
-namespace mgcpp {
-template <typename Expr,
-          typename VectorType,
-          VectorType (*Function)(typename VectorType::parent_type const& vec)>
-struct dvec_elemwise_expr
-    : public dvec_expr<dvec_elemwise_expr<Expr, VectorType, Function>> {
-  using expr_type = typename std::decay<Expr>::type;
+namespace mgcpp
+{
+template <
+    typename Expr,
+    typename Expr::result_type (*Function)(
+        typename Expr::result_type::parent_type const& vec)>
+struct dvec_map_expr : public dvec_expr<dvec_map_expr<Expr, Function>>
+{
+    using expr_type = typename std::decay<Expr>::type;
 
-  using result_type = typename expr_type::result_type;
+    using result_type = typename expr_type::result_type;
 
-  Expr _expr;
+    Expr _expr;
 
-  inline explicit dvec_elemwise_expr(Expr const& expr) noexcept;
-  inline explicit dvec_elemwise_expr(Expr&& expr) noexcept;
+    inline explicit dvec_map_expr(Expr const& expr) noexcept;
+    inline explicit dvec_map_expr(Expr&& expr) noexcept;
 
-  inline decltype(auto) eval() const;
+    inline decltype(auto) eval() const;
 };
 
 template <typename Expr>
@@ -50,6 +52,6 @@ inline decltype(auto) tanh(dvec_expr<Expr> const& expr) noexcept;
 
 template <typename Expr>
 inline decltype(auto) relu(dvec_expr<Expr> const& expr) noexcept;
-}  // namespace mgcpp
+} // namespace mgcpp
 
 #endif
