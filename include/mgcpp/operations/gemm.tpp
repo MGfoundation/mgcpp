@@ -113,7 +113,7 @@ inline decltype(auto) strict::gemm(
 
   auto casted_alpha = Type(alpha);
   auto casted_beta = Type(beta);
-  auto status = cublas_gemm(handle, static_cast<cublasOperation_t>(mode_A),
+  auto status = cublas::gemm(handle, static_cast<cublasOperation_t>(mode_A),
                             static_cast<cublasOperation_t>(mode_B), m, n, k,
                             pun_cast<device_pointer>(&casted_alpha),
                             A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],
@@ -180,7 +180,7 @@ inline decltype(auto) strict::gemm(
 
   auto casted_alpha = Type(alpha);
   auto casted_beta = Type(beta);
-  auto status = cublas_gemm(handle, static_cast<cublasOperation_t>(mode_A),
+  auto status = cublas::gemm(handle, static_cast<cublasOperation_t>(mode_A),
                             static_cast<cublasOperation_t>(mode_B), m, n, k,
                             pun_cast<device_pointer>(&casted_alpha),
                             A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],

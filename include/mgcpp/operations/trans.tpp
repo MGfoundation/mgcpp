@@ -32,7 +32,7 @@ decltype(auto) strict::trans(
 
   Type* null = nullptr;
   auto status =
-      cublas_geam(handle, CUBLAS_OP_T, CUBLAS_OP_N, n, m, &alpha, dmat.data(),
+      cublas::geam(handle, CUBLAS_OP_T, CUBLAS_OP_N, n, m, &alpha, dmat.data(),
                   m, &beta, null, n, result.data_mutable(), n);
 
   if (!status)

@@ -32,7 +32,7 @@ decltype(auto) strict::sub(
   value_type const alpha = -1;
 
   auto result = device_vector<Type, DeviceId, allocator_type>(lhs_vec);
-  auto status = cublas_axpy(handle, size, &alpha, rhs_vec.data(), 1,
+  auto status = cublas::axpy(handle, size, &alpha, rhs_vec.data(), 1,
                             result.data_mutable(), 1);
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
@@ -75,7 +75,7 @@ decltype(auto) strict::sub(
 
   auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
 
-  auto status = cublas_geam(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, &alpha,
+  auto status = cublas::geam(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, &alpha,
                             lhs_mat.data(), m, &beta, rhs_mat.data(), m,
                             result.data_mutable(), m);
 

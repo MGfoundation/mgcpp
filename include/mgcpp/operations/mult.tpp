@@ -47,7 +47,7 @@ decltype(auto) strict::mult(
 
   auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
 
-  auto status = cublas_gemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha,
+  auto status = cublas::gemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha,
                             lhs_mat.data(), m, rhs_mat.data(), k, &beta,
                             result.data_mutable(), m);
 
@@ -81,7 +81,7 @@ inline decltype(auto) strict::mult(
   Type const alpha = 1;
   Type const beta = 0;
 
-  auto status = cublas_gemv(handle, CUBLAS_OP_N, n, k, &alpha, dmat.data(), n,
+  auto status = cublas::gemv(handle, CUBLAS_OP_N, n, k, &alpha, dmat.data(), n,
                             dvec.data(), 1, &beta, result.data_mutable(), 1);
 
   if (!status) {
@@ -114,7 +114,7 @@ decltype(auto) strict::mult(
   auto result =
       device_vector<VectorType, DeviceId, allocator_type>(original_vec);
   auto status =
-      cublas_scal(handle, size, pun_cast<device_pointer>(&casted_scalar),
+      cublas::scal(handle, size, pun_cast<device_pointer>(&casted_scalar),
                   result.data_mutable(), 1);
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
@@ -145,7 +145,7 @@ inline decltype(auto) strict::mult(
   auto casted_scalar = MatrixType(scalar);
   auto result =
       device_matrix<MatrixType, DeviceId, allocator_type>(original_mat);
-  auto status = cublas_scal(handle, size[0] * size[1],
+  auto status = cublas::scal(handle, size[0] * size[1],
                             pun_cast<device_pointer>(&casted_scalar),
                             result.data_mutable(), 1);
   if (!status) {
