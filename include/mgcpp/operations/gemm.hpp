@@ -9,7 +9,7 @@
 
 #include <mgcpp/matrix/dense_matrix.hpp>
 #include <mgcpp/matrix/device_matrix.hpp>
-#include <mgcpp/type_traits/type_traits.hpp>
+#include <mgcpp/type_traits/is_scalar.hpp>
 
 #include <cstdlib>
 
