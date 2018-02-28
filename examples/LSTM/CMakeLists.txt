@@ -1,0 +1,26 @@
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+
+set(EXAMPLE_DIR ${PROJECT_SOURCE_DIR}/examples/LSTM)
+
+set(EXAMPLE_SOURCE_FILES
+    ${EXAMPLE_DIR}/main.cpp)
+
+# add example target
+add_executable(${PROJECT_NAME}_example_LSTM ${EXAMPLE_SOURCE_FILES})
+
+target_include_directories(${PROJECT_NAME}_example_LSTM
+    PUBLIC
+    ${PROJECT_SOURCE_DIR}/include)
+
+target_link_libraries(${PROJECT_NAME}_example_LSTM
+    ${PROJECT_NAME})
+
+set(EXAMPLE_BUILD_FLAGS ${BUILD_FLAGS})
+
+set_target_properties(${PROJECT_NAME}_example_LSTM
+    PROPERTIES COMPILE_FLAGS "${EXAMPLE_BUILD_FLAGS}")
