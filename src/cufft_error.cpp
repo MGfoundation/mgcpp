@@ -67,9 +67,11 @@ std::string cufft_error_category_t::message(int ev) const {
     case CUFFT_LICENSE_ERROR:
       return "CUFFT_LICENSE_ERROR: Used in previous versions.";
 
+#ifdef CUFFT_NOT_SUPPORTED // added in CUDA 9.0
     case CUFFT_NOT_SUPPORTED:
       return "CUFFT_NOT_SUPPORTED: Operation is not supported for parameters "
              "given.";
+#endif
   }
   return "";
 }

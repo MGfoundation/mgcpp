@@ -13,14 +13,14 @@
 
 TEST(mgblas_helpers, array_init) {
   auto stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(stat);
+  EXPECT_TRUE(bool(stat));
 
   size_t size = 20;
   float value = 7;
 
   auto rst = mgcpp::cuda_malloc<float>(size);
   auto status = mgcpp::mgblas_fill(rst.value(), value, size);
-  EXPECT_TRUE(status) << status.error();
+  EXPECT_TRUE(bool(status)) << status.error();
 
   float* host = (float*)malloc(sizeof(float) * size);
 

@@ -12,7 +12,7 @@
 
 TEST(default_allocator, device_allocation_and_deallocation) {
   auto stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(stat);
+  EXPECT_TRUE(bool(stat));
 
   auto mem_info = mgcpp::cuda_mem_get_info();
   size_t before_memory = mem_info.value().first;
@@ -38,7 +38,7 @@ TEST(default_allocator, device_allocation_and_deallocation) {
 
 TEST(default_allocator, copy_to_and_from_host) {
   auto stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(stat);
+  EXPECT_TRUE(bool(stat));
 
   mgcpp::default_allocator<float, 0> allocator{};
 

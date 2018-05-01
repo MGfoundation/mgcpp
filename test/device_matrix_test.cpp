@@ -66,10 +66,10 @@ TEST(device_matrix, default_constructor) {
 
 TEST(device_matrix, dimension_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t row_dim = 10;
@@ -77,7 +77,7 @@ TEST(device_matrix, dimension_constructor) {
   mgcpp::device_matrix<float, 0> mat({row_dim, col_dim});
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -90,10 +90,10 @@ TEST(device_matrix, dimension_constructor) {
 
 TEST(device_matrix, dimension_initializing_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t row_dim = 5;
@@ -102,7 +102,7 @@ TEST(device_matrix, dimension_initializing_constructor) {
   mgcpp::device_matrix<float> mat({row_dim, col_dim}, init_val);
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -123,7 +123,7 @@ TEST(device_matrix, dimension_initializing_constructor) {
 
 TEST(device_matrix, third_party_matrix_construction) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -154,7 +154,7 @@ TEST(device_matrix, third_party_matrix_construction) {
 
 TEST(device_matrix, matrix_init_from_host_data) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 10;
   size_t col_dim = 10;
@@ -169,14 +169,14 @@ TEST(device_matrix, matrix_init_from_host_data) {
   }
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_freemem = before.value().first;
 
   mgcpp::device_matrix<float> mat{};
   EXPECT_NO_THROW(mat = mgcpp::device_matrix<float>({row_dim, col_dim}, data));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_freemem = after.value().first;
 
   EXPECT_GT(before_freemem, after_freemem);
@@ -196,20 +196,20 @@ TEST(device_matrix, matrix_init_from_host_data) {
 
 TEST(device_matrix, matrix_init_from_init_list) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto init_list = std::initializer_list<std::initializer_list<float>>{
       {0.0f, 1.0f, 2.0f}, {3.0f, 4.0f, 5.0f}, {6.0f, 7.0f, 8.0f}};
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_freemem = before.value().first;
 
   mgcpp::device_matrix<float> mat{};
   EXPECT_NO_THROW(mat = mgcpp::device_matrix<float>::from_list(init_list));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_freemem = after.value().first;
 
   EXPECT_GT(before_freemem, after_freemem);
@@ -230,7 +230,7 @@ TEST(device_matrix, matrix_init_from_init_list) {
 
 TEST(device_matrix, copy_construction) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -253,7 +253,7 @@ TEST(device_matrix, copy_construction) {
 
 TEST(device_matrix, reallocation_during_copy_assign) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -274,14 +274,14 @@ TEST(device_matrix, reallocation_during_copy_assign) {
 
 TEST(device_matrix, no_reallocation_during_copy_assign) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
   float init = 7;
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_freemem = before.value().first;
 
   mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
@@ -291,7 +291,7 @@ TEST(device_matrix, no_reallocation_during_copy_assign) {
   EXPECT_EQ(copied.check_value(0, 0), init);  // supressing optimization
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_freemem = before.value().first;
 
   EXPECT_EQ(after_freemem, before_freemem);
@@ -302,7 +302,7 @@ TEST(device_matrix, no_reallocation_during_copy_assign) {
 
 TEST(device_matrix, copy_to_host) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -322,7 +322,7 @@ TEST(device_matrix, copy_to_host) {
 
 TEST(device_matrix, move_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -331,13 +331,13 @@ TEST(device_matrix, move_constructor) {
   mgcpp::device_matrix<float> original({row_dim, col_dim}, init);
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_freemem = before.value().first;
 
   mgcpp::device_matrix<float> moved(std::move(original));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_freemem = after.value().first;
 
   EXPECT_EQ(before_freemem, after_freemem);
@@ -357,7 +357,7 @@ TEST(device_matrix, move_constructor) {
 
 TEST(device_matrix, move_assign_operator) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -386,7 +386,7 @@ TEST(device_matrix, move_assign_operator) {
 
 TEST(device_matrix, matrix_resize) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 10;
   size_t col_dim = 10;
@@ -400,7 +400,7 @@ TEST(device_matrix, matrix_resize) {
 
 TEST(device_matrix, matrix_resize_init) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 10;
   size_t col_dim = 10;
@@ -425,7 +425,7 @@ TEST(device_matrix, matrix_resize_init) {
 
 TEST(device_matrix, matrix_zero_after_allocation) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t row_dim = 5;
   size_t col_dim = 10;
@@ -444,7 +444,7 @@ TEST(device_matrix, matrix_zero_after_allocation) {
 
 TEST(device_matrix, matrix_zero_without_allocation_failure) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   mgcpp::device_matrix<float> mat{};
 

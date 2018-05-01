@@ -46,7 +46,7 @@ struct adapter<dummy_vector<T>> : std::true_type {
 
 TEST(device_vector, default_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   EXPECT_NO_THROW(do {
     mgcpp::device_vector<float> vec{};
@@ -60,10 +60,10 @@ TEST(device_vector, default_constructor) {
 
 TEST(device_vector, size_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -71,7 +71,7 @@ TEST(device_vector, size_constructor) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<float>(size));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -84,10 +84,10 @@ TEST(device_vector, size_constructor) {
 #ifdef USE_HALF
 TEST(device_vector, size_constructor_half) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -95,7 +95,7 @@ TEST(device_vector, size_constructor_half) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<mgcpp::half>(size));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -108,10 +108,10 @@ TEST(device_vector, size_constructor_half) {
 
 TEST(device_vector, initializing_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -120,7 +120,7 @@ TEST(device_vector, initializing_constructor) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<float>(size, init_val));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -138,10 +138,10 @@ TEST(device_vector, initializing_constructor) {
 
 TEST(device_vector, initializing_constructor_complex) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -151,7 +151,7 @@ TEST(device_vector, initializing_constructor_complex) {
       vec = mgcpp::device_vector<mgcpp::complex<float>>(size, init_val));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -170,10 +170,10 @@ TEST(device_vector, initializing_constructor_complex) {
 
 TEST(device_vector, initializing_constructor_double_complex) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -183,7 +183,7 @@ TEST(device_vector, initializing_constructor_double_complex) {
       vec = mgcpp::device_vector<mgcpp::complex<double>>(size, init_val));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -203,10 +203,10 @@ TEST(device_vector, initializing_constructor_double_complex) {
 #ifdef USE_HALF
 TEST(device_vector, initializing_constructor_half) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 128;
@@ -215,7 +215,7 @@ TEST(device_vector, initializing_constructor_half) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<mgcpp::half>(size, init_val));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -235,10 +235,10 @@ TEST(device_vector, initializing_constructor_half) {
 
 TEST(device_vector, constructon_from_host_data) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -254,7 +254,7 @@ TEST(device_vector, constructon_from_host_data) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<float>(size, host));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -274,10 +274,10 @@ TEST(device_vector, constructon_from_host_data) {
 
 TEST(device_vector, constructon_from_host_data_complex) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -295,7 +295,7 @@ TEST(device_vector, constructon_from_host_data_complex) {
                       mgcpp::device_vector<mgcpp::complex<float>>(size, host));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -317,10 +317,10 @@ TEST(device_vector, constructon_from_host_data_complex) {
 #ifdef USE_HALF
 TEST(device_vector, constructon_from_host_data_half) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   size_t size = 10;
@@ -336,7 +336,7 @@ TEST(device_vector, constructon_from_host_data_half) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<mgcpp::half>(size, host.data()));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -380,10 +380,10 @@ TEST(device_vector, third_party_matrix_construction) {
 
 TEST(device_vector, constructon_from_init_list) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   auto init_list = std::initializer_list<float>({1, 2, 3, 4, 5});
@@ -392,7 +392,7 @@ TEST(device_vector, constructon_from_init_list) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<float>(init_list));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -411,10 +411,10 @@ TEST(device_vector, constructon_from_init_list) {
 
 TEST(device_vector, complex_vector_constructon_from_init_list) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   auto init_list = std::initializer_list<std::complex<float>>({1, 2, 3, 4, 5});
@@ -423,7 +423,7 @@ TEST(device_vector, complex_vector_constructon_from_init_list) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<mgcpp::complex<float>>(init_list));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -446,10 +446,10 @@ TEST(device_vector, constructon_from_init_list_half) {
   using namespace half_float::literal;
 
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   auto init_list =
@@ -459,7 +459,7 @@ TEST(device_vector, constructon_from_init_list_half) {
   EXPECT_NO_THROW(vec = mgcpp::device_vector<mgcpp::half>(init_list));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_GT(before_memory, after_memory);
@@ -480,7 +480,7 @@ TEST(device_vector, constructon_from_init_list_half) {
 
 TEST(device_vector, cpy_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   size_t init_val = 7;
@@ -499,7 +499,7 @@ TEST(device_vector, cpy_constructor) {
 
 TEST(device_vector, allocation_during_cpy_assign) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   size_t init_val = 7;
@@ -523,21 +523,21 @@ TEST(device_vector, allocation_during_cpy_assign) {
 
 TEST(device_vector, no_allocation_during_cpy_assign) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   size_t init_val = 7;
   mgcpp::device_vector<float> original(size, init_val);
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   mgcpp::device_vector<float> copied(size * 2);
   EXPECT_NO_THROW(copied = original);
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_EQ(before_memory, after_memory);
@@ -553,20 +553,20 @@ TEST(device_vector, no_allocation_during_cpy_assign) {
 
 TEST(device_vector, move_constructor) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   size_t init_val = 7;
   mgcpp::device_vector<float> original(size, init_val);
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   mgcpp::device_vector<float> moved(std::move(original));
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_EQ(before_memory, after_memory);
@@ -580,21 +580,21 @@ TEST(device_vector, move_constructor) {
 
 TEST(device_vector, move_assign_operator) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   size_t init_val = 7;
   mgcpp::device_vector<float> original(size, init_val);
 
   auto before = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(before);
+  EXPECT_TRUE(before.has_value());
   auto before_memory = before.value().first;
 
   mgcpp::device_vector<float> moved(size, init_val);
   moved = std::move(original);
 
   auto after = mgcpp::cuda_mem_get_info();
-  EXPECT_TRUE(after);
+  EXPECT_TRUE(after.has_value());
   auto after_memory = after.value().first;
 
   EXPECT_EQ(before_memory, after_memory);
@@ -611,7 +611,7 @@ TEST(device_vector, move_assign_operator) {
 
 TEST(device_vector, copy_to_host) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   float* host = (float*)malloc(sizeof(float) * size);
@@ -633,7 +633,7 @@ TEST(device_vector, copy_to_host) {
 #ifdef USE_HALF
 TEST(device_vector, copy_to_host_half) {
   auto set_device_stat = mgcpp::cuda_set_device(0);
-  EXPECT_TRUE(set_device_stat);
+  EXPECT_TRUE(set_device_stat.has_value());
 
   size_t size = 10;
   mgcpp::half* host = (mgcpp::half*)malloc(sizeof(mgcpp::half) * size);
