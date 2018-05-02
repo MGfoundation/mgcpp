@@ -18,6 +18,8 @@
 #include <utility>
 
 namespace mgcpp {
+
+/*
 namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_add_subgraph_matcher(
@@ -141,18 +143,20 @@ template <typename LhsExpr, typename RhsExpr>
 decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
   return internal::dmat_dmat_add_subgraph_matcher(*this);
 }
+*/
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
+mat_mat_add_op<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
+mat_mat_add_op<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
+
 }  // namespace mgcpp

@@ -8,20 +8,20 @@
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> operator-(
+mat_mat_add_op<LhsExpr, RhsExpr> operator-(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
   auto const& lhs_orig = ~lhs;
   auto const& rhs_orig = (-1) * (~rhs);
-  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(lhs_orig, rhs_orig);
+  return mat_mat_add_op<LhsExpr, RhsExpr>(lhs_orig, rhs_orig);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> sub(
+mat_mat_add_op<LhsExpr, RhsExpr> sub(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
   auto const& lhs_orig = ~lhs;
   auto const& rhs_orig = (-1) * (~rhs);
-  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(lhs_orig, rhs_orig);
+  return mat_mat_add_op<LhsExpr, RhsExpr>(lhs_orig, rhs_orig);
 }
 }  // namespace mgcpp

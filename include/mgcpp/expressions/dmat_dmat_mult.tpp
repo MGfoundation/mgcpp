@@ -14,7 +14,9 @@
 #include <mgcpp/system/assert.hpp>
 
 namespace mgcpp {
+/*
 namespace internal {
+
 template <typename LhsExpr, typename RhsExpr>
 inline decltype(auto) dmat_dmat_mult_subgraph_matcher(
     dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr) {
@@ -81,18 +83,19 @@ typename dmat_dmat_mult_expr<LhsExpr, RhsExpr>::result_type
 dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval() const {
   return internal::dmat_dmat_mult_subgraph_matcher(*this);
 }
+*/
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(
+mat_mat_mult_op<LhsExpr, RhsExpr> operator*(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return dmat_dmat_mult_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return mat_mat_mult_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_mult_expr<LhsExpr, RhsExpr> mult(
+mat_mat_mult_op<LhsExpr, RhsExpr> mult(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return dmat_dmat_mult_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return mat_mat_mult_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 }  // namespace mgcpp

@@ -8,44 +8,23 @@
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
+#include <mgcpp/expressions/binary_op.hpp>
 
 namespace mgcpp {
+
 template <typename LhsExpr, typename RhsExpr>
-struct dmat_dmat_add_expr
-    : public dmat_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>> {
-  using lhs_expr_type = typename std::decay<LhsExpr>::type;
-  using rhs_expr_type = typename std::decay<RhsExpr>::type;
+using mat_mat_add_op = binary_op<'+', LhsExpr, RhsExpr, dmat_expr, typename LhsExpr::result_type>;
 
-  using result_type = typename lhs_expr_type::result_type;
-
-  LhsExpr _lhs;
-  RhsExpr _rhs;
-
-  inline dmat_dmat_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
-  inline dmat_dmat_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
-
-  /** Evaluates the compuational graph starting from this expression.
-   */
-  inline decltype(auto) eval() const;
-};
-
-/** Returns a dense matrix add expression.
- * \param lhs the left-hand side dense matrix
- * \param rhs the right-hand side dense matrix
- */
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
+inline mat_mat_add_op<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
-/** Returns a dense matrix add expression.
- * \param lhs the left-hand side dense matrix
- * \param rhs the right-hand side dense matrix
- */
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
+inline mat_mat_add_op<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
+
 }  // namespace mgcpp
 
 #endif

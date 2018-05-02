@@ -9,33 +9,19 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
+#include <mgcpp/expressions/binary_op.hpp>
 
 namespace mgcpp {
+
 template <typename MatExpr, typename VecExpr>
-struct dmat_dvec_mult_expr
-    : public dvec_expr<dmat_dvec_mult_expr<MatExpr, VecExpr>> {
-  using lhs_expr_type = typename std::decay<MatExpr>::type;
-  using rhs_expr_type = typename std::decay<VecExpr>::type;
-
-  using result_type = typename rhs_expr_type::result_type;
-
-  MatExpr _mat;
-  VecExpr _vec;
-
-  inline dmat_dvec_mult_expr(MatExpr const& mat, VecExpr const& vec) noexcept;
-  inline dmat_dvec_mult_expr(MatExpr&& mat, VecExpr&& vec) noexcept;
-
-  /** Evaluates the compuational graph starting from this expression.
-   */
-  inline result_type eval() const;
-};
+using mat_vec_mult_op = binary_op<'m', MatExpr, VecExpr, dvec_expr, typename VecExpr::result_type>;
 
 /** Returns a dense matrix vector product expression.
  * \param lhs the left-hand side dense matrix
  * \param rhs the right-hand side dense vector
  */
 template <typename MatExpr, typename VecExpr>
-inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
+inline mat_vec_mult_op<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept;
 
@@ -44,7 +30,7 @@ inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
  * \param rhs the right-hand side dense vector
  */
 template <typename MatExpr, typename VecExpr>
-inline dmat_dvec_mult_expr<MatExpr, VecExpr> mult(
+inline mat_vec_mult_op<MatExpr, VecExpr> mult(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept;
 }  // namespace mgcpp

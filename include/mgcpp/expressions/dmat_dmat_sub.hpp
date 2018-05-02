@@ -12,12 +12,12 @@
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator-(
+inline mat_mat_add_op<LhsExpr, RhsExpr> operator-(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> sub(
+inline mat_mat_add_op<LhsExpr, RhsExpr> sub(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
