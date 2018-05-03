@@ -41,12 +41,13 @@ We can raise the priority for most needed features.
 ```C++
 #include <mgcpp/mgcpp.hpp>
 
-#define GPU 0
+mgcpp::device_matrix<float> A({4, 3}, 2);
+mgcpp::device_matrix<float> B({3, 2}, 2);
 
-mgcpp::device_matrix<float, GPU> A(4, 3, 2);
-mgcpp::device_matrix<float, GPU> B(3, 2, 2);
+auto C = ref(A) * ref(B);
 
-auto C = mgcpp::eval(A * B);
+// Lazy evaluation
+auto result = mgcpp::eval(C);
 
 ```
 

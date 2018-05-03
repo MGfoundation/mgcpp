@@ -10,13 +10,17 @@
 #include <type_traits>
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/scalar_expr.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/scalar_expr.hpp>
 
 namespace mgcpp {
 
 template <typename ScalExpr, typename DMatExpr>
-using scalar_dmat_mult_expr = generic_op<'S', dmat_expr, typename DMatExpr::result_type, ScalExpr, DMatExpr>;
+using scalar_dmat_mult_expr = generic_op<expression_type::SCALAR_DMAT_MULT,
+                                         dmat_expr,
+                                         typename DMatExpr::result_type,
+                                         ScalExpr,
+                                         DMatExpr>;
 
 /** Returns a scalar, dense matrix product expression.
  * \param lhs the left-hand side scalar variable

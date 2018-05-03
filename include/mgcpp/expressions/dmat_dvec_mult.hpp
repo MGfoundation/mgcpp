@@ -14,7 +14,11 @@
 namespace mgcpp {
 
 template <typename MatExpr, typename VecExpr>
-using mat_vec_mult_op = binary_op<'m', dvec_expr, typename VecExpr::result_type, MatExpr, VecExpr>;
+using mat_vec_mult_op = binary_op<expression_type::DMAT_DVEC_MULT,
+                                  dvec_expr,
+                                  typename VecExpr::result_type,
+                                  MatExpr,
+                                  VecExpr>;
 
 /** Returns a dense matrix vector product expression.
  * \param lhs the left-hand side dense matrix

@@ -13,7 +13,11 @@
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-using mat_mat_add_op = binary_op<'+', dmat_expr, typename LhsExpr::result_type, LhsExpr, RhsExpr>;
+using mat_mat_add_op = binary_op<expression_type::DMAT_DMAT_ADD,
+                                 dmat_expr,
+                                 typename LhsExpr::result_type,
+                                 LhsExpr,
+                                 RhsExpr>;
 
 template <typename LhsExpr, typename RhsExpr>
 inline mat_mat_add_op<LhsExpr, RhsExpr> operator+(

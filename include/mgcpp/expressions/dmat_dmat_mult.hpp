@@ -13,7 +13,11 @@
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-using mat_mat_mult_op = binary_op<'*', dmat_expr, typename LhsExpr::result_type, LhsExpr, RhsExpr>;
+using mat_mat_mult_op = binary_op<expression_type::DMAT_DMAT_MULT,
+                                  dmat_expr,
+                                  typename LhsExpr::result_type,
+                                  LhsExpr,
+                                  RhsExpr>;
 
 /** Returns a dense matrix product expression.
  * \param lhs the left-hand side dense matrix

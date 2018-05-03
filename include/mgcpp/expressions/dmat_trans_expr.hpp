@@ -8,13 +8,16 @@
 #define _MGCPP_EXPRESSIONS_DMAT_TRANS_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/matrix/forward.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 
 template <typename Expr>
-using dmat_trans_expr = unary_op<'T', dmat_expr, typename Expr::result_type, Expr>;
+using dmat_trans_expr = unary_op<expression_type::DMAT_TRANSPOSE,
+                                 dmat_expr,
+                                 typename Expr::result_type,
+                                 Expr>;
 
 template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;

@@ -12,7 +12,7 @@
 
 namespace mgcpp {
 
-template <int OpID,
+template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename... OperandTypes>
@@ -22,7 +22,7 @@ generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::first() const
   return std::get<0>(exprs);
 }
 
-template <int OpID,
+template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename... OperandTypes>
@@ -32,7 +32,7 @@ generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::second() const
   return std::get<1>(exprs);
 }
 
-template <int OpID,
+template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename... OperandTypes>

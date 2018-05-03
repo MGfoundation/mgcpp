@@ -15,7 +15,16 @@
 
 namespace mgcpp {
 
-template <int OpID,
+enum class expression_type {
+  DMAT_DMAT_ADD,
+  DMAT_DMAT_MULT,
+  DMAT_DVEC_MULT,
+  DMAT_TRANSPOSE,
+  DVEC_DVEC_ADD,
+  SCALAR_DMAT_MULT
+};
+
+template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename... OperandTypes>
@@ -40,10 +49,10 @@ struct generic_op
       std::make_shared<std::unique_ptr<result_type>>(nullptr);
 };
 
-template <int OpID, template<typename> class ResultExprType, typename ResultType, typename Expr>
+template <expression_type OpID, template<typename> class ResultExprType, typename ResultType, typename Expr>
 using unary_op = generic_op<OpID, ResultExprType, ResultType, Expr>;
 
-template <int OpID, template<typename> class ResultExprType, typename ResultType, typename LhsExpr, typename RhsExpr>
+template <expression_type OpID, template<typename> class ResultExprType, typename ResultType, typename LhsExpr, typename RhsExpr>
 using binary_op = generic_op<OpID, ResultExprType, ResultType, LhsExpr, RhsExpr>;
 
 }  // namespace mgcpp
