@@ -17,6 +17,7 @@ namespace mgcpp {
 struct eval_context {
   int total_computations = 0;
   int cache_hits = 0;
+  bool is_evaluating = false;
 
   struct erased {
     erased() = default;

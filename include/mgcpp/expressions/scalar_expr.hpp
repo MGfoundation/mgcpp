@@ -20,6 +20,11 @@ inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
     Scalar scalar, eval_context&) {
   return scalar;
 }
+
+template <typename Scalar>
+inline typename std::enable_if<is_scalar<Scalar>::value, void>::type traverse(
+    Scalar, eval_context&) {
+}
 }  // namespace mgcpp
 
 #endif

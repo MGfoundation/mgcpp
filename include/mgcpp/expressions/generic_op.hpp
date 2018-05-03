@@ -21,20 +21,39 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-struct generic_op
-    : public ResultExprType<
-          generic_op<TagType, Tag, ResultExprType, ResultType, NParameters, OperandTypes...>> {
+struct generic_op : public ResultExprType<generic_op<TagType,
+                                                     Tag,
+                                                     ResultExprType,
+                                                     ResultType,
+                                                     NParameters,
+                                                     OperandTypes...>> {
+  // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;
 
+  enum {
+    // Is this node a terminal node (i.e. with no child nodes)
+    is_terminal = sizeof...(OperandTypes) == NParameters,
+  };
+
+  // Operand expressions
   std::tuple<OperandTypes...> exprs;
+
+  // Convenience getters for the operands
   inline decltype(auto) first() const noexcept;
   inline decltype(auto) second() const noexcept;
 
+  // Constructor
   inline generic_op(OperandTypes const&... args) noexcept : exprs(args...) {}
-  //inline generic_op(OperandTypes&&... args) noexcept
+
+  // TODO: overload this constructor if all arguments are moveable.
+  // (Possibly by SFINAE)
+  // inline generic_op(OperandTypes&&... args) noexcept
   //    : exprs(std::move(args)...) {}
 
+  // Analyze information about the tree
   inline void traverse(eval_context& ctx) const;
+
+  // Evaluate this expression with the context `ctx`.
   inline result_type eval(eval_context& ctx) const;
 };
 
@@ -49,24 +68,34 @@ enum class expression_type {
   DVEC_REF,
 };
 
+// A placeholder node with 0 operands
 template <int PlaceholderID,
           template <typename> class ResultExprType,
           typename ResultType>
-using placeholder_node = generic_op<int, PlaceholderID, ResultExprType, ResultType, 0>;
+using placeholder_node =
+    generic_op<int, PlaceholderID, ResultExprType, ResultType, 0>;
 
+// A unary operator with 1 operand (i.e. map)
 template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename Expr>
-using unary_op = generic_op<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
+using unary_op =
+    generic_op<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
 
+// A binary operator with left and right operands (i.e. addition, multiplication)
 template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename LhsExpr,
           typename RhsExpr>
-using binary_op =
-    generic_op<expression_type, OpID, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
+using binary_op = generic_op<expression_type,
+                             OpID,
+                             ResultExprType,
+                             ResultType,
+                             0,
+                             LhsExpr,
+                             RhsExpr>;
 
 }  // namespace mgcpp
 

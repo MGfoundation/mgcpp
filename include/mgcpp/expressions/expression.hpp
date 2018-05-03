@@ -37,6 +37,8 @@ inline typename T::result_type eval(expression<T> const& expr,
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr);
 
+template <typename T>
+inline void traverse(expression<T> const& expr, eval_context& ctx);
 
 /*
 template <typename... Ts>
