@@ -9,6 +9,7 @@
 
 #include <mgcpp/type_traits/is_scalar.hpp>
 #include <type_traits>
+#include <mgcpp/expressions/eval_context.hpp>
 
 namespace mgcpp {
 template <typename Type>
@@ -16,8 +17,8 @@ struct scalar_expr;
 
 template <typename Scalar>
 inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
-    Scalar scalar) {
-  return Scalar(scalar);
+    Scalar scalar, eval_context&) {
+  return scalar;
 }
 }  // namespace mgcpp
 

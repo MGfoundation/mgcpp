@@ -1,3 +1,9 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef _MGCPP_EXPRESSIONS_DVEC_REF_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DVEC_REF_EXPR_HPP_
 
@@ -13,7 +19,7 @@ struct dvec_ref_expr : dvec_expr<dvec_ref_expr<DenseVector, Type, DeviceId>> {
 
   DenseVector const& _vec;
   inline dvec_ref_expr(DenseVector const& vec);
-  inline DenseVector const& eval() const;
+  inline DenseVector const& eval(eval_context& ctx) const;
 };
 
 template <typename DenseVector, typename Type, size_t DeviceId>

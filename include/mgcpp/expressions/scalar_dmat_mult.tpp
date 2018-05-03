@@ -8,26 +8,6 @@
 #include <mgcpp/operations/mult.hpp>
 
 namespace mgcpp {
-template <typename ScalExpr, typename DMatExpr>
-scalar_dmat_mult_expr<ScalExpr, DMatExpr>::scalar_dmat_mult_expr(
-    ScalExpr const& scal_expr,
-    DMatExpr const& dmat_expr) noexcept
-    : _scal_expr(scal_expr), _dmat_expr(dmat_expr) {}
-
-template <typename ScalExpr, typename DMatExpr>
-scalar_dmat_mult_expr<ScalExpr, DMatExpr>::scalar_dmat_mult_expr(
-    ScalExpr&& scal_expr,
-    DMatExpr&& dmat_expr) noexcept
-    : _scal_expr(std::move(scal_expr)), _dmat_expr(std::move(dmat_expr)) {}
-
-template <typename ScalExpr, typename DMatExpr>
-typename scalar_dmat_mult_expr<ScalExpr, DMatExpr>::result_type
-scalar_dmat_mult_expr<ScalExpr, DMatExpr>::eval() const {
-  auto const& scal = mgcpp::eval(_scal_expr);
-  auto const& dmat = mgcpp::eval(_dmat_expr);
-
-  return strict::mult(scal, dmat);
-}
 
 template <typename Scalar, typename DMatExpr, typename>
 scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(

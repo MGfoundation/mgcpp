@@ -4,16 +4,14 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef EVALUATOR_HPP
-#define EVALUATOR_HPP
-
-#include <mgcpp/expressions/eval_context.hpp>
+#ifndef EVAL_CONTEXT_HPP
+#define EVAL_CONTEXT_HPP
 
 namespace mgcpp {
-struct evaluator {
-    template <typename Op>
-    inline static auto eval(Op const &op, eval_context& ctx);
+struct eval_context {
+    int total_computations = 0;
+    int cache_hits = 0;
 };
 }
 
-#endif // EVALUATOR_HPP
+#endif // EVAL_CONTEXT_HPP

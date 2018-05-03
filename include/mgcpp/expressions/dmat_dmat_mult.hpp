@@ -8,12 +8,12 @@
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_MULT_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/binary_op.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-using mat_mat_mult_op = binary_op<'*', LhsExpr, RhsExpr, dmat_expr, typename LhsExpr::result_type>;
+using mat_mat_mult_op = binary_op<'*', dmat_expr, typename LhsExpr::result_type, LhsExpr, RhsExpr>;
 
 /** Returns a dense matrix product expression.
  * \param lhs the left-hand side dense matrix

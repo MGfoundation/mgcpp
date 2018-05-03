@@ -1,8 +1,15 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef _MGCPP_EXPRESSIONS_DVEC_REDUCE_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DVEC_REDUCE_EXPR_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
 #include <mgcpp/vector/forward.hpp>
+#include <mgcpp/expressions/eval_context.hpp>
 
 namespace mgcpp
 {
@@ -22,7 +29,7 @@ struct dvec_reduce_expr
     inline explicit dvec_reduce_expr(Expr const& expr) noexcept;
     inline explicit dvec_reduce_expr(Expr&& expr) noexcept;
 
-    inline decltype(auto) eval() const;
+    inline decltype(auto) eval(eval_context& ctx) const;
 };
 
 template <typename Expr>

@@ -8,37 +8,18 @@
 #include <mgcpp/operations/add.hpp>
 
 namespace mgcpp {
-template <typename LhsExpr, typename RhsExpr>
-dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(
-    LhsExpr const& lhs,
-    RhsExpr const& rhs) noexcept
-    : _lhs(lhs), _rhs(rhs) {}
 
 template <typename LhsExpr, typename RhsExpr>
-dvec_dvec_add_expr<LhsExpr, RhsExpr>::dvec_dvec_add_expr(LhsExpr&& lhs,
-                                                         RhsExpr&& rhs) noexcept
-    : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
-
-template <typename LhsExpr, typename RhsExpr>
-typename dvec_dvec_add_expr<LhsExpr, RhsExpr>::result_type
-dvec_dvec_add_expr<LhsExpr, RhsExpr>::eval() const {
-  auto const& lhs = mgcpp::eval(_lhs);
-  auto const& rhs = mgcpp::eval(_rhs);
-
-  return strict::add(lhs, rhs);
+vec_vec_add_op<LhsExpr, RhsExpr> operator+(
+    dvec_expr<LhsExpr> const& lhs,
+    dvec_expr<RhsExpr> const& rhs) noexcept {
+  return vec_vec_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
+vec_vec_add_op<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept {
-  return dvec_dvec_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
-}
-
-template <typename LhsExpr, typename RhsExpr>
-dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
-    dvec_expr<LhsExpr> const& lhs,
-    dvec_expr<RhsExpr> const& rhs) noexcept {
-  return dvec_dvec_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return vec_vec_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 }  // namespace mgcpp

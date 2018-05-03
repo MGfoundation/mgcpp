@@ -19,7 +19,7 @@
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
 #include <mgcpp/expressions/evaluator.hpp>
-#include <mgcpp/expressions/binary_op.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 #include <mgcpp/expressions/dvec_dvec_add.tpp>
 #include <mgcpp/expressions/dvec_ref_expr.tpp>
@@ -33,6 +33,6 @@
 #include <mgcpp/expressions/dmat_trans_expr.tpp>
 #include <mgcpp/expressions/dvec_reduce_expr.tpp>
 #include <mgcpp/expressions/evaluator.tpp>
-#include <mgcpp/expressions/binary_op.tpp>
+#include <mgcpp/expressions/generic_op.tpp>
 
 #endif

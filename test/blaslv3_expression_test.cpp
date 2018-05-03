@@ -19,7 +19,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     auto mult_expr = mgcpp::ref(A_mat) * mgcpp::ref(B_mat);
 
     matrix C_mat;
-    EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
+    EXPECT_NO_THROW({ C_mat = eval(mult_expr); });
 
     auto shape = C_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -40,7 +40,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     auto mult_expr = mgcpp::mult(mgcpp::ref(A_mat), mgcpp::ref(B_mat));
 
     matrix C_mat;
-    EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
+    EXPECT_NO_THROW({ C_mat = eval(mult_expr); });
 
     auto shape = C_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -61,7 +61,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     auto mult_expr = 1.0 * mgcpp::ref(A_mat) * mgcpp::ref(B_mat);
 
     matrix C_mat;
-    EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
+    EXPECT_NO_THROW({ C_mat = eval(mult_expr); });
 
     auto shape = C_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -82,7 +82,7 @@ TEST(mult_expr, dmat_dmat_mult) {
     auto mult_expr = mgcpp::ref(A_mat) * mgcpp::ref(B_mat) * 1.0;
 
     matrix C_mat;
-    EXPECT_NO_THROW({ C_mat = mult_expr.eval(); });
+    EXPECT_NO_THROW({ C_mat = eval(mult_expr); });
 
     auto shape = C_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -106,7 +106,7 @@ TEST(mult_expr, dmat_dmat_add) {
   auto add_expr = (mgcpp::ref(A_mat) * mgcpp::ref(B_mat)) + mgcpp::ref(C_mat);
 
   matrix D_mat;
-  EXPECT_NO_THROW({ D_mat = add_expr.eval(); });
+  EXPECT_NO_THROW({ D_mat = eval(add_expr); });
 
   auto shape = D_mat.shape();
   EXPECT_EQ(shape[0], 2);
@@ -128,7 +128,7 @@ TEST(mult_expr, scalar_dmat_mult) {
     auto expr = 7.0 * mgcpp::ref(A_mat);
 
     matrix B_mat;
-    EXPECT_NO_THROW({ B_mat = expr.eval(); });
+    EXPECT_NO_THROW({ B_mat = eval(expr); });
 
     auto shape = B_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -174,7 +174,7 @@ TEST(mult_expr, scalar_dmat_mult) {
     auto expr = mgcpp::mult(7.0, mgcpp::ref(A_mat));
 
     matrix B_mat;
-    EXPECT_NO_THROW({ B_mat = expr.eval(); });
+    EXPECT_NO_THROW({ B_mat = eval(expr); });
 
     auto shape = B_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -196,7 +196,7 @@ TEST(mult_expr, scalar_dmat_mult) {
     auto expr = mgcpp::mult(mgcpp::ref(A_mat), 7.0);
 
     matrix B_mat;
-    EXPECT_NO_THROW({ B_mat = expr.eval(); });
+    EXPECT_NO_THROW({ B_mat = eval(expr); });
 
     auto shape = B_mat.shape();
     EXPECT_EQ(shape[0], 2);
@@ -217,7 +217,7 @@ TEST(mat_expression, mat_trans) {
 
   auto expr = mgcpp::trans(mgcpp::ref(mat));
   mgcpp::device_matrix<float> result{};
-  EXPECT_NO_THROW({ result = expr.eval(); });
+  EXPECT_NO_THROW({ result = eval(expr); });
   EXPECT_EQ(result.shape()[0], 3);
   EXPECT_EQ(result.shape()[1], 2);
   EXPECT_EQ(result.check_value(0, 0), -1);
@@ -242,7 +242,7 @@ TEST(mat_expression, mat_trans_gemm_add) {
       mgcpp::trans(mgcpp::ref(mat)) * mgcpp::ref(mat2) + mgcpp::ref(mat3);
 
   mgcpp::device_matrix<float> result{};
-  EXPECT_NO_THROW({ result = expr.eval(); });
+  EXPECT_NO_THROW({ result = eval(expr); });
 
   EXPECT_EQ(result.shape()[0], 3);
   EXPECT_EQ(result.shape()[1], 3);

@@ -19,14 +19,14 @@ struct dvec_map_expr : public dvec_expr<dvec_map_expr<Expr, Function>>
 {
     using expr_type = typename std::decay<Expr>::type;
 
-    using result_type = typename expr_type::result_type;
+    using result_type = typename Expr::result_type;
 
     Expr _expr;
 
     inline explicit dvec_map_expr(Expr const& expr) noexcept;
     inline explicit dvec_map_expr(Expr&& expr) noexcept;
 
-    inline decltype(auto) eval() const;
+    inline decltype(auto) eval(eval_context& ctx) const;
 };
 
 template <typename Expr>

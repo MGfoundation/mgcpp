@@ -1,3 +1,9 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef EVALUATOR_TPP
 #define EVALUATOR_TPP
 
@@ -6,43 +12,72 @@
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
+#include <mgcpp/expressions/dmat_trans_expr.hpp>
+#include <mgcpp/expressions/dvec_dvec_add.hpp>
+#include <mgcpp/expressions/dvec_map.hpp>
+#include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 #include <mgcpp/operations/add.hpp>
-#include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/gemm.hpp>
+#include <mgcpp/operations/mult.hpp>
+#include <mgcpp/operations/trans.hpp>
 
 namespace mgcpp {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_mat_add_op<LhsExpr, RhsExpr> const& expr) {
-    auto lhs = mgcpp::eval(expr._lhs);
-    auto rhs = mgcpp::eval(expr._rhs);
+auto eval(mat_mat_add_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+  auto const& lhs = mgcpp::eval(expr.first(), ctx);
+  auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
-    return strict::add(lhs, rhs);
+  return strict::add(lhs, rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_mat_mult_op<LhsExpr, RhsExpr> const& expr) {
-    auto const& lhs = mgcpp::eval(expr._lhs);
-    auto const& rhs = mgcpp::eval(expr._rhs);
+auto eval(mat_mat_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+  auto const& lhs = mgcpp::eval(expr.first(), ctx);
+  auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
-    return strict::mult(lhs, rhs);
+  return strict::mult(lhs, rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_vec_mult_op<LhsExpr, RhsExpr> const& expr) {
-    auto const& lhs = mgcpp::eval(expr._lhs);
-    auto const& rhs = mgcpp::eval(expr._rhs);
+auto eval(mat_vec_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+  auto const& lhs = mgcpp::eval(expr.first(), ctx);
+  auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
-    return strict::mult(lhs, rhs);
+  return strict::mult(lhs, rhs);
 }
+
+template <typename LhsExpr, typename RhsExpr>
+auto eval(vec_vec_add_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+  auto const& lhs = mgcpp::eval(expr.first(), ctx);
+  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+
+  return strict::add(lhs, rhs);
 }
+
+template <typename LhsExpr, typename RhsExpr>
+auto eval(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context& ctx) {
+  auto const& lhs = mgcpp::eval(expr.first(), ctx);
+  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+
+  return strict::mult(lhs, rhs);
+}
+
+template <typename Expr>
+auto eval(dmat_trans_expr<Expr> const& expr, eval_context& ctx) {
+  return mgcpp::strict::trans(mgcpp::eval(expr.first(), ctx));
+}
+
+}  // namespace internal
 
 template <typename Op>
-auto evaluator::eval(Op const& op) {
-    return internal::eval(op);
-}
+auto evaluator::eval(Op const& op, eval_context& ctx) {
+  return internal::eval(op, ctx);
 }
 
-#endif // EVALUATOR_TPP
+}  // namespace mgcpp
+
+#endif  // EVALUATOR_TPP

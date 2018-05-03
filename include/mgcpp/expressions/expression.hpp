@@ -11,6 +11,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <mgcpp/expressions/eval_context.hpp>
+
 namespace mgcpp {
 template <typename Type>
 struct expression {
@@ -23,7 +25,13 @@ struct expression {
 
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr) {
-  return (~expr).eval();
+  eval_context ctx;
+  return (~expr).eval(ctx);
+}
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr, eval_context& ctx) {
+  return (~expr).eval(ctx);
 }
 
 }  // namespace mgcpp

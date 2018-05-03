@@ -20,7 +20,7 @@ TEST(add_expr, row_major_mat_mat_add) {
   auto add_expr = mgcpp::ref(A_mat) + mgcpp::ref(B_mat);
 
   matrix C_mat;
-  EXPECT_NO_THROW({ C_mat = add_expr.eval(); });
+  EXPECT_NO_THROW({ C_mat = eval(add_expr); });
 
   auto shape = C_mat.shape();
   EXPECT_EQ(C_mat.shape(), A_mat.shape());
@@ -41,7 +41,7 @@ TEST(add_expr, row_major_mat_mat_add_func) {
   auto add_expr = mgcpp::add(mgcpp::ref(A_mat), mgcpp::ref(B_mat));
 
   matrix C_mat;
-  EXPECT_NO_THROW({ C_mat = add_expr.eval(); });
+  EXPECT_NO_THROW({ C_mat = eval(add_expr); });
 
   auto shape = C_mat.shape();
   EXPECT_EQ(C_mat.shape(), A_mat.shape());
@@ -60,7 +60,7 @@ TEST(elemwise_expr, abs_expr) {
   auto abs_expr = mgcpp::abs(mgcpp::ref(v));
 
   vector result;
-  EXPECT_NO_THROW({ result = abs_expr.eval(); });
+  EXPECT_NO_THROW({ result = eval(abs_expr); });
 
   EXPECT_EQ(result.shape(), 5);
 
@@ -76,7 +76,7 @@ TEST(elemwise_expr, sin_expr) {
   auto sin_expr = mgcpp::sin(mgcpp::ref(v));
 
   vector result;
-  EXPECT_NO_THROW({ result = sin_expr.eval(); });
+  EXPECT_NO_THROW({ result = eval(sin_expr); });
 
   EXPECT_EQ(result.shape(), 5);
 
@@ -93,6 +93,9 @@ TEST(caching, caching) {
     auto c = ref(a) + ref(b);
     auto d = trans(c);
     auto r = c * d;
-    auto result = mgcpp::eval(r);
+
+    mgcpp::eval_context ctx;
+    auto result = mgcpp::eval(r, ctx);
     EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
+    EXPECT_EQ(ctx.cache_hits, 1);
 }

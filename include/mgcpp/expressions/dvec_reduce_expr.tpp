@@ -1,3 +1,9 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
 #include <mgcpp/operations/sum.hpp>
 #include <mgcpp/operations/mean.hpp>
@@ -24,9 +30,9 @@ template <
     typename Expr,
     typename Expr::result_type::value_type (*Function)(
         typename Expr::result_type::parent_type const& vec)>
-decltype(auto) dvec_reduce_expr<Expr, Function>::eval() const
+decltype(auto) dvec_reduce_expr<Expr, Function>::eval(eval_context& ctx) const
 {
-    return Function(mgcpp::eval(_expr));
+    return Function(mgcpp::eval(_expr, ctx));
 }
 
 template <typename Expr>

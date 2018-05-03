@@ -11,29 +11,12 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/scalar_expr.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
+
 template <typename ScalExpr, typename DMatExpr>
-struct scalar_dmat_mult_expr
-    : public dmat_expr<scalar_dmat_mult_expr<ScalExpr, DMatExpr>> {
-  using scal_expr_type = typename std::decay<ScalExpr>::type;
-  using dmat_expr_type = typename std::decay<DMatExpr>::type;
-
-  using result_type = typename dmat_expr_type::result_type;
-
-  ScalExpr _scal_expr;
-  DMatExpr _dmat_expr;
-
-  inline scalar_dmat_mult_expr(ScalExpr const& scal_expr,
-                               DMatExpr const& dmat_expr) noexcept;
-
-  inline scalar_dmat_mult_expr(ScalExpr&& scal_expr,
-                               DMatExpr&& dmat_expr) noexcept;
-
-  /** Evaluates the compuational graph starting from this expression.
-   */
-  inline result_type eval() const;
-};
+using scalar_dmat_mult_expr = generic_op<'S', dmat_expr, typename DMatExpr::result_type, ScalExpr, DMatExpr>;
 
 /** Returns a scalar, dense matrix product expression.
  * \param lhs the left-hand side scalar variable

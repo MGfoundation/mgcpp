@@ -8,33 +8,18 @@
 #define _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
-struct dvec_dvec_add_expr
-    : public dvec_expr<dvec_dvec_add_expr<LhsExpr, RhsExpr>> {
-  using lhs_expr_type = typename std::decay<LhsExpr>::type;
-  using rhs_expr_type = typename std::decay<RhsExpr>::type;
-
-  using result_type = typename lhs_expr_type::result_type;
-
-  LhsExpr _lhs;
-  RhsExpr _rhs;
-
-  inline dvec_dvec_add_expr(LhsExpr const& lhs, RhsExpr const& rhs) noexcept;
-  inline dvec_dvec_add_expr(LhsExpr&& lhs, RhsExpr&& rhs) noexcept;
-
-  /** Evaluates the compuational graph starting from this expression.
-   */
-  inline result_type eval() const;
-};
+using vec_vec_add_op = generic_op<'a', dvec_expr, typename LhsExpr::result_type, LhsExpr, RhsExpr>;
 
 /** Returns a dense vector addition expression.
  * \param lhs the left-hand side dense vector
  * \param rhs the right-hand side dense vector
  */
 template <typename LhsExpr, typename RhsExpr>
-inline dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
+inline vec_vec_add_op<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 
@@ -43,7 +28,7 @@ inline dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
  * \param rhs the right-hand side dense vector
  */
 template <typename LhsExpr, typename RhsExpr>
-inline dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
+inline vec_vec_add_op<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp

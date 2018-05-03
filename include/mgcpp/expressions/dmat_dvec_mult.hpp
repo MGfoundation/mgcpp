@@ -9,12 +9,12 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/binary_op.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
 
 template <typename MatExpr, typename VecExpr>
-using mat_vec_mult_op = binary_op<'m', MatExpr, VecExpr, dvec_expr, typename VecExpr::result_type>;
+using mat_vec_mult_op = binary_op<'m', dvec_expr, typename VecExpr::result_type, MatExpr, VecExpr>;
 
 /** Returns a dense matrix vector product expression.
  * \param lhs the left-hand side dense matrix

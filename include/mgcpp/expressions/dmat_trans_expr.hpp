@@ -1,23 +1,20 @@
+
+//          Copyright RedPortal, mujjingun 2017 - 2018.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef _MGCPP_EXPRESSIONS_DMAT_TRANS_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_TRANS_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/matrix/forward.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
+
 template <typename Expr>
-struct dmat_trans_expr : public dmat_expr<dmat_trans_expr<Expr>> {
-  using expr_type = typename std::decay<Expr>::type;
-
-  using result_type = typename expr_type::result_type;
-
-  Expr _mat;
-
-  inline dmat_trans_expr(Expr const& mat) noexcept;
-  inline dmat_trans_expr(Expr&& mat) noexcept;
-
-  inline decltype(auto) eval() const;
-};
+using dmat_trans_expr = unary_op<'T', dmat_expr, typename Expr::result_type, Expr>;
 
 template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;

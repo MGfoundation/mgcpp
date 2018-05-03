@@ -21,7 +21,7 @@ TEST(lv2_expr, mat_vec_mult) {
   auto mult_expr = mgcpp::ref(M) * mgcpp::ref(v);
 
   vector result;
-  EXPECT_NO_THROW({ result = mult_expr.eval(); });
+  EXPECT_NO_THROW({ result = eval(mult_expr); });
 
   auto shape = result.shape();
   EXPECT_EQ(shape, 4);
@@ -38,7 +38,7 @@ TEST(lv2_expr, mat_reduce_sum) {
     vector v({1, 2, 3});
 
     auto sum = reduce_sum(ref(v));
-    auto val = sum.eval();
+    auto val = eval(sum);
 
     EXPECT_FLOAT_EQ(val, 6);
 }
@@ -49,7 +49,7 @@ TEST(lv2_expr, mat_reduce_mean) {
     vector v({1, 2, 3});
 
     auto sum = reduce_mean(ref(v));
-    auto val = sum.eval();
+    auto val = eval(sum);
 
     EXPECT_FLOAT_EQ(val, 2);
 }
