@@ -86,3 +86,13 @@ TEST(elemwise_expr, sin_expr) {
   for (size_t i = 0; i < result.shape(); ++i)
     EXPECT_FLOAT_EQ(result.check_value(i), expected[i]) << "i : " << i;
 }
+
+TEST(caching, caching) {
+    mgcpp::device_matrix<float> a(mgcpp::make_shape(3, 3)),
+                                b(mgcpp::make_shape(3, 3));
+    auto c = ref(a) + ref(b);
+    auto d = trans(c);
+    auto r = c * d;
+    auto result = mgcpp::eval(r);
+    EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
+}

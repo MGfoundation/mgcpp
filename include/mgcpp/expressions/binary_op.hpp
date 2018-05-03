@@ -18,14 +18,15 @@ struct binary_op
     LhsExpr _lhs;
     RhsExpr _rhs;
 
-    mutable std::shared_ptr<result_type> _cache = nullptr;
-
     inline binary_op(LhsExpr const& lhs, RhsExpr const& rhs) noexcept
         : _lhs(lhs), _rhs(rhs) {}
     inline binary_op(LhsExpr&& lhs, RhsExpr&& rhs) noexcept
         : _lhs(std::move(lhs)), _rhs(std::move(rhs)) {}
 
     inline result_type eval() const;
+
+protected:
+    mutable std::shared_ptr<std::unique_ptr<result_type>> cache_ptr = std::make_shared<std::unique_ptr<result_type>>(nullptr);
 };
 
 }
