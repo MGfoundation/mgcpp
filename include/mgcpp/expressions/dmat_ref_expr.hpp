@@ -14,17 +14,8 @@
 
 namespace mgcpp {
 
-template <typename Matrix /* = device_matrix<float> */>
-struct dmat_ref_expr : dmat_expr<dmat_ref_expr<Matrix>> {
-  using value_type = typename Matrix::value_type;
-  using result_type = Matrix;
-
-  Matrix const& _mat;
-  inline dmat_ref_expr(Matrix const& mat);
-
-  inline void traverse(eval_context&) const {}
-  inline Matrix const& eval(eval_context& ctx) const;
-};
+template <typename Matrix>
+using dmat_ref_expr = generic_op<expression_type, expression_type::DMAT_REF, dmat_expr, Matrix, 1, Matrix const&>;
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix> ref(

@@ -19,11 +19,11 @@ template <typename TagType,
           TagType Tag,
           template <typename> class ResultExprType,
           typename ResultType,
-          size_t NNonParameters,
+          size_t NParameters,
           typename... OperandTypes>
 struct generic_op
     : public ResultExprType<
-          generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>> {
+          generic_op<TagType, Tag, ResultExprType, ResultType, NParameters, OperandTypes...>> {
   using result_type = ResultType;
 
   std::tuple<OperandTypes...> exprs;
@@ -31,8 +31,8 @@ struct generic_op
   inline decltype(auto) second() const noexcept;
 
   inline generic_op(OperandTypes const&... args) noexcept : exprs(args...) {}
-  inline generic_op(OperandTypes&&... args) noexcept
-      : exprs(std::move(args)...) {}
+  //inline generic_op(OperandTypes&&... args) noexcept
+  //    : exprs(std::move(args)...) {}
 
   inline void traverse(eval_context& ctx) const;
   inline result_type eval(eval_context& ctx) const;
@@ -44,7 +44,9 @@ enum class expression_type {
   DMAT_DVEC_MULT,
   DMAT_TRANSPOSE,
   DVEC_DVEC_ADD,
-  SCALAR_DMAT_MULT
+  SCALAR_DMAT_MULT,
+  DMAT_REF,
+  DVEC_REF,
 };
 
 template <int PlaceholderID,

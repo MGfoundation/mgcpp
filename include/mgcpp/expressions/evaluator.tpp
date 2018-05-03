@@ -9,10 +9,12 @@
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
+#include <mgcpp/expressions/dmat_ref_expr.hpp>
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
 #include <mgcpp/expressions/dvec_map.hpp>
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
+#include <mgcpp/expressions/dvec_ref_expr.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 #include <mgcpp/operations/add.hpp>
@@ -82,6 +84,17 @@ template <typename Expr,
 auto eval(dvec_reduce_expr<Expr, Function> const& expr, eval_context& ctx) {
   return Function(mgcpp::eval(expr.first(), ctx));
 }
+
+template <typename Matrix>
+auto eval(dmat_ref_expr<Matrix> const& expr, eval_context&) {
+  return expr.first();
+}
+
+template <typename Vector>
+auto eval(dvec_ref_expr<Vector> const& expr, eval_context&) {
+  return expr.first();
+}
+
 }  // namespace internal
 
 template <typename Op>

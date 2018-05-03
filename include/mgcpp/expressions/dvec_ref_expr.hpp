@@ -9,24 +9,16 @@
 
 #include <mgcpp/expressions/dvec_expr.hpp>
 #include <mgcpp/vector/forward.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
 
-template <typename DenseVector, typename Type, size_t DeviceId>
-struct dvec_ref_expr : dvec_expr<dvec_ref_expr<DenseVector, Type, DeviceId>> {
-  using value_type = Type;
-  using result_type = DenseVector;
-
-  DenseVector const& _vec;
-  inline dvec_ref_expr(DenseVector const& vec);
-
-  inline void traverse(eval_context& ctx) const {}
-  inline DenseVector const& eval(eval_context& ctx) const;
-};
+template <typename Vector>
+using dvec_ref_expr = generic_op<expression_type, expression_type::DVEC_REF, dvec_expr, Vector, 1, Vector const&>;
 
 template <typename DenseVector, typename Type, size_t DeviceId>
-inline dvec_ref_expr<DenseVector, Type, DeviceId> ref(
-    dense_vector<DenseVector, Type, DeviceId> const& vec);
+inline dvec_ref_expr<DenseVector> ref(
+    dense_vector<DenseVector, Type, DeviceId> const& mat);
 }  // namespace mgcpp
 
 #endif

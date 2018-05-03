@@ -8,17 +8,6 @@
 
 namespace mgcpp {
 
-template <typename Matrix>
-inline dmat_ref_expr<Matrix>::dmat_ref_expr(
-    Matrix const& mat)
-    : _mat(mat) {}
-
-template <typename Matrix>
-inline Matrix const& dmat_ref_expr<Matrix>::eval(eval_context&)
-    const {
-  return _mat;
-}
-
 template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix> ref(
     dense_matrix<DenseMatrix, Type, DeviceId> const& mat) {

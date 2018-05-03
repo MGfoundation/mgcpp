@@ -9,19 +9,8 @@
 namespace mgcpp {
 
 template <typename DenseVector, typename Type, size_t DeviceId>
-inline dvec_ref_expr<DenseVector, Type, DeviceId>::dvec_ref_expr(
-    DenseVector const& vec)
-    : _vec(vec) {}
-
-template <typename DenseVector, typename Type, size_t DeviceId>
-inline DenseVector const& dvec_ref_expr<DenseVector, Type, DeviceId>::eval(eval_context&)
-    const {
-  return _vec;
-}
-
-template <typename DenseVector, typename Type, size_t DeviceId>
-inline dvec_ref_expr<DenseVector, Type, DeviceId> ref(
+inline dvec_ref_expr<DenseVector> ref(
     dense_vector<DenseVector, Type, DeviceId> const& vec) {
-  return dvec_ref_expr<DenseVector, Type, DeviceId>(~vec);
+  return dvec_ref_expr<DenseVector>(~vec);
 }
 }  // namespace mgcpp
