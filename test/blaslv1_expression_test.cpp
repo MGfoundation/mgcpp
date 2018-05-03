@@ -88,14 +88,36 @@ TEST(elemwise_expr, sin_expr) {
 }
 
 TEST(caching, caching) {
-    mgcpp::device_matrix<float> a(mgcpp::make_shape(3, 3)),
-                                b(mgcpp::make_shape(3, 3));
-    auto c = ref(a) + ref(b);
-    auto d = trans(c);
-    auto r = c * d;
+  mgcpp::device_matrix<float> a(mgcpp::make_shape(3, 3)),
+      b(mgcpp::make_shape(3, 3));
+  auto c = ref(a) + ref(b);
+  auto d = trans(c);
+  auto r = c * d;
 
+  {
     mgcpp::eval_context ctx;
     auto result = mgcpp::eval(r, ctx);
     EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
     EXPECT_EQ(ctx.cache_hits, 1);
+    float expected[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    for (size_t i = 0; i < 3; ++i) {
+      for (size_t j = 0; j < 3; ++j) {
+        EXPECT_FLOAT_EQ(result.check_value(i, j), expected[i][j]);
+      }
+    }
+  }
+
+  a.set_value(0, 0, 2.0f);
+  {
+    mgcpp::eval_context ctx;
+    auto result = mgcpp::eval(r, ctx);
+    EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
+    EXPECT_EQ(ctx.cache_hits, 1);
+    float expected[3][3] = {{4.0f, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    for (size_t i = 0; i < 3; ++i) {
+      for (size_t j = 0; j < 3; ++j) {
+        EXPECT_FLOAT_EQ(result.check_value(i, j), expected[i][j]);
+      }
+    }
+  }
 }

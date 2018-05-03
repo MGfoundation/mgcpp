@@ -7,6 +7,7 @@
 #ifndef _MGCPP_EXPRESSIONS_FORWARD_HPP_
 #define _MGCPP_EXPRESSIONS_FORWARD_HPP_
 
+#include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
 #include <mgcpp/expressions/dvec_map.hpp>
@@ -21,6 +22,7 @@
 #include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 
+#include <mgcpp/expressions/expression.tpp>
 #include <mgcpp/expressions/dvec_dvec_add.tpp>
 #include <mgcpp/expressions/dvec_ref_expr.tpp>
 #include <mgcpp/expressions/dvec_map.tpp>

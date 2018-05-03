@@ -8,21 +8,21 @@
 
 namespace mgcpp {
 
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline dmat_ref_expr<DenseMatrix, Type, DeviceId>::dmat_ref_expr(
-    DenseMatrix const& mat)
+template <typename Matrix>
+inline dmat_ref_expr<Matrix>::dmat_ref_expr(
+    Matrix const& mat)
     : _mat(mat) {}
 
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline DenseMatrix const& dmat_ref_expr<DenseMatrix, Type, DeviceId>::eval(eval_context&)
+template <typename Matrix>
+inline Matrix const& dmat_ref_expr<Matrix>::eval(eval_context&)
     const {
   return _mat;
 }
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline dmat_ref_expr<DenseMatrix, Type, DeviceId> ref(
+inline dmat_ref_expr<DenseMatrix> ref(
     dense_matrix<DenseMatrix, Type, DeviceId> const& mat) {
-  return dmat_ref_expr<DenseMatrix, Type, DeviceId>(~mat);
+  return dmat_ref_expr<DenseMatrix>(~mat);
 }
 
 }  // namespace mgcpp

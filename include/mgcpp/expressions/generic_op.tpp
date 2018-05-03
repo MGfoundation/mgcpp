@@ -4,55 +4,78 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef GENERIC_OP_TPP
-#define GENERIC_OP_TPP
-
 #include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/global/tuple_utils.hpp>
 
 namespace mgcpp {
 
-template <expression_type OpID,
+template <typename TagType,
+          TagType Tag,
           template <typename> class ResultExprType,
           typename ResultType,
+          size_t NNonParameters,
           typename... OperandTypes>
 inline decltype(auto)
-generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::first() const
-    noexcept {
+generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>::first()
+    const noexcept {
   return std::get<0>(exprs);
 }
 
-template <expression_type OpID,
+template <typename TagType,
+          TagType Tag,
           template <typename> class ResultExprType,
           typename ResultType,
+          size_t NNonParameters,
           typename... OperandTypes>
 inline decltype(auto)
-generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::second() const
-    noexcept {
+generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>::second()
+    const noexcept {
   return std::get<1>(exprs);
 }
 
-template <expression_type OpID,
+template <typename TagType,
+          TagType Tag,
           template <typename> class ResultExprType,
           typename ResultType,
+          size_t NNonParameters,
           typename... OperandTypes>
-typename generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::
+inline void
+generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>::traverse(
+    eval_context& ctx) const {
+  ctx.cnt[this->id]++;
+
+  // traverse from NNonParameters to sizeof...(OperandTypes) - 1
+  apply_void(take_rest<NNonParameters>(exprs), [&](auto const& expr) { expr.traverse(ctx); });
+}
+
+template <typename TagType,
+          TagType Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NNonParameters,
+          typename... OperandTypes>
+typename generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>::
     result_type
-    generic_op<OpID, ResultExprType, ResultType, OperandTypes...>::eval(
+    generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>::eval(
         eval_context& ctx) const {
   ctx.total_computations++;
-  if (cache_ptr.use_count() > 1) {
-    if (*cache_ptr == nullptr) {
-      *cache_ptr = std::make_unique<result_type>(evaluator::eval(*this, ctx));
-    } else {
-      ctx.cache_hits++;
+  /*
+    if (ctx.cnt.at(this->id)-- > 1)
+    {
+      auto it = ctx.cache.find(this->id);
+      if (it != ctx.cache.end()) {
+        ctx.cache_hits++;
+        return it->second.template get<result_type>();
+      }
+      else {
+        auto result = evaluator::eval(*this, ctx);
+        ctx.cache[this->id] = result;
+        return result;
+      }
     }
-    return **cache_ptr;
-  } else {
-    return evaluator::eval(*this, ctx);
-  }
+  */
+  return evaluator::eval(*this, ctx);
 }
 
 }  // namespace mgcpp
-
-#endif  // GENERIC_OP_TPP

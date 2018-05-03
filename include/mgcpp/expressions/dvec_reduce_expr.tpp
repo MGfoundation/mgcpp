@@ -10,31 +10,6 @@
 
 namespace mgcpp
 {
-template <
-    typename Expr,
-    typename Expr::result_type::value_type (*Function)(
-        typename Expr::result_type::parent_type const& vec)>
-dvec_reduce_expr<Expr, Function>::dvec_reduce_expr(const Expr& expr) noexcept
-    : _expr(expr)
-{}
-
-template <
-    typename Expr,
-    typename Expr::result_type::value_type (*Function)(
-        typename Expr::result_type::parent_type const& vec)>
-dvec_reduce_expr<Expr, Function>::dvec_reduce_expr(Expr&& expr) noexcept
-    : _expr(std::move(expr))
-{}
-
-template <
-    typename Expr,
-    typename Expr::result_type::value_type (*Function)(
-        typename Expr::result_type::parent_type const& vec)>
-decltype(auto) dvec_reduce_expr<Expr, Function>::eval(eval_context& ctx) const
-{
-    return Function(mgcpp::eval(_expr, ctx));
-}
-
 template <typename Expr>
 decltype(auto) reduce_sum(const dvec_expr<Expr>& expr) noexcept
 {

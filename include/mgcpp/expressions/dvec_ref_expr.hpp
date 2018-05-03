@@ -19,6 +19,8 @@ struct dvec_ref_expr : dvec_expr<dvec_ref_expr<DenseVector, Type, DeviceId>> {
 
   DenseVector const& _vec;
   inline dvec_ref_expr(DenseVector const& vec);
+
+  inline void traverse(eval_context& ctx) const {}
   inline DenseVector const& eval(eval_context& ctx) const;
 };
 

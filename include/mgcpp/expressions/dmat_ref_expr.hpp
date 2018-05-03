@@ -10,21 +10,24 @@
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/matrix/forward.hpp>
 #include <mgcpp/expressions/eval_context.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
 
-template <typename DenseMatrix, typename Type, size_t DeviceId>
-struct dmat_ref_expr : dmat_expr<dmat_ref_expr<DenseMatrix, Type, DeviceId>> {
-  using value_type = Type;
-  using result_type = DenseMatrix;
+template <typename Matrix /* = device_matrix<float> */>
+struct dmat_ref_expr : dmat_expr<dmat_ref_expr<Matrix>> {
+  using value_type = typename Matrix::value_type;
+  using result_type = Matrix;
 
-  DenseMatrix const& _mat;
-  inline dmat_ref_expr(DenseMatrix const& mat);
-  inline DenseMatrix const& eval(eval_context& ctx) const;
+  Matrix const& _mat;
+  inline dmat_ref_expr(Matrix const& mat);
+
+  inline void traverse(eval_context&) const {}
+  inline Matrix const& eval(eval_context& ctx) const;
 };
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
-inline dmat_ref_expr<DenseMatrix, Type, DeviceId> ref(
+inline dmat_ref_expr<DenseMatrix> ref(
     dense_matrix<DenseMatrix, Type, DeviceId> const& mat);
 }  // namespace mgcpp
 

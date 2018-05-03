@@ -12,11 +12,11 @@
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
-using vec_vec_add_op = generic_op<expression_type::DVEC_DVEC_ADD,
-                                  dvec_expr,
-                                  typename LhsExpr::result_type,
-                                  LhsExpr,
-                                  RhsExpr>;
+using vec_vec_add_op = binary_op<expression_type::DVEC_DVEC_ADD,
+                                 dvec_expr,
+                                 typename LhsExpr::result_type,
+                                 LhsExpr,
+                                 RhsExpr>;
 
 /** Returns a dense vector addition expression.
  * \param lhs the left-hand side dense vector

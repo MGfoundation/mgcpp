@@ -8,12 +8,35 @@
 #define GENERIC_OP_HPP
 
 #include <memory>
-#include <utility>
 #include <tuple>
+#include <utility>
 
 #include <mgcpp/expressions/eval_context.hpp>
 
 namespace mgcpp {
+
+template <typename TagType,
+          TagType Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NNonParameters,
+          typename... OperandTypes>
+struct generic_op
+    : public ResultExprType<
+          generic_op<TagType, Tag, ResultExprType, ResultType, NNonParameters, OperandTypes...>> {
+  using result_type = ResultType;
+
+  std::tuple<OperandTypes...> exprs;
+  inline decltype(auto) first() const noexcept;
+  inline decltype(auto) second() const noexcept;
+
+  inline generic_op(OperandTypes const&... args) noexcept : exprs(args...) {}
+  inline generic_op(OperandTypes&&... args) noexcept
+      : exprs(std::move(args)...) {}
+
+  inline void traverse(eval_context& ctx) const;
+  inline result_type eval(eval_context& ctx) const;
+};
 
 enum class expression_type {
   DMAT_DMAT_ADD,
@@ -24,36 +47,24 @@ enum class expression_type {
   SCALAR_DMAT_MULT
 };
 
+template <int PlaceholderID,
+          template <typename> class ResultExprType,
+          typename ResultType>
+using placeholder_node = generic_op<int, PlaceholderID, ResultExprType, ResultType, 0>;
+
 template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
-          typename... OperandTypes>
-struct generic_op
-    : public ResultExprType<
-          generic_op<OpID, ResultExprType, ResultType, OperandTypes...>> {
-  using result_type = ResultType;
+          typename Expr>
+using unary_op = generic_op<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
 
-  std::tuple<OperandTypes...> exprs;
-  inline decltype(auto) first() const noexcept;
-  inline decltype(auto) second() const noexcept;
-
-  inline generic_op(OperandTypes const& ... args) noexcept
-      : exprs(args...) {}
-  inline generic_op(OperandTypes&& ... args) noexcept
-      : exprs(std::move(args)...) {}
-
-  inline result_type eval(eval_context& ctx) const;
-
- protected:
-  mutable std::shared_ptr<std::unique_ptr<result_type>> cache_ptr =
-      std::make_shared<std::unique_ptr<result_type>>(nullptr);
-};
-
-template <expression_type OpID, template<typename> class ResultExprType, typename ResultType, typename Expr>
-using unary_op = generic_op<OpID, ResultExprType, ResultType, Expr>;
-
-template <expression_type OpID, template<typename> class ResultExprType, typename ResultType, typename LhsExpr, typename RhsExpr>
-using binary_op = generic_op<OpID, ResultExprType, ResultType, LhsExpr, RhsExpr>;
+template <expression_type OpID,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          typename LhsExpr,
+          typename RhsExpr>
+using binary_op =
+    generic_op<expression_type, OpID, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
 
 }  // namespace mgcpp
 

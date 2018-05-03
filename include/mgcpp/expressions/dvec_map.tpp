@@ -9,25 +9,6 @@
 
 namespace mgcpp {
 
-template <typename Expr,
-          typename Expr::result_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-dvec_map_expr<Expr, Function>::dvec_map_expr(Expr const& expr) noexcept
-    : _expr(expr) {}
-
-template <typename Expr,
-          typename Expr::result_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-dvec_map_expr<Expr, Function>::dvec_map_expr(Expr&& expr) noexcept
-    : _expr(std::move(expr)) {}
-
-template <typename Expr,
-          typename Expr::result_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-decltype(auto) dvec_map_expr<Expr, Function>::eval(eval_context& ctx) const {
-  return Function(mgcpp::eval(_expr, ctx));
-}
-
 template <typename Expr>
 inline decltype(auto) abs(dvec_expr<Expr> const& expr) noexcept {
   return dvec_map_expr<Expr, strict::abs>(~expr);
