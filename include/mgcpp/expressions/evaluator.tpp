@@ -95,6 +95,13 @@ auto eval(dvec_ref_expr<Vector> const& expr, eval_context&) {
   return expr.first();
 }
 
+template <int PlaceholderID,
+          template <typename> class ResultExprType,
+          typename ResultType>
+ResultType eval(placeholder_node<PlaceholderID, ResultExprType, ResultType>, eval_context& ctx) {
+  return ctx.get_placeholder<PlaceholderID, ResultType>();
+}
+
 }  // namespace internal
 
 template <typename Op>

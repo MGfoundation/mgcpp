@@ -9,6 +9,8 @@
 
 #include <memory>
 #include <mgcpp/expressions/expression.hpp>
+#include <tuple>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 
@@ -23,10 +25,12 @@ struct eval_context {
     erased() = default;
 
     template <typename T>
-    erased(T const& data) : m(std::make_shared<model<T>>(data)) {}
+    erased(T&& data)
+        : m(std::make_shared<model<std::remove_reference_t<T>>>(
+              std::forward<T>(data))) {}
 
     template <typename T>
-    T get() {
+    T get() const {
       return static_cast<model<T> const&>(*m).data;
     }
 
@@ -45,6 +49,19 @@ struct eval_context {
 
   std::unordered_map<expr_id_type, size_t> cnt;
   std::unordered_map<expr_id_type, erased> cache;
+
+  std::unordered_map<size_t, erased> placeholders;
+
+  template <size_t... Placeholders, typename... Args>
+  void feed(Args const&... args) {
+    (void)std::initializer_list<int>{
+        ((void)placeholders.insert({Placeholders, erased(args)}), 0)...};
+  }
+
+  template <size_t PlaceholderID, typename ResultType>
+  auto get_placeholder() const {
+    return placeholders.at(PlaceholderID).get<ResultType>();
+  }
 };
 }  // namespace mgcpp
 

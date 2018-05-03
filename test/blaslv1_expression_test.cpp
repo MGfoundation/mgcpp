@@ -121,3 +121,22 @@ TEST(caching, caching) {
     }
   }
 }
+
+TEST(placeholder, placeholder) {
+  mgcpp::placeholder_node<0, mgcpp::dvec_expr, mgcpp::device_vector<float>> ph_0;
+  mgcpp::placeholder_node<1, mgcpp::dvec_expr, mgcpp::device_vector<float>> ph_1;
+  auto added = ph_0 + ph_1;
+
+  mgcpp::device_vector<float> a({1, 2, 3});
+  mgcpp::device_vector<float> b({9, 18, 27});
+
+  mgcpp::eval_context ctx;
+  ctx.feed<0>(a);
+  ctx.feed<1>(b);
+  auto result = eval(added, ctx);
+
+  float expected[] = {10, 20, 30};
+  for (size_t i = 0; i < 3; ++i) {
+      EXPECT_FLOAT_EQ(result.check_value(i), expected[i]);
+  }
+}

@@ -70,7 +70,7 @@ typename generic_op<TagType, Tag, ResultExprType, ResultType, NParameters, Opera
   // If cached, return the cache
   if (it != ctx.cache.end()) {
     ctx.cache_hits++;
-    auto cached = std::move(it->second.template get<result_type>());
+    auto cached = it->second.template get<result_type>();
 
     // Erase the cache for memory if it is no longer needed
     if (left == 0)
