@@ -9,7 +9,6 @@
 
 #include <gtest/gtest.h>
 
-#define MGCPP_TEST(FIXTURE, TEST_NAME, TEST_CASE) \
-    TEST_F(FIXTURE, TEST_NAME){TEST_CASE} 
+#define MGCPP_TEST(FIXTURE, TEST_NAME) TEST_F(FIXTURE, TEST_NAME){TEST_NAME();} 
 
 #endif
