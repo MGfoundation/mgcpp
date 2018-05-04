@@ -7,9 +7,9 @@
 #ifndef _MGCPP_EXPRESSIONS_SCALAR_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_SCALAR_EXPR_HPP_
 
+#include <mgcpp/expressions/eval_context.hpp>
 #include <mgcpp/type_traits/is_scalar.hpp>
 #include <type_traits>
-#include <mgcpp/expressions/eval_context.hpp>
 
 namespace mgcpp {
 template <typename Type>
@@ -17,14 +17,14 @@ struct scalar_expr;
 
 template <typename Scalar>
 inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
-    Scalar scalar, eval_context&) {
+    Scalar scalar,
+    eval_context&) {
   return scalar;
 }
 
 template <typename Scalar>
 inline typename std::enable_if<is_scalar<Scalar>::value, void>::type traverse(
-    Scalar, eval_context&) {
-}
+    Scalar) {}
 }  // namespace mgcpp
 
 #endif

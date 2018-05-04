@@ -95,10 +95,9 @@ TEST(caching, caching) {
   auto r = c * d;
 
   {
-    mgcpp::eval_context ctx;
-    auto result = mgcpp::eval(r, ctx);
+    auto result = r.eval();
     EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
-    EXPECT_EQ(ctx.cache_hits, 1);
+    EXPECT_EQ(mgcpp::get_eval_cache().cache_hits, 1);
     float expected[3][3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
     for (size_t i = 0; i < 3; ++i) {
       for (size_t j = 0; j < 3; ++j) {
@@ -109,10 +108,9 @@ TEST(caching, caching) {
 
   a.set_value(0, 0, 2.0f);
   {
-    mgcpp::eval_context ctx;
-    auto result = mgcpp::eval(r, ctx);
+    auto result = r.eval();
     EXPECT_EQ(result.shape(), mgcpp::make_shape(3, 3));
-    EXPECT_EQ(ctx.cache_hits, 1);
+    EXPECT_EQ(mgcpp::get_eval_cache().cache_hits, 1);
     float expected[3][3] = {{4.0f, 0, 0}, {0, 0, 0}, {0, 0, 0}};
     for (size_t i = 0; i < 3; ++i) {
       for (size_t j = 0; j < 3; ++j) {

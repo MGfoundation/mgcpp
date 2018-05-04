@@ -18,11 +18,9 @@ expr_id_type make_id();
 
 template <typename Type>
 struct expression {
-  inline Type& operator~() noexcept { return *static_cast<Type*>(this); }
+  inline Type& operator~() noexcept;
 
-  inline Type const& operator~() const noexcept {
-    return *static_cast<Type const*>(this);
-  }
+  inline Type const& operator~() const noexcept;
 
 protected:
   expr_id_type id = make_id();
@@ -38,16 +36,7 @@ template <typename T>
 inline typename T::result_type eval(expression<T> const& expr);
 
 template <typename T>
-inline void traverse(expression<T> const& expr, eval_context& ctx);
-
-/*
-template <typename... Ts>
-inline std::tuple<typename Ts::result_type...> eval(
-    std::tuple<Ts...> const& tuple,
-    eval_context& ctx) {
-  return std::make_tuple(eval(tuple, ctx)...);
-}
-*/
+inline void traverse(expression<T> const& expr);
 
 }  // namespace mgcpp
 
