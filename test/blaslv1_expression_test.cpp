@@ -122,9 +122,11 @@ TEST(caching, caching) {
   }
 }
 
-TEST(placeholder, placeholder) {
-  mgcpp::placeholder_node<0, mgcpp::dvec_expr, mgcpp::device_vector<float>> ph_0;
-  mgcpp::placeholder_node<1, mgcpp::dvec_expr, mgcpp::device_vector<float>> ph_1;
+TEST(placeholder_expr, placeholder_expr) {
+  mgcpp::placeholder_node<0, mgcpp::dvec_expr, mgcpp::device_vector<float>>
+      ph_0;
+  mgcpp::placeholder_node<1, mgcpp::dvec_expr, mgcpp::device_vector<float>>
+      ph_1;
   auto added = ph_0 + ph_1;
 
   mgcpp::device_vector<float> a({1, 2, 3});
@@ -137,6 +139,34 @@ TEST(placeholder, placeholder) {
 
   float expected[] = {10, 20, 30};
   for (size_t i = 0; i < 3; ++i) {
-      EXPECT_FLOAT_EQ(result.check_value(i), expected[i]);
+    EXPECT_FLOAT_EQ(result.check_value(i), expected[i]);
+  }
+}
+
+TEST(tie_expr, tie_expr) {
+  mgcpp::placeholder_node<0, mgcpp::dvec_expr, mgcpp::device_vector<float>>
+      ph_0;
+  mgcpp::placeholder_node<1, mgcpp::dvec_expr, mgcpp::device_vector<float>>
+      ph_1;
+  auto added = mgcpp::tie(ph_0 + ph_1, ph_1);
+
+  mgcpp::device_vector<float> a({1, 2, 3});
+  mgcpp::device_vector<float> b({9, 18, 27});
+
+  mgcpp::eval_context ctx;
+  ctx.feed<0>(a);
+  ctx.feed<1>(b);
+
+  mgcpp::device_vector<float> result_1, result_2;
+  std::tie(result_1, result_2) = eval(added, ctx);
+
+  float expected1[] = {10, 20, 30};
+  for (size_t i = 0; i < 3; ++i) {
+    EXPECT_FLOAT_EQ(result_1.check_value(i), expected1[i]);
+  }
+
+  float expected2[] = {9, 18, 27};
+  for (size_t i = 0; i < 3; ++i) {
+    EXPECT_FLOAT_EQ(result_2.check_value(i), expected2[i]);
   }
 }

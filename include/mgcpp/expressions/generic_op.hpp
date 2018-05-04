@@ -12,6 +12,7 @@
 #include <utility>
 
 #include <mgcpp/expressions/eval_context.hpp>
+#include <mgcpp/global/tuple_utils.hpp>
 
 namespace mgcpp {
 
@@ -35,7 +36,8 @@ struct generic_op : public ResultExprType<generic_op<TagType,
     is_terminal = sizeof...(OperandTypes) == NParameters,
   };
 
-  // Operand expressions
+  // Operand expressions (first NParameter elements are non-expression
+  // parameters)
   std::tuple<OperandTypes...> exprs;
 
   // Convenience getters for the operands
@@ -43,12 +45,7 @@ struct generic_op : public ResultExprType<generic_op<TagType,
   inline decltype(auto) second() const noexcept;
 
   // Constructor
-  inline generic_op(OperandTypes const&... args) noexcept : exprs(args...) {}
-
-  // TODO: overload this constructor if all arguments are moveable.
-  // (Possibly by SFINAE)
-  // inline generic_op(OperandTypes&&... args) noexcept
-  //    : exprs(std::move(args)...) {}
+  inline generic_op(OperandTypes... args) noexcept;
 
   // Analyze information about the tree
   inline void traverse(eval_context& ctx) const;
@@ -66,6 +63,7 @@ enum class expression_type {
   SCALAR_DMAT_MULT,
   DMAT_REF,
   DVEC_REF,
+  TIE
 };
 
 // A placeholder node with 0 operands
@@ -83,7 +81,8 @@ template <expression_type OpID,
 using unary_op =
     generic_op<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
 
-// A binary operator with left and right operands (i.e. addition, multiplication)
+// A binary operator with left and right operands (i.e. addition,
+// multiplication)
 template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
@@ -96,7 +95,6 @@ using binary_op = generic_op<expression_type,
                              0,
                              LhsExpr,
                              RhsExpr>;
-
 }  // namespace mgcpp
 
 #endif  // GENERIC_OP_HPP

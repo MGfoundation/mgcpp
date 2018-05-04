@@ -21,6 +21,7 @@
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
 #include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/tie_expr.hpp>
 
 #include <mgcpp/expressions/expression.tpp>
 #include <mgcpp/expressions/dvec_dvec_add.tpp>
@@ -36,5 +37,6 @@
 #include <mgcpp/expressions/dvec_reduce_expr.tpp>
 #include <mgcpp/expressions/evaluator.tpp>
 #include <mgcpp/expressions/generic_op.tpp>
+#include <mgcpp/expressions/tie_expr.tpp>
 
 #endif
