@@ -8,44 +8,13 @@
 #define EVAL_CONTEXT_HPP
 
 #include <memory>
+#include <mgcpp/global/type_erased.hpp>
 #include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 #include <type_traits>
 #include <unordered_map>
 
 namespace mgcpp {
-
-struct type_erased {
-  type_erased() = default;
-
-  template <typename T>
-  type_erased(T&& data);
-
-  template <typename T>
-  T get() const;
-
-  struct concept {
-    virtual ~concept() = default;
-  };
-
-  template <typename T>
-  struct model final : concept {
-    model(T const& x);
-    model(T&& x);
-    T data;
-  };
-
-  std::shared_ptr<concept const> m;
-};
-
-struct eval_cache {
-  int total_computations = 0;
-  int cache_hits = 0;
-  bool evaluating = false;
-  std::unordered_map<expr_id_type, int> cnt;
-  std::unordered_map<expr_id_type, type_erased> map;
-};
-extern thread_local eval_cache thread_eval_cache;
 
 struct eval_context {
   /** Associate a value to a placeholder. The associated value will be fed to

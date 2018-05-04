@@ -78,7 +78,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/mgblas_error.cpp
     ${SOURCE_DIR}/thread_context.cpp
     ${SOURCE_DIR}/generic_op.cpp
-    ${SOURCE_DIR}/eval_context.cpp)
+    ${SOURCE_DIR}/eval_cache.cpp)
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
     "${BASE_SOURCE_FILES}")

@@ -4,6 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <mgcpp/expressions/eval_cache.hpp>
 #include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
@@ -67,7 +68,7 @@ inline void generic_op<TagType,
                        ResultType,
                        NParameters,
                        OperandTypes...>::traverse() const {
-  auto& cache = thread_eval_cache;
+  auto& cache = get_eval_cache();
 
   cache.cnt[this->id]++;
 
@@ -82,13 +83,13 @@ inline void generic_op<TagType,
 namespace internal {
 struct cache_lock_guard {
   cache_lock_guard() {
-    auto& cache = thread_eval_cache;
+    auto& cache = get_eval_cache();
     cache.total_computations = 0;
     cache.cache_hits = 0;
     cache.evaluating = true;
   }
   ~cache_lock_guard() {
-    auto& cache = thread_eval_cache;
+    auto& cache = get_eval_cache();
     cache.evaluating = false;
     MGCPP_ASSERT(cache.cnt.empty(),
                  "Cache counter is not empty after evaluation");
@@ -137,7 +138,7 @@ generic_op<TagType,
            ResultType,
            NParameters,
            OperandTypes...>::eval(eval_context& ctx) const {
-  auto& cache = thread_eval_cache;
+  auto& cache = get_eval_cache();
 
   // traverse the tree first to count the number of duplicate subtrees
   if (!cache.evaluating) {
