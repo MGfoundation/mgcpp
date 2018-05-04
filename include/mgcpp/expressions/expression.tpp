@@ -1,21 +1,24 @@
 #ifndef EXPRESSION_TPP
 #define EXPRESSION_TPP
 
-#include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/expressions/eval_context.hpp>
+#include <mgcpp/expressions/expression.hpp>
 
 namespace mgcpp {
+
+template <typename Type>
+Type& expression<Type>::operator~() noexcept {
+  return *static_cast<Type*>(this);
+}
+
+template <typename Type>
+const Type& expression<Type>::operator~() const noexcept {
+  return *static_cast<Type const*>(this);
+}
+
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr,
                                     eval_context& ctx) {
-
-  // traverse the tree first to count the number of duplicate subtrees
-  if (!ctx.is_evaluating) {
-    traverse(expr, ctx);
-  }
-
-  // mask the context so that traverse() won't be called hereafter
-  ctx.is_evaluating = true;
   return (~expr).eval(ctx);
 }
 
@@ -26,9 +29,10 @@ inline typename T::result_type eval(expression<T> const& expr) {
 }
 
 template <typename T>
-inline void traverse(expression<T> const& expr, eval_context& ctx) {
-  (~expr).traverse(ctx);
-}
+inline void traverse(expression<T> const& expr) {
+  (~expr).traverse();
 }
 
-#endif // EXPRESSION_TPP
+}  // namespace mgcpp
+
+#endif  // EXPRESSION_TPP

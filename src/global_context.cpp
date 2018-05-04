@@ -7,7 +7,7 @@
 #include <mgcpp/context/global_context.hpp>
 
 namespace mgcpp {
-global_context _singl_context{};
+static global_context _singl_context{};
 
 thread_context& global_context::get_thread_context() {
   auto this_thread_id = std::this_thread::get_id();

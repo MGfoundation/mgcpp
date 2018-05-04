@@ -50,8 +50,8 @@ struct generic_op : public ResultExprType<generic_op<TagType,
   // Constructor
   inline generic_op(OperandTypes... args) noexcept;
 
-  // Analyze information about the tree
-  inline void traverse(eval_context& ctx) const;
+  // Analyze information about the expression tree
+  inline void traverse() const;
 
   // Evaluate this expression with the context `ctx`.
   inline result_type eval(eval_context& ctx) const;
