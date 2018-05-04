@@ -10,9 +10,10 @@
 #include <cublas_v2.h>
 
 namespace mgcpp {
+namespace cublas {
 // lv1
 template <>
-inline outcome::result<void> cublas::dot(cublasHandle_t handle,
+inline outcome::result<void> dot(cublasHandle_t handle,
                                          size_t n,
                                          float const* x,
                                          size_t incx,
@@ -28,7 +29,7 @@ inline outcome::result<void> cublas::dot(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::dot(cublasHandle_t handle,
+inline outcome::result<void> dot(cublasHandle_t handle,
                                          size_t n,
                                          double const* x,
                                          size_t incx,
@@ -44,7 +45,7 @@ inline outcome::result<void> cublas::dot(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::axpy(cublasHandle_t handle,
+inline outcome::result<void> axpy(cublasHandle_t handle,
                                           size_t n,
                                           float const* alpha,
                                           float const* x,
@@ -60,7 +61,7 @@ inline outcome::result<void> cublas::axpy(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::axpy(cublasHandle_t handle,
+inline outcome::result<void> axpy(cublasHandle_t handle,
                                           size_t n,
                                           double const* alpha,
                                           double const* x,
@@ -76,7 +77,7 @@ inline outcome::result<void> cublas::axpy(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           float const* alpha,
                                           float* vec,
@@ -90,7 +91,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           double const* alpha,
                                           double* vec,
@@ -104,7 +105,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           cuComplex const* alpha,
                                           cuComplex* vec,
@@ -119,7 +120,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           float const* alpha,
                                           cuComplex* vec,
@@ -133,7 +134,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           cuDoubleComplex const* alpha,
                                           cuDoubleComplex* vec,
@@ -147,7 +148,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::scal(cublasHandle_t handle,
+inline outcome::result<void> scal(cublasHandle_t handle,
                                           size_t n,
                                           double const* alpha,
                                           cuDoubleComplex* vec,
@@ -163,7 +164,7 @@ inline outcome::result<void> cublas::scal(cublasHandle_t handle,
 // lv2
 
 template <>
-inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
+inline outcome::result<void> gemv(cublasHandle_t handle,
                                           cublasOperation_t trans,
                                           int m,
                                           int n,
@@ -185,7 +186,7 @@ inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
+inline outcome::result<void> gemv(cublasHandle_t handle,
                                           cublasOperation_t trans,
                                           int m,
                                           int n,
@@ -207,7 +208,7 @@ inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
+inline outcome::result<void> gemv(cublasHandle_t handle,
                                           cublasOperation_t trans,
                                           int m,
                                           int n,
@@ -229,7 +230,7 @@ inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
+inline outcome::result<void> gemv(cublasHandle_t handle,
                                           cublasOperation_t trans,
                                           int m,
                                           int n,
@@ -252,7 +253,7 @@ inline outcome::result<void> cublas::gemv(cublasHandle_t handle,
 
 // lv3
 template <>
-inline outcome::result<void> cublas::gemm(cublasHandle_t handle,
+inline outcome::result<void> gemm(cublasHandle_t handle,
                                           cublasOperation_t transa,
                                           cublasOperation_t transb,
                                           size_t m,
@@ -276,7 +277,7 @@ inline outcome::result<void> cublas::gemm(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::gemm(cublasHandle_t handle,
+inline outcome::result<void> gemm(cublasHandle_t handle,
                                           cublasOperation_t transa,
                                           cublasOperation_t transb,
                                           size_t m,
@@ -301,7 +302,7 @@ inline outcome::result<void> cublas::gemm(cublasHandle_t handle,
 
 // blas-like cublas extensions
 template <>
-inline outcome::result<void> cublas::geam(cublasHandle_t handle,
+inline outcome::result<void> geam(cublasHandle_t handle,
                                           cublasOperation_t transa,
                                           cublasOperation_t transb,
                                           size_t m,
@@ -324,7 +325,7 @@ inline outcome::result<void> cublas::geam(cublasHandle_t handle,
 }
 
 template <>
-inline outcome::result<void> cublas::geam(cublasHandle_t handle,
+inline outcome::result<void> geam(cublasHandle_t handle,
                                           cublasOperation_t transa,
                                           cublasOperation_t transb,
                                           size_t m,
@@ -344,5 +345,6 @@ inline outcome::result<void> cublas::geam(cublasHandle_t handle,
     return err;
   else
     return outcome::success();
+}
 }
 }  // namespace mgcpp

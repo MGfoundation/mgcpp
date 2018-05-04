@@ -60,7 +60,7 @@ struct generic_op : public ResultExprType<generic_op<TagType,
 
   /**
    * Evaluate this expression with context.
-   * \param ctx the context in which to evaluate the expression.
+   * \param ctx the context the expression is evaluated in.
    */
   inline result_type eval(eval_context& ctx) const;
 };
