@@ -1,4 +1,5 @@
 
+## All these files will be deprecated!
 set(TEST_SOURCE_FILES
     ${TEST_DIR}/main.cpp
     ${TEST_DIR}/test_policy.cpp
@@ -21,6 +22,49 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/blaslv3_expression_test.cpp
     ${TEST_DIR}/blaslv2_expression_test.cpp
     ${TEST_DIR}/fft_test.cpp)
+
+# System Test
+set(SYSTEM_TEST_PATH ${TEST_DIR}/system)
+
+# Allocator Test
+set(ALLOCATOR_TEST_PATH ${TEST_DIR}/allocators)
+
+# Adapters Test
+set(ADAPTERS_TEST_PATH ${TEST_DIR}/adapters)
+
+# Context Test
+set(CONTEXT_TEST_PATH ${TEST_DIR}/context)
+
+# CUDA Test
+set(CUDA_TEST_PATH ${TEST_DIR}/cuda)
+
+# CUDA LIBS Test
+set(CUDA_LIBS_TEST_PATH ${TEST_DIR}/cuda_libs)
+
+# Matrix Test
+set(MATRIX_TEST_PATH ${TEST_DIR}/matrix)
+set(TEST_SOURCE_FILES
+    ${TEST_SOURCE_FILES}
+    ${MATRIX_TEST_PATH}/device_matrix_test.cpp)
+
+# Operations Test
+set(OPERATIONS_TEST_PATH ${TEST_DIR}/operations)
+
+# Expressions Test
+set(EXPRESSIONS_TEST_PATH ${TEST_DIR}/expressions)
+
+# Vector Test
+set(VECTOR_TEST_PATH ${TEST_DIR}/vector)
+
+# Operations Test
+set(OPERATIONS_TEST_PATH ${TEST_DIR}/operations)
+
+# Kernels Test
+set(KERNELS_TEST_PATH ${TEST_DIR}/kernels)
+
+# Type Traits Test
+set(TYPE_TRAITS_TEST_PATH ${TEST_DIR}/type_traits)
+
 mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
     "${TEST_SOURCE_FILES}")
 
