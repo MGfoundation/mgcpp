@@ -24,8 +24,7 @@ inline typename T::result_type eval(expression<T> const& expr,
 
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr) {
-  eval_context ctx;
-  return eval(expr, ctx);
+  return (~expr).eval();
 }
 
 template <typename T>

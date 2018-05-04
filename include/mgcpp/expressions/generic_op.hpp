@@ -53,7 +53,15 @@ struct generic_op : public ResultExprType<generic_op<TagType,
   // Analyze information about the expression tree
   inline void traverse() const;
 
-  // Evaluate this expression with the context `ctx`.
+  /**
+   * Evaluate this expression with an empty default context.
+   */
+  inline result_type eval() const;
+
+  /**
+   * Evaluate this expression with context.
+   * \param ctx the context in which to evaluate the expression.
+   */
   inline result_type eval(eval_context& ctx) const;
 };
 

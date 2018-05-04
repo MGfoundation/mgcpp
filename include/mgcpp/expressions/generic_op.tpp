@@ -114,6 +114,28 @@ generic_op<TagType,
            ResultExprType,
            ResultType,
            NParameters,
+           OperandTypes...>::eval() const {
+  eval_context ctx;
+  return this->eval(ctx);
+}
+
+template <typename TagType,
+          TagType Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
+typename generic_op<TagType,
+                    Tag,
+                    ResultExprType,
+                    ResultType,
+                    NParameters,
+                    OperandTypes...>::result_type
+generic_op<TagType,
+           Tag,
+           ResultExprType,
+           ResultType,
+           NParameters,
            OperandTypes...>::eval(eval_context& ctx) const {
   auto& cache = thread_eval_cache;
 
