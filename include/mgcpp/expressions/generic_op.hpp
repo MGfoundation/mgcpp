@@ -11,8 +11,9 @@
 #include <tuple>
 #include <utility>
 
-#include <mgcpp/expressions/eval_context.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
+
+struct eval_context;
 
 namespace mgcpp {
 
@@ -35,6 +36,8 @@ struct generic_op : public ResultExprType<generic_op<TagType,
     // Is this node a terminal node (i.e. with no child nodes)
     is_terminal = sizeof...(OperandTypes) == NParameters,
   };
+
+  static constexpr TagType tag = Tag;
 
   // Operand expressions (first NParameter elements are non-expression
   // parameters)

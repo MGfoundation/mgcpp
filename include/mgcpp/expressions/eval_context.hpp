@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/expressions/generic_op.hpp>
 #include <tuple>
 #include <type_traits>
 #include <unordered_map>
@@ -50,12 +51,14 @@ struct eval_context {
   std::unordered_map<expr_id_type, size_t> cnt;
   std::unordered_map<expr_id_type, erased> cache;
 
-  std::unordered_map<size_t, erased> placeholders;
+  std::unordered_map<int, erased> placeholders;
 
-  template <size_t... Placeholders, typename... Args>
-  void feed(Args const&... args) {
-    (void)std::initializer_list<int>{
-        ((void)placeholders.insert({Placeholders, erased(args)}), 0)...};
+  template <int Num,
+            template <typename> class ResultExprType,
+            typename ResultType>
+  void feed(placeholder_node<Num, ResultExprType, ResultType>,
+            ResultType const& val) {
+    placeholders[Num] = erased(val);
   }
 
   template <size_t PlaceholderID, typename ResultType>

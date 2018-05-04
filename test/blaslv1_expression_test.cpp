@@ -133,8 +133,8 @@ TEST(placeholder_expr, placeholder_expr) {
   mgcpp::device_vector<float> b({9, 18, 27});
 
   mgcpp::eval_context ctx;
-  ctx.feed<0>(a);
-  ctx.feed<1>(b);
+  ctx.feed(ph_0, a);
+  ctx.feed(ph_1, b);
   auto result = eval(added, ctx);
 
   float expected[] = {10, 20, 30};
@@ -154,8 +154,8 @@ TEST(tie_expr, tie_expr) {
   mgcpp::device_vector<float> b({9, 18, 27});
 
   mgcpp::eval_context ctx;
-  ctx.feed<0>(a);
-  ctx.feed<1>(b);
+  ctx.feed(ph_0, a);
+  ctx.feed(ph_1, b);
 
   mgcpp::device_vector<float> result_1, result_2;
   std::tie(result_1, result_2) = eval(added, ctx);
