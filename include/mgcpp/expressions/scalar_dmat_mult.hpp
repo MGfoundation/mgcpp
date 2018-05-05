@@ -103,4 +103,5 @@ inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> mult(
     scalar_expr<ScalExpr> const& scalar) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/scalar_dmat_mult.tpp>
 #endif

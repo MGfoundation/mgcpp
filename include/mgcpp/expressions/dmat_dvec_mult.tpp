@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
-#include <mgcpp/operations/mult.hpp>
 
 namespace mgcpp {
 template <typename MatExpr, typename VecExpr>

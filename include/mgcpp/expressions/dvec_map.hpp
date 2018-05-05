@@ -49,4 +49,5 @@ template <typename Expr>
 inline decltype(auto) relu(dvec_expr<Expr> const& expr) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dvec_map.tpp>
 #endif

@@ -5,17 +5,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <type_traits>
-
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
-#include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/dmat_trans_expr.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
-#include <mgcpp/operations/add.hpp>
-#include <mgcpp/operations/gemm.hpp>
-#include <mgcpp/system/assert.hpp>
-
-#include <utility>
 
 namespace mgcpp {
 

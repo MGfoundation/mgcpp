@@ -37,4 +37,6 @@ inline vec_vec_add_op<LhsExpr, RhsExpr> add(
     dvec_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp
 
+
+#include <mgcpp/expressions/dvec_dvec_add.tpp>
 #endif  // _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_

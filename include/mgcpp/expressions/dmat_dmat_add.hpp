@@ -7,6 +7,7 @@
 #ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 
@@ -31,4 +32,5 @@ inline mat_mat_add_op<LhsExpr, RhsExpr> add(
 
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_dmat_add.tpp>
 #endif

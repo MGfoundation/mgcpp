@@ -6,8 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/expressions/forward.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
+#include <mgcpp/mgcpp.hpp>
 
 TEST(mult_expr, dmat_dmat_mult) {
   {

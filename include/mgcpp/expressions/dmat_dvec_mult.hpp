@@ -39,4 +39,5 @@ inline mat_vec_mult_op<MatExpr, VecExpr> mult(
     dvec_expr<VecExpr> const& vec) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_dvec_mult.tpp>
 #endif

@@ -17,6 +17,7 @@
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
@@ -106,13 +107,14 @@ ResultType eval(placeholder_node<PlaceholderID, ResultExprType, ResultType>,
 
 template <typename... Exprs>
 auto eval(tie_expr<Exprs...> const& tie, eval_context& ctx) {
-  return apply((~tie).exprs, [&](auto const& t) { return mgcpp::eval(t, ctx); });
+  return apply((~tie).exprs,
+               [&](auto const& t) { return mgcpp::eval(t, ctx); });
 }
 
 }  // namespace internal
 
 template <typename Op>
-auto evaluator::eval(Op const& op, eval_context& ctx) {
+typename Op::result_type evaluator::eval(Op const& op, eval_context& ctx) {
   return internal::eval(op, ctx);
 }
 

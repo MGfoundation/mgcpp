@@ -12,8 +12,7 @@
 #include <utility>
 
 #include <mgcpp/global/tuple_utils.hpp>
-
-struct eval_context;
+#include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
 
@@ -32,10 +31,8 @@ struct generic_op : public ResultExprType<generic_op<TagType,
   // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;
 
-  enum {
-    // Is this node a terminal node (i.e. with no child nodes)
-    is_terminal = sizeof...(OperandTypes) == NParameters,
-  };
+  // Is this node a terminal node (i.e. with no child nodes)
+  static constexpr bool is_terminal = sizeof...(OperandTypes) == NParameters;
 
   static constexpr TagType tag = Tag;
 
@@ -77,13 +74,6 @@ enum class expression_type {
   TIE
 };
 
-// A placeholder node with 0 operands
-template <int PlaceholderID,
-          template <typename> class ResultExprType,
-          typename ResultType>
-using placeholder_node =
-    generic_op<int, PlaceholderID, ResultExprType, ResultType, 0>;
-
 // A unary operator with 1 operand (i.e. map)
 template <expression_type OpID,
           template <typename> class ResultExprType,
@@ -108,4 +98,5 @@ using binary_op = generic_op<expression_type,
                              RhsExpr>;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/generic_op.tpp>
 #endif  // GENERIC_OP_HPP

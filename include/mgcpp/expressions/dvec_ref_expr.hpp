@@ -8,7 +8,6 @@
 #define _MGCPP_EXPRESSIONS_DVEC_REF_EXPR_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/vector/forward.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 
 namespace mgcpp {
@@ -21,4 +20,5 @@ inline dvec_ref_expr<DenseVector> ref(
     dense_vector<DenseVector, Type, DeviceId> const& mat);
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dvec_ref_expr.tpp>
 #endif

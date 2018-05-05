@@ -38,4 +38,5 @@ inline mat_mat_mult_op<LhsExpr, RhsExpr> mult(
     dmat_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_dmat_mult.tpp>
 #endif

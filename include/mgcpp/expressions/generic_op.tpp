@@ -4,9 +4,12 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/expressions/eval_cache.hpp>
-#include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
+
+#include <mgcpp/expressions/evaluator.hpp>
+#include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/expressions/scalar_expr.hpp>
+#include <mgcpp/expressions/eval_cache.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/system/assert.hpp>
 

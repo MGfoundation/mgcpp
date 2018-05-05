@@ -21,4 +21,5 @@ inline tie_op<Exprs...> tie(Exprs const& ... exprs);
 
 }
 
+#include <mgcpp/expressions/tie_expr.tpp>
 #endif // TIE_EXPR_HPP

@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
-#include <mgcpp/operations/add.hpp>
 
 namespace mgcpp {
 

@@ -23,4 +23,5 @@ template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_trans_expr.tpp>
 #endif

@@ -4,14 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <type_traits>
-
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
-#include <mgcpp/global/shape.hpp>
-#include <mgcpp/operations/gemm.hpp>
-#include <mgcpp/operations/mult.hpp>
-#include <mgcpp/system/assert.hpp>
 
 namespace mgcpp {
 /*

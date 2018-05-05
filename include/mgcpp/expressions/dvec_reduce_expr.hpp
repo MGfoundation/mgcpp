@@ -8,10 +8,8 @@
 #define _MGCPP_EXPRESSIONS_DVEC_REDUCE_EXPR_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/eval_context.hpp>
 #include <mgcpp/expressions/generic_op.hpp>
 #include <mgcpp/expressions/scalar_expr.hpp>
-#include <mgcpp/vector/forward.hpp>
 
 namespace mgcpp {
 
@@ -34,4 +32,5 @@ template <typename Expr>
 inline decltype(auto) reduce_mean(dvec_expr<Expr> const& expr) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dvec_reduce_expr.tpp>
 #endif
