@@ -9,13 +9,13 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/eval_context.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 #include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 
 template <typename Matrix>
-using dmat_ref_expr = generic_op<expression_type,
+using dmat_ref_expr = generic_expr<expression_type,
                                  expression_type::DMAT_REF,
                                  dmat_expr,
                                  Matrix,

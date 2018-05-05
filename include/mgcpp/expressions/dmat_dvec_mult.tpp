@@ -8,16 +8,16 @@
 
 namespace mgcpp {
 template <typename MatExpr, typename VecExpr>
-inline mat_vec_mult_op<MatExpr, VecExpr> operator*(
+inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept {
-  return mat_vec_mult_op<MatExpr, VecExpr>(~mat, ~vec);
+  return dmat_dvec_mult_expr<MatExpr, VecExpr>(~mat, ~vec);
 }
 
 template <typename MatExpr, typename VecExpr>
-inline mat_vec_mult_op<MatExpr, VecExpr> mult(
+inline dmat_dvec_mult_expr<MatExpr, VecExpr> mult(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept {
-  return mat_vec_mult_op<MatExpr, VecExpr>(~mat, ~vec);
+  return dmat_dvec_mult_expr<MatExpr, VecExpr>(~mat, ~vec);
 }
 }  // namespace mgcpp

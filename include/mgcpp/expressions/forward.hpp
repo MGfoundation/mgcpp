@@ -22,7 +22,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-struct generic_op;
+struct generic_expr;
 }
 
 #endif

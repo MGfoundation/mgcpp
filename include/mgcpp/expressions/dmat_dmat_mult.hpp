@@ -8,12 +8,12 @@
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_MULT_EXPR_HPP_
 
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-using mat_mat_mult_op = binary_op<expression_type::DMAT_DMAT_MULT,
+using dmat_dmat_mult_expr = binary_expr<expression_type::DMAT_DMAT_MULT,
                                   dmat_expr,
                                   typename LhsExpr::result_type,
                                   LhsExpr,
@@ -24,7 +24,7 @@ using mat_mat_mult_op = binary_op<expression_type::DMAT_DMAT_MULT,
  * \param rhs the right-hand side dense matrix
  */
 template <typename LhsExpr, typename RhsExpr>
-inline mat_mat_mult_op<LhsExpr, RhsExpr> operator*(
+inline dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
@@ -33,7 +33,7 @@ inline mat_mat_mult_op<LhsExpr, RhsExpr> operator*(
  * \param rhs the right-hand side dense matrix
  */
 template <typename LhsExpr, typename RhsExpr>
-inline mat_mat_mult_op<LhsExpr, RhsExpr> mult(
+inline dmat_dmat_mult_expr<LhsExpr, RhsExpr> mult(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp

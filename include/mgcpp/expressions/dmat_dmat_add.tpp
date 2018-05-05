@@ -136,17 +136,17 @@ decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
 */
 
 template <typename LhsExpr, typename RhsExpr>
-mat_mat_add_op<LhsExpr, RhsExpr> operator+(
+dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-mat_mat_add_op<LhsExpr, RhsExpr> add(
+dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 }  // namespace mgcpp

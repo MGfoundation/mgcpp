@@ -8,7 +8,7 @@
 #define _MGCPP_EXPRESSIONS_DVEC_REDUCE_EXPR_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 #include <mgcpp/expressions/scalar_expr.hpp>
 
 namespace mgcpp {
@@ -17,7 +17,7 @@ template <typename Expr,
           typename Expr::result_type::value_type (*Function)(
               typename Expr::result_type::parent_type const& vec)>
 using dvec_reduce_expr =
-    generic_op<typename Expr::result_type::value_type (*)(
+    generic_expr<typename Expr::result_type::value_type (*)(
                    typename Expr::result_type::parent_type const& vec),
                Function,
                dvec_expr,  // FIXME: needs to be scalar_expr

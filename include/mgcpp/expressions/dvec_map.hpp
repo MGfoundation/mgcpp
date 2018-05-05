@@ -8,7 +8,7 @@
 #define _MGCPP_EXPRESSIONS_DVEC_ELEMWISE_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 
@@ -16,7 +16,7 @@ template <typename Expr,
           typename Expr::result_type (*Function)(
               typename Expr::result_type::parent_type const& vec)>
 using dvec_map_expr =
-    generic_op<typename Expr::result_type (*)(
+    generic_expr<typename Expr::result_type (*)(
                    typename Expr::result_type::parent_type const& vec),
                Function,
                dvec_expr,

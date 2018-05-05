@@ -8,11 +8,11 @@
 #define _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_
 
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 template <typename LhsExpr, typename RhsExpr>
-using vec_vec_add_op = binary_op<expression_type::DVEC_DVEC_ADD,
+using dvec_dvec_add_expr = binary_expr<expression_type::DVEC_DVEC_ADD,
                                  dvec_expr,
                                  typename LhsExpr::result_type,
                                  LhsExpr,
@@ -23,7 +23,7 @@ using vec_vec_add_op = binary_op<expression_type::DVEC_DVEC_ADD,
  * \param rhs the right-hand side dense vector
  */
 template <typename LhsExpr, typename RhsExpr>
-inline vec_vec_add_op<LhsExpr, RhsExpr> operator+(
+inline dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 
@@ -32,7 +32,7 @@ inline vec_vec_add_op<LhsExpr, RhsExpr> operator+(
  * \param rhs the right-hand side dense vector
  */
 template <typename LhsExpr, typename RhsExpr>
-inline vec_vec_add_op<LhsExpr, RhsExpr> add(
+inline dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp

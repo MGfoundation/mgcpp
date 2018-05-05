@@ -8,7 +8,7 @@ template <int PlaceholderID,
           template <typename> class ResultExprType,
           typename ResultType>
 using placeholder_node =
-    generic_op<int, PlaceholderID, ResultExprType, ResultType, 0>;
+    generic_expr<int, PlaceholderID, ResultExprType, ResultType, 0>;
 }
 
 #endif  // PLACEHOLDER_HPP

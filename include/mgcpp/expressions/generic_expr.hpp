@@ -22,7 +22,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-struct generic_op : public ResultExprType<generic_op<TagType,
+struct generic_expr : public ResultExprType<generic_expr<TagType,
                                                      Tag,
                                                      ResultExprType,
                                                      ResultType,
@@ -45,7 +45,7 @@ struct generic_op : public ResultExprType<generic_op<TagType,
   inline decltype(auto) second() const noexcept;
 
   // Constructor
-  inline generic_op(OperandTypes... args) noexcept;
+  inline generic_expr(OperandTypes... args) noexcept;
 
   // Analyze information about the expression tree
   inline void traverse() const;
@@ -79,8 +79,8 @@ template <expression_type OpID,
           template <typename> class ResultExprType,
           typename ResultType,
           typename Expr>
-using unary_op =
-    generic_op<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
+using unary_expr =
+    generic_expr<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
 
 // A binary operator with left and right operands (i.e. addition,
 // multiplication)
@@ -89,7 +89,7 @@ template <expression_type OpID,
           typename ResultType,
           typename LhsExpr,
           typename RhsExpr>
-using binary_op = generic_op<expression_type,
+using binary_expr = generic_expr<expression_type,
                              OpID,
                              ResultExprType,
                              ResultType,
@@ -98,5 +98,5 @@ using binary_op = generic_op<expression_type,
                              RhsExpr>;
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/generic_op.tpp>
+#include <mgcpp/expressions/generic_expr.tpp>
 #endif  // GENERIC_OP_HPP

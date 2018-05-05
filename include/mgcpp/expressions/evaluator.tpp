@@ -28,7 +28,7 @@ namespace mgcpp {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_mat_add_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -36,7 +36,7 @@ auto eval(mat_mat_add_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_mat_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -44,7 +44,7 @@ auto eval(mat_mat_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(mat_vec_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -52,7 +52,7 @@ auto eval(mat_vec_mult_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(vec_vec_add_op<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 

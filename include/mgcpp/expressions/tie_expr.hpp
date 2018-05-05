@@ -1,7 +1,7 @@
 #ifndef TIE_EXPR_HPP
 #define TIE_EXPR_HPP
 
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 
@@ -9,7 +9,7 @@ template <typename Expr>
 struct tie_expr : public expression<Expr> {};
 
 template <typename... Exprs>
-using tie_op = generic_op<expression_type,
+using tie_op = generic_expr<expression_type,
                           expression_type::TIE,
                           tie_expr,
                           std::tuple<typename Exprs::result_type...>,
