@@ -1,6 +1,8 @@
 
 #include <mgcpp/system/cufft_error.hpp>
 
+#include <cuda_runtime_api.h>
+
 namespace mgcpp {
 class cufft_error_category_t : public std::error_category {
  public:
@@ -67,7 +69,7 @@ std::string cufft_error_category_t::message(int ev) const {
     case CUFFT_LICENSE_ERROR:
       return "CUFFT_LICENSE_ERROR: Used in previous versions.";
 
-#ifdef CUFFT_NOT_SUPPORTED // added in CUDA 9.0
+#if CUDART_VERSION >= 8000 // added in CUDA toolkit v8.0
     case CUFFT_NOT_SUPPORTED:
       return "CUFFT_NOT_SUPPORTED: Operation is not supported for parameters "
              "given.";
