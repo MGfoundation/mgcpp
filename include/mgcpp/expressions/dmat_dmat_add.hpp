@@ -7,28 +7,30 @@
 #ifndef _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 #define _MGCPP_EXPRESSIONS_DMAT_DMAT_ADD_EXPR_HPP_
 
+#include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/expressions/dmat_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-using mat_mat_add_op = binary_op<expression_type::DMAT_DMAT_ADD,
+using dmat_dmat_add_expr = binary_expr<expression_type::DMAT_DMAT_ADD,
                                  dmat_expr,
                                  typename LhsExpr::result_type,
                                  LhsExpr,
                                  RhsExpr>;
 
 template <typename LhsExpr, typename RhsExpr>
-inline mat_mat_add_op<LhsExpr, RhsExpr> operator+(
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline mat_mat_add_op<LhsExpr, RhsExpr> add(
+inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_dmat_add.tpp>
 #endif

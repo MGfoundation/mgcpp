@@ -9,12 +9,12 @@
 
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
 
 template <typename MatExpr, typename VecExpr>
-using mat_vec_mult_op = binary_op<expression_type::DMAT_DVEC_MULT,
+using dmat_dvec_mult_expr = binary_expr<expression_type::DMAT_DVEC_MULT,
                                   dvec_expr,
                                   typename VecExpr::result_type,
                                   MatExpr,
@@ -25,7 +25,7 @@ using mat_vec_mult_op = binary_op<expression_type::DMAT_DVEC_MULT,
  * \param rhs the right-hand side dense vector
  */
 template <typename MatExpr, typename VecExpr>
-inline mat_vec_mult_op<MatExpr, VecExpr> operator*(
+inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept;
 
@@ -34,9 +34,10 @@ inline mat_vec_mult_op<MatExpr, VecExpr> operator*(
  * \param rhs the right-hand side dense vector
  */
 template <typename MatExpr, typename VecExpr>
-inline mat_vec_mult_op<MatExpr, VecExpr> mult(
+inline dmat_dvec_mult_expr<MatExpr, VecExpr> mult(
     dmat_expr<MatExpr> const& mat,
     dvec_expr<VecExpr> const& vec) noexcept;
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/dmat_dvec_mult.tpp>
 #endif

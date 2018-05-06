@@ -5,21 +5,20 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
-#include <mgcpp/operations/add.hpp>
 
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-vec_vec_add_op<LhsExpr, RhsExpr> operator+(
+dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept {
-  return vec_vec_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dvec_dvec_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-vec_vec_add_op<LhsExpr, RhsExpr> add(
+dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept {
-  return vec_vec_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dvec_dvec_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 }  // namespace mgcpp

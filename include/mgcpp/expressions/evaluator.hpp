@@ -7,13 +7,14 @@
 #ifndef EVALUATOR_HPP
 #define EVALUATOR_HPP
 
-#include <mgcpp/expressions/eval_context.hpp>
+#include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
 struct evaluator {
-    template <typename Op>
-    inline static auto eval(Op const &op, eval_context& ctx);
+  template <typename Op>
+  inline static typename Op::result_type eval(Op const& op, eval_context& ctx);
 };
-}
+}  // namespace mgcpp
 
-#endif // EVALUATOR_HPP
+#include <mgcpp/expressions/evaluator.tpp>
+#endif  // EVALUATOR_HPP

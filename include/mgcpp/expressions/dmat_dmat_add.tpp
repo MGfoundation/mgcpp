@@ -5,17 +5,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <type_traits>
-
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
-#include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/dmat_trans_expr.hpp>
-#include <mgcpp/expressions/scalar_dmat_mult.hpp>
-#include <mgcpp/operations/add.hpp>
-#include <mgcpp/operations/gemm.hpp>
-#include <mgcpp/system/assert.hpp>
-
-#include <utility>
 
 namespace mgcpp {
 
@@ -146,17 +136,17 @@ decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
 */
 
 template <typename LhsExpr, typename RhsExpr>
-mat_mat_add_op<LhsExpr, RhsExpr> operator+(
+dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-mat_mat_add_op<LhsExpr, RhsExpr> add(
+dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {
-  return mat_mat_add_op<LhsExpr, RhsExpr>(~lhs, ~rhs);
+  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 }  // namespace mgcpp

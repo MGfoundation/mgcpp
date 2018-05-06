@@ -1,7 +1,3 @@
-#ifndef EXPRESSION_TPP
-#define EXPRESSION_TPP
-
-#include <mgcpp/expressions/eval_context.hpp>
 #include <mgcpp/expressions/expression.hpp>
 
 namespace mgcpp {
@@ -33,5 +29,3 @@ inline void traverse(expression<T> const& expr) {
 }
 
 }  // namespace mgcpp
-
-#endif  // EXPRESSION_TPP

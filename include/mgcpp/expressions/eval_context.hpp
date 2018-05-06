@@ -10,7 +10,8 @@
 #include <memory>
 #include <mgcpp/global/type_erased.hpp>
 #include <mgcpp/expressions/expression.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/forward.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 #include <type_traits>
 #include <unordered_map>
 
@@ -41,5 +42,4 @@ protected:
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/eval_context.tpp>
-
 #endif  // EVAL_CONTEXT_HPP

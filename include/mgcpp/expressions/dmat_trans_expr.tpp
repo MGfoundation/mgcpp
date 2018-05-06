@@ -5,7 +5,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
-#include <mgcpp/operations/trans.hpp>
 
 namespace mgcpp {
 

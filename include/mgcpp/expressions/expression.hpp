@@ -10,11 +10,11 @@
 #include <cstddef>
 #include <utility>
 #include <functional>
+#include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
 
-using expr_id_type = unsigned long;
-expr_id_type make_id();
+size_t make_id();
 
 template <typename Type>
 struct expression {
@@ -23,10 +23,8 @@ struct expression {
   inline Type const& operator~() const noexcept;
 
 protected:
-  expr_id_type id = make_id();
+  size_t id = make_id();
 };
-
-struct eval_context;
 
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr,
@@ -40,4 +38,5 @@ inline void traverse(expression<T> const& expr);
 
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/expression.tpp>
 #endif

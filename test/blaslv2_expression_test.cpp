@@ -6,9 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include <mgcpp/expressions/forward.hpp>
-#include <mgcpp/matrix/device_matrix.hpp>
-#include <mgcpp/vector/device_vector.hpp>
+#include <mgcpp/mgcpp.hpp>
 
 TEST(lv2_expr, mat_vec_mult) {
   using matrix = mgcpp::device_matrix<float>;

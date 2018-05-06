@@ -4,9 +4,12 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/expressions/eval_cache.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
+
 #include <mgcpp/expressions/evaluator.hpp>
-#include <mgcpp/expressions/generic_op.hpp>
+#include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/expressions/scalar_expr.hpp>
+#include <mgcpp/expressions/eval_cache.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/system/assert.hpp>
 
@@ -18,12 +21,12 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline generic_op<TagType,
+inline generic_expr<TagType,
                   Tag,
                   ResultExprType,
                   ResultType,
                   NParameters,
-                  OperandTypes...>::generic_op(OperandTypes... args) noexcept
+                  OperandTypes...>::generic_expr(OperandTypes... args) noexcept
     : exprs(std::move(args)...) {}
 
 template <typename TagType,
@@ -32,7 +35,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline decltype(auto) generic_op<TagType,
+inline decltype(auto) generic_expr<TagType,
                                  Tag,
                                  ResultExprType,
                                  ResultType,
@@ -47,7 +50,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline decltype(auto) generic_op<TagType,
+inline decltype(auto) generic_expr<TagType,
                                  Tag,
                                  ResultExprType,
                                  ResultType,
@@ -62,7 +65,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline void generic_op<TagType,
+inline void generic_expr<TagType,
                        Tag,
                        ResultExprType,
                        ResultType,
@@ -104,13 +107,13 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-typename generic_op<TagType,
+typename generic_expr<TagType,
                     Tag,
                     ResultExprType,
                     ResultType,
                     NParameters,
                     OperandTypes...>::result_type
-generic_op<TagType,
+generic_expr<TagType,
            Tag,
            ResultExprType,
            ResultType,
@@ -126,13 +129,13 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-typename generic_op<TagType,
+typename generic_expr<TagType,
                     Tag,
                     ResultExprType,
                     ResultType,
                     NParameters,
                     OperandTypes...>::result_type
-generic_op<TagType,
+generic_expr<TagType,
            Tag,
            ResultExprType,
            ResultType,
@@ -155,7 +158,6 @@ generic_op<TagType,
   auto it = cache.map.find(this->id);
 
   // number of instances of this node left
-
   auto left = --cache.cnt.at(this->id);
   if (left == 0) {
     cache.cnt.erase(this->id);
