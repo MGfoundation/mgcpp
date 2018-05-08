@@ -98,7 +98,7 @@ add_library(${PROJECT_NAME} STATIC SHARED ${MAIN_SOURCE_FILES})
 
 if(WIN32 AND MSVC)
     set(BUILD_FLAGS
-	"${CMAKE_CXX_FLAGS} /w3 /Ot /Ox /MP")
+	"${CMAKE_CXX_FLAGS} /W3 /MP")
 else()
     if(WIN32)
 	set(BUILD_FLAGS
@@ -159,7 +159,7 @@ target_link_libraries(${PROJECT_NAME}
     ${CUDA_cusparse_LIBRARIES})
 
 # outcome 
-#find_package(Boost REQUIRED)
+find_package(Boost REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

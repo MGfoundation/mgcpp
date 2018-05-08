@@ -103,13 +103,13 @@ make -j4
 make install
 ```
 
-On Windows, execute the following on the Developer Command Prompt for VS 2017:
+On Windows, after installing all dependencies, execute the following on the Developer Command Prompt for VS 2017:
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
 cd mgcpp
 mkdir build
 cd build
-cmake -G "Visual Studio 15 2017 Win64"
+cmake -G "Visual Studio 15 2017 Win64" -T v140,host=x64 ..
 msbuild ALL_BUILD.vcxproj
 ```
 
