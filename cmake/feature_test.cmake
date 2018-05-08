@@ -1,23 +1,23 @@
 
 set(FEATURE_TEST_DIR ${CMAKE_CURRENT_LIST_DIR}/feature_test)
 
-message(STATUS "compiling feature test")
-try_compile(BUILD_RESULT
-    ${FEATURE_TEST_DIR}
-    ${FEATURE_TEST_DIR}
-    "feature_test"
-    OUTPUT_VARIABLE BUILD_STATUS)
+message(STATUS "compiling and running feature test")
+
+find_package(CUDA REQUIRED)
+try_run(CUDA_GENCODE_TEST_RESULT BUILD_RESULT
+    "${CMAKE_CURRENT_BINARY_DIR}/FeatureTest"
+    SOURCES "${FEATURE_TEST_DIR}/cuda_gencode_test.cpp"
+	LINK_LIBRARIES "${CUDA_LIBRARIES}"
+	CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${CUDA_INCLUDE_DIRS}"
+				"-DLINK_DIRECTORIES=${CUDA_LIBRARIES}"
+    COMPILE_OUTPUT_VARIABLE BUILD_STATUS
+	RUN_OUTPUT_VARIABLE CUDA_GENCODE_TEST_STATUS)
 
 if(NOT BUILD_RESULT)
     message(${BUILD_STATUS})
     message(FATAL_ERROR "failed to build feature test")
 endif()
 message(STATUS "successfully compiled feature test")
-message(STATUS "running feature test")
-
-execute_process(COMMAND "${FEATURE_TEST_DIR}/cuda_gencode"
-    RESULT_VARIABLE CUDA_GENCODE_TEST_RESULT
-    OUTPUT_VARIABLE CUDA_GENCODE_TEST_STATUS)
 
 if(NOT ${CUDA_GENCODE_TEST_RESULT} EQUAL "0")
     message(STATUS "running feature test - failed")

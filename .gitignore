@@ -71,5 +71,5 @@ CTestTestfile.cmake
 *.out
 *.app
 
-# cuda_gencode
-cmake/feature_test/cuda_gencode
+# Build directory
+build/

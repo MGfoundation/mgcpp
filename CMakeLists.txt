@@ -159,7 +159,7 @@ target_link_libraries(${PROJECT_NAME}
     ${CUDA_cusparse_LIBRARIES})
 
 # outcome 
-find_package(Boost REQUIRED)
+#find_package(Boost REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
