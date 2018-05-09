@@ -102,10 +102,10 @@ if(WIN32 AND MSVC)
 else()
     if(WIN32)
 	set(BUILD_FLAGS
-	    "${CMAKE_CXX_FLAGS} -std=c++14 -g -Wall -Wextra")
+	    "${CMAKE_CXX_FLAGS} -g -Wall -Wextra")
     else()
 	set(BUILD_FLAGS
-            "${CMAKE_CXX_FLAGS} -std=c++14 -g -fPIC -Wall -Wextra")
+            "${CMAKE_CXX_FLAGS} -g -fPIC -Wall -Wextra")
     endif()
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(BUILD_FLAGS
@@ -115,8 +115,9 @@ endif()
 message("C++ flags = ${BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}
-    PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}")
-
+    PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}"
+               CXX_STANDARD 14
+               CXX_STANDARD_REQUIRED ON)
 
 # Include directories
 target_include_directories("${PROJECT_NAME}base"
