@@ -34,17 +34,6 @@ enum class expression_type {
   SCALAR_CONSTANT
 };
 
-template <typename Expr>
-struct shape_expr : expression<Expr> {};
-
-template <typename Expr>
-using symbolic_shape_expr = generic_expr<expression_type,
-                                         expression_type::SHAPE,
-                                         shape_expr,
-                                         typename shape_type<typename Expr::result_type>::type,
-                                         0,
-                                         Expr>;
-
 template <typename TagType,
           TagType Tag,
           template <typename> class ResultExprType,
@@ -86,11 +75,6 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
 
   // Analyze information about the expression tree
   inline void traverse() const;
-
-  /*
-   * Obtain the dynamic shape of this expression
-   */
-  inline symbolic_shape_expr<this_type> shape() const;
 
   /**
    * Evaluate this expression with an empty default context.

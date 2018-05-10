@@ -34,8 +34,7 @@ template <int PlaceholderID,
 inline auto grad(
     placeholder_node<PlaceholderID, ResultExprType, ResultType>,
     placeholder_node<PlaceholderID, ResultExprType, ResultType> ph) {
-  return ones_like<
-      placeholder_node<PlaceholderID, ResultExprType, ResultType>>(ph.shape());
+  return make_ones_like(ph);
 }
 
 }  // namespace internal

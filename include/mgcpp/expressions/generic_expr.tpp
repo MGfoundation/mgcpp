@@ -84,27 +84,6 @@ inline void generic_expr<TagType,
   }
 }
 
-template <typename TagType,
-          TagType Tag,
-          template <typename> class ResultExprType,
-          typename ResultType,
-          size_t NParameters,
-          typename... OperandTypes>
-inline symbolic_shape_expr<generic_expr<TagType,
-                                        Tag,
-                                        ResultExprType,
-                                        ResultType,
-                                        NParameters,
-                                        OperandTypes...>>
-generic_expr<TagType,
-             Tag,
-             ResultExprType,
-             ResultType,
-             NParameters,
-             OperandTypes...>::shape() const {
-  return symbolic_shape_expr<this_type>(*this);
-}
-
 namespace internal {
 struct cache_lock_guard {
   cache_lock_guard() {
