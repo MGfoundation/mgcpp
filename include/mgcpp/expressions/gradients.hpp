@@ -37,6 +37,16 @@ inline auto grad(
   return make_ones_like(ph);
 }
 
+template <int PlaceholderID1,
+          int PlaceholderID2,
+          template <typename> class ResultExprType,
+          typename ResultType>
+inline auto grad(
+    placeholder_node<PlaceholderID1, ResultExprType, ResultType>,
+    placeholder_node<PlaceholderID2, ResultExprType, ResultType> ph) {
+  return make_zeros_like(ph);
+}
+
 }  // namespace internal
 
 template <typename Op,

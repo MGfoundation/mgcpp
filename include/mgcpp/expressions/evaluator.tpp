@@ -118,13 +118,15 @@ auto eval(tie_expr<Exprs...> const& tie, eval_context const& ctx) {
 template <typename Expr>
 auto eval(zeros_mat_expr<Expr> const& expr, eval_context const& ctx) {
   auto shape = mgcpp::eval(expr.first(), ctx);
-  return typename Expr::result_type(shape, 0);
+  using result_type = typename Expr::result_type;
+  using value_type = typename result_type::value_type;
+  return result_type(shape, value_type{0.0});
 }
 
 template <typename Expr>
 auto eval(ones_mat_expr<Expr> const& expr, eval_context const& ctx) {
   auto shape = mgcpp::eval(expr.first(), ctx);
-  return typename Expr::result_type(shape, 1);
+  return typename Expr::result_type(shape, 1.0);
 }
 
 template <typename Expr>

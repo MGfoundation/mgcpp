@@ -20,7 +20,7 @@ using dvec_reduce_expr =
     generic_expr<typename Expr::result_type::value_type (*)(
                    typename Expr::result_type::parent_type const& vec),
                Function,
-               dvec_expr,  // FIXME: needs to be scalar_expr
+               scalar_expr,
                typename Expr::result_type::value_type,
                0,
                Expr>;
