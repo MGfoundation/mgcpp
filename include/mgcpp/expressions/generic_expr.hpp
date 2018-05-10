@@ -30,7 +30,8 @@ enum class expression_type {
   TIE,
   ALL_ZEROS,
   ALL_ONES,
-  SHAPE
+  SHAPE,
+  SCALAR_CONSTANT
 };
 
 template <typename Expr>

@@ -8,23 +8,27 @@
 #define _MGCPP_EXPRESSIONS_SCALAR_EXPR_HPP_
 
 #include <mgcpp/expressions/eval_context.hpp>
+#include <mgcpp/expressions/expression.hpp>
+#include <mgcpp/expressions/generic_expr.hpp>
 #include <mgcpp/type_traits/is_scalar.hpp>
 #include <type_traits>
 
 namespace mgcpp {
+template <typename Expr>
+struct scalar_expr : public expression<Expr> {};
+
+template <typename T>
+using scalar_constant_expr = generic_expr<expression_type,
+                                          expression_type::SCALAR_CONSTANT,
+                                          scalar_expr,
+                                          T,
+                                          1,
+                                          T>;
+
 template <typename Type>
-struct scalar_expr;
+inline scalar_constant_expr<Type> scal(Type scalar);
 
-template <typename Scalar>
-inline typename std::enable_if<is_scalar<Scalar>::value, Scalar>::type eval(
-    Scalar scalar,
-    eval_context&) {
-  return scalar;
-}
-
-template <typename Scalar>
-inline typename std::enable_if<is_scalar<Scalar>::value, void>::type traverse(
-    Scalar) {}
 }  // namespace mgcpp
 
+#include <mgcpp/expressions/scalar_expr.tpp>
 #endif

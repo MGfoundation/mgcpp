@@ -29,7 +29,7 @@ using scalar_dmat_mult_expr = binary_expr<expression_type::SCALAR_DMAT_MULT,
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
+inline scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> operator*(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& exp) noexcept;
 
@@ -40,7 +40,7 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
+inline scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& exp,
     Scalar const& scalar) noexcept;
 
@@ -69,7 +69,7 @@ inline scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
+inline scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> mult(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& mat_exp) noexcept;
 
@@ -80,7 +80,7 @@ inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
 template <typename Scalar,
           typename DMatExpr,
           typename = typename std::enable_if<is_scalar<Scalar>::value>::type>
-inline scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
+inline scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_exp,
     Scalar const& scalar) noexcept;
 

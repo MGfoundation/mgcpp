@@ -10,17 +10,19 @@
 namespace mgcpp {
 
 template <typename Scalar, typename DMatExpr, typename>
-scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
+scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> operator*(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& mat_expr) noexcept {
-  return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
+  auto scal_expr = mgcpp::scal(scalar);
+  return scalar_dmat_mult_expr<decltype(scal_expr), DMatExpr>(scal_expr, ~mat_expr);
 }
 
 template <typename Scalar, typename DMatExpr, typename>
-scalar_dmat_mult_expr<Scalar, DMatExpr> operator*(
+scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> operator*(
     dmat_expr<DMatExpr> const& mat_expr,
     Scalar const& scalar) noexcept {
-  return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
+  auto scal_expr = mgcpp::scal(scalar);
+  return scalar_dmat_mult_expr<decltype(scal_expr), DMatExpr>(scal_expr, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>
@@ -38,17 +40,19 @@ scalar_dmat_mult_expr<ScalExpr, DMatExpr> operator*(
 }
 
 template <typename Scalar, typename DMatExpr, typename>
-scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
+scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> mult(
     Scalar const& scalar,
     dmat_expr<DMatExpr> const& mat_expr) noexcept {
-  return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
+  auto scal_expr = mgcpp::scal(scalar);
+  return scalar_dmat_mult_expr<decltype(scal_expr), DMatExpr>(scal_expr, ~mat_expr);
 }
 
 template <typename Scalar, typename DMatExpr, typename>
-scalar_dmat_mult_expr<Scalar, DMatExpr> mult(
+scalar_dmat_mult_expr<scalar_constant_expr<Scalar>, DMatExpr> mult(
     dmat_expr<DMatExpr> const& mat_expr,
     Scalar const& scalar) noexcept {
-  return scalar_dmat_mult_expr<Scalar, DMatExpr>(scalar, ~mat_expr);
+  auto scal_expr = mgcpp::scal(scalar);
+  return scalar_dmat_mult_expr<decltype(scal_expr), DMatExpr>(scal_expr, ~mat_expr);
 }
 
 template <typename ScalExpr, typename DMatExpr>

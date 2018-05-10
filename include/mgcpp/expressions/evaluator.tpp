@@ -6,6 +6,7 @@
 
 #include <mgcpp/expressions/evaluator.hpp>
 
+#include <mgcpp/expressions/constant_expr.hpp>
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
@@ -18,7 +19,6 @@
 #include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
-#include <mgcpp/expressions/constant_expr.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
@@ -130,6 +130,11 @@ template <typename Expr>
 auto eval(symbolic_shape_expr<Expr> const& expr, eval_context& ctx) {
   // TODO: do not evaluate whole expression
   return mgcpp::eval(expr.first(), ctx).shape();
+}
+
+template <typename Expr>
+auto eval(scalar_constant_expr<Expr> const& expr, eval_context&) {
+  return expr.first();
 }
 
 }  // namespace internal

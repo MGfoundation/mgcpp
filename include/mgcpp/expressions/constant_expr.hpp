@@ -2,6 +2,7 @@
 #define CONSTANT_EXPR_HPP
 
 #include <mgcpp/expressions/generic_expr.hpp>
+#include <mgcpp/expressions/dmat_expr.hpp>
 
 namespace mgcpp {
 
