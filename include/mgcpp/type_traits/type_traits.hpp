@@ -7,8 +7,7 @@
 #ifndef _MGCPP_TYPE_TRAITS_TYPE_TRAITS_HPP_
 #define _MGCPP_TYPE_TRAITS_TYPE_TRAITS_HPP_
 
-#include <mgcpp/global/complex.hpp>
-#include <type_traits>
+static_assert(true, "remove this file");
 
 namespace mgcpp {
 template <typename... Args>

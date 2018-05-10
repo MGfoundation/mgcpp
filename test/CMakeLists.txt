@@ -22,7 +22,7 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/blaslv3_expression_test.cpp
     ${TEST_DIR}/blaslv2_expression_test.cpp
     ${TEST_DIR}/fft_test.cpp
-#    ${TEST_DIR}/gradient_test.cpp
+    ${TEST_DIR}/gradient_test.cpp
 )
 
 # System Test

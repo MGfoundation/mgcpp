@@ -11,10 +11,38 @@
 #include <tuple>
 #include <utility>
 
-#include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/expressions/forward.hpp>
+#include <mgcpp/global/shape.hpp>
+#include <mgcpp/global/tuple_utils.hpp>
+#include <mgcpp/type_traits/shape_type.hpp>
 
 namespace mgcpp {
+
+enum class expression_type {
+  DMAT_DMAT_ADD,
+  DMAT_DMAT_MULT,
+  DMAT_DVEC_MULT,
+  DMAT_TRANSPOSE,
+  DVEC_DVEC_ADD,
+  SCALAR_DMAT_MULT,
+  DMAT_REF,
+  DVEC_REF,
+  TIE,
+  ALL_ZEROS,
+  ALL_ONES,
+  SHAPE
+};
+
+template <typename Expr>
+struct shape_expr : expression<Expr> {};
+
+template <typename Expr>
+using symbolic_shape_expr = generic_expr<expression_type,
+                                         expression_type::SHAPE,
+                                         shape_expr,
+                                         typename shape_type<typename Expr::result_type>::type,
+                                         0,
+                                         Expr>;
 
 template <typename TagType,
           TagType Tag,
@@ -23,11 +51,19 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 struct generic_expr : public ResultExprType<generic_expr<TagType,
-                                                     Tag,
-                                                     ResultExprType,
-                                                     ResultType,
-                                                     NParameters,
-                                                     OperandTypes...>> {
+                                                         Tag,
+                                                         ResultExprType,
+                                                         ResultType,
+                                                         NParameters,
+                                                         OperandTypes...>> {
+  // Type of self
+  using this_type = generic_expr<TagType,
+                                 Tag,
+                                 ResultExprType,
+                                 ResultType,
+                                 NParameters,
+                                 OperandTypes...>;
+
   // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;
 
@@ -50,6 +86,11 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
   // Analyze information about the expression tree
   inline void traverse() const;
 
+  /*
+   * Obtain the dynamic shape of this expression
+   */
+  inline symbolic_shape_expr<this_type> shape() const;
+
   /**
    * Evaluate this expression with an empty default context.
    */
@@ -60,18 +101,6 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
    * \param ctx the context the expression is evaluated in.
    */
   inline result_type eval(eval_context& ctx) const;
-};
-
-enum class expression_type {
-  DMAT_DMAT_ADD,
-  DMAT_DMAT_MULT,
-  DMAT_DVEC_MULT,
-  DMAT_TRANSPOSE,
-  DVEC_DVEC_ADD,
-  SCALAR_DMAT_MULT,
-  DMAT_REF,
-  DVEC_REF,
-  TIE
 };
 
 // A unary operator with 1 operand (i.e. map)
@@ -90,12 +119,12 @@ template <expression_type OpID,
           typename LhsExpr,
           typename RhsExpr>
 using binary_expr = generic_expr<expression_type,
-                             OpID,
-                             ResultExprType,
-                             ResultType,
-                             0,
-                             LhsExpr,
-                             RhsExpr>;
+                                 OpID,
+                                 ResultExprType,
+                                 ResultType,
+                                 0,
+                                 LhsExpr,
+                                 RhsExpr>;
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/generic_expr.tpp>

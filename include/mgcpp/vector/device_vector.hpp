@@ -14,6 +14,7 @@
 #include <mgcpp/type_traits/device_value_type.hpp>
 #include <mgcpp/type_traits/is_supported_type.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
+#include <mgcpp/global/shape.hpp>
 
 #include <cstdlib>
 #include <initializer_list>
@@ -37,6 +38,7 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   using const_device_pointer = device_value_type const*;
   using result_type = this_type;
   using allocator_type = Alloc;
+  using shape_type = mgcpp::shape<1>;
   using parent_type =
       dense_vector<device_vector<Type, DeviceId, Alloc>, Type, DeviceId>;
   size_t const device_id = DeviceId;

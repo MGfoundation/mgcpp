@@ -11,6 +11,7 @@
 #include <utility>
 #include <functional>
 #include <mgcpp/expressions/forward.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 
 namespace mgcpp {
 

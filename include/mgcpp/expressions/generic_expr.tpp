@@ -6,10 +6,10 @@
 
 #include <mgcpp/expressions/generic_expr.hpp>
 
+#include <mgcpp/expressions/eval_cache.hpp>
 #include <mgcpp/expressions/evaluator.hpp>
 #include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/expressions/scalar_expr.hpp>
-#include <mgcpp/expressions/eval_cache.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/system/assert.hpp>
 
@@ -21,12 +21,13 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline generic_expr<TagType,
-                  Tag,
-                  ResultExprType,
-                  ResultType,
-                  NParameters,
-                  OperandTypes...>::generic_expr(OperandTypes... args) noexcept
+inline generic_expr<
+    TagType,
+    Tag,
+    ResultExprType,
+    ResultType,
+    NParameters,
+    OperandTypes...>::generic_expr(OperandTypes... args) noexcept
     : exprs(std::move(args)...) {}
 
 template <typename TagType,
@@ -36,11 +37,11 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
-                                 Tag,
-                                 ResultExprType,
-                                 ResultType,
-                                 NParameters,
-                                 OperandTypes...>::first() const noexcept {
+                                   Tag,
+                                   ResultExprType,
+                                   ResultType,
+                                   NParameters,
+                                   OperandTypes...>::first() const noexcept {
   return std::get<0>(exprs);
 }
 
@@ -51,11 +52,11 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
-                                 Tag,
-                                 ResultExprType,
-                                 ResultType,
-                                 NParameters,
-                                 OperandTypes...>::second() const noexcept {
+                                   Tag,
+                                   ResultExprType,
+                                   ResultType,
+                                   NParameters,
+                                   OperandTypes...>::second() const noexcept {
   return std::get<1>(exprs);
 }
 
@@ -66,11 +67,11 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 inline void generic_expr<TagType,
-                       Tag,
-                       ResultExprType,
-                       ResultType,
-                       NParameters,
-                       OperandTypes...>::traverse() const {
+                         Tag,
+                         ResultExprType,
+                         ResultType,
+                         NParameters,
+                         OperandTypes...>::traverse() const {
   auto& cache = get_eval_cache();
 
   cache.cnt[this->id]++;
@@ -81,6 +82,27 @@ inline void generic_expr<TagType,
     apply_void(take_rest<NParameters>(exprs),
                [&](auto const& expr) { mgcpp::traverse(expr); });
   }
+}
+
+template <typename TagType,
+          TagType Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
+inline symbolic_shape_expr<generic_expr<TagType,
+                                        Tag,
+                                        ResultExprType,
+                                        ResultType,
+                                        NParameters,
+                                        OperandTypes...>>
+generic_expr<TagType,
+             Tag,
+             ResultExprType,
+             ResultType,
+             NParameters,
+             OperandTypes...>::shape() const {
+  return symbolic_shape_expr<this_type>(*this);
 }
 
 namespace internal {
@@ -108,17 +130,17 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 typename generic_expr<TagType,
-                    Tag,
-                    ResultExprType,
-                    ResultType,
-                    NParameters,
-                    OperandTypes...>::result_type
+                      Tag,
+                      ResultExprType,
+                      ResultType,
+                      NParameters,
+                      OperandTypes...>::result_type
 generic_expr<TagType,
-           Tag,
-           ResultExprType,
-           ResultType,
-           NParameters,
-           OperandTypes...>::eval() const {
+             Tag,
+             ResultExprType,
+             ResultType,
+             NParameters,
+             OperandTypes...>::eval() const {
   eval_context ctx;
   return this->eval(ctx);
 }
@@ -130,17 +152,17 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 typename generic_expr<TagType,
-                    Tag,
-                    ResultExprType,
-                    ResultType,
-                    NParameters,
-                    OperandTypes...>::result_type
+                      Tag,
+                      ResultExprType,
+                      ResultType,
+                      NParameters,
+                      OperandTypes...>::result_type
 generic_expr<TagType,
-           Tag,
-           ResultExprType,
-           ResultType,
-           NParameters,
-           OperandTypes...>::eval(eval_context& ctx) const {
+             Tag,
+             ResultExprType,
+             ResultType,
+             NParameters,
+             OperandTypes...>::eval(eval_context& ctx) const {
   auto& cache = get_eval_cache();
 
   // traverse the tree first to count the number of duplicate subtrees

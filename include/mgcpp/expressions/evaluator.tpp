@@ -15,9 +15,10 @@
 #include <mgcpp/expressions/dvec_map.hpp>
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
-#include <mgcpp/expressions/placeholder.hpp>
+#include <mgcpp/expressions/constant_expr.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
@@ -36,7 +37,8 @@ auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -44,7 +46,8 @@ auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) 
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -109,6 +112,24 @@ template <typename... Exprs>
 auto eval(tie_expr<Exprs...> const& tie, eval_context& ctx) {
   return apply((~tie).exprs,
                [&](auto const& t) { return mgcpp::eval(t, ctx); });
+}
+
+template <typename Expr>
+auto eval(zeros_like<Expr> const& expr, eval_context& ctx) {
+  auto shape = mgcpp::eval(expr.first(), ctx);
+  return typename Expr::result_type(shape, 0);
+}
+
+template <typename Expr>
+auto eval(ones_like<Expr> const& expr, eval_context& ctx) {
+  auto shape = mgcpp::eval(expr.first(), ctx);
+  return typename Expr::result_type(shape, 1);
+}
+
+template <typename Expr>
+auto eval(symbolic_shape_expr<Expr> const& expr, eval_context& ctx) {
+  // TODO: do not evaluate whole expression
+  return mgcpp::eval(expr.first(), ctx).shape();
 }
 
 }  // namespace internal

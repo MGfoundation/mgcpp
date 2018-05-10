@@ -8,6 +8,7 @@
 #define _MGCPP_GLOBAL_HALF_PRECISION_HPP_
 
 #ifdef USE_HALF
+#include <cuComplex.h>
 #include <cuda_fp16.h>
 #include <half/half.hpp>
 namespace mgcpp {
