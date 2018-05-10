@@ -117,7 +117,8 @@ message("C++ flags = ${BUILD_FLAGS}")
 set_target_properties(${PROJECT_NAME}
     PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS}"
                CXX_STANDARD 14
-               CXX_STANDARD_REQUIRED ON)
+               CXX_STANDARD_REQUIRED ON
+               CXX_EXTENSIONS OFF)
 
 # Include directories
 target_include_directories("${PROJECT_NAME}base"

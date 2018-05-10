@@ -21,7 +21,8 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/blaslv1_expression_test.cpp
     ${TEST_DIR}/blaslv3_expression_test.cpp
     ${TEST_DIR}/blaslv2_expression_test.cpp
-    ${TEST_DIR}/fft_test.cpp)
+    ${TEST_DIR}/fft_test.cpp
+    ${TEST_DIR}/gradient_test.cpp)
 
 # System Test
 set(SYSTEM_TEST_PATH ${TEST_DIR}/system)
@@ -88,7 +89,10 @@ set(TEST_BUILD_FLAGS ${BUILD_FLAGS})
 message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}_test
-    PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}")
+    PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}"
+               CXX_STANDARD 14
+               CXX_STANDARD_REQUIRED ON
+               CXX_EXTENSIONS OFF)
 
 # ctest
 add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)
