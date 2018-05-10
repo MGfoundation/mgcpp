@@ -12,7 +12,7 @@
 namespace mgcpp {
 struct evaluator {
   template <typename Op>
-  inline static typename Op::result_type eval(Op const& op, eval_context& ctx);
+  inline static typename Op::result_type eval(Op const& op, eval_context const& ctx);
 };
 }  // namespace mgcpp
 

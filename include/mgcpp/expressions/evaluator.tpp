@@ -29,7 +29,7 @@ namespace mgcpp {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -38,7 +38,7 @@ auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
-          eval_context& ctx) {
+          eval_context const& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -47,7 +47,7 @@ auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
-          eval_context& ctx) {
+          eval_context const& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -55,7 +55,7 @@ auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
+auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -64,7 +64,7 @@ auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context& ctx) {
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
-          eval_context& ctx) {
+          eval_context const& ctx) {
   auto const& lhs = mgcpp::eval(expr.first(), ctx);
   auto const& rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -72,31 +72,31 @@ auto eval(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
 }
 
 template <typename Expr>
-auto eval(dmat_trans_expr<Expr> const& expr, eval_context& ctx) {
+auto eval(dmat_trans_expr<Expr> const& expr, eval_context const& ctx) {
   return mgcpp::strict::trans(mgcpp::eval(expr.first(), ctx));
 }
 
 template <typename Expr,
           typename Expr::result_type (*Function)(
               typename Expr::result_type::parent_type const& vec)>
-auto eval(dvec_map_expr<Expr, Function> const& expr, eval_context& ctx) {
+auto eval(dvec_map_expr<Expr, Function> const& expr, eval_context const& ctx) {
   return Function(mgcpp::eval(expr.first(), ctx));
 }
 
 template <typename Expr,
           typename Expr::result_type::value_type (*Function)(
               typename Expr::result_type::parent_type const& vec)>
-auto eval(dvec_reduce_expr<Expr, Function> const& expr, eval_context& ctx) {
+auto eval(dvec_reduce_expr<Expr, Function> const& expr, eval_context const& ctx) {
   return Function(mgcpp::eval(expr.first(), ctx));
 }
 
 template <typename Matrix>
-auto eval(dmat_ref_expr<Matrix> const& expr, eval_context&) {
+auto eval(dmat_ref_expr<Matrix> const& expr, eval_context const&) {
   return expr.first();
 }
 
 template <typename Vector>
-auto eval(dvec_ref_expr<Vector> const& expr, eval_context&) {
+auto eval(dvec_ref_expr<Vector> const& expr, eval_context const&) {
   return expr.first();
 }
 
@@ -104,43 +104,43 @@ template <int PlaceholderID,
           template <typename> class ResultExprType,
           typename ResultType>
 ResultType eval(placeholder_node<PlaceholderID, ResultExprType, ResultType>,
-                eval_context& ctx) {
+                eval_context const& ctx) {
   return ctx.get_placeholder<PlaceholderID, ResultType>();
 }
 
 template <typename... Exprs>
-auto eval(tie_expr<Exprs...> const& tie, eval_context& ctx) {
+auto eval(tie_expr<Exprs...> const& tie, eval_context const& ctx) {
   return apply((~tie).exprs,
                [&](auto const& t) { return mgcpp::eval(t, ctx); });
 }
 
 template <typename Expr>
-auto eval(zeros_like<Expr> const& expr, eval_context& ctx) {
+auto eval(zeros_like<Expr> const& expr, eval_context const& ctx) {
   auto shape = mgcpp::eval(expr.first(), ctx);
   return typename Expr::result_type(shape, 0);
 }
 
 template <typename Expr>
-auto eval(ones_like<Expr> const& expr, eval_context& ctx) {
+auto eval(ones_like<Expr> const& expr, eval_context const& ctx) {
   auto shape = mgcpp::eval(expr.first(), ctx);
   return typename Expr::result_type(shape, 1);
 }
 
 template <typename Expr>
-auto eval(symbolic_shape_expr<Expr> const& expr, eval_context& ctx) {
+auto eval(symbolic_shape_expr<Expr> const& expr, eval_context const& ctx) {
   // TODO: do not evaluate whole expression
   return mgcpp::eval(expr.first(), ctx).shape();
 }
 
 template <typename Expr>
-auto eval(scalar_constant_expr<Expr> const& expr, eval_context&) {
+auto eval(scalar_constant_expr<Expr> const& expr, eval_context const&) {
   return expr.first();
 }
 
 }  // namespace internal
 
 template <typename Op>
-typename Op::result_type evaluator::eval(Op const& op, eval_context& ctx) {
+typename Op::result_type evaluator::eval(Op const& op, eval_context const& ctx) {
   return internal::eval(op, ctx);
 }
 

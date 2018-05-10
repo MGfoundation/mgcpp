@@ -14,7 +14,7 @@ const Type& expression<Type>::operator~() const noexcept {
 
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr,
-                                    eval_context& ctx) {
+                                    eval_context const& ctx) {
   return (~expr).eval(ctx);
 }
 

@@ -162,7 +162,7 @@ generic_expr<TagType,
              ResultExprType,
              ResultType,
              NParameters,
-             OperandTypes...>::eval(eval_context& ctx) const {
+             OperandTypes...>::eval(eval_context const& ctx) const {
   auto& cache = get_eval_cache();
 
   // traverse the tree first to count the number of duplicate subtrees

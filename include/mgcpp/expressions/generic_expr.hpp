@@ -101,7 +101,7 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
    * Evaluate this expression with context.
    * \param ctx the context the expression is evaluated in.
    */
-  inline result_type eval(eval_context& ctx) const;
+  inline result_type eval(eval_context const& ctx) const;
 };
 
 // A unary operator with 1 operand (i.e. map)
