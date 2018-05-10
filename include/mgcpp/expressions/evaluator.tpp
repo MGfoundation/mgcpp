@@ -5,6 +5,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/evaluator.hpp>
+#include <mgcpp/expressions/shape_evaluator.hpp>
 
 #include <mgcpp/expressions/constant_expr.hpp>
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
@@ -128,8 +129,7 @@ auto eval(ones_mat_expr<Expr> const& expr, eval_context const& ctx) {
 
 template <typename Expr>
 auto eval(symbolic_shape_expr<Expr> const& expr, eval_context const& ctx) {
-  // TODO: do not evaluate whole expression
-  return mgcpp::eval(expr.first(), ctx).shape();
+  return expr.first().shape(ctx);
 }
 
 template <typename Expr>

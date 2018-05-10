@@ -189,4 +189,20 @@ generic_expr<TagType,
   return evaluator::eval(*this, ctx);
 }
 
+template <typename TagType,
+          TagType Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
+template <typename T, typename>
+typename T::shape_type generic_expr<TagType,
+                                    Tag,
+                                    ResultExprType,
+                                    ResultType,
+                                    NParameters,
+                                    OperandTypes...>::shape(eval_context const& ctx) const {
+  return shape_evaluator::shape(*this, ctx);
+}
+
 }  // namespace mgcpp

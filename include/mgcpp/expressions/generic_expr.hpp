@@ -86,6 +86,15 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
    * \param ctx the context the expression is evaluated in.
    */
   inline result_type eval(eval_context const& ctx) const;
+
+  /**
+   * Get the shape of this expression without computing the whole expression.
+   */
+  template <
+      typename T = ResultType,
+      typename = typename std::enable_if<std::is_same<T, ResultType>::value &&
+                                         mgcpp::has_shape<T>::value>::type>
+  inline typename T::shape_type shape(eval_context const& ctx) const;
 };
 
 // A unary operator with 1 operand (i.e. map)

@@ -12,8 +12,8 @@ template <typename Expr>
 using symbolic_shape_expr = generic_expr<expression_type,
                                          expression_type::SHAPE,
                                          shape_expr,
-                                         typename shape_type<typename Expr::result_type>::type,
-                                         0,
+                                         typename Expr::result_type::shape_type,
+                                         1,
                                          Expr>;
 
 
