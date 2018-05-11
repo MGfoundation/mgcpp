@@ -1,0 +1,5 @@
+# branches to build
+branches:
+  # whitelist
+  only:
+    # disable windows builds for now
