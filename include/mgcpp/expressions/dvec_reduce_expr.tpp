@@ -5,20 +5,17 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
-#include <mgcpp/operations/sum.hpp>
 #include <mgcpp/operations/mean.hpp>
+#include <mgcpp/operations/sum.hpp>
 
-namespace mgcpp
-{
+namespace mgcpp {
 template <typename Expr>
-decltype(auto) reduce_sum(const dvec_expr<Expr>& expr) noexcept
-{
-    return dvec_reduce_expr<Expr, strict::sum>(~expr);
+decltype(auto) reduce_sum(const dvec_expr<Expr>& expr) noexcept {
+  return dvec_reduce_expr<Expr>(strict::sum, ~expr);
 }
 
 template <typename Expr>
-decltype(auto) reduce_mean(const dvec_expr<Expr>& expr) noexcept
-{
-    return dvec_reduce_expr<Expr, strict::mean>(~expr);
+decltype(auto) reduce_mean(const dvec_expr<Expr>& expr) noexcept {
+  return dvec_reduce_expr<Expr>(strict::mean, ~expr);
 }
-}
+}  // namespace mgcpp

@@ -77,18 +77,14 @@ auto eval(dmat_trans_expr<Expr> const& expr, eval_context const& ctx) {
   return mgcpp::strict::trans(mgcpp::eval(expr.first(), ctx));
 }
 
-template <typename Expr,
-          typename Expr::result_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-auto eval(dvec_map_expr<Expr, Function> const& expr, eval_context const& ctx) {
-  return Function(mgcpp::eval(expr.first(), ctx));
+template <typename Expr>
+auto eval(dvec_map_expr<Expr> const& expr, eval_context const& ctx) {
+  return expr.first()(mgcpp::eval(expr.second(), ctx));
 }
 
-template <typename Expr,
-          typename Expr::result_type::value_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-auto eval(dvec_reduce_expr<Expr, Function> const& expr, eval_context const& ctx) {
-  return Function(mgcpp::eval(expr.first(), ctx));
+template <typename Expr>
+auto eval(dvec_reduce_expr<Expr> const& expr, eval_context const& ctx) {
+  return expr.first()(mgcpp::eval(expr.second(), ctx));
 }
 
 template <typename Matrix>

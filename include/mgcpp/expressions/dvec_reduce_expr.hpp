@@ -13,17 +13,16 @@
 
 namespace mgcpp {
 
-template <typename Expr,
-          typename Expr::result_type::value_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
+template <typename Expr>
 using dvec_reduce_expr =
-    generic_expr<typename Expr::result_type::value_type (*)(
-                   typename Expr::result_type::parent_type const& vec),
-               Function,
-               scalar_expr,
-               typename Expr::result_type::value_type,
-               0,
-               Expr>;
+    generic_expr<expression_type,
+                 expression_type::DVEC_REDUCE,
+                 scalar_expr,
+                 typename Expr::result_type::value_type,
+                 1,
+                 typename Expr::result_type::value_type (*)(
+                     typename Expr::result_type::parent_type const& vec),
+                 Expr>;
 
 template <typename Expr>
 inline decltype(auto) reduce_sum(dvec_expr<Expr> const& expr) noexcept;

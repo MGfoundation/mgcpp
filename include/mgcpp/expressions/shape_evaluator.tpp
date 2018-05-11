@@ -53,10 +53,8 @@ auto shape(dmat_trans_expr<Expr> const& expr, eval_context const& ctx) {
   // TODO
 }
 
-template <typename Expr,
-          typename Expr::result_type (*Function)(
-              typename Expr::result_type::parent_type const& vec)>
-auto shape(dvec_map_expr<Expr, Function> const& expr, eval_context const& ctx) {
+template <typename Expr>
+auto shape(dvec_map_expr<Expr> const& expr, eval_context const& ctx) {
   // TODO
 }
 

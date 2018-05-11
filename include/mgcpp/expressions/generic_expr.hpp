@@ -31,7 +31,9 @@ enum class expression_type {
   ALL_ZEROS,
   ALL_ONES,
   SHAPE,
-  SCALAR_CONSTANT
+  SCALAR_CONSTANT,
+  DVEC_MAP,
+  DVEC_REDUCE
 };
 
 template <typename TagType,
