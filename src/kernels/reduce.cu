@@ -36,6 +36,8 @@ namespace mgcpp
         if(id >= n)
             return;
 
+        *y = 0;
+
         shared[tid] = x[id];
         __syncthreads();
 
@@ -67,6 +69,8 @@ namespace mgcpp
 
         if(id >= n)
             return;
+
+        *y = 0;
 
         shared[tid] = x[id];
         __syncthreads();
