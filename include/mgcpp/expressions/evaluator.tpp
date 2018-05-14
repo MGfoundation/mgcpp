@@ -31,8 +31,8 @@ namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
-  auto const& lhs = mgcpp::eval(expr.first(), ctx);
-  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::add(lhs, rhs);
 }
@@ -40,8 +40,8 @@ auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
           eval_context const& ctx) {
-  auto const& lhs = mgcpp::eval(expr.first(), ctx);
-  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::mult(lhs, rhs);
 }
@@ -49,16 +49,16 @@ auto eval(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
           eval_context const& ctx) {
-  auto const& lhs = mgcpp::eval(expr.first(), ctx);
-  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::mult(lhs, rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
-  auto const& lhs = mgcpp::eval(expr.first(), ctx);
-  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::add(lhs, rhs);
 }
@@ -66,8 +66,8 @@ auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
           eval_context const& ctx) {
-  auto const& lhs = mgcpp::eval(expr.first(), ctx);
-  auto const& rhs = mgcpp::eval(expr.second(), ctx);
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::mult(lhs, rhs);
 }

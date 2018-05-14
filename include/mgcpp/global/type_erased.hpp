@@ -5,11 +5,11 @@
 
 namespace mgcpp {
 
-struct type_erased {
-  type_erased() = default;
+struct static_any {
+  static_any() = default;
 
   template <typename T>
-  type_erased(T&& data);
+  static_any(T data);
 
   template <typename T>
   T get() const;
@@ -20,8 +20,7 @@ struct type_erased {
 
   template <typename T>
   struct model final : concept {
-    model(T const& x);
-    model(T&& x);
+    model(T x);
     T data;
   };
 

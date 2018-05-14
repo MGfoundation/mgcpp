@@ -30,6 +30,12 @@ bool shape<Dims>::operator==(shape const& rhs) const {
   return true;
 }
 
+template<size_t Dims>
+bool shape<Dims>::operator!=(const shape &rhs) const
+{
+  return !(*this == rhs);
+}
+
 template <size_t Dims>
 template <std::size_t N>
 size_t shape<Dims>::get() const {

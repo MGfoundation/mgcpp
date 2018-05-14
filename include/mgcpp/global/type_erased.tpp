@@ -2,19 +2,16 @@
 
 namespace mgcpp {
 template <typename T>
-type_erased::type_erased(T&& data)
-    : m(std::make_shared<model<std::remove_reference_t<T>>>(
-          std::forward<T>(data))) {}
+static_any::static_any(T data)
+    : m(std::make_shared<model<T>>(
+          std::move(data))) {}
 
 template <typename T>
-T type_erased::get() const {
+T static_any::get() const {
   return static_cast<model<T> const&>(*m).data;
 }
 
 template <typename T>
-type_erased::model<T>::model(T const& x) : data(x) {}
-
-template <typename T>
-type_erased::model<T>::model(T&& x) : data(std::move(x)) {}
+static_any::model<T>::model(T x) : data(std::move(x)) {}
 
 }  // namespace mgcpp

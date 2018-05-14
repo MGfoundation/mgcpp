@@ -18,6 +18,7 @@ struct shape {
   size_t operator[](size_t idx) const;
   size_t& operator[](size_t idx);
   bool operator==(shape const& rhs) const;
+  bool operator!=(shape const& rhs) const;
 
   template <std::size_t N>
   size_t get() const;

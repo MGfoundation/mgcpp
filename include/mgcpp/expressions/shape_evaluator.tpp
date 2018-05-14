@@ -21,51 +21,66 @@ namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 auto shape(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
-  // TODO
+  mgcpp::shape<2> sh0 = expr.first().shape();
+  mgcpp::shape<2> sh1 = expr.first().shape();
+  if (sh0 != sh1)
+    MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
+  return sh0;
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto shape(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
-  // TODO
+  mgcpp::shape<2> sh0 = expr.first().shape();
+  mgcpp::shape<2> sh1 = expr.first().shape();
+  if (sh0[1] != sh1[0])
+    MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
+  return mgcpp::make_shape(sh0[0], sh1[1]);
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto shape(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
-  // TODO
+  mgcpp::shape<2> mat_shape = expr.first().shape();
+  mgcpp::shape<1> vec_shape = expr.second().shape();
+  if (mat_shape[1] == vec_shape[0])
+    MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
+  return mgcpp::make_shape(mat_shape[0]);
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto shape(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
-  // TODO
+  return expr.first().shape();
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto shape(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
-  // TODO
+  return expr.first().shape();
 }
 
 template <typename Expr>
 auto shape(dmat_trans_expr<Expr> const& expr, eval_context const& ctx) {
-  // TODO
+  auto sh = expr.first().shape();
+  std::swap(sh[0], sh[1]);
+  return sh;
 }
 
 template <typename Expr>
 auto shape(dvec_map_expr<Expr> const& expr, eval_context const& ctx) {
-  // TODO
+  return expr.first().shape();
 }
 
 template <typename Matrix>
 auto shape(dmat_ref_expr<Matrix> const& expr, eval_context const&) {
-  // TODO
+  return expr.first().shape();
 }
 
 template <typename Vector>
 auto shape(dvec_ref_expr<Vector> const& expr, eval_context const&) {
-  // TODO
+  // FIXME: first make device_vector::shape() return an mgcpp::shape<1>
+  return mgcpp::make_shape(expr.first().shape());
 }
 
 template <int PlaceholderID,
