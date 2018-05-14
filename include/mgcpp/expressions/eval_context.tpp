@@ -7,7 +7,7 @@ template <int Num,
           typename ResultType>
 void eval_context::feed(placeholder_node<Num, ResultExprType, ResultType>,
                         ResultType const& val) {
-  _placeholders[Num] = type_erased(val);
+  _placeholders[Num] = static_any(val);
 }
 
 template <size_t PlaceholderID, typename ResultType>

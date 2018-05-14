@@ -36,7 +36,7 @@ struct eval_context {
   auto get_placeholder() const;
 
 protected:
-  std::unordered_map<int, type_erased> _placeholders;
+  std::unordered_map<int, static_any> _placeholders;
 };
 
 }  // namespace mgcpp

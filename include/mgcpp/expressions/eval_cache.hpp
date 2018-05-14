@@ -11,7 +11,7 @@ struct eval_cache {
   int cache_hits = 0;
   bool evaluating = false;
   std::unordered_map<size_t, int> cnt;
-  std::unordered_map<size_t, type_erased> map;
+  std::unordered_map<size_t, static_any> map;
 };
 
 eval_cache& get_eval_cache();
