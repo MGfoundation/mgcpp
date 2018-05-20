@@ -16,7 +16,7 @@
 namespace mgcpp {
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -31,7 +31,38 @@ inline generic_expr<
     : exprs(std::move(args)...) {}
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
+inline decltype(auto) generic_expr<TagType,
+                                   Tag,
+                                   ResultExprType,
+                                   ResultType,
+                                   NParameters,
+                                   OperandTypes...>::operands() const noexcept {
+  return take_rest<NParameters>(exprs);
+}
+
+template <typename TagType,
+          size_t Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
+inline decltype(auto) generic_expr<TagType,
+                                   Tag,
+                                   ResultExprType,
+                                   ResultType,
+                                   NParameters,
+                                   OperandTypes...>::parameters() const
+    noexcept {
+  return take_front<NParameters>(exprs);
+}
+
+template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -46,7 +77,7 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -61,7 +92,7 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -79,8 +110,7 @@ inline void generic_expr<TagType,
   // if cnt is bigger than 1, the subexpressions won't be evaluated
   if (cache.cnt[this->id] <= 1) {
     // traverse from NParameters to sizeof...(OperandTypes) - 1
-    apply_void(take_rest<NParameters>(exprs),
-               [&](auto const& expr) { mgcpp::traverse(expr); });
+    apply_void(operands(), [&](auto const& expr) { mgcpp::traverse(expr); });
   }
 }
 
@@ -103,7 +133,7 @@ struct cache_lock_guard {
 }  // namespace internal
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -125,7 +155,7 @@ generic_expr<TagType,
 }
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -190,18 +220,19 @@ generic_expr<TagType,
 }
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 template <typename T, typename>
-typename T::shape_type generic_expr<TagType,
-                                    Tag,
-                                    ResultExprType,
-                                    ResultType,
-                                    NParameters,
-                                    OperandTypes...>::shape(eval_context const& ctx) const {
+typename T::shape_type
+generic_expr<TagType,
+             Tag,
+             ResultExprType,
+             ResultType,
+             NParameters,
+             OperandTypes...>::shape(eval_context const& ctx) const {
   return shape_evaluator::shape(*this, ctx);
 }
 

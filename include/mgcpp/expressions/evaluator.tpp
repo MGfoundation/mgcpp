@@ -20,6 +20,7 @@
 #include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
+#include <mgcpp/expressions/dmat_reduce_expr.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
@@ -30,7 +31,8 @@ namespace mgcpp {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
+auto eval(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context const& ctx) {
   auto lhs = mgcpp::eval(expr.first(), ctx);
   auto rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -56,7 +58,8 @@ auto eval(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr, eval_context const& ctx) {
+auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context const& ctx) {
   auto lhs = mgcpp::eval(expr.first(), ctx);
   auto rhs = mgcpp::eval(expr.second(), ctx);
 
@@ -83,8 +86,23 @@ auto eval(dvec_map_expr<Expr> const& expr, eval_context const& ctx) {
 }
 
 template <typename Expr>
-auto eval(dvec_reduce_expr<Expr> const& expr, eval_context const& ctx) {
-  return expr.first()(mgcpp::eval(expr.second(), ctx));
+auto eval(dvec_reduce_sum_expr<Expr> const& expr, eval_context const& ctx) {
+  return strict::sum(mgcpp::eval(expr.first(), ctx));
+}
+
+template <typename Expr>
+auto eval(dvec_reduce_mean_expr<Expr> const& expr, eval_context const& ctx) {
+  return strict::mean(mgcpp::eval(expr.first(), ctx));
+}
+
+template <typename Expr>
+auto eval(dmat_reduce_sum_expr<Expr> const& expr, eval_context const& ctx) {
+  return strict::sum(mgcpp::eval(expr.first(), ctx));
+}
+
+template <typename Expr>
+auto eval(dmat_reduce_mean_expr<Expr> const& expr, eval_context const& ctx) {
+  return strict::mean(mgcpp::eval(expr.first(), ctx));
 }
 
 template <typename Matrix>
@@ -97,7 +115,7 @@ auto eval(dvec_ref_expr<Vector> const& expr, eval_context const&) {
   return expr.first();
 }
 
-template <int PlaceholderID,
+template <size_t PlaceholderID,
           template <typename> class ResultExprType,
           typename ResultType>
 ResultType eval(placeholder_node<PlaceholderID, ResultExprType, ResultType>,
@@ -113,7 +131,7 @@ auto eval(tie_expr<Exprs...> const& tie, eval_context const& ctx) {
 
 template <typename Expr>
 auto eval(zeros_mat_expr<Expr> const& expr, eval_context const& ctx) {
-  auto shape = mgcpp::eval(expr.first(), ctx);
+  auto shape = expr.first().shape(ctx);
   using result_type = typename Expr::result_type;
   using value_type = typename result_type::value_type;
   return result_type(shape, value_type{0.0});
@@ -121,13 +139,8 @@ auto eval(zeros_mat_expr<Expr> const& expr, eval_context const& ctx) {
 
 template <typename Expr>
 auto eval(ones_mat_expr<Expr> const& expr, eval_context const& ctx) {
-  auto shape = mgcpp::eval(expr.first(), ctx);
+  auto shape = expr.first().shape(ctx);
   return typename Expr::result_type(shape, 1.0);
-}
-
-template <typename Expr>
-auto eval(symbolic_shape_expr<Expr> const& expr, eval_context const& ctx) {
-  return expr.first().shape(ctx);
 }
 
 template <typename Expr>
@@ -138,7 +151,8 @@ auto eval(scalar_constant_expr<Expr> const& expr, eval_context const&) {
 }  // namespace internal
 
 template <typename Op>
-typename Op::result_type evaluator::eval(Op const& op, eval_context const& ctx) {
+typename Op::result_type evaluator::eval(Op const& op,
+                                         eval_context const& ctx) {
   return internal::eval(op, ctx);
 }
 

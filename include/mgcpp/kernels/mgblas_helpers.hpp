@@ -8,9 +8,7 @@
 #define _MGCPP_KERNELS_MGBLAS_HELPERS_HPP_
 
 #include <mgcpp/kernels/bits/fill.cuh>
-
-#include <boost/outcome.hpp>
-namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
+#include <mgcpp/system/outcome.hpp>
 
 #include <cstdlib>
 

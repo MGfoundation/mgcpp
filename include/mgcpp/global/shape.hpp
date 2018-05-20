@@ -10,6 +10,8 @@ template <size_t Dims>
 struct shape {
   size_t dims[Dims];
 
+  using shape_type = shape<Dims>;
+
   shape();
   shape(std::initializer_list<size_t> list);
   shape(shape const&) = default;

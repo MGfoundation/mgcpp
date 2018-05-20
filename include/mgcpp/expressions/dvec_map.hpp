@@ -12,10 +12,12 @@
 
 namespace mgcpp {
 
+struct dmat_mat_expr_type;
+
 template <typename Expr>
 using dvec_map_expr =
-    generic_expr<expression_type,
-                 expression_type::DVEC_MAP,
+    generic_expr<dmat_mat_expr_type,
+                 0,
                  dvec_expr,
                  typename Expr::result_type,
                  1,

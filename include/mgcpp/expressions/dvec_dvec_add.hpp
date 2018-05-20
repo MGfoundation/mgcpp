@@ -11,12 +11,15 @@
 #include <mgcpp/expressions/generic_expr.hpp>
 
 namespace mgcpp {
+
+struct dvec_dvec_add_expr_type;
+
 template <typename LhsExpr, typename RhsExpr>
-using dvec_dvec_add_expr = binary_expr<expression_type::DVEC_DVEC_ADD,
-                                 dvec_expr,
-                                 typename LhsExpr::result_type,
-                                 LhsExpr,
-                                 RhsExpr>;
+using dvec_dvec_add_expr = binary_expr<dvec_dvec_add_expr_type,
+                                       dvec_expr,
+                                       typename LhsExpr::result_type,
+                                       LhsExpr,
+                                       RhsExpr>;
 
 /** Returns a dense vector addition expression.
  * \param lhs the left-hand side dense vector
@@ -36,7 +39,6 @@ inline dvec_dvec_add_expr<LhsExpr, RhsExpr> add(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept;
 }  // namespace mgcpp
-
 
 #include <mgcpp/expressions/dvec_dvec_add.tpp>
 #endif  // _MGCPP_EXPRESSIONS_DVEC_DVEC_ADD_HPP_

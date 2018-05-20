@@ -19,6 +19,7 @@ size_t make_id();
 
 template <typename Type>
 struct expression {
+
   inline Type& operator~() noexcept;
 
   inline Type const& operator~() const noexcept;

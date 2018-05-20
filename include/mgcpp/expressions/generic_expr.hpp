@@ -15,29 +15,12 @@
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/type_traits/shape_type.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 
 namespace mgcpp {
 
-enum class expression_type {
-  DMAT_DMAT_ADD,
-  DMAT_DMAT_MULT,
-  DMAT_DVEC_MULT,
-  DMAT_TRANSPOSE,
-  DVEC_DVEC_ADD,
-  SCALAR_DMAT_MULT,
-  DMAT_REF,
-  DVEC_REF,
-  TIE,
-  ALL_ZEROS,
-  ALL_ONES,
-  SHAPE,
-  SCALAR_CONSTANT,
-  DVEC_MAP,
-  DVEC_REDUCE
-};
-
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -59,14 +42,23 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
   // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;
 
+  template <typename T>
+  using result_expr_type = ResultExprType<T>;
+
   // Is this node a terminal node (i.e. with no child nodes)
   static constexpr bool is_terminal = sizeof...(OperandTypes) == NParameters;
-
-  static constexpr TagType tag = Tag;
+  static constexpr size_t n_parameters = NParameters;
+  static constexpr size_t tag = Tag;
 
   // Operand expressions (first NParameter elements are non-expression
   // parameters)
   std::tuple<OperandTypes...> exprs;
+
+  // Returns tuple containing operands
+  inline decltype(auto) operands() const noexcept;
+
+  // Returns tuple containing parameters
+  inline decltype(auto) parameters() const noexcept;
 
   // Convenience getters for the operands
   inline decltype(auto) first() const noexcept;
@@ -100,27 +92,22 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
 };
 
 // A unary operator with 1 operand (i.e. map)
-template <expression_type OpID,
+template <typename TagType,
           template <typename> class ResultExprType,
           typename ResultType,
           typename Expr>
 using unary_expr =
-    generic_expr<expression_type, OpID, ResultExprType, ResultType, 0, Expr>;
+    generic_expr<TagType, 0, ResultExprType, ResultType, 0, Expr>;
 
 // A binary operator with left and right operands (i.e. addition,
 // multiplication)
-template <expression_type OpID,
+template <typename TagType,
           template <typename> class ResultExprType,
           typename ResultType,
           typename LhsExpr,
           typename RhsExpr>
-using binary_expr = generic_expr<expression_type,
-                                 OpID,
-                                 ResultExprType,
-                                 ResultType,
-                                 0,
-                                 LhsExpr,
-                                 RhsExpr>;
+using binary_expr =
+    generic_expr<TagType, 0, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/generic_expr.tpp>

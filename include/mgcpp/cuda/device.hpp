@@ -7,9 +7,7 @@
 #ifndef _MGCPP_CUDA_DEVICE_HPP_
 #define _MGCPP_CUDA_DEVICE_HPP_
 
-#include <boost/outcome.hpp>
-namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
-
+#include <mgcpp/system/outcome.hpp>
 #include <mgcpp/system/error_code.hpp>
 
 #include <cstdlib>

@@ -7,8 +7,7 @@
 #ifndef _MGCPP_KERNELS_MGBLAS_LV1_HPP_
 #define _MGCPP_KERNELS_MGBLAS_LV1_HPP_
 
-#include <boost/outcome.hpp>
-namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
+#include <mgcpp/system/outcome.hpp>
 
 #include <cstdlib>
 

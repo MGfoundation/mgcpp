@@ -8,9 +8,11 @@ namespace mgcpp {
 template <typename Expr>
 struct shape_expr : expression<Expr> {};
 
+struct symbolic_shape_expr_type {};
+
 template <typename Expr>
-using symbolic_shape_expr = generic_expr<expression_type,
-                                         expression_type::SHAPE,
+using symbolic_shape_expr = generic_expr<symbolic_shape_expr_type,
+                                         0,
                                          shape_expr,
                                          typename Expr::result_type::shape_type,
                                          1,

@@ -17,7 +17,7 @@ struct expression;
 struct eval_context;
 
 template <typename TagType,
-          TagType Tag,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,

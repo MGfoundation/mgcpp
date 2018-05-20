@@ -9,8 +9,7 @@
 
 #include <cstdlib>
 
-#include <boost/outcome.hpp>
-namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
+#include <mgcpp/system/outcome.hpp>
 
 #include <cublas_v2.h>
 

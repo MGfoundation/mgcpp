@@ -11,11 +11,11 @@
 namespace mgcpp {
 template <typename Expr>
 decltype(auto) reduce_sum(const dvec_expr<Expr>& expr) noexcept {
-  return dvec_reduce_expr<Expr>(strict::sum, ~expr);
+  return dvec_reduce_sum_expr<Expr>(~expr);
 }
 
 template <typename Expr>
 decltype(auto) reduce_mean(const dvec_expr<Expr>& expr) noexcept {
-  return dvec_reduce_expr<Expr>(strict::mean, ~expr);
+  return dvec_reduce_mean_expr<Expr>(~expr);
 }
 }  // namespace mgcpp

@@ -23,7 +23,7 @@ struct eval_context {
    * \param ph The placeholder.
    * \param val The value associated with the placeholder.
    */
-  template <int Num,
+  template <size_t Num,
             template <typename> class ResultExprType,
             typename ResultType>
   void feed(placeholder_node<Num, ResultExprType, ResultType> ph,

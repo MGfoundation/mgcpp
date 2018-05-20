@@ -17,13 +17,11 @@ namespace mgcpp {
 template <typename Expr>
 struct scalar_expr : public expression<Expr> {};
 
+struct scalar_constant_expr_type;
+
 template <typename T>
-using scalar_constant_expr = generic_expr<expression_type,
-                                          expression_type::SCALAR_CONSTANT,
-                                          scalar_expr,
-                                          T,
-                                          1,
-                                          T>;
+using scalar_constant_expr =
+    generic_expr<scalar_constant_expr_type, 0, scalar_expr, T, 1, T>;
 
 template <typename Type>
 inline scalar_constant_expr<Type> scal(Type scalar);

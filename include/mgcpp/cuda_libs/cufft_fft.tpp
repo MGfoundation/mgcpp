@@ -6,9 +6,7 @@
 
 #include <mgcpp/cuda_libs/cufft_fft.hpp>
 #include <mgcpp/global/complex.hpp>
-
-#include <boost/outcome.hpp>
-namespace outcome = BOOST_OUTCOME_V2_NAMESPACE;
+#include <mgcpp/system/outcome.hpp>
 
 #include <cufft.h>
 #include <mgcpp/system/error_code.hpp>
