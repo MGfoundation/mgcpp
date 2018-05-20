@@ -10,11 +10,10 @@ namespace mgcpp {
 
 template <typename Expr,
           size_t PlaceholderID,
-          template <typename> class PhResultExprType,
           typename PhResultType>
 inline auto grad(
     scalar_expr<Expr> const& expr,
-    placeholder_node<PlaceholderID, PhResultExprType, PhResultType> wrt);
+    placeholder_node<PlaceholderID, PhResultType> wrt);
 
 }  // namespace mgcpp
 

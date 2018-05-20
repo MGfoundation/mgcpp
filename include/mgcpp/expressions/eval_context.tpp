@@ -3,9 +3,8 @@
 namespace mgcpp {
 
 template <size_t Num,
-          template <typename> class ResultExprType,
           typename ResultType>
-void eval_context::feed(placeholder_node<Num, ResultExprType, ResultType>,
+void eval_context::feed(placeholder_node<Num, ResultType>,
                         ResultType const& val) {
   _placeholders[Num] = static_any(val);
 }

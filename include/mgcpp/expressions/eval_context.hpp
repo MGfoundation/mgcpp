@@ -24,9 +24,8 @@ struct eval_context {
    * \param val The value associated with the placeholder.
    */
   template <size_t Num,
-            template <typename> class ResultExprType,
             typename ResultType>
-  void feed(placeholder_node<Num, ResultExprType, ResultType> ph,
+  void feed(placeholder_node<Num, ResultType> ph,
             ResultType const& val);
 
   /** Get the value of the placeholder associated with the PlaceholderID.

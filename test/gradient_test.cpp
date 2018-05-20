@@ -3,7 +3,7 @@
 #include <mgcpp/expressions/gradients.hpp>
 
 TEST(gradient_test, dmat_placeholder) {
-  mgcpp::placeholder_node<0, mgcpp::dmat_expr, mgcpp::device_matrix<float>> ph0;
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<float>> ph0;
   auto sum = mgcpp::reduce_sum(ph0);
   auto grad = mgcpp::grad(sum, ph0);
   mgcpp::eval_context ctx;
@@ -19,8 +19,8 @@ TEST(gradient_test, dmat_placeholder) {
 }
 
 TEST(gradient_test, dmat_placeholder_disconnected) {
-  mgcpp::placeholder_node<0, mgcpp::dmat_expr, mgcpp::device_matrix<float>> ph0;
-  mgcpp::placeholder_node<1, mgcpp::dmat_expr, mgcpp::device_matrix<float>> ph1;
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<float>> ph0;
+  mgcpp::placeholder_node<1, mgcpp::device_matrix<float>> ph1;
   auto grad = mgcpp::grad(reduce_sum(ph0), ph1);
   mgcpp::eval_context ctx;
   mgcpp::device_matrix<float> mat({2, 4}, 3);
@@ -36,8 +36,8 @@ TEST(gradient_test, dmat_placeholder_disconnected) {
 }
 
 TEST(gradient_test, dmat_add) {
-  mgcpp::placeholder_node<0, mgcpp::dmat_expr, mgcpp::device_matrix<float>> ph0;
-  mgcpp::placeholder_node<1, mgcpp::dmat_expr, mgcpp::device_matrix<float>> ph1;
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<float>> ph0;
+  mgcpp::placeholder_node<1, mgcpp::device_matrix<float>> ph1;
   auto add = ph0 + ph1;
   auto grad = mgcpp::grad(reduce_sum(add), ph0);
   mgcpp::eval_context ctx;
@@ -54,8 +54,8 @@ TEST(gradient_test, dmat_add) {
 }
 
 TEST(gradient_test, dmat_mul) {
-  mgcpp::placeholder_node<0, mgcpp::dmat_expr, mgcpp::device_matrix<double>> ph0;
-  mgcpp::placeholder_node<1, mgcpp::dmat_expr, mgcpp::device_matrix<double>> ph1;
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> ph0;
+  mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> ph1;
   auto mul = ph0 * ph1;
   auto sum = reduce_sum(mul);
   auto grad = mgcpp::grad(sum, ph0);
@@ -85,8 +85,8 @@ TEST(gradient_test, dmat_mul) {
 
 
 TEST(gradient_test, dmat_mul_add) {
-  mgcpp::placeholder_node<0, mgcpp::dmat_expr, mgcpp::device_matrix<double>> ph0;
-  mgcpp::placeholder_node<1, mgcpp::dmat_expr, mgcpp::device_matrix<double>> ph1;
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> ph0;
+  mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> ph1;
   auto expr = ph0 * ph1 + ph0 * ph0;
   auto sum = reduce_sum(expr);
   auto grad = mgcpp::grad(sum, ph0);

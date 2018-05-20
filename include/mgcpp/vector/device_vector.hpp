@@ -37,6 +37,8 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   using device_pointer = device_value_type*;
   using const_device_pointer = device_value_type const*;
   using result_type = this_type;
+  template <typename T>
+  using result_expr_type = dvec_expr<T>;
   using allocator_type = Alloc;
   using shape_type = mgcpp::shape<1>;
   using parent_type =

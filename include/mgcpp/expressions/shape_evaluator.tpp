@@ -84,9 +84,8 @@ auto shape(dvec_ref_expr<Vector> const& expr, eval_context const&) {
 }
 
 template <size_t PlaceholderID,
-          template <typename> class ResultExprType,
           typename ResultType>
-auto shape(placeholder_node<PlaceholderID, ResultExprType, ResultType>,
+auto shape(placeholder_node<PlaceholderID, ResultType>,
                  eval_context const& ctx) {
   return ctx.get_placeholder<PlaceholderID, ResultType>().shape();
 }
