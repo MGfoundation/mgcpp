@@ -16,5 +16,5 @@ inline decltype(auto) outer(
 }
 }  // namespace mgcpp
 
-#include <mgcpp/operations/outer.hpp>
+#include <mgcpp/operations/outer.tpp>
 #endif  // OUTER_HPP

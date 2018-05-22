@@ -31,9 +31,51 @@ std::ostream& inspect(std::ostream& os,
   return os;
 }
 
+template <typename LhsExpr, typename RhsExpr>
+std::ostream& inspect(std::ostream& os,
+                      dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr) {
+  os << (~expr).first() << " * " << (~expr).second();
+  return os;
+}
+
+template <typename LhsExpr, typename RhsExpr>
+std::ostream& inspect(std::ostream& os,
+                      dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr) {
+  os << (~expr).first() << " + " << (~expr).second();
+  return os;
+}
+
+template <typename LhsExpr, typename RhsExpr>
+std::ostream& inspect(std::ostream& os,
+                      dvec_dvec_outer_expr<LhsExpr, RhsExpr> const& expr) {
+  os << (~expr).first() << " (*) " << (~expr).second();
+  return os;
+}
+
+template <typename Expr>
+std::ostream& inspect(std::ostream& os,
+                      zeros_mat_expr<Expr> const& expr) {
+  os << "ZerosLike{" << (~expr).first() << "}";
+  return os;
+}
+
+template <typename Expr>
+std::ostream& inspect(std::ostream& os,
+                      zeros_vec_expr<Expr> const& expr) {
+  os << "ZerosLike{" << (~expr).first() << "}";
+  return os;
+}
+
 template <typename Expr>
 std::ostream& inspect(std::ostream& os,
                       ones_mat_expr<Expr> const& expr) {
+  os << "OnesLike{" << (~expr).first() << "}";
+  return os;
+}
+
+template <typename Expr>
+std::ostream& inspect(std::ostream& os,
+                      ones_vec_expr<Expr> const& expr) {
   os << "OnesLike{" << (~expr).first() << "}";
   return os;
 }
@@ -48,7 +90,14 @@ std::ostream& inspect(std::ostream& os,
 template <typename Expr>
 std::ostream& inspect(std::ostream& os,
                       dmat_reduce_sum_expr<Expr> const& expr) {
-  os << "ReduceSum{" << (~expr).first() << "}";
+  os << "MatReduceSum{" << (~expr).first() << "}";
+  return os;
+}
+
+template <typename Expr>
+std::ostream& inspect(std::ostream& os,
+                      dvec_reduce_sum_expr<Expr> const& expr) {
+  os << "VecReduceSum{" << (~expr).first() << "}";
   return os;
 }
 

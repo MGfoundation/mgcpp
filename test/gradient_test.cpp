@@ -117,11 +117,11 @@ TEST(gradient_test, dmat_mul) {
     }
   }
 }
-/*
+
 TEST(gradient_test, dmat_dvec_mul_add) {
   mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> W;
   mgcpp::placeholder_node<1, mgcpp::device_vector<double>> v;
-  mgcpp::placeholder_node<1, mgcpp::device_vector<double>> b;
+  mgcpp::placeholder_node<2, mgcpp::device_vector<double>> b;
   auto expr = W * v + b;
   auto sum = reduce_sum(expr);
   std::cout << sum << std::endl;
@@ -149,4 +149,4 @@ TEST(gradient_test, dmat_dvec_mul_add) {
     }
   }
 }
-*/
+

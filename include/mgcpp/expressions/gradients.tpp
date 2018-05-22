@@ -68,9 +68,9 @@ template <size_t PlaceholderID1,
           size_t PlaceholderID2,
           typename PhResultType2>
 inline auto grad_impl(placeholder_node<PlaceholderID1, PhResultType1>,
-                      expression<GradsExpr> const& grads,
-                      placeholder_node<PlaceholderID2, PhResultType2>) {
-  return make_zeros_like(~grads);
+                      expression<GradsExpr> const&,
+                      placeholder_node<PlaceholderID2, PhResultType2> wrt) {
+  return make_zeros_like(wrt);
 }
 
 /**

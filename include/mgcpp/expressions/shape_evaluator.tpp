@@ -43,7 +43,7 @@ auto shape(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
   mgcpp::shape<2> mat_shape = expr.first().shape(ctx);
   mgcpp::shape<1> vec_shape = expr.second().shape(ctx);
-  if (mat_shape[1] == vec_shape[0])
+  if (mat_shape[1] != vec_shape[0])
     MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
   return mgcpp::make_shape(mat_shape[0]);
 }
