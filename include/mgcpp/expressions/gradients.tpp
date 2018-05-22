@@ -78,7 +78,7 @@ template <typename Expr,
 inline auto grad(
     scalar_expr<Expr> const& expr,
     placeholder_node<PlaceholderID, PhResultType> wrt) {
-  return grad_impl(~expr, scal<typename Expr::result_type>(1), wrt);
+  return grad_impl(~expr, scalar_one_constant_expr<typename Expr::result_type>(), wrt);
 }
 
 }  // namespace mgcpp

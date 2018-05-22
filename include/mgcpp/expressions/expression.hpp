@@ -18,12 +18,12 @@ namespace mgcpp {
 size_t make_id();
 
 template <typename Type>
-struct expression {
-
+class expression {
+public:
   inline Type& operator~() noexcept;
-
   inline Type const& operator~() const noexcept;
 
+  inline void traverse() const;
 protected:
   size_t id = make_id();
 };
@@ -34,10 +34,6 @@ inline typename T::result_type eval(expression<T> const& expr,
 
 template <typename T>
 inline typename T::result_type eval(expression<T> const& expr);
-
-template <typename T>
-inline void traverse(expression<T> const& expr);
-
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/expression.tpp>

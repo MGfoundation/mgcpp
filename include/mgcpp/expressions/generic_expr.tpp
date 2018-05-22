@@ -97,59 +97,12 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-inline void generic_expr<TagType,
-                         Tag,
-                         ResultExprType,
-                         ResultType,
-                         NParameters,
-                         OperandTypes...>::traverse() const {
-  auto& cache = get_eval_cache();
-
-  cache.cnt[this->id]++;
-
-  // if cnt is bigger than 1, the subexpressions won't be evaluated
-  if (cache.cnt[this->id] <= 1) {
-    // traverse from NParameters to sizeof...(OperandTypes) - 1
-    apply_void(operands(), [&](auto const& expr) { mgcpp::traverse(expr); });
-  }
-}
-
-namespace internal {
-struct cache_lock_guard {
-  cache_lock_guard() {
-    auto& cache = get_eval_cache();
-    cache.total_computations = 0;
-    cache.cache_hits = 0;
-    cache.evaluating = true;
-  }
-  ~cache_lock_guard() {
-    auto& cache = get_eval_cache();
-    cache.evaluating = false;
-    MGCPP_ASSERT(cache.cnt.empty(),
-                 "Cache counter is not empty after evaluation");
-    MGCPP_ASSERT(cache.map.empty(), "Cache map is not empty after evaluation");
-  }
-};
-}  // namespace internal
-
-template <typename TagType,
-          size_t Tag,
-          template <typename> class ResultExprType,
-          typename ResultType,
-          size_t NParameters,
-          typename... OperandTypes>
-typename generic_expr<TagType,
-                      Tag,
-                      ResultExprType,
-                      ResultType,
-                      NParameters,
-                      OperandTypes...>::result_type
-generic_expr<TagType,
-             Tag,
-             ResultExprType,
-             ResultType,
-             NParameters,
-             OperandTypes...>::eval() const {
+ResultType generic_expr<TagType,
+                        Tag,
+                        ResultExprType,
+                        ResultType,
+                        NParameters,
+                        OperandTypes...>::eval() const {
   eval_context ctx;
   return this->eval(ctx);
 }
@@ -160,63 +113,16 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-typename generic_expr<TagType,
-                      Tag,
-                      ResultExprType,
-                      ResultType,
-                      NParameters,
-                      OperandTypes...>::result_type
-generic_expr<TagType,
-             Tag,
-             ResultExprType,
-             ResultType,
-             NParameters,
-             OperandTypes...>::eval(eval_context const& ctx) const {
-  auto& cache = get_eval_cache();
-
-  // traverse the tree first to count the number of duplicate subtrees
-  if (!cache.evaluating) {
-    mgcpp::traverse(*this);
-
-    internal::cache_lock_guard guard{};
-
-    return this->eval(ctx);
-  }
-
-  cache.total_computations++;
-
-  // try to find cache
-  auto it = cache.map.find(this->id);
-
-  // number of instances of this node left
-  auto left = --cache.cnt.at(this->id);
-  if (left == 0) {
-    cache.cnt.erase(this->id);
-  }
-
-  // If cached, return the cache
-  if (it != cache.map.end()) {
-    cache.cache_hits++;
-    auto cached = it->second.template get<result_type>();
-
-    // Erase the cache for memory if it is no longer needed
-    if (left == 0) {
-      cache.map.erase(it);
-    }
-
-    return cached;
-  }
-
-  // If the same subexpression is shared by more than 1 nodes
-  // and this is not a terminal node, cache
-  if (!is_terminal && left >= 1) {
-    auto result = evaluator::eval(*this, ctx);
-    cache.map[this->id] = result;
-    return result;
-  }
-
-  // No need to cache if the expression is not shared
-  return evaluator::eval(*this, ctx);
+ResultType generic_expr<TagType,
+                        Tag,
+                        ResultExprType,
+                        ResultType,
+                        NParameters,
+                        OperandTypes...>::eval(eval_context const& ctx) const {
+  static_any result =
+      evaluate_if_needed(this->id, !is_terminal, [&] { this->traverse(); },
+                         [&] { return static_any(evaluator::eval(*this, ctx)); });
+  return result.get<ResultType>();
 }
 
 template <typename TagType,

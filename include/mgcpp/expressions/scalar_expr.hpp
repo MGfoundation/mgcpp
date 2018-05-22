@@ -26,6 +26,18 @@ using scalar_constant_expr =
 template <typename Type>
 inline scalar_constant_expr<Type> scal(Type scalar);
 
+struct scalar_zero_constant_expr_type;
+
+template <typename T>
+using scalar_zero_constant_expr =
+    generic_expr<scalar_zero_constant_expr_type, 0, scalar_expr, T, 0>;
+
+struct scalar_one_constant_expr_type;
+
+template <typename T>
+using scalar_one_constant_expr =
+    generic_expr<scalar_one_constant_expr_type, 0, scalar_expr, T, 0>;
+
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/scalar_expr.tpp>

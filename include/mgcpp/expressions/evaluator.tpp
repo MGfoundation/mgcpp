@@ -11,6 +11,7 @@
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 #include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
+#include <mgcpp/expressions/dmat_reduce_expr.hpp>
 #include <mgcpp/expressions/dmat_ref_expr.hpp>
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
@@ -20,7 +21,6 @@
 #include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
-#include <mgcpp/expressions/dmat_reduce_expr.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
@@ -115,8 +115,7 @@ auto eval(dvec_ref_expr<Vector> const& expr, eval_context const&) {
   return expr.first();
 }
 
-template <size_t PlaceholderID,
-          typename ResultType>
+template <size_t PlaceholderID, typename ResultType>
 ResultType eval(placeholder_node<PlaceholderID, ResultType>,
                 eval_context const& ctx) {
   return ctx.get_placeholder<PlaceholderID, ResultType>();
@@ -142,9 +141,19 @@ auto eval(ones_mat_expr<Expr> const& expr, eval_context const& ctx) {
   return typename Expr::result_type(shape, 1.0);
 }
 
-template <typename Expr>
-auto eval(scalar_constant_expr<Expr> const& expr, eval_context const&) {
+template <typename T>
+T eval(scalar_constant_expr<T> const& expr, eval_context const&) {
   return expr.first();
+}
+
+template <typename T>
+inline auto eval(scalar_zero_constant_expr<T>, eval_context const&) {
+  return static_cast<T>(0);
+}
+
+template <typename T>
+inline auto eval(scalar_one_constant_expr<T>, eval_context const&) {
+  return static_cast<T>(1);
 }
 
 }  // namespace internal

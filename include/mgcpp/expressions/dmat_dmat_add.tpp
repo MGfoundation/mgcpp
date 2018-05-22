@@ -138,19 +138,20 @@ decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
 */
 namespace internal {
 template <typename LhsExpr, typename RhsExpr>
-auto add_impl(dmat_expr<LhsExpr> const& lhs,
+auto dmat_dmat_add_impl(dmat_expr<LhsExpr> const& lhs,
               dmat_expr<RhsExpr> const& rhs) noexcept {
   return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
+// TODO: check shape compatibility??
 template <typename LhsExpr, typename RhsExpr>
-auto add_impl(zeros_mat_expr<LhsExpr> const&,
+auto dmat_dmat_add_impl(zeros_mat_expr<LhsExpr> const&,
               dmat_expr<RhsExpr> const& rhs) noexcept {
   return ~rhs;
 }
 
 template <typename LhsExpr, typename RhsExpr>
-auto add_impl(dmat_expr<LhsExpr> const& lhs,
+auto dmat_dmat_add_impl(dmat_expr<LhsExpr> const& lhs,
               zeros_mat_expr<RhsExpr> const&) noexcept {
   return ~lhs;
 }
@@ -159,13 +160,13 @@ auto add_impl(dmat_expr<LhsExpr> const& lhs,
 template <typename LhsExpr, typename RhsExpr>
 auto operator+(dmat_expr<LhsExpr> const& lhs,
                dmat_expr<RhsExpr> const& rhs) noexcept {
-  return internal::add_impl(~lhs, ~rhs);
+  return internal::dmat_dmat_add_impl(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
 auto add(dmat_expr<LhsExpr> const& lhs,
          dmat_expr<RhsExpr> const& rhs) noexcept {
-  return internal::add_impl(~lhs, ~rhs);
+  return internal::dmat_dmat_add_impl(~lhs, ~rhs);
 }
 
 }  // namespace mgcpp

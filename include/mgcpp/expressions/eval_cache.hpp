@@ -1,20 +1,20 @@
 #ifndef EVAL_CACHE_HPP
 #define EVAL_CACHE_HPP
 
+#include <functional>
 #include <mgcpp/global/type_erased.hpp>
-#include <unordered_map>
 
 namespace mgcpp {
 
-struct eval_cache {
-  int total_computations = 0;
-  int cache_hits = 0;
-  bool evaluating = false;
-  std::unordered_map<size_t, int> cnt;
-  std::unordered_map<size_t, static_any> map;
-};
+size_t get_last_run_cache_hits();
 
-eval_cache& get_eval_cache();
+void analyze_graph(size_t id, std::function<void()> traverse);
+
+static_any evaluate_if_needed(size_t id,
+                              bool needs_caching,
+                              std::function<void()> traverse,
+                              std::function<static_any()> evaluate);
+
 }  // namespace mgcpp
 
 #endif  // EVAL_CACHE_HPP

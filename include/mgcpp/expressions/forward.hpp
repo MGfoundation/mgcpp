@@ -12,7 +12,7 @@
 namespace mgcpp {
 
 template <typename Type>
-struct expression;
+class expression;
 
 struct eval_context;
 

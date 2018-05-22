@@ -67,19 +67,16 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
   // Constructor
   inline generic_expr(OperandTypes... args) noexcept;
 
-  // Analyze information about the expression tree
-  inline void traverse() const;
-
   /**
    * Evaluate this expression with an empty default context.
    */
-  inline result_type eval() const;
+  inline ResultType eval() const;
 
   /**
    * Evaluate this expression with context.
    * \param ctx the context the expression is evaluated in.
    */
-  inline result_type eval(eval_context const& ctx) const;
+  inline ResultType eval(eval_context const& ctx) const;
 
   /**
    * Get the shape of this expression without computing the whole expression.
