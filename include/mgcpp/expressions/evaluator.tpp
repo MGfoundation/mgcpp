@@ -22,11 +22,13 @@
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/scalar_dvec_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
+#include <mgcpp/expressions/dvec_dvec_outer.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
 #include <mgcpp/operations/trans.hpp>
+#include <mgcpp/operations/outer.hpp>
 
 namespace mgcpp {
 namespace evaluator {
@@ -66,6 +68,15 @@ auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr,
   auto rhs = mgcpp::eval(expr.second(), ctx);
 
   return strict::add(lhs, rhs);
+}
+
+template <typename LhsExpr, typename RhsExpr>
+auto eval(dvec_dvec_outer_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context const& ctx) {
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
+
+  return strict::outer(lhs, rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>

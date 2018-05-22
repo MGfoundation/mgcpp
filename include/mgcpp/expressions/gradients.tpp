@@ -44,7 +44,7 @@ inline auto grad(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
   return std::make_tuple((~grads) * mgcpp::trans((~expr).second()),
                          mgcpp::trans((~expr).first()) * (~grads));
 }
-/*
+
 template <typename LhsExpr, typename RhsExpr, typename GradsType>
 inline auto grad(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
                  dvec_expr<GradsType> const& grads) {
@@ -52,7 +52,7 @@ inline auto grad(dmat_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
   return std::make_tuple(mgcpp::outer(~grads, (~expr).second()),
                          mgcpp::trans((~expr).first()) * (~grads));
 }
-*/
+
 }  // namespace internal
 
 template <typename GradsExpr, size_t PlaceholderID, typename PhResultType>

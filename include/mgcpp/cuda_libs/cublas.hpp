@@ -75,6 +75,19 @@ outcome::result<void> gemv(cublasHandle_t handle,
                            T* y,
                            int incy);
 
+/// This function performs the rank-1 update
+template <typename T>
+outcome::result<void> ger(cublasHandle_t handle,
+                          size_t m,
+                          size_t n,
+                          T const* alpha,
+                          T const* x,
+                          size_t incx,
+                          T const* y,
+                          size_t incy,
+                          T* A,
+                          int lda);
+
 // lv3
 
 template <typename T>

@@ -346,5 +346,46 @@ outcome::result<void> geam(cublasHandle_t handle,
   else
     return outcome::success();
 }
+
+template <>
+outcome::result<void> ger(cublasHandle_t handle,
+                          size_t m,
+                          size_t n,
+                          float const* alpha,
+                          float const* x,
+                          size_t incx,
+                          float const* y,
+                          size_t incy,
+                          float* A,
+                          int lda) {
+  std::error_code err =
+      cublasSger(handle, m, n, alpha, x, incx, y, incy, A, lda);
+
+  if (err)
+    return err;
+  else
+    return outcome::success();
+}
+
+template <>
+outcome::result<void> ger(cublasHandle_t handle,
+                          size_t m,
+                          size_t n,
+                          double const* alpha,
+                          double const* x,
+                          size_t incx,
+                          double const* y,
+                          size_t incy,
+                          double* A,
+                          int lda) {
+  std::error_code err =
+      cublasDger(handle, m, n, alpha, x, incx, y, incy, A, lda);
+
+  if (err)
+    return err;
+  else
+    return outcome::success();
+}
+
 }  // namespace cublas
 }  // namespace mgcpp

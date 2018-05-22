@@ -207,6 +207,7 @@ outcome::result<void> cuda_memcpy(float* to,
 
   return cuda_free(ptr.value());
 }
+#endif
 
 outcome::result<std::pair<free_mem_t, total_mem_t>>
 cuda_mem_get_info() noexcept {
@@ -220,5 +221,4 @@ cuda_mem_get_info() noexcept {
   else
     return std::make_pair(free_memory, total_memory);
 }
-#endif
 }  // namespace mgcpp
