@@ -22,7 +22,7 @@ template <typename LhsExpr, typename RhsExpr>
 auto shape(dmat_dmat_add_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
   mgcpp::shape<2> sh0 = expr.first().shape(ctx);
-  mgcpp::shape<2> sh1 = expr.first().shape(ctx);
+  mgcpp::shape<2> sh1 = expr.second().shape(ctx);
   if (sh0 != sh1)
     MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
   return sh0;
@@ -32,7 +32,7 @@ template <typename LhsExpr, typename RhsExpr>
 auto shape(dmat_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
            eval_context const& ctx) {
   mgcpp::shape<2> sh0 = expr.first().shape(ctx);
-  mgcpp::shape<2> sh1 = expr.first().shape(ctx);
+  mgcpp::shape<2> sh1 = expr.second().shape(ctx);
   if (sh0[1] != sh1[0])
     MGCPP_THROW_LENGTH_ERROR("incompatible shapes");
   return mgcpp::make_shape(sh0[0], sh1[1]);

@@ -32,7 +32,7 @@ struct eval_context {
    * ResultType should be the type of the value when feed() was called.
    */
   template <size_t PlaceholderID, typename ResultType>
-  auto get_placeholder() const;
+  ResultType get_placeholder() const;
 
 protected:
   std::unordered_map<int, static_any> _placeholders;

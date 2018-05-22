@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <mgcpp/mgcpp.hpp>
 #include <mgcpp/expressions/gradients.hpp>
 #include <mgcpp/expressions/inspect_graph.hpp>
+#include <mgcpp/mgcpp.hpp>
 
 #include <iostream>
 
@@ -15,9 +15,9 @@ TEST(gradient_test, dmat_placeholder) {
   auto result = grad.eval(ctx);
   EXPECT_EQ(result.shape(), mgcpp::make_shape(2, 4));
   for (size_t i = 0; i < result.shape()[0]; ++i) {
-      for (size_t j = 0; j < result.shape()[1]; ++j) {
-          EXPECT_FLOAT_EQ(result.check_value(i, j), 1);
-      }
+    for (size_t j = 0; j < result.shape()[1]; ++j) {
+      EXPECT_FLOAT_EQ(result.check_value(i, j), 1);
+    }
   }
 }
 
@@ -32,9 +32,9 @@ TEST(gradient_test, dmat_placeholder_disconnected) {
   auto result = grad.eval(ctx);
   EXPECT_EQ(result.shape(), mgcpp::make_shape(2, 4));
   for (size_t i = 0; i < result.shape()[0]; ++i) {
-      for (size_t j = 0; j < result.shape()[1]; ++j) {
-          EXPECT_FLOAT_EQ(result.check_value(i, j), 0);
-      }
+    for (size_t j = 0; j < result.shape()[1]; ++j) {
+      EXPECT_FLOAT_EQ(result.check_value(i, j), 0);
+    }
   }
 }
 
@@ -54,46 +54,41 @@ TEST(gradient_test, dmat_add) {
   auto result = grad.eval(ctx);
   EXPECT_EQ(result.shape(), mgcpp::make_shape(2, 4));
   for (size_t i = 0; i < result.shape()[0]; ++i) {
-      for (size_t j = 0; j < result.shape()[1]; ++j) {
-          EXPECT_FLOAT_EQ(result.check_value(i, j), 1);
-      }
+    for (size_t j = 0; j < result.shape()[1]; ++j) {
+      EXPECT_FLOAT_EQ(result.check_value(i, j), 1);
+    }
   }
+}
+
+template <typename Expr, size_t PlaceholderID, typename ResultType>
+auto numerical_differentiation(
+    mgcpp::scalar_expr<Expr> const& expr,
+    mgcpp::placeholder_node<PlaceholderID, ResultType> wrt,
+    mgcpp::eval_context ctx) {
+  double R = (~expr).eval(ctx);
+
+  ResultType x = ctx.get_placeholder<PlaceholderID, ResultType>();
+  ResultType result = x;
+  double epsilon = 0.00001;
+  for (size_t i = 0; i < x.shape()[0]; ++i) {
+    for (size_t j = 0; j < x.shape()[1]; ++j) {
+      auto orig_val = x.check_value(i, j);
+      x.set_value(i, j, orig_val + epsilon);
+      ctx.feed(wrt, x);
+      double Rp = (~expr).eval(ctx);
+      double p = (Rp - R) / epsilon;
+      result.set_value(i, j, p);
+      x.set_value(i, j, orig_val);
+    }
+  }
+
+  return result;
 }
 
 TEST(gradient_test, dmat_mul) {
-  mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> ph0;
-  mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> ph1;
-  auto mul = ph0 * ph1;
-  auto sum = reduce_sum(mul);
-  auto grad = mgcpp::grad(sum, ph0);
-
-  mgcpp::eval_context ctx;
-  mgcpp::device_matrix<double> mat1({4, 4}, 3);
-  mgcpp::device_matrix<double> mat2({4, 4}, 2);
-  ctx.feed(ph0, mat1);
-  ctx.feed(ph1, mat2);
-  auto result = grad.eval(ctx);
-
-  mgcpp::eval_context ctx2;
-  double epsilon = 0.00001;
-  mat1.set_value(0, 0, 3 + epsilon);
-  ctx2.feed(ph0, mat1);
-  ctx2.feed(ph1, mat2);
-  double R = sum.eval(ctx);
-  double Rp = sum.eval(ctx2);
-  auto numeric_approx = (Rp - R) / epsilon;
-  EXPECT_EQ(result.shape(), mgcpp::make_shape(4, 4));
-  for (size_t i = 0; i < result.shape()[0]; ++i) {
-      for (size_t j = 0; j < result.shape()[1]; ++j) {
-          EXPECT_FLOAT_EQ(result.check_value(i, j), numeric_approx);
-      }
-  }
-}
-
-TEST(gradient_test, dmat_mul_add) {
   mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> x;
   mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> w;
-  auto expr = x * w + x * x;
+  auto expr = x * w;
   auto sum = reduce_sum(expr);
   std::cout << sum << std::endl;
 
@@ -101,24 +96,24 @@ TEST(gradient_test, dmat_mul_add) {
   std::cout << grad << std::endl;
 
   mgcpp::eval_context ctx;
-  mgcpp::device_matrix<double> mat1({4, 4}, 3);
-  mgcpp::device_matrix<double> mat2({4, 4}, 2);
+  auto mat1 = mgcpp::device_matrix<double>::from_list({{1, 2, 3, 4},
+                                                       {2, 3, -4, 5},
+                                                       {6, -7, 8, 9},
+                                                       {10, 2, 3, 4},
+                                                       {1, 0, 1, -2}});  // 5x4
+  auto mat2 = mgcpp::device_matrix<double>::from_list(
+      {{1, 2, 3}, {2, 3, 4}, {5, 6, 1}, {-1, 2, 3}});  // 4x3
   ctx.feed(x, mat1);
   ctx.feed(w, mat2);
   auto result = grad.eval(ctx);
 
-  mgcpp::eval_context ctx2;
-  double epsilon = 0.00001;
-  mat1.set_value(0, 0, 3 + epsilon);
-  ctx2.feed(x, mat1);
-  ctx2.feed(w, mat2);
-  double R = sum.eval(ctx);
-  double Rp = sum.eval(ctx2);
-  auto numeric_approx = (Rp - R) / epsilon;
-  EXPECT_EQ(result.shape(), mgcpp::make_shape(4, 4));
+  auto numeric_approx = numerical_differentiation(sum, x, ctx);
+
+  EXPECT_EQ(result.shape(), mgcpp::make_shape(5, 4));
   for (size_t i = 0; i < result.shape()[0]; ++i) {
-      for (size_t j = 0; j < result.shape()[1]; ++j) {
-          EXPECT_FLOAT_EQ(result.check_value(i, j), numeric_approx);
-      }
+    for (size_t j = 0; j < result.shape()[1]; ++j) {
+      EXPECT_FLOAT_EQ(result.check_value(i, j),
+                      numeric_approx.check_value(i, j));
+    }
   }
 }

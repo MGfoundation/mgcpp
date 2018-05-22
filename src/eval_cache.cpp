@@ -44,9 +44,12 @@ struct cache_lock_guard {
   ~cache_lock_guard() {
     auto& cache = get_eval_cache();
     cache.evaluating = false;
-    MGCPP_ASSERT(cache.cnt.empty(),
-                 "Cache counter is not empty after evaluation");
-    MGCPP_ASSERT(cache.map.empty(), "Cache map is not empty after evaluation");
+    if (!std::uncaught_exception()) {
+      MGCPP_ASSERT(cache.cnt.empty(),
+                   "Cache counter is not empty after evaluation");
+      MGCPP_ASSERT(cache.map.empty(),
+                   "Cache map is not empty after evaluation");
+    }
   }
 };
 }  // namespace
