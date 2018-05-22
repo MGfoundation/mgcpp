@@ -67,6 +67,9 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
   // Constructor
   inline generic_expr(OperandTypes... args) noexcept;
 
+  // Build cache info by traversing the entire graph
+  inline void traverse() const;
+
   /**
    * Evaluate this expression with an empty default context.
    */

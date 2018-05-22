@@ -15,7 +15,7 @@
 #include <mgcpp/expressions/tie_expr.hpp>
 
 namespace mgcpp {
-
+namespace shape_evaluator {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
@@ -83,10 +83,9 @@ auto shape(dvec_ref_expr<Vector> const& expr, eval_context const&) {
   return mgcpp::make_shape(expr.first().shape());
 }
 
-template <size_t PlaceholderID,
-          typename ResultType>
+template <size_t PlaceholderID, typename ResultType>
 auto shape(placeholder_node<PlaceholderID, ResultType>,
-                 eval_context const& ctx) {
+           eval_context const& ctx) {
   return ctx.get_placeholder<PlaceholderID, ResultType>().shape();
 }
 
@@ -108,9 +107,9 @@ auto shape(symbolic_shape_expr<Expr> const& expr, eval_context const& ctx) {
 }  // namespace internal
 
 template <typename Op>
-typename Op::result_type::shape_type shape_evaluator::shape(const Op& op,
-                                                const eval_context& ctx) {
+typename Op::result_type::shape_type shape(const Op& op,
+                                           const eval_context& ctx) {
   return internal::shape(op, ctx);
 }
-
+}  // namespace shape_evaluator
 }  // namespace mgcpp

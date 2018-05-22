@@ -1,6 +1,9 @@
 #include <gtest/gtest.h>
 #include <mgcpp/mgcpp.hpp>
 #include <mgcpp/expressions/gradients.hpp>
+#include <mgcpp/expressions/inspect_graph.hpp>
+
+#include <iostream>
 
 TEST(gradient_test, dmat_placeholder) {
   mgcpp::placeholder_node<0, mgcpp::device_matrix<float>> ph0;
@@ -39,7 +42,11 @@ TEST(gradient_test, dmat_add) {
   mgcpp::placeholder_node<0, mgcpp::device_matrix<float>> ph0;
   mgcpp::placeholder_node<1, mgcpp::device_matrix<float>> ph1;
   auto add = ph0 + ph1;
+  std::cout << add << std::endl;
+
   auto grad = mgcpp::grad(reduce_sum(add), ph0);
+  std::cout << grad << std::endl;
+
   mgcpp::eval_context ctx;
   mgcpp::device_matrix<float> mat({2, 4}, 3);
   ctx.feed(ph0, mat);
@@ -89,7 +96,10 @@ TEST(gradient_test, dmat_mul_add) {
   mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> w;
   auto expr = x * w + x * x;
   auto sum = reduce_sum(expr);
+  std::cout << sum << std::endl;
+
   auto grad = mgcpp::grad(sum, x);
+  std::cout << grad << std::endl;
 
   mgcpp::eval_context ctx;
   mgcpp::device_matrix<double> mat1({4, 4}, 3);

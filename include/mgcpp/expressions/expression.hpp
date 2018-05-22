@@ -8,10 +8,7 @@
 #define _MGCPP_EXPRESSIONS_EXPRESSION_HPP_
 
 #include <cstddef>
-#include <utility>
-#include <functional>
 #include <mgcpp/expressions/forward.hpp>
-#include <mgcpp/expressions/placeholder.hpp>
 
 namespace mgcpp {
 
@@ -22,18 +19,10 @@ class expression {
 public:
   inline Type& operator~() noexcept;
   inline Type const& operator~() const noexcept;
-
-  inline void traverse() const;
 protected:
   size_t id = make_id();
 };
 
-template <typename T>
-inline typename T::result_type eval(expression<T> const& expr,
-                                    eval_context const& ctx);
-
-template <typename T>
-inline typename T::result_type eval(expression<T> const& expr);
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/expression.tpp>

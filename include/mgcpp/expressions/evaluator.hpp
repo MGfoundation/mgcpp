@@ -10,10 +10,18 @@
 #include <mgcpp/expressions/forward.hpp>
 
 namespace mgcpp {
-struct evaluator {
+namespace evaluator {
   template <typename Op>
-  inline static typename Op::result_type eval(Op const& op, eval_context const& ctx);
+  inline typename Op::result_type eval(Op const& op, eval_context const& ctx);
 };
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr,
+                                    eval_context const& ctx);
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr);
+
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/evaluator.tpp>

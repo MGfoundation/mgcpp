@@ -36,6 +36,23 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
+void generic_expr<TagType,
+                  Tag,
+                  ResultExprType,
+                  ResultType,
+                  NParameters,
+                  OperandTypes...>::traverse() const {
+  analyze_graph(this->id, [&] {
+    apply_void(this->operands(), [](auto const& ch) { ch.traverse(); });
+  });
+}
+
+template <typename TagType,
+          size_t Tag,
+          template <typename> class ResultExprType,
+          typename ResultType,
+          size_t NParameters,
+          typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
                                    Tag,
                                    ResultExprType,
@@ -119,9 +136,9 @@ ResultType generic_expr<TagType,
                         ResultType,
                         NParameters,
                         OperandTypes...>::eval(eval_context const& ctx) const {
-  static_any result =
-      evaluate_if_needed(this->id, !is_terminal, [&] { this->traverse(); },
-                         [&] { return static_any(evaluator::eval(*this, ctx)); });
+  static_any result = evaluate_if_needed(
+      this->id, !is_terminal, [&] { this->traverse(); },
+      [&] { return static_any(evaluator::eval(*this, ctx)); });
   return result.get<ResultType>();
 }
 

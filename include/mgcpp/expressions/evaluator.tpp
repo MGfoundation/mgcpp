@@ -28,6 +28,7 @@
 #include <mgcpp/operations/trans.hpp>
 
 namespace mgcpp {
+namespace evaluator {
 namespace internal {
 
 template <typename LhsExpr, typename RhsExpr>
@@ -155,13 +156,23 @@ template <typename T>
 inline auto eval(scalar_one_constant_expr<T>, eval_context const&) {
   return static_cast<T>(1);
 }
-
 }  // namespace internal
 
 template <typename Op>
-typename Op::result_type evaluator::eval(Op const& op,
-                                         eval_context const& ctx) {
+typename Op::result_type eval(Op const& op, eval_context const& ctx) {
   return internal::eval(op, ctx);
+}
+}  // namespace evaluator
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr,
+                                    eval_context const& ctx) {
+  return (~expr).eval(ctx);
+}
+
+template <typename T>
+inline typename T::result_type eval(expression<T> const& expr) {
+  return (~expr).eval();
 }
 
 }  // namespace mgcpp
