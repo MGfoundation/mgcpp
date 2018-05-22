@@ -88,7 +88,7 @@ TEST(cuda_memset, memset_to_zero) {
       memory.value(), &host, size, mgcpp::cuda_memcpy_kind::host_to_device);
   EXPECT_TRUE(bool(to_device_stat));
 
-  auto status = mgcpp::cuda_memset(memory.value(), 0.0f, size);
+  auto status = mgcpp::cuda_memset_to_zero(memory.value(), size);
   EXPECT_TRUE(bool(status));
 
   host = 7;
@@ -99,3 +99,4 @@ TEST(cuda_memset, memset_to_zero) {
 
   (void)mgcpp::cuda_free(memory.value());
 }
+

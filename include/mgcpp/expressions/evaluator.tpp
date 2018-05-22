@@ -20,6 +20,7 @@
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
 #include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
+#include <mgcpp/expressions/scalar_dvec_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
 
 #include <mgcpp/operations/add.hpp>
@@ -69,6 +70,15 @@ auto eval(dvec_dvec_add_expr<LhsExpr, RhsExpr> const& expr,
 
 template <typename LhsExpr, typename RhsExpr>
 auto eval(scalar_dmat_mult_expr<LhsExpr, RhsExpr> const& expr,
+          eval_context const& ctx) {
+  auto lhs = mgcpp::eval(expr.first(), ctx);
+  auto rhs = mgcpp::eval(expr.second(), ctx);
+
+  return strict::mult(lhs, rhs);
+}
+
+template <typename LhsExpr, typename RhsExpr>
+auto eval(scalar_dvec_mult_expr<LhsExpr, RhsExpr> const& expr,
           eval_context const& ctx) {
   auto lhs = mgcpp::eval(expr.first(), ctx);
   auto rhs = mgcpp::eval(expr.second(), ctx);
@@ -133,13 +143,31 @@ auto eval(zeros_mat_expr<Expr> const& expr, eval_context const& ctx) {
   auto shape = expr.first().shape(ctx);
   using result_type = typename Expr::result_type;
   using value_type = typename result_type::value_type;
-  return result_type(shape, value_type{0.0});
+  return result_type(shape, static_cast<value_type>(0.0));
 }
 
 template <typename Expr>
 auto eval(ones_mat_expr<Expr> const& expr, eval_context const& ctx) {
   auto shape = expr.first().shape(ctx);
-  return typename Expr::result_type(shape, 1.0);
+  using result_type = typename Expr::result_type;
+  using value_type = typename result_type::value_type;
+  return result_type(shape, static_cast<value_type>(1.0));
+}
+
+template <typename Expr>
+auto eval(zeros_vec_expr<Expr> const& expr, eval_context const& ctx) {
+  auto shape = expr.first().shape(ctx);
+  using result_type = typename Expr::result_type;
+  using value_type = typename result_type::value_type;
+  return result_type(shape[0], static_cast<value_type>(0.0));
+}
+
+template <typename Expr>
+auto eval(ones_vec_expr<Expr> const& expr, eval_context const& ctx) {
+  auto shape = expr.first().shape(ctx);
+  using result_type = typename Expr::result_type;
+  using value_type = typename result_type::value_type;
+  return result_type(shape[0], static_cast<value_type>(1.0));
 }
 
 template <typename T>

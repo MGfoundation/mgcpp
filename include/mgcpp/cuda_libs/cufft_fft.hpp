@@ -23,7 +23,7 @@ namespace cufft {
  *  \param result the fft result, which is an array of
  *         floor(n/2)+1 complex numbers.
  */
-inline outcome::result<void> rfft(size_t n, float const* x, cuComplex* result);
+outcome::result<void> rfft(size_t n, float const* x, cuComplex* result);
 
 /**
  *  Performs double-precision real-to-complex forward FFT.
@@ -33,9 +33,7 @@ inline outcome::result<void> rfft(size_t n, float const* x, cuComplex* result);
  *  \param result the fft result, which is an array of
  *         floor(n/2)+1 complex numbers.
  */
-inline outcome::result<void> rfft(size_t n,
-                                  double const* x,
-                                  cuDoubleComplex* result);
+outcome::result<void> rfft(size_t n, double const* x, cuDoubleComplex* result);
 
 /**
  *  Performs single-precision complex-to-real inverse unnormalized FFT.
@@ -44,7 +42,7 @@ inline outcome::result<void> rfft(size_t n,
  *  \param x input array of floor(n/2)+1 interleaved complex values
  *  \param result the fft result, which is an array of n real numbers.
  */
-inline outcome::result<void> irfft(size_t n, cuComplex const* x, float* result);
+outcome::result<void> irfft(size_t n, cuComplex const* x, float* result);
 
 /**
  *  Performs double-precision complex-to-real inverse unnormalized FFT.
@@ -53,9 +51,7 @@ inline outcome::result<void> irfft(size_t n, cuComplex const* x, float* result);
  *  \param x input array of floor(n/2)+1 interleaved complex values
  *  \param result the fft result, which is an array of n real numbers.
  */
-inline outcome::result<void> irfft(size_t n,
-                                   cuDoubleComplex const* x,
-                                   double* result);
+outcome::result<void> irfft(size_t n, cuDoubleComplex const* x, double* result);
 
 enum class fft_direction {
   /// Forward FFT (time domain -> frequency domain representation)
@@ -74,10 +70,10 @@ enum class fft_direction {
  *  \param direction cufft::fft_direction::forward for forward FFT, or
  * cufft::fft_direction::inverse to perform an inverse (unnormalized) FFT.
  */
-inline outcome::result<void> cfft(size_t n,
-                                  cuComplex const* x,
-                                  cuComplex* result,
-                                  fft_direction direction);
+outcome::result<void> cfft(size_t n,
+                           cuComplex const* x,
+                           cuComplex* result,
+                           fft_direction direction);
 
 /**
  *  Performs double-precision complex-to-complex FFT.
@@ -88,10 +84,10 @@ inline outcome::result<void> cfft(size_t n,
  *  \param direction cufft::fft_direction::forward for forward FFT, or
  * cufft::fft_direction::inverse to perform an inverse (unnormalized) FFT.
  */
-inline outcome::result<void> cfft(size_t n,
-                                  cuDoubleComplex const* x,
-                                  cuDoubleComplex* result,
-                                  fft_direction direction);
+outcome::result<void> cfft(size_t n,
+                           cuDoubleComplex const* x,
+                           cuDoubleComplex* result,
+                           fft_direction direction);
 
 /**
  *  Performs two-dimensional single-precision real-to-complex forward FFT.
@@ -102,10 +98,10 @@ inline outcome::result<void> cfft(size_t n,
  *  \param result the fft result, which is an array of floor(n/2)+1 complex
  * numbers.
  */
-inline outcome::result<void> rfft2(size_t n,
-                                   size_t m,
-                                   float const* x,
-                                   cuComplex* result);
+outcome::result<void> rfft2(size_t n,
+                            size_t m,
+                            float const* x,
+                            cuComplex* result);
 
 /**
  *  Performs two-dimensional double-precision real-to-complex forward FFT.
@@ -116,10 +112,10 @@ inline outcome::result<void> rfft2(size_t n,
  *  \param result the fft result, which is an array of (floor(n/2)+1) x m
  * complex numbers.
  */
-inline outcome::result<void> rfft2(size_t n,
-                                   size_t m,
-                                   double const* x,
-                                   cuDoubleComplex* result);
+outcome::result<void> rfft2(size_t n,
+                            size_t m,
+                            double const* x,
+                            cuDoubleComplex* result);
 
 /**
  *  Performs two-dimensional single-precision complex-to-real inverse
@@ -128,10 +124,10 @@ inline outcome::result<void> rfft2(size_t n,
  * input array of (floor(n/2)+1) x m interleaved complex values \param result
  * the fft result, which is an array of n x m real numbers.
  */
-inline outcome::result<void> irfft2(size_t n,
-                                    size_t m,
-                                    cuComplex const* x,
-                                    float* result);
+outcome::result<void> irfft2(size_t n,
+                             size_t m,
+                             cuComplex const* x,
+                             float* result);
 
 /**
  *  Performs two-dimensional double-precision complex-to-real inverse
@@ -140,10 +136,10 @@ inline outcome::result<void> irfft2(size_t n,
  * input array of (floor(n/2)+1) x m interleaved complex values \param result
  * the fft result, which is an array of n x m real numbers.
  */
-inline outcome::result<void> irfft2(size_t n,
-                                    size_t m,
-                                    cuDoubleComplex const* x,
-                                    double* result);
+outcome::result<void> irfft2(size_t n,
+                             size_t m,
+                             cuDoubleComplex const* x,
+                             double* result);
 
 /**
  *  Performs two-dimensional single-precision complex-to-complex FFT.
@@ -155,11 +151,11 @@ inline outcome::result<void> irfft2(size_t n,
  *  \param direction cufft::fft_direction::forward for forward FFT, or
  * cufft::fft_direction::inverse to perform an inverse (unnormalized) FFT.
  */
-inline outcome::result<void> cfft2(size_t n,
-                                   size_t m,
-                                   cuComplex const* x,
-                                   cuComplex* result,
-                                   fft_direction direction);
+outcome::result<void> cfft2(size_t n,
+                            size_t m,
+                            cuComplex const* x,
+                            cuComplex* result,
+                            fft_direction direction);
 
 /**
  *  Performs two-dimensional double-precision complex-to-complex FFT.
@@ -171,14 +167,12 @@ inline outcome::result<void> cfft2(size_t n,
  *  \param direction cufft::fft_direction::forward for forward FFT, or
  * cufft::fft_direction::inverse to perform an inverse (unnormalized) FFT.
  */
-inline outcome::result<void> cfft2(size_t n,
-                                   size_t m,
-                                   cuDoubleComplex const* x,
-                                   cuDoubleComplex* result,
-                                   fft_direction direction);
+outcome::result<void> cfft2(size_t n,
+                            size_t m,
+                            cuDoubleComplex const* x,
+                            cuDoubleComplex* result,
+                            fft_direction direction);
 }  // namespace cufft
 }  // namespace mgcpp
-
-#include <mgcpp/cuda_libs/cufft_fft.tpp>
 
 #endif

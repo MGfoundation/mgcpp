@@ -20,5 +20,4 @@ template <typename Expr>
 struct dvec_expr : public expression<Expr> {};
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dvec_expr.tpp>
 #endif

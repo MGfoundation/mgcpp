@@ -117,3 +117,36 @@ TEST(gradient_test, dmat_mul) {
     }
   }
 }
+/*
+TEST(gradient_test, dmat_dvec_mul_add) {
+  mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> W;
+  mgcpp::placeholder_node<1, mgcpp::device_vector<double>> v;
+  mgcpp::placeholder_node<1, mgcpp::device_vector<double>> b;
+  auto expr = W * v + b;
+  auto sum = reduce_sum(expr);
+  std::cout << sum << std::endl;
+
+  auto grad = mgcpp::grad(sum, W);
+  std::cout << grad << std::endl;
+
+  mgcpp::eval_context ctx;
+  ctx.feed(W, mgcpp::device_matrix<double>::from_list({{1, 2, 3, 4},
+                                                       {2, 3, -4, 5},
+                                                       {6, -7, 8, 9},
+                                                       {10, 2, 3, 4},
+                                                       {1, 0, 1, -2}}));  // 5x4
+  ctx.feed(v, mgcpp::device_vector<double>({-3, 4, -5, 6})); // 4x1
+  ctx.feed(b, mgcpp::device_vector<double>({1, 2, 3, 4, 5})); // 5x1
+  auto result = grad.eval(ctx);
+
+  auto numeric_approx = numerical_differentiation(sum, W, ctx);
+
+  EXPECT_EQ(result.shape(), mgcpp::make_shape(5, 4));
+  for (size_t i = 0; i < result.shape()[0]; ++i) {
+    for (size_t j = 0; j < result.shape()[1]; ++j) {
+      EXPECT_FLOAT_EQ(result.check_value(i, j),
+                      numeric_approx.check_value(i, j));
+    }
+  }
+}
+*/

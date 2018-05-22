@@ -78,7 +78,11 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/mgblas_error.cpp
     ${SOURCE_DIR}/thread_context.cpp
     ${SOURCE_DIR}/expression.cpp
-    ${SOURCE_DIR}/eval_cache.cpp)
+    ${SOURCE_DIR}/eval_cache.cpp
+    ${SOURCE_DIR}/cuda_libs/cublas.cpp
+    ${SOURCE_DIR}/cuda_libs/cufft_fft.cpp
+    ${SOURCE_DIR}/cuda/device.cpp
+    ${SOURCE_DIR}/cuda/memory.cpp)
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
     "${BASE_SOURCE_FILES}")

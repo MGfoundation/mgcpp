@@ -348,7 +348,7 @@ device_matrix<Type, DeviceId, Alloc>::zero() {
   }
 
   auto set_result =
-      cuda_memset(_data, static_cast<Type>(0), _shape[0] * _shape[1]);
+      cuda_memset_to_zero(_data, _shape[0] * _shape[1]);
   if (!set_result) {
     MGCPP_THROW_SYSTEM_ERROR(set_result.error());
   }

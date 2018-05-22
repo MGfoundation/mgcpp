@@ -32,6 +32,16 @@ inline auto add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
+template <typename LhsExpr, typename RhsExpr>
+inline auto operator-(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
+
+template <typename LhsExpr, typename RhsExpr>
+inline auto sub(
+    dmat_expr<LhsExpr> const& lhs,
+    dmat_expr<RhsExpr> const& rhs) noexcept;
+
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/dmat_dmat_add.tpp>

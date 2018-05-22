@@ -19,5 +19,4 @@ template <typename Expr>
 struct dmat_expr : public expression<Expr> {};
 }  // namespace mgcpp
 
-#include <mgcpp/expressions/dmat_expr.tpp>
 #endif
