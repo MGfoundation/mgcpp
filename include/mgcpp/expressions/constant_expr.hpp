@@ -7,7 +7,7 @@
 
 namespace mgcpp {
 
-struct zeros_mat_expr_type {};
+struct zeros_mat_expr_type;
 
 template <typename Expr>
 using zeros_mat_expr = generic_expr<zeros_mat_expr_type,
@@ -22,7 +22,7 @@ zeros_mat_expr<Expr> make_zeros_like(dmat_expr<Expr> const& expr) {
   return zeros_mat_expr<Expr>(sym_shape(~expr));
 }
 
-struct ones_mat_expr_type {};
+struct ones_mat_expr_type;
 
 template <typename Expr>
 using ones_mat_expr = generic_expr<ones_mat_expr_type,

@@ -23,12 +23,12 @@ using dmat_dmat_add_expr = binary_expr<dmat_dmat_add_expr_type,
                                        RhsExpr>;
 
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
+inline auto operator+(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
+inline auto add(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept;
 

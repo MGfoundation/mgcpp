@@ -7,6 +7,8 @@
 
 #include <mgcpp/expressions/dmat_dmat_add.hpp>
 
+#include <mgcpp/expressions/constant_expr.hpp>
+
 namespace mgcpp {
 
 /*
@@ -134,19 +136,36 @@ decltype(auto) dmat_dmat_add_expr<LhsExpr, RhsExpr>::eval() const {
   return internal::dmat_dmat_add_subgraph_matcher(*this);
 }
 */
-
+namespace internal {
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> operator+(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept {
+auto add_impl(dmat_expr<LhsExpr> const& lhs,
+              dmat_expr<RhsExpr> const& rhs) noexcept {
   return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
 }
 
 template <typename LhsExpr, typename RhsExpr>
-dmat_dmat_add_expr<LhsExpr, RhsExpr> add(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept {
-  return dmat_dmat_add_expr<LhsExpr, RhsExpr>(~lhs, ~rhs);
+auto add_impl(zeros_mat_expr<LhsExpr> const&,
+              dmat_expr<RhsExpr> const& rhs) noexcept {
+  return ~rhs;
+}
+
+template <typename LhsExpr, typename RhsExpr>
+auto add_impl(dmat_expr<LhsExpr> const& lhs,
+              zeros_mat_expr<RhsExpr> const&) noexcept {
+  return ~lhs;
+}
+}  // namespace internal
+
+template <typename LhsExpr, typename RhsExpr>
+auto operator+(dmat_expr<LhsExpr> const& lhs,
+               dmat_expr<RhsExpr> const& rhs) noexcept {
+  return internal::add_impl(~lhs, ~rhs);
+}
+
+template <typename LhsExpr, typename RhsExpr>
+auto add(dmat_expr<LhsExpr> const& lhs,
+         dmat_expr<RhsExpr> const& rhs) noexcept {
+  return internal::add_impl(~lhs, ~rhs);
 }
 
 }  // namespace mgcpp

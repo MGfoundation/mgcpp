@@ -120,10 +120,8 @@ TEST(caching, caching) {
 }
 
 TEST(placeholder_expr, placeholder_expr) {
-  mgcpp::placeholder_node<0, mgcpp::device_vector<float>>
-      ph_0;
-  mgcpp::placeholder_node<1, mgcpp::device_vector<float>>
-      ph_1;
+  mgcpp::placeholder_node<0, mgcpp::device_vector<float>> ph_0;
+  mgcpp::placeholder_node<1, mgcpp::device_vector<float>> ph_1;
   auto added = ph_0 + ph_1;
 
   mgcpp::device_vector<float> a({1, 2, 3});
@@ -141,10 +139,8 @@ TEST(placeholder_expr, placeholder_expr) {
 }
 
 TEST(tie_expr, tie_expr) {
-  mgcpp::placeholder_node<0, mgcpp::device_vector<float>>
-      ph_0;
-  mgcpp::placeholder_node<1, mgcpp::device_vector<float>>
-      ph_1;
+  mgcpp::placeholder_node<0, mgcpp::device_vector<float>> ph_0;
+  mgcpp::placeholder_node<1, mgcpp::device_vector<float>> ph_1;
   auto added = mgcpp::tie(ph_0 + ph_1, ph_1);
 
   mgcpp::device_vector<float> a({1, 2, 3});
