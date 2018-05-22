@@ -27,7 +27,7 @@ decltype(auto) strict::sub(
   auto* thread_context = lhs_vec.context();
   auto handle = thread_context->get_cublas_context(DeviceId);
 
-  auto size = lhs_vec.shape();
+  auto size = lhs_vec.size();
 
   value_type const alpha = -1;
 

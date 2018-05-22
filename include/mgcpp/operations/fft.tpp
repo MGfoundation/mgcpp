@@ -21,7 +21,7 @@ decltype(auto) strict::rfft(
 
   auto const& dev_vec = ~vec;
 
-  size_t fft_size = dev_vec.shape();
+  size_t fft_size = dev_vec.size();
   size_t output_size = fft_size / 2 + 1;
 
   auto result = device_vector<complex<Type>, DeviceId, result_allocator_type>(
@@ -48,8 +48,8 @@ decltype(auto) strict::irfft(
 
   size_t fft_size = n;
   if (n < 0) {
-    fft_size = (dev_vec.shape() - 1) * 2;
-  } else if (fft_size / 2 + 1 > dev_vec.shape()) {
+    fft_size = (dev_vec.size() - 1) * 2;
+  } else if (fft_size / 2 + 1 > dev_vec.size()) {
     // Pad vector with zeroes
     auto new_shape = fft_size / 2 + 1;
     auto padded = dev_vec;
@@ -81,7 +81,7 @@ decltype(auto) strict::cfft(
 
   auto const& dev_vec = ~vec;
 
-  size_t fft_size = dev_vec.shape();
+  size_t fft_size = dev_vec.size();
   size_t output_size = fft_size;
 
   auto result = device_vector<complex<Type>, DeviceId, result_allocator_type>(

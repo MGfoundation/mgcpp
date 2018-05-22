@@ -51,7 +51,7 @@ TEST(device_vector, default_constructor) {
   EXPECT_NO_THROW(do {
     mgcpp::device_vector<float> vec{};
 
-    EXPECT_EQ(vec.shape(), 0);
+    EXPECT_EQ(vec.size(), 0);
     EXPECT_EQ(vec.data(), nullptr);
     EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 
@@ -76,7 +76,7 @@ TEST(device_vector, size_constructor) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 }
@@ -100,7 +100,7 @@ TEST(device_vector, size_constructor_half) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<mgcpp::half>().context());
 }
@@ -125,7 +125,7 @@ TEST(device_vector, initializing_constructor) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 
@@ -156,7 +156,7 @@ TEST(device_vector, initializing_constructor_complex) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(),
             mgcpp::device_vector<mgcpp::complex<float>>().context());
@@ -188,7 +188,7 @@ TEST(device_vector, initializing_constructor_double_complex) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(),
             mgcpp::device_vector<mgcpp::complex<double>>().context());
@@ -220,7 +220,7 @@ TEST(device_vector, initializing_constructor_half) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_NE(vec.data(), nullptr);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<mgcpp::half>().context());
 
@@ -259,7 +259,7 @@ TEST(device_vector, constructon_from_host_data) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 
   counter = 0;
@@ -300,7 +300,7 @@ TEST(device_vector, constructon_from_host_data_complex) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_EQ(vec.context(),
             mgcpp::device_vector<mgcpp::complex<float>>().context());
 
@@ -341,7 +341,7 @@ TEST(device_vector, constructon_from_host_data_half) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), size);
+  EXPECT_EQ(vec.size(), size);
   EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 
   counter = 0;
@@ -374,7 +374,7 @@ TEST(device_vector, third_party_matrix_construction) {
       ++counter;
     }
 
-    EXPECT_EQ(device.shape(), host.shape());
+    EXPECT_EQ(device.size(), host.shape());
   } while (false));
 }
 
@@ -397,7 +397,7 @@ TEST(device_vector, constructon_from_init_list) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), init_list.size());
+  EXPECT_EQ(vec.size(), init_list.size());
   EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
 
   EXPECT_NO_THROW(do {
@@ -428,7 +428,7 @@ TEST(device_vector, complex_vector_constructon_from_init_list) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), init_list.size());
+  EXPECT_EQ(vec.size(), init_list.size());
   EXPECT_EQ(vec.context(),
             mgcpp::device_vector<mgcpp::complex<float>>().context());
 
@@ -464,7 +464,7 @@ TEST(device_vector, constructon_from_init_list_half) {
 
   EXPECT_GT(before_memory, after_memory);
 
-  EXPECT_EQ(vec.shape(), init_list.size());
+  EXPECT_EQ(vec.size(), init_list.size());
   EXPECT_EQ(vec.context(), mgcpp::device_vector<mgcpp::half>().context());
 
   EXPECT_NO_THROW(do {
@@ -489,7 +489,7 @@ TEST(device_vector, cpy_constructor) {
   mgcpp::device_vector<float> copied{};
   EXPECT_NO_THROW(copied = mgcpp::device_vector<float>(original));
 
-  EXPECT_EQ(copied.shape(), original.shape());
+  EXPECT_EQ(copied.size(), original.size());
   EXPECT_NO_THROW(do {
     for (auto i = 0u; i < size; ++i) {
       EXPECT_EQ(copied.check_value(i), init_val);
@@ -512,7 +512,7 @@ TEST(device_vector, allocation_during_cpy_assign) {
 
   EXPECT_GT(copied.capacity(), original_capacity);
 
-  EXPECT_EQ(copied.shape(), original.shape());
+  EXPECT_EQ(copied.size(), original.size());
   EXPECT_EQ(copied.capacity(), original.capacity());
   EXPECT_NO_THROW(do {
     for (auto i = 0u; i < size; ++i) {
@@ -542,7 +542,7 @@ TEST(device_vector, no_allocation_during_cpy_assign) {
 
   EXPECT_EQ(before_memory, after_memory);
 
-  EXPECT_EQ(copied.shape(), original.shape());
+  EXPECT_EQ(copied.size(), original.size());
   EXPECT_GT(copied.capacity(), original.capacity());
   EXPECT_NO_THROW(do {
     for (auto i = 0u; i < size; ++i) {
@@ -571,7 +571,7 @@ TEST(device_vector, move_constructor) {
 
   EXPECT_EQ(before_memory, after_memory);
   EXPECT_EQ(original.data(), nullptr);
-  EXPECT_EQ(moved.shape(), 10);
+  EXPECT_EQ(moved.size(), 10);
 
   for (auto i = 0u; i < size; ++i) {
     EXPECT_EQ(moved.check_value(i), init_val);
@@ -605,7 +605,7 @@ TEST(device_vector, move_assign_operator) {
     }
   } while (false));
 
-  EXPECT_EQ(moved.shape(), size);
+  EXPECT_EQ(moved.size(), size);
   EXPECT_EQ(original.data(), nullptr);
 }
 

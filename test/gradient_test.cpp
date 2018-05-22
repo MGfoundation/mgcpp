@@ -90,7 +90,6 @@ TEST(gradient_test, dmat_mul) {
   }
 }
 
-
 TEST(gradient_test, dmat_mul_add) {
   mgcpp::placeholder_node<0, mgcpp::device_matrix<double>> x;
   mgcpp::placeholder_node<1, mgcpp::device_matrix<double>> w;

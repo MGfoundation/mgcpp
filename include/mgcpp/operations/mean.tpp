@@ -21,7 +21,7 @@ decltype(auto) strict::mean(dense_vector<DenseVec, Type, DeviceId> const& vec) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
-  size_t size = original_vec.shape();
+  size_t size = original_vec.size();
   value_type result;
 
   auto status = mgblas_vpr(original_vec.data(), &result, size);

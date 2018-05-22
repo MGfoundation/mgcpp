@@ -24,7 +24,7 @@ decltype(auto) strict::sum(dense_vector<DenseVec, Type, DeviceId> const& vec) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
-  size_t size = original_vec.shape();
+  size_t size = original_vec.size();
 
   value_type result;
 

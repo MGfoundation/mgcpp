@@ -21,7 +21,7 @@ TEST(lv2_expr, mat_vec_mult) {
   vector result;
   EXPECT_NO_THROW({ result = eval(mult_expr); });
 
-  auto shape = result.shape();
+  auto shape = result.size();
   EXPECT_EQ(shape, 4);
 
   float expected[] = {14, 32, 50, 68};

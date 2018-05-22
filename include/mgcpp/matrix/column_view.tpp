@@ -67,7 +67,7 @@ operator=(dense_vector<DenseVec, Type, DeviceId> const& vec) {
   auto const& dense_vec = ~vec;
 
   size_t size = _matrix->shape()[0];
-  MGCPP_ASSERT(size == dense_vec.shape(),
+  MGCPP_ASSERT(size == dense_vec.size(),
                "column view and assigned vector size doesn't match");
 
   auto status = cuda_memcpy(data_mutable(), dense_vec.data(), size,

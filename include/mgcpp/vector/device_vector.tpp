@@ -367,13 +367,14 @@ device_vector<Type, DeviceId, Alloc>::data_mutable() noexcept {
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>
-size_t device_vector<Type, DeviceId, Alloc>::shape() const noexcept {
+size_t device_vector<Type, DeviceId, Alloc>::size() const noexcept {
   return _shape;
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>
-size_t device_vector<Type, DeviceId, Alloc>::size() const noexcept {
-  return _shape;
+typename device_vector<Type, DeviceId, Alloc>::shape_type
+device_vector<Type, DeviceId, Alloc>::shape() const noexcept {
+  return mgcpp::make_shape(_shape);
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>

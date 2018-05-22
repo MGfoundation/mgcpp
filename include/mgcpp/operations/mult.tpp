@@ -70,7 +70,7 @@ inline decltype(auto) strict::mult(
   auto* context = dmat.context();
   auto handle = context->get_cublas_context(DeviceId);
 
-  MGCPP_ASSERT(dmat.shape()[1] == dvec.shape(),
+  MGCPP_ASSERT(dmat.shape()[1] == dvec.size(),
                "Matrix.shape[1] != Vector.shape");
 
   auto n = dmat.shape()[0];
@@ -107,7 +107,7 @@ decltype(auto) strict::mult(
   auto* context = original_vec.context();
   auto handle = context->get_cublas_context(DeviceId);
 
-  auto size = original_vec.shape();
+  auto size = original_vec.size();
 
   // complex scalar x real vector will need something
   auto casted_scalar = VectorType(scalar);

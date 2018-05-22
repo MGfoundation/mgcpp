@@ -27,7 +27,7 @@ strict::map(dense_vector<DenseVec, Type, DeviceId> const& vec) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
-  size_t n = original_vec.shape();
+  size_t n = original_vec.size();
 
   auto result = device_vector<Type, DeviceId, allocator_type>(original_vec);
   auto status = Function(result.data_mutable(), n);

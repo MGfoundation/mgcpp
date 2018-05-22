@@ -26,7 +26,7 @@ decltype(auto) strict::hdmd(
   MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(),
                "matrix dimensions didn't match");
 
-  size_t size = lhs_vec.shape();
+  size_t size = lhs_vec.size();
 
   auto result = device_vector<Type, DeviceId, allocator_type>(size);
   auto status =

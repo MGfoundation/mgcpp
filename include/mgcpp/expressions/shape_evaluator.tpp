@@ -79,8 +79,7 @@ auto shape(dmat_ref_expr<Matrix> const& expr, eval_context const&) {
 
 template <typename Vector>
 auto shape(dvec_ref_expr<Vector> const& expr, eval_context const&) {
-  // FIXME: first make device_vector::shape() return an mgcpp::shape<1>
-  return mgcpp::make_shape(expr.first().shape());
+  return expr.first().shape();
 }
 
 template <size_t PlaceholderID, typename ResultType>

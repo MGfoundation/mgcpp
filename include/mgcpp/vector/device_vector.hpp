@@ -120,7 +120,7 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
 
   inline thread_context* context() const noexcept;
 
-  inline size_t shape() const noexcept;
+  inline shape_type shape() const noexcept;
 
   inline Alloc& allocator() noexcept;
 
