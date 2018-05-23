@@ -17,26 +17,29 @@ namespace mgcpp {
 template <typename Expr>
 struct scalar_expr : public expression<Expr> {};
 
-struct scalar_constant_expr_type;
-
 template <typename T>
-using scalar_constant_expr =
-    generic_expr<scalar_constant_expr_type, 0, scalar_expr, T, 1, T>;
+struct scalar_constant_expr
+    : generic_expr<scalar_constant_expr<T>, 0, scalar_expr, T, 1, T> {
+  using generic_expr<scalar_constant_expr<T>, 0, scalar_expr, T, 1, T>::
+      generic_expr;
+};
 
 template <typename Type>
 inline scalar_constant_expr<Type> scal(Type scalar);
 
-struct scalar_zero_constant_expr_type;
+template <typename T>
+struct scalar_zero_constant_expr
+    : generic_expr<scalar_zero_constant_expr<T>, 0, scalar_expr, T, 0> {
+  using generic_expr<scalar_zero_constant_expr<T>, 0, scalar_expr, T, 0>::
+      generic_expr;
+};
 
 template <typename T>
-using scalar_zero_constant_expr =
-    generic_expr<scalar_zero_constant_expr_type, 0, scalar_expr, T, 0>;
-
-struct scalar_one_constant_expr_type;
-
-template <typename T>
-using scalar_one_constant_expr =
-    generic_expr<scalar_one_constant_expr_type, 0, scalar_expr, T, 0>;
+struct scalar_one_constant_expr
+    : generic_expr<scalar_one_constant_expr<T>, 0, scalar_expr, T, 0> {
+  using generic_expr<scalar_one_constant_expr<T>, 0, scalar_expr, T, 0>::
+      generic_expr;
+};
 
 }  // namespace mgcpp
 

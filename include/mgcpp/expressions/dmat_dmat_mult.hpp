@@ -12,14 +12,18 @@
 
 namespace mgcpp {
 
-struct dmat_dmat_mult_expr_type;
-
 template <typename LhsExpr, typename RhsExpr>
-using dmat_dmat_mult_expr = binary_expr<dmat_dmat_mult_expr_type,
+struct dmat_dmat_mult_expr : binary_expr<dmat_dmat_mult_expr<LhsExpr, RhsExpr>,
                                         dmat_expr,
                                         typename LhsExpr::result_type,
                                         LhsExpr,
-                                        RhsExpr>;
+                                        RhsExpr> {
+  using binary_expr<dmat_dmat_mult_expr<LhsExpr, RhsExpr>,
+                    dmat_expr,
+                    typename LhsExpr::result_type,
+                    LhsExpr,
+                    RhsExpr>::generic_expr;
+};
 
 /** Returns a dense matrix product expression.
  * \param lhs the left-hand side dense matrix

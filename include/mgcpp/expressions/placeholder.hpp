@@ -5,14 +5,19 @@
 
 namespace mgcpp {
 
-struct placeholder_node_type;
-
 template <size_t PlaceholderID, typename ResultType>
-using placeholder_node = generic_expr<placeholder_node_type,
-                                      PlaceholderID,
-                                      ResultType::template result_expr_type,
-                                      ResultType,
-                                      0>;
+struct placeholder_node
+    : generic_expr<placeholder_node<PlaceholderID, ResultType>,
+                   PlaceholderID,
+                   ResultType::template result_expr_type,
+                   ResultType,
+                   0> {
+  using generic_expr<placeholder_node<PlaceholderID, ResultType>,
+                     PlaceholderID,
+                     ResultType::template result_expr_type,
+                     ResultType,
+                     0>::generic_expr;
+};
 }  // namespace mgcpp
 
 #endif  // PLACEHOLDER_HPP

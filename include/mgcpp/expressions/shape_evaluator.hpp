@@ -5,8 +5,8 @@
 
 namespace mgcpp {
 namespace shape_evaluator {
-template <typename Op>
-inline typename Op::result_type::shape_type shape(Op const& op,
+template <typename T>
+inline typename T::result_type::shape_type shape(expression<T> const& op,
                                                   eval_context const& ctx);
 };
 }  // namespace mgcpp

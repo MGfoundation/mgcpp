@@ -12,11 +12,20 @@
 
 namespace mgcpp {
 
-struct dvec_ref_expr_type;
-
 template <typename Vector>
-using dvec_ref_expr =
-    generic_expr<dvec_ref_expr_type, 0, dvec_expr, Vector, 1, Vector const&>;
+struct dvec_ref_expr : generic_expr<dvec_ref_expr<Vector>,
+                                    0,
+                                    dvec_expr,
+                                    Vector,
+                                    1,
+                                    Vector const&> {
+  using generic_expr<dvec_ref_expr<Vector>,
+                     0,
+                     dvec_expr,
+                     Vector,
+                     1,
+                     Vector const&>::generic_expr;
+};
 
 template <typename DenseVector, typename Type, size_t DeviceId>
 inline dvec_ref_expr<DenseVector> ref(

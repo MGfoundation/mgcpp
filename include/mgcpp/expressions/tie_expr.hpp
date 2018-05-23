@@ -8,18 +8,23 @@ namespace mgcpp {
 template <typename Expr>
 struct tie_expr : public expression<Expr> {};
 
-struct tie_op_type;
+template <typename... Exprs>
+struct symbolic_tie_expr : generic_expr<symbolic_tie_expr<Exprs...>,
+                             0,
+                             tie_expr,
+                             std::tuple<typename Exprs::result_type...>,
+                             0,
+                             Exprs...> {
+  using generic_expr<symbolic_tie_expr<Exprs...>,
+                     0,
+                     tie_expr,
+                     std::tuple<typename Exprs::result_type...>,
+                     0,
+                     Exprs...>::generic_expr;
+};
 
 template <typename... Exprs>
-using tie_op = generic_expr<tie_op_type,
-                            0,
-                            tie_expr,
-                            std::tuple<typename Exprs::result_type...>,
-                            0,
-                            Exprs...>;
-
-template <typename... Exprs>
-inline tie_op<Exprs...> tie(Exprs const&... exprs);
+inline symbolic_tie_expr<Exprs...> tie(Exprs const&... exprs);
 
 }  // namespace mgcpp
 

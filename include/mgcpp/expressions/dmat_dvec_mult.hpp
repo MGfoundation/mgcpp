@@ -13,14 +13,18 @@
 
 namespace mgcpp {
 
-struct dmat_dvec_mult_expr_type;
-
-template <typename MatExpr, typename VecExpr>
-using dmat_dvec_mult_expr = binary_expr<dmat_dvec_mult_expr_type,
+template <typename LhsExpr, typename RhsExpr>
+struct dmat_dvec_mult_expr : binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
                                         dvec_expr,
-                                        typename VecExpr::result_type,
-                                        MatExpr,
-                                        VecExpr>;
+                                        typename RhsExpr::result_type,
+                                        LhsExpr,
+                                        RhsExpr> {
+  using binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
+                    dvec_expr,
+                    typename RhsExpr::result_type,
+                    LhsExpr,
+                    RhsExpr>::generic_expr;
+};
 
 /** Returns a dense matrix vector product expression.
  * \param lhs the left-hand side dense matrix

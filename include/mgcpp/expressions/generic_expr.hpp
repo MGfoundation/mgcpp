@@ -25,12 +25,7 @@ template <typename TagType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-struct generic_expr : public ResultExprType<generic_expr<TagType,
-                                                         Tag,
-                                                         ResultExprType,
-                                                         ResultType,
-                                                         NParameters,
-                                                         OperandTypes...>> {
+struct generic_expr : public ResultExprType<TagType> {
   // Type of self
   using this_type = generic_expr<TagType,
                                  Tag,
@@ -38,6 +33,7 @@ struct generic_expr : public ResultExprType<generic_expr<TagType,
                                  ResultType,
                                  NParameters,
                                  OperandTypes...>;
+  using tag_type = TagType;
 
   // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;

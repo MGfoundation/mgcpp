@@ -12,18 +12,25 @@
 
 namespace mgcpp {
 
-struct dmat_mat_expr_type;
-
 template <typename Expr>
-using dvec_map_expr =
-    generic_expr<dmat_mat_expr_type,
-                 0,
-                 dvec_expr,
-                 typename Expr::result_type,
-                 1,
-                 typename Expr::result_type (*)(
-                     typename Expr::result_type::parent_type const& vec),
-                 Expr>;
+struct dvec_map_expr
+    : generic_expr<dvec_map_expr<Expr>,
+                   0,
+                   dvec_expr,
+                   typename Expr::result_type,
+                   1,
+                   typename Expr::result_type (*)(
+                       typename Expr::result_type::parent_type const& vec),
+                   Expr> {
+  using generic_expr<dvec_map_expr<Expr>,
+                     0,
+                     dvec_expr,
+                     typename Expr::result_type,
+                     1,
+                     typename Expr::result_type (*)(
+                         typename Expr::result_type::parent_type const& vec),
+                     Expr>::generic_expr;
+};
 
 template <typename Expr>
 inline decltype(auto) abs(dvec_expr<Expr> const& expr) noexcept;

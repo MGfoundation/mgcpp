@@ -13,34 +13,34 @@
 
 namespace mgcpp {
 
-struct dmat_dmat_add_expr_type;
+template <typename LhsExpr, typename RhsExpr>
+struct dmat_dmat_add_expr : binary_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>,
+                                        dmat_expr,
+                                        typename LhsExpr::result_type,
+                                        LhsExpr,
+                                        RhsExpr> {
+  using binary_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>,
+                    dmat_expr,
+                    typename LhsExpr::result_type,
+                    LhsExpr,
+                    RhsExpr>::generic_expr;
+};
 
 template <typename LhsExpr, typename RhsExpr>
-using dmat_dmat_add_expr = binary_expr<dmat_dmat_add_expr_type,
-                                       dmat_expr,
-                                       typename LhsExpr::result_type,
-                                       LhsExpr,
-                                       RhsExpr>;
+inline auto operator+(dmat_expr<LhsExpr> const& lhs,
+                      dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto operator+(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto add(dmat_expr<LhsExpr> const& lhs,
+                dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto add(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto operator-(dmat_expr<LhsExpr> const& lhs,
+                      dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto operator-(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
-
-template <typename LhsExpr, typename RhsExpr>
-inline auto sub(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto sub(dmat_expr<LhsExpr> const& lhs,
+                dmat_expr<RhsExpr> const& rhs) noexcept;
 
 }  // namespace mgcpp
 

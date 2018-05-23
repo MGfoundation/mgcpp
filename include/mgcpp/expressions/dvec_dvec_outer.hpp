@@ -7,15 +7,19 @@
 
 namespace mgcpp {
 
-struct dvec_dvec_outer_expr_type;
-
 template <typename LhsExpr, typename RhsExpr>
-using dvec_dvec_outer_expr =
-    binary_expr<dvec_dvec_outer_expr_type,
-                dmat_expr,
-                device_matrix<typename LhsExpr::result_type::value_type>,
-                LhsExpr,
-                RhsExpr>;
+struct dvec_dvec_outer_expr
+    : binary_expr<dvec_dvec_outer_expr<LhsExpr, RhsExpr>,
+                  dmat_expr,
+                  device_matrix<typename LhsExpr::result_type::value_type>,
+                  LhsExpr,
+                  RhsExpr> {
+  using binary_expr<dvec_dvec_outer_expr<LhsExpr, RhsExpr>,
+                    dmat_expr,
+                    device_matrix<typename LhsExpr::result_type::value_type>,
+                    LhsExpr,
+                    RhsExpr>::generic_expr;
+};
 
 template <typename LhsExpr, typename RhsExpr>
 auto outer(dvec_expr<LhsExpr> const& lhs,

@@ -3,8 +3,8 @@
 namespace mgcpp {
 
 template <typename... Exprs>
-inline tie_op<Exprs...> tie(Exprs const& ... exprs) {
-  return tie_op<Exprs...>(~exprs...);
+inline symbolic_tie_expr<Exprs...> tie(Exprs const& ... exprs) {
+  return symbolic_tie_expr<Exprs...>(~exprs...);
 }
 
 }

@@ -14,11 +14,20 @@
 
 namespace mgcpp {
 
-struct dmat_ref_expr_type;
-
 template <typename Matrix>
-using dmat_ref_expr =
-    generic_expr<dmat_ref_expr_type, 0, dmat_expr, Matrix, 1, Matrix const&>;
+struct dmat_ref_expr : generic_expr<dmat_ref_expr<Matrix>,
+                                    0,
+                                    dmat_expr,
+                                    Matrix,
+                                    1,
+                                    Matrix const&> {
+  using generic_expr<dmat_ref_expr<Matrix>,
+                     0,
+                     dmat_expr,
+                     Matrix,
+                     1,
+                     Matrix const&>::generic_expr;
+};
 
 template <typename DenseMatrix, typename Type, size_t DeviceId>
 inline dmat_ref_expr<DenseMatrix> ref(

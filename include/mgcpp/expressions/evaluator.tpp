@@ -197,9 +197,9 @@ inline auto eval(scalar_one_constant_expr<T>, eval_context const&) {
 }
 }  // namespace internal
 
-template <typename Op>
-typename Op::result_type eval(Op const& op, eval_context const& ctx) {
-  return internal::eval(op, ctx);
+template <typename T>
+typename T::result_type eval(expression<T> const& op, eval_context const& ctx) {
+  return internal::eval(~op, ctx);
 }
 }  // namespace evaluator
 
