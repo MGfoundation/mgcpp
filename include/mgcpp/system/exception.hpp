@@ -18,23 +18,23 @@
 #endif
 
 #ifndef mgcpp_error_check
-#define mgcpp_error_check(EXP)                                         \
-  do {                                                                 \
-    try {                                                              \
-      EXP;                                                             \
-    } catch (std::exception const& e) {                                \
-      MGCPP_ERROR_MESSAGE_HANDLER("[mgcpp errror] %s in %s line %d\n", \
-                                  e.what(), __FILE__, __LINE__);       \
-      if (MGCPP_ABORT_ON_ERROR)                                        \
-        exit(1);                                                       \
-    }                                                                  \
+#define mgcpp_error_check(EXP)                                        \
+  do {                                                                \
+    try {                                                             \
+      EXP;                                                            \
+    } catch (std::exception const& e) {                               \
+      MGCPP_ERROR_MESSAGE_HANDLER("[mgcpp error] %s in %s line %d\n", \
+                                  e.what(), __FILE__, __LINE__);      \
+      if (MGCPP_ABORT_ON_ERROR)                                       \
+        exit(1);                                                      \
+    }                                                                 \
   } while (false)
 #endif
 
 #ifdef ERROR_CHECK_EXCEPTION
 #define MGCPP_THROW(EXCEPTION)                                         \
   do {                                                                 \
-    MGCPP_ERROR_MESSAGE_HANDLER("[mgcpp errror] %s in %s line %d\n",   \
+    MGCPP_ERROR_MESSAGE_HANDLER("[mgcpp error] %s in %s line %d\n",    \
                                 EXCEPTION.what(), __FILE__, __LINE__); \
     throw EXCEPTION;                                                   \
   } while (false)

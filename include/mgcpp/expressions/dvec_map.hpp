@@ -15,7 +15,6 @@ namespace mgcpp {
 template <typename Expr>
 struct dvec_map_expr
     : generic_expr<dvec_map_expr<Expr>,
-                   0,
                    dvec_expr,
                    typename Expr::result_type,
                    1,
@@ -23,7 +22,6 @@ struct dvec_map_expr
                        typename Expr::result_type::parent_type const& vec),
                    Expr> {
   using generic_expr<dvec_map_expr<Expr>,
-                     0,
                      dvec_expr,
                      typename Expr::result_type,
                      1,

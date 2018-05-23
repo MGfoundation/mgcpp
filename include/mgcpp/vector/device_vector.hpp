@@ -43,7 +43,7 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   using shape_type = mgcpp::shape<1>;
   using parent_type =
       dense_vector<device_vector<Type, DeviceId, Alloc>, Type, DeviceId>;
-  size_t const device_id = DeviceId;
+  static size_t constexpr device_id = DeviceId;
 
  private:
   thread_context* _context;

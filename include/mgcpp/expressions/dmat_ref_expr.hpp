@@ -16,13 +16,11 @@ namespace mgcpp {
 
 template <typename Matrix>
 struct dmat_ref_expr : generic_expr<dmat_ref_expr<Matrix>,
-                                    0,
                                     dmat_expr,
                                     Matrix,
                                     1,
                                     Matrix const&> {
   using generic_expr<dmat_ref_expr<Matrix>,
-                     0,
                      dmat_expr,
                      Matrix,
                      1,

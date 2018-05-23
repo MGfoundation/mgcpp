@@ -24,6 +24,9 @@ struct dmat_dmat_add_expr : binary_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>,
                     typename LhsExpr::result_type,
                     LhsExpr,
                     RhsExpr>::generic_expr;
+
+  template<typename GradsType>
+  auto grad(dmat_expr<GradsType> const& grads) const;
 };
 
 template <typename LhsExpr, typename RhsExpr>

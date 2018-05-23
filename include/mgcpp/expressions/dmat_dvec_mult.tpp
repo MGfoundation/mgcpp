@@ -6,7 +6,18 @@
 
 #include <mgcpp/expressions/dmat_dvec_mult.hpp>
 
+#include <mgcpp/expressions/dvec_dvec_outer.hpp>
+
 namespace mgcpp {
+
+template <typename LhsExpr, typename RhsExpr>
+template <typename GradsType>
+auto dmat_dvec_mult_expr<LhsExpr, RhsExpr>::grad(
+    dvec_expr<GradsType> const& grads) const {
+  return std::make_tuple(mgcpp::outer(~grads, this->second()),
+                         mgcpp::trans(this->first()) * (~grads));
+}
+
 template <typename MatExpr, typename VecExpr>
 inline dmat_dvec_mult_expr<MatExpr, VecExpr> operator*(
     dmat_expr<MatExpr> const& mat,

@@ -10,13 +10,11 @@ struct tie_expr : public expression<Expr> {};
 
 template <typename... Exprs>
 struct symbolic_tie_expr : generic_expr<symbolic_tie_expr<Exprs...>,
-                             0,
                              tie_expr,
                              std::tuple<typename Exprs::result_type...>,
                              0,
                              Exprs...> {
   using generic_expr<symbolic_tie_expr<Exprs...>,
-                     0,
                      tie_expr,
                      std::tuple<typename Exprs::result_type...>,
                      0,

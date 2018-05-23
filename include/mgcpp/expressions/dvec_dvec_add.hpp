@@ -23,6 +23,9 @@ struct dvec_dvec_add_expr : binary_expr<dvec_dvec_add_expr<LhsExpr, RhsExpr>,
                     typename LhsExpr::result_type,
                     LhsExpr,
                     RhsExpr>::generic_expr;
+
+  template <typename GradsType>
+  auto grad(dvec_expr<GradsType> const& grads) const;
 };
 
 /** Returns a dense vector addition expression.

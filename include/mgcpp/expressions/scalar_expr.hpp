@@ -19,8 +19,8 @@ struct scalar_expr : public expression<Expr> {};
 
 template <typename T>
 struct scalar_constant_expr
-    : generic_expr<scalar_constant_expr<T>, 0, scalar_expr, T, 1, T> {
-  using generic_expr<scalar_constant_expr<T>, 0, scalar_expr, T, 1, T>::
+    : generic_expr<scalar_constant_expr<T>, scalar_expr, T, 1, T> {
+  using generic_expr<scalar_constant_expr<T>, scalar_expr, T, 1, T>::
       generic_expr;
 };
 
@@ -29,15 +29,15 @@ inline scalar_constant_expr<Type> scal(Type scalar);
 
 template <typename T>
 struct scalar_zero_constant_expr
-    : generic_expr<scalar_zero_constant_expr<T>, 0, scalar_expr, T, 0> {
-  using generic_expr<scalar_zero_constant_expr<T>, 0, scalar_expr, T, 0>::
+    : generic_expr<scalar_zero_constant_expr<T>, scalar_expr, T, 0> {
+  using generic_expr<scalar_zero_constant_expr<T>, scalar_expr, T, 0>::
       generic_expr;
 };
 
 template <typename T>
 struct scalar_one_constant_expr
-    : generic_expr<scalar_one_constant_expr<T>, 0, scalar_expr, T, 0> {
-  using generic_expr<scalar_one_constant_expr<T>, 0, scalar_expr, T, 0>::
+    : generic_expr<scalar_one_constant_expr<T>, scalar_expr, T, 0> {
+  using generic_expr<scalar_one_constant_expr<T>, scalar_expr, T, 0>::
       generic_expr;
 };
 

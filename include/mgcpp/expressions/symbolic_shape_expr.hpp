@@ -11,13 +11,11 @@ struct shape_expr : expression<Expr> {};
 template <typename Expr>
 struct symbolic_shape_expr
     : generic_expr<symbolic_shape_expr<Expr>,
-                   0,
                    shape_expr,
                    typename Expr::result_type::shape_type,
                    1,
                    Expr> {
   using generic_expr<symbolic_shape_expr<Expr>,
-                     0,
                      shape_expr,
                      typename Expr::result_type::shape_type,
                      1,

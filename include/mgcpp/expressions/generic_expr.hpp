@@ -20,7 +20,6 @@
 namespace mgcpp {
 
 template <typename TagType,
-          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -28,7 +27,6 @@ template <typename TagType,
 struct generic_expr : public ResultExprType<TagType> {
   // Type of self
   using this_type = generic_expr<TagType,
-                                 Tag,
                                  ResultExprType,
                                  ResultType,
                                  NParameters,
@@ -44,7 +42,6 @@ struct generic_expr : public ResultExprType<TagType> {
   // Is this node a terminal node (i.e. with no child nodes)
   static constexpr bool is_terminal = sizeof...(OperandTypes) == NParameters;
   static constexpr size_t n_parameters = NParameters;
-  static constexpr size_t tag = Tag;
 
   // Operand expressions (first NParameter elements are non-expression
   // parameters)
@@ -93,7 +90,7 @@ template <typename TagType,
           typename ResultType,
           typename Expr>
 using unary_expr =
-    generic_expr<TagType, 0, ResultExprType, ResultType, 0, Expr>;
+    generic_expr<TagType, ResultExprType, ResultType, 0, Expr>;
 
 // A binary operator with left and right operands (i.e. addition,
 // multiplication)
@@ -103,7 +100,7 @@ template <typename TagType,
           typename LhsExpr,
           typename RhsExpr>
 using binary_expr =
-    generic_expr<TagType, 0, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
+    generic_expr<TagType, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/generic_expr.tpp>

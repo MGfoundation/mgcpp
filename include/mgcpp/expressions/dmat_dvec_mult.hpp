@@ -15,15 +15,18 @@ namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
 struct dmat_dvec_mult_expr : binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
-                                        dvec_expr,
-                                        typename RhsExpr::result_type,
-                                        LhsExpr,
-                                        RhsExpr> {
+                                         dvec_expr,
+                                         typename RhsExpr::result_type,
+                                         LhsExpr,
+                                         RhsExpr> {
   using binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
                     dvec_expr,
                     typename RhsExpr::result_type,
                     LhsExpr,
                     RhsExpr>::generic_expr;
+
+  template <typename GradsType>
+  auto grad(dvec_expr<GradsType> const& grads) const;
 };
 
 /** Returns a dense matrix vector product expression.

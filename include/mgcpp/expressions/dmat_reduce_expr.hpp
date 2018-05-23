@@ -10,17 +10,18 @@ namespace mgcpp {
 template <typename Expr>
 struct dmat_reduce_sum_expr
     : generic_expr<dmat_reduce_sum_expr<Expr>,
-                   0,
                    scalar_expr,
                    typename Expr::result_type::value_type,
                    0,
                    Expr> {
   using generic_expr<dmat_reduce_sum_expr<Expr>,
-                     0,
                      scalar_expr,
                      typename Expr::result_type::value_type,
                      0,
                      Expr>::generic_expr;
+
+  template <typename GradsType>
+  auto grad(scalar_expr<GradsType> const& grads) const;
 };
 
 template <typename Expr>
@@ -29,13 +30,11 @@ inline decltype(auto) reduce_sum(dmat_expr<Expr> const& expr) noexcept;
 template <typename Expr>
 struct dmat_reduce_mean_expr
     : generic_expr<dmat_reduce_mean_expr<Expr>,
-                   0,
                    scalar_expr,
                    typename Expr::result_type::value_type,
                    0,
                    Expr> {
   using generic_expr<dmat_reduce_mean_expr<Expr>,
-                     0,
                      scalar_expr,
                      typename Expr::result_type::value_type,
                      0,

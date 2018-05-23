@@ -4,6 +4,7 @@
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/dvec_expr.hpp>
 #include <mgcpp/expressions/generic_expr.hpp>
+#include <mgcpp/matrix/forward.hpp>
 
 namespace mgcpp {
 
@@ -11,14 +12,19 @@ template <typename LhsExpr, typename RhsExpr>
 struct dvec_dvec_outer_expr
     : binary_expr<dvec_dvec_outer_expr<LhsExpr, RhsExpr>,
                   dmat_expr,
-                  device_matrix<typename LhsExpr::result_type::value_type>,
+                  device_matrix<typename LhsExpr::result_type::value_type,
+                                LhsExpr::result_type::device_id,
+                                typename LhsExpr::result_type::allocator_type>,
                   LhsExpr,
                   RhsExpr> {
-  using binary_expr<dvec_dvec_outer_expr<LhsExpr, RhsExpr>,
-                    dmat_expr,
-                    device_matrix<typename LhsExpr::result_type::value_type>,
-                    LhsExpr,
-                    RhsExpr>::generic_expr;
+  using binary_expr<
+      dvec_dvec_outer_expr<LhsExpr, RhsExpr>,
+      dmat_expr,
+      device_matrix<typename LhsExpr::result_type::value_type,
+                    LhsExpr::result_type::device_id,
+                    typename LhsExpr::result_type::allocator_type>,
+      LhsExpr,
+      RhsExpr>::generic_expr;
 };
 
 template <typename LhsExpr, typename RhsExpr>

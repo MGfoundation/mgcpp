@@ -45,7 +45,7 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
   using result_expr_type = dmat_expr<T>;
   using allocator_type = Alloc;
   using shape_type = mgcpp::shape<2>;
-  size_t const device_id = DeviceId;
+  static size_t constexpr device_id = DeviceId;
 
  private:
   thread_context* _context;

@@ -14,13 +14,11 @@ namespace mgcpp {
 
 template <typename Vector>
 struct dvec_ref_expr : generic_expr<dvec_ref_expr<Vector>,
-                                    0,
                                     dvec_expr,
                                     Vector,
                                     1,
                                     Vector const&> {
   using generic_expr<dvec_ref_expr<Vector>,
-                     0,
                      dvec_expr,
                      Vector,
                      1,

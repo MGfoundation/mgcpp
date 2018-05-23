@@ -10,13 +10,11 @@ namespace mgcpp {
 
 template <typename Expr>
 struct zeros_mat_expr : generic_expr<zeros_mat_expr<Expr>,
-                                     0,
                                      dmat_expr,
                                      typename Expr::result_type,
                                      1,
                                      symbolic_shape_expr<Expr>> {
   using parent_type = generic_expr<zeros_mat_expr<Expr>,
-                                   0,
                                    dmat_expr,
                                    typename Expr::result_type,
                                    1,
@@ -31,13 +29,11 @@ zeros_mat_expr<Expr> make_zeros_like(dmat_expr<Expr> const& expr) {
 
 template <typename Expr>
 struct ones_mat_expr : generic_expr<ones_mat_expr<Expr>,
-                                    0,
                                     dmat_expr,
                                     typename Expr::result_type,
                                     1,
                                     symbolic_shape_expr<Expr>> {
   using generic_expr<ones_mat_expr<Expr>,
-                     0,
                      dmat_expr,
                      typename Expr::result_type,
                      1,
@@ -51,13 +47,11 @@ ones_mat_expr<Expr> make_ones_like(dmat_expr<Expr> const& expr) {
 
 template <typename Expr>
 struct zeros_vec_expr : generic_expr<zeros_vec_expr<Expr>,
-                                     0,
                                      dvec_expr,
                                      typename Expr::result_type,
                                      1,
                                      symbolic_shape_expr<Expr>> {
   using generic_expr<zeros_vec_expr<Expr>,
-                     0,
                      dvec_expr,
                      typename Expr::result_type,
                      1,
@@ -71,13 +65,11 @@ zeros_vec_expr<Expr> make_zeros_like(dvec_expr<Expr> const& expr) {
 
 template <typename Expr>
 struct ones_vec_expr : generic_expr<ones_vec_expr<Expr>,
-                                    0,
                                     dvec_expr,
                                     typename Expr::result_type,
                                     1,
                                     symbolic_shape_expr<Expr>> {
   using generic_expr<ones_vec_expr<Expr>,
-                     0,
                      dvec_expr,
                      typename Expr::result_type,
                      1,

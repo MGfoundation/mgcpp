@@ -9,6 +9,15 @@
 #include <mgcpp/operations/sum.hpp>
 
 namespace mgcpp {
+
+template <typename Expr>
+template <typename GradsType>
+inline auto dvec_reduce_sum_expr<Expr>::grad(
+    scalar_expr<GradsType> const& grads) const {
+  // returns (dvec)
+  return std::make_tuple((~grads) * mgcpp::make_ones_like(this->first()));
+}
+
 template <typename Expr>
 decltype(auto) reduce_sum(const dvec_expr<Expr>& expr) noexcept {
   return dvec_reduce_sum_expr<Expr>(~expr);
