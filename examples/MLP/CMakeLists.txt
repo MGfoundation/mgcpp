@@ -14,7 +14,7 @@ set(EXAMPLE_DIR ${PROJECT_SOURCE_DIR}/examples/MLP)
 
 set(MLP_MODEL_URL https://www.dropbox.com/s/7nc8310oncyxcez/model.h)
 
-if(DOWNLOAD_MODEL)
+if(DOWNLOAD_MODEL AND NOT(EXISTS ${EXAMPLE_DIR}/model.h))
     message(STATUS "downloading model.h for example/MLP")
     set(DOWNLOAD_STATUS 1)
     file(DOWNLOAD ${MLP_MODEL_URL} ${EXAMPLE_DIR}/model.h
