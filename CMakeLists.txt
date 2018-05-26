@@ -165,12 +165,15 @@ target_link_libraries(${PROJECT_NAME}
     ${CUDA_cusparse_LIBRARIES})
 
 # outcome 
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS system REQUIRED)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     ${Boost_INCLUDE_DIRS}
     ${THIRD_PARTY_DIR}/boost-outcome/include)
+
+target_link_libraries(${PROJECT_NAME}
+    ${Boost_LIBRARIES})
 
 # half
 if(USE_HALF)
