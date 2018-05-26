@@ -23,8 +23,9 @@ inline decltype(auto) strict::outer(
 
   const Type alpha = static_cast<Type>(1);
 
-  auto status = cublas::ger(handle, shape[0], shape[1], &alpha, (~lhs).data(), 1,
-                            (~rhs).data(), 1, result.data_mutable(), shape[0]);
+  auto status =
+      cublas::ger(handle, shape[0], shape[1], &alpha, (~lhs).data(), 1,
+                  (~rhs).data(), 1, result.data_mutable(), shape[0]);
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
   }

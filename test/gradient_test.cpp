@@ -135,8 +135,8 @@ TEST(gradient_test, dmat_dvec_mul_add) {
                                                        {6, -7, 8, 9},
                                                        {10, 2, 3, 4},
                                                        {1, 0, 1, -2}}));  // 5x4
-  ctx.feed(v, mgcpp::device_vector<double>({-3, 4, -5, 6})); // 4x1
-  ctx.feed(b, mgcpp::device_vector<double>({1, 2, 3, 4, 5})); // 5x1
+  ctx.feed(v, mgcpp::device_vector<double>({-3, 4, -5, 6}));              // 4x1
+  ctx.feed(b, mgcpp::device_vector<double>({1, 2, 3, 4, 5}));             // 5x1
   auto result = grad.eval(ctx);
 
   auto numeric_approx = numerical_differentiation(sum, W, ctx);
@@ -149,4 +149,3 @@ TEST(gradient_test, dmat_dvec_mul_add) {
     }
   }
 }
-

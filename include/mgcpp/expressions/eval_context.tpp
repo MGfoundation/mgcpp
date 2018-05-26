@@ -2,8 +2,7 @@
 
 namespace mgcpp {
 
-template <size_t Num,
-          typename ResultType>
+template <size_t Num, typename ResultType>
 void eval_context::feed(placeholder_node<Num, ResultType>,
                         ResultType const& val) {
   _placeholders[Num] = static_any(val);

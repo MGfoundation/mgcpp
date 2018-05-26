@@ -33,10 +33,9 @@ void memory_leak_detector::OnTestStart(::testing::TestInfo const& test_info) {
     (void)cuda_set_device(i);
 
     auto memstat = cuda_mem_get_info();
-    EXPECT_TRUE(bool(memstat)) << "error occurred while getting memory of device "
-                         << i << '\n'
-                         << memstat.error() << "in start of test "
-                         << test_info.name();
+    EXPECT_TRUE(bool(memstat))
+        << "error occurred while getting memory of device " << i << '\n'
+        << memstat.error() << "in start of test " << test_info.name();
 
     device_free_memory.push_back(memstat.value().first);
   }
@@ -57,9 +56,9 @@ void memory_leak_detector::OnTestEnd(::testing::TestInfo const& test_info) {
 
     auto memstat = cuda_mem_get_info();
 
-    EXPECT_TRUE(bool(memstat)) << "error while getting memory info of device " << i
-                         << '\n'
-                         << "in test " << test_info.name();
+    EXPECT_TRUE(bool(memstat))
+        << "error while getting memory info of device " << i << '\n'
+        << "in test " << test_info.name();
 
     size_t result_memory = memstat.value().first;
     EXPECT_EQ(result_memory, device_free_memory[i])

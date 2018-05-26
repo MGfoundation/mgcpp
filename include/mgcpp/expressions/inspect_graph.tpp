@@ -1,11 +1,11 @@
 #include <mgcpp/expressions/inspect_graph.hpp>
 
-#include <mgcpp/expressions/dmat_dmat_mult.hpp>
-#include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/expressions/constant_expr.hpp>
-#include <mgcpp/expressions/symbolic_shape_expr.hpp>
+#include <mgcpp/expressions/dmat_dmat_mult.hpp>
 #include <mgcpp/expressions/dmat_reduce_expr.hpp>
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
+#include <mgcpp/expressions/symbolic_shape_expr.hpp>
 
 namespace mgcpp {
 
@@ -53,36 +53,31 @@ std::ostream& inspect(std::ostream& os,
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      zeros_mat_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, zeros_mat_expr<Expr> const& expr) {
   os << "ZerosLike{" << (~expr).first() << "}";
   return os;
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      zeros_vec_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, zeros_vec_expr<Expr> const& expr) {
   os << "ZerosLike{" << (~expr).first() << "}";
   return os;
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      ones_mat_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, ones_mat_expr<Expr> const& expr) {
   os << "OnesLike{" << (~expr).first() << "}";
   return os;
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      ones_vec_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, ones_vec_expr<Expr> const& expr) {
   os << "OnesLike{" << (~expr).first() << "}";
   return os;
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      symbolic_shape_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, symbolic_shape_expr<Expr> const& expr) {
   os << "Shape{" << (~expr).first() << "}";
   return os;
 }
@@ -102,8 +97,7 @@ std::ostream& inspect(std::ostream& os,
 }
 
 template <typename Expr>
-std::ostream& inspect(std::ostream& os,
-                      dmat_trans_expr<Expr> const& expr) {
+std::ostream& inspect(std::ostream& os, dmat_trans_expr<Expr> const& expr) {
   os << "Transpose{" << (~expr).first() << "}";
   return os;
 }

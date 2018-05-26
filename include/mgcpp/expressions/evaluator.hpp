@@ -11,8 +11,8 @@
 
 namespace mgcpp {
 namespace evaluator {
-  template <typename Op>
-  inline typename Op::result_type eval(Op const& op, eval_context const& ctx);
+template <typename Op>
+inline typename Op::result_type eval(Op const& op, eval_context const& ctx);
 };
 
 template <typename T>

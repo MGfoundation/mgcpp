@@ -18,7 +18,6 @@ using symbolic_shape_expr = generic_expr<symbolic_shape_expr_type,
                                          1,
                                          Expr>;
 
-
 /*
  * Obtain the dynamic shape of this expression
  */
@@ -27,6 +26,6 @@ inline symbolic_shape_expr<Expr> sym_shape(Expr const& expr) {
   return symbolic_shape_expr<Expr>(expr);
 }
 
-}
+}  // namespace mgcpp
 
-#endif // SYMBOLIC_SHAPE_EXPR_HPP
+#endif  // SYMBOLIC_SHAPE_EXPR_HPP

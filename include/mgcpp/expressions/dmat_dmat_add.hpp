@@ -23,24 +23,20 @@ using dmat_dmat_add_expr = binary_expr<dmat_dmat_add_expr_type,
                                        RhsExpr>;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto operator+(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto operator+(dmat_expr<LhsExpr> const& lhs,
+                      dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto add(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto add(dmat_expr<LhsExpr> const& lhs,
+                dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto operator-(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto operator-(dmat_expr<LhsExpr> const& lhs,
+                      dmat_expr<RhsExpr> const& rhs) noexcept;
 
 template <typename LhsExpr, typename RhsExpr>
-inline auto sub(
-    dmat_expr<LhsExpr> const& lhs,
-    dmat_expr<RhsExpr> const& rhs) noexcept;
+inline auto sub(dmat_expr<LhsExpr> const& lhs,
+                dmat_expr<RhsExpr> const& rhs) noexcept;
 
 }  // namespace mgcpp
 

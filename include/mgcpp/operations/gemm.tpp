@@ -114,11 +114,11 @@ inline decltype(auto) strict::gemm(
   auto casted_alpha = Type(alpha);
   auto casted_beta = Type(beta);
   auto status = cublas::gemm(handle, static_cast<cublasOperation_t>(mode_A),
-                            static_cast<cublasOperation_t>(mode_B), m, n, k,
-                            pun_cast<device_pointer>(&casted_alpha),
-                            A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],
-                            pun_cast<device_pointer>(&casted_beta),
-                            result.data_mutable(), C_shape[0]);
+                             static_cast<cublasOperation_t>(mode_B), m, n, k,
+                             pun_cast<device_pointer>(&casted_alpha),
+                             A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],
+                             pun_cast<device_pointer>(&casted_beta),
+                             result.data_mutable(), C_shape[0]);
 
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
@@ -181,11 +181,11 @@ inline decltype(auto) strict::gemm(
   auto casted_alpha = Type(alpha);
   auto casted_beta = Type(beta);
   auto status = cublas::gemm(handle, static_cast<cublasOperation_t>(mode_A),
-                            static_cast<cublasOperation_t>(mode_B), m, n, k,
-                            pun_cast<device_pointer>(&casted_alpha),
-                            A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],
-                            pun_cast<device_pointer>(&casted_beta),
-                            C_mat.data_mutable(), C_shape[0]);
+                             static_cast<cublasOperation_t>(mode_B), m, n, k,
+                             pun_cast<device_pointer>(&casted_alpha),
+                             A_mat.data(), A_shape[0], B_mat.data(), B_shape[0],
+                             pun_cast<device_pointer>(&casted_beta),
+                             C_mat.data_mutable(), C_shape[0]);
 
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());

@@ -27,7 +27,7 @@ struct static_any {
   std::shared_ptr<concept const> m;
 };
 
-}
+}  // namespace mgcpp
 
 #include <mgcpp/global/type_erased.tpp>
-#endif // TYPE_ERASED_HPP
+#endif  // TYPE_ERASED_HPP

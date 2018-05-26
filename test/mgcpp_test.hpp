@@ -4,11 +4,12 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _MGCPP_TEST_TEST_FIXTURE_HPP_
-#define _MGCPP_TEST_TEST_FIXTURE_HPP_
+#ifndef _MGCPP_TEST_MGCPP_TEST_HPP_
+#define _MGCPP_TEST_MGCPP_TEST_HPP_
 
 #include <gtest/gtest.h>
 
-#define MGCPP_TEST(FIXTURE, TEST_NAME) TEST_F(FIXTURE, TEST_NAME){TEST_NAME();} 
+#define MGCPP_TEST(FIXTURE, TEST_NAME) \
+  TEST_F(FIXTURE, TEST_NAME) { TEST_NAME(); }
 
 #endif

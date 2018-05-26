@@ -11,4 +11,4 @@ using outcome = BOOST_OUTCOME_V2_NAMESPACE::std_outcome<R>;
 using BOOST_OUTCOME_V2_NAMESPACE::success;
 }  // namespace outcome
 
-#endif // OUTCOME_HPP
+#endif  // OUTCOME_HPP

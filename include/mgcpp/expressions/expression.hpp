@@ -16,10 +16,11 @@ size_t make_id();
 
 template <typename Type>
 class expression {
-public:
+ public:
   inline Type& operator~() noexcept;
   inline Type const& operator~() const noexcept;
-protected:
+
+ protected:
   size_t id = make_id();
 };
 

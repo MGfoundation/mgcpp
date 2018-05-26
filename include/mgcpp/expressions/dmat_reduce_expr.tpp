@@ -12,4 +12,4 @@ decltype(auto) reduce_mean(const dmat_expr<Expr>& expr) noexcept {
   return dmat_reduce_mean_expr<Expr>(~expr);
 }
 
-}
+}  // namespace mgcpp

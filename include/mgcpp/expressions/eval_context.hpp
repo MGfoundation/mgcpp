@@ -8,10 +8,10 @@
 #define EVAL_CONTEXT_HPP
 
 #include <memory>
-#include <mgcpp/global/type_erased.hpp>
 #include <mgcpp/expressions/expression.hpp>
 #include <mgcpp/expressions/forward.hpp>
 #include <mgcpp/expressions/placeholder.hpp>
+#include <mgcpp/global/type_erased.hpp>
 #include <type_traits>
 #include <unordered_map>
 
@@ -23,10 +23,8 @@ struct eval_context {
    * \param ph The placeholder.
    * \param val The value associated with the placeholder.
    */
-  template <size_t Num,
-            typename ResultType>
-  void feed(placeholder_node<Num, ResultType> ph,
-            ResultType const& val);
+  template <size_t Num, typename ResultType>
+  void feed(placeholder_node<Num, ResultType> ph, ResultType const& val);
 
   /** Get the value of the placeholder associated with the PlaceholderID.
    * ResultType should be the type of the value when feed() was called.
@@ -34,7 +32,7 @@ struct eval_context {
   template <size_t PlaceholderID, typename ResultType>
   ResultType get_placeholder() const;
 
-protected:
+ protected:
   std::unordered_map<int, static_any> _placeholders;
 };
 

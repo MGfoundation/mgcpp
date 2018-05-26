@@ -30,9 +30,8 @@ bool shape<Dims>::operator==(shape const& rhs) const {
   return true;
 }
 
-template<size_t Dims>
-bool shape<Dims>::operator!=(const shape &rhs) const
-{
+template <size_t Dims>
+bool shape<Dims>::operator!=(const shape& rhs) const {
   return !(*this == rhs);
 }
 

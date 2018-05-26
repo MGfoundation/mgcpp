@@ -31,23 +31,21 @@ TEST(lv2_expr, mat_vec_mult) {
 }
 
 TEST(lv2_expr, mat_reduce_sum) {
+  using vector = mgcpp::device_vector<float>;
+  vector v({1, 2, 3});
 
-    using vector = mgcpp::device_vector<float>;
-    vector v({1, 2, 3});
+  auto sum = reduce_sum(ref(v));
+  auto val = eval(sum);
 
-    auto sum = reduce_sum(ref(v));
-    auto val = eval(sum);
-
-    EXPECT_FLOAT_EQ(val, 6);
+  EXPECT_FLOAT_EQ(val, 6);
 }
 
 TEST(lv2_expr, mat_reduce_mean) {
+  using vector = mgcpp::device_vector<float>;
+  vector v({1, 2, 3});
 
-    using vector = mgcpp::device_vector<float>;
-    vector v({1, 2, 3});
+  auto sum = reduce_mean(ref(v));
+  auto val = eval(sum);
 
-    auto sum = reduce_mean(ref(v));
-    auto val = eval(sum);
-
-    EXPECT_FLOAT_EQ(val, 2);
+  EXPECT_FLOAT_EQ(val, 2);
 }

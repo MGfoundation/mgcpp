@@ -23,6 +23,6 @@ template <typename TagType,
           size_t NParameters,
           typename... OperandTypes>
 struct generic_expr;
-}
+}  // namespace mgcpp
 
 #endif

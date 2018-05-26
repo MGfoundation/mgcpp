@@ -15,6 +15,7 @@
 #include <mgcpp/expressions/dmat_ref_expr.hpp>
 #include <mgcpp/expressions/dmat_trans_expr.hpp>
 #include <mgcpp/expressions/dvec_dvec_add.hpp>
+#include <mgcpp/expressions/dvec_dvec_outer.hpp>
 #include <mgcpp/expressions/dvec_map.hpp>
 #include <mgcpp/expressions/dvec_reduce_expr.hpp>
 #include <mgcpp/expressions/dvec_ref_expr.hpp>
@@ -22,13 +23,12 @@
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 #include <mgcpp/expressions/scalar_dvec_mult.hpp>
 #include <mgcpp/expressions/tie_expr.hpp>
-#include <mgcpp/expressions/dvec_dvec_outer.hpp>
 
 #include <mgcpp/operations/add.hpp>
 #include <mgcpp/operations/gemm.hpp>
 #include <mgcpp/operations/mult.hpp>
-#include <mgcpp/operations/trans.hpp>
 #include <mgcpp/operations/outer.hpp>
+#include <mgcpp/operations/trans.hpp>
 
 namespace mgcpp {
 namespace evaluator {
