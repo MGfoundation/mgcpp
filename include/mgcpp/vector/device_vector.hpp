@@ -10,11 +10,11 @@
 #include <mgcpp/adapters/adapters.hpp>
 #include <mgcpp/allocators/default.hpp>
 #include <mgcpp/context/thread_context.hpp>
+#include <mgcpp/global/shape.hpp>
 #include <mgcpp/system/concept.hpp>
 #include <mgcpp/type_traits/device_value_type.hpp>
 #include <mgcpp/type_traits/is_supported_type.hpp>
 #include <mgcpp/vector/dense_vector.hpp>
-#include <mgcpp/global/shape.hpp>
 
 #include <cstdlib>
 #include <initializer_list>

@@ -7,4 +7,4 @@ inline symbolic_tie_expr<Exprs...> tie(Exprs const& ... exprs) {
   return symbolic_tie_expr<Exprs...>(~exprs...);
 }
 
-}
+}  // namespace mgcpp

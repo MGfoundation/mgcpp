@@ -109,10 +109,16 @@ device_vector<Type, DeviceId, Alloc>::device_vector(HostVec const& host_mat,
 
   pointer host_p;
   adapt(host_mat, &host_p, &_shape);
-
   _capacity = _shape;
   _data = _allocator.device_allocate(_shape);
-  _allocator.copy_from_host(_data, host_p, _shape);
+
+  try {
+    _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(host_p),
+                              _shape);
+  } catch (std::system_error const& err) {
+    _allocator.device_deallocate(_data, _capacity);
+    MGCPP_THROW_SYSTEM_ERROR(err);
+  }
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>

@@ -54,7 +54,6 @@ TEST(device_vector, default_constructor) {
     EXPECT_EQ(vec.size(), 0);
     EXPECT_EQ(vec.data(), nullptr);
     EXPECT_EQ(vec.context(), mgcpp::device_vector<float>().context());
-
   } while (false));
 }
 

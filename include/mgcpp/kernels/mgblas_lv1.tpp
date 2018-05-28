@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <mgcpp/kernels/bits/map.cuh>
 #include <mgcpp/kernels/bits/hadamard.cuh>
+#include <mgcpp/kernels/bits/map.cuh>
 #include <mgcpp/kernels/bits/reduce.cuh>
 #include <mgcpp/kernels/mgblas_lv1.hpp>
 #include <mgcpp/system/error_code.hpp>

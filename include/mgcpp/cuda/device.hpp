@@ -7,8 +7,8 @@
 #ifndef _MGCPP_CUDA_DEVICE_HPP_
 #define _MGCPP_CUDA_DEVICE_HPP_
 
-#include <mgcpp/system/outcome.hpp>
 #include <mgcpp/system/error_code.hpp>
+#include <mgcpp/system/outcome.hpp>
 
 #include <cstdlib>
 

@@ -25,6 +25,10 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/gradient_test.cpp
 )
 
+set(TEST_SOURCE_FILES
+    ${TEST_SOURCE_FILES}
+    ${TEST_DIR}/test_utils.cpp)
+
 # System Test
 set(SYSTEM_TEST_PATH ${TEST_DIR}/system)
 
@@ -60,6 +64,9 @@ set(VECTOR_TEST_PATH ${TEST_DIR}/vector)
 
 # Operations Test
 set(OPERATIONS_TEST_PATH ${TEST_DIR}/operations)
+set(TEST_SOURCE_FILES
+    ${TEST_SOURCE_FILES}
+    ${OPERATIONS_TEST_PATH}/fft_test.cpp)
 
 # Kernels Test
 set(KERNELS_TEST_PATH ${TEST_DIR}/kernels)
@@ -91,9 +98,9 @@ message("Test C++ flags = ${TEST_BUILD_FLAGS}")
 
 set_target_properties(${PROJECT_NAME}_test
     PROPERTIES COMPILE_FLAGS "${TEST_BUILD_FLAGS}"
-               CXX_STANDARD 14
-               CXX_STANDARD_REQUIRED ON
-               CXX_EXTENSIONS OFF)
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF)
 
 # ctest
 add_test(${PROJECT_NAME}_cmake_test ${PROJECT_NAME}_test)

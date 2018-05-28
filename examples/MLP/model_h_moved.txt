@@ -1,2 +1,6 @@
-model.h is removed due to the large file size.
-You can download the file here: https://www.dropbox.com/s/7nc8310oncyxcez/model.h?dl=0
+
+model should be downloaded automatically using CMake.
+
+In case you want to provide the file manually,
+Download the file here: https://www.dropbox.com/s/7nc8310oncyxcez/model.h?dl=0
+and set the option DOWNLOAD_EXAMPLE_MLP_MODEL=OFF.

@@ -12,10 +12,10 @@
 #include <utility>
 
 #include <mgcpp/expressions/forward.hpp>
+#include <mgcpp/expressions/placeholder.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/global/tuple_utils.hpp>
 #include <mgcpp/type_traits/shape_type.hpp>
-#include <mgcpp/expressions/placeholder.hpp>
 
 namespace mgcpp {
 

@@ -3,8 +3,7 @@
 namespace mgcpp {
 template <typename T>
 static_any::static_any(T data)
-    : m(std::make_shared<model<T>>(
-          std::move(data))) {}
+    : m(std::make_shared<model<T>>(std::move(data))) {}
 
 template <typename T>
 T static_any::get() const {

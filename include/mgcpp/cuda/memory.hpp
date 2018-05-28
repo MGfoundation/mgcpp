@@ -24,8 +24,7 @@ template <typename ElemType>
 outcome::result<void> cuda_free(ElemType* ptr) noexcept;
 
 template <typename ElemType>
-outcome::result<void> cuda_memset_to_zero(ElemType* ptr,
-                                          size_t count) noexcept;
+outcome::result<void> cuda_memset_to_zero(ElemType* ptr, size_t count) noexcept;
 
 template <typename ElemType>
 outcome::result<ElemType*> malloc_pinned(size_t count) noexcept;

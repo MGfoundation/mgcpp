@@ -99,4 +99,3 @@ TEST(cuda_memset, memset_to_zero) {
 
   (void)mgcpp::cuda_free(memory.value());
 }
-

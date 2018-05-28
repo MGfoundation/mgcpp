@@ -169,8 +169,14 @@ device_matrix<Type, DeviceId, Alloc>::device_matrix(HostMat const& host_mat,
   size_t total_size = _shape[0] * _shape[1];
   _data = _allocator.device_allocate(total_size);
   _capacity = total_size;
-  _allocator.copy_from_host(_data, pun_cast<device_pointer>(host_p),
-                            total_size);
+
+  try {
+    _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(host_p),
+                              total_size);
+  } catch (std::system_error const& err) {
+    _allocator.device_deallocate(_data, _capacity);
+    MGCPP_THROW_SYSTEM_ERROR(err);
+  }
 }
 
 template <typename Type, size_t DeviceId, typename Alloc>
@@ -347,8 +353,7 @@ device_matrix<Type, DeviceId, Alloc>::zero() {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
 
-  auto set_result =
-      cuda_memset_to_zero(_data, _shape[0] * _shape[1]);
+  auto set_result = cuda_memset_to_zero(_data, _shape[0] * _shape[1]);
   if (!set_result) {
     MGCPP_THROW_SYSTEM_ERROR(set_result.error());
   }
