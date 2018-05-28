@@ -11,8 +11,6 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/cuda_memory_test.cpp
     ${TEST_DIR}/device_allocators_test.cpp
     ${TEST_DIR}/mgblas_helpers_test.cpp
-    ${TEST_DIR}/device_matrix_test.cpp
-    ${TEST_DIR}/device_matrix_test.cpp
     ${TEST_DIR}/matrix_view_test.cpp
     ${TEST_DIR}/device_vector_test.cpp
     #${TEST_DIR}/type_trait_test.cpp
@@ -21,7 +19,6 @@ set(TEST_SOURCE_FILES
     ${TEST_DIR}/blaslv1_expression_test.cpp
     ${TEST_DIR}/blaslv3_expression_test.cpp
     ${TEST_DIR}/blaslv2_expression_test.cpp
-    ${TEST_DIR}/fft_test.cpp
     ${TEST_DIR}/gradient_test.cpp
 )
 

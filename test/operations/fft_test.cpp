@@ -95,11 +95,11 @@ class fft_operation_test : public ::testing::Test {
   void float_complex_to_complex_inv_fft();
 };
 
-using complex_double_type = fft_operation_test<std::complex<double>>;
-using complex_type = fft_operation_test<std::complex<float>>;
-using double_type = fft_operation_test<double>;
-using float_type = fft_operation_test<float>;
-using half_type = fft_operation_test<mgcpp::half>;
+using fft_complex_double_type = fft_operation_test<std::complex<double>>;
+using fft_complex_type = fft_operation_test<std::complex<float>>;
+using fft_double_type = fft_operation_test<double>;
+using fft_float_type = fft_operation_test<float>;
+using fft_half_type = fft_operation_test<mgcpp::half>;
 
 template <typename Type>
 void fft_operation_test<Type>::real_to_complex_fwd_fft() {
@@ -125,8 +125,8 @@ void fft_operation_test<Type>::real_to_complex_fwd_fft() {
   }
 }
 
-MGCPP_TEST(float_type, real_to_complex_fwd_fft)
-MGCPP_TEST(double_type, real_to_complex_fwd_fft)
+MGCPP_TEST(fft_float_type, real_to_complex_fwd_fft)
+MGCPP_TEST(fft_double_type, real_to_complex_fwd_fft)
 // MGCPP_TEST(half_type, real_to_complex_fwd_fft)
 
 template <typename Type>
@@ -156,8 +156,8 @@ void fft_operation_test<Type>::complex_to_real_fwd_fft() {
   }
 }
 
-MGCPP_TEST(float_type, complex_to_real_fwd_fft)
-MGCPP_TEST(double_type, complex_to_real_fwd_fft)
+MGCPP_TEST(fft_float_type, complex_to_real_fwd_fft)
+MGCPP_TEST(fft_double_type, complex_to_real_fwd_fft)
 
 template <typename Type>
 void fft_operation_test<Type>::real_complex_real_roundtrip_2d() {
@@ -209,8 +209,8 @@ void fft_operation_test<Type>::upsampling_fft_even() {
   }
 }
 
-MGCPP_TEST(float_type, upsampling_fft_even)
-MGCPP_TEST(double_type, upsampling_fft_even)
+MGCPP_TEST(fft_float_type, upsampling_fft_even)
+MGCPP_TEST(fft_double_type, upsampling_fft_even)
 
 // forward cfft
 template <typename Type>
@@ -239,8 +239,8 @@ void fft_operation_test<Type>::complex_to_complex_fwd_fft() {
   }
 }
 
-MGCPP_TEST(float_type, complex_to_complex_fwd_fft)
-MGCPP_TEST(double_type, complex_to_complex_fwd_fft)
+MGCPP_TEST(fft_float_type, complex_to_complex_fwd_fft)
+MGCPP_TEST(fft_double_type, complex_to_complex_fwd_fft)
 
 template <typename Type>
 void fft_operation_test<Type>::float_complex_to_complex_inv_fft() {
@@ -268,5 +268,5 @@ void fft_operation_test<Type>::float_complex_to_complex_inv_fft() {
   }
 }
 
-MGCPP_TEST(float_type, float_complex_to_complex_inv_fft)
-MGCPP_TEST(double_type, float_complex_to_complex_inv_fft)
+MGCPP_TEST(fft_float_type, float_complex_to_complex_inv_fft)
+MGCPP_TEST(fft_double_type, float_complex_to_complex_inv_fft)
