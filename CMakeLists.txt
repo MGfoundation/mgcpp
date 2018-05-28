@@ -81,8 +81,7 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/eval_cache.cpp
     ${SOURCE_DIR}/cuda_libs/cublas.cpp
     ${SOURCE_DIR}/cuda_libs/cufft_fft.cpp
-    ${SOURCE_DIR}/cuda/device.cpp
-    ${SOURCE_DIR}/cuda/memory.cpp)
+    ${SOURCE_DIR}/cuda/device.cpp)
 
 mgcpp_display_elements("Source files for ${PROJECT_NAME}base"
     "${BASE_SOURCE_FILES}")
