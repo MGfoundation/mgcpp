@@ -23,7 +23,7 @@ decltype(auto) strict::mult(dense_matrix<LhsDenseMat, Type> const& lhs,
   MGCPP_ASSERT(lhs_mat.shape()[1] == rhs_mat.shape()[0],
                "matrix dimensions didn't match");
 
-  auto device_id = lhs_mat.allocator()._device_id;
+  auto device_id = lhs_mat.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
@@ -64,7 +64,7 @@ inline decltype(auto) strict::mult(dense_matrix<DenseMat, Type> const& mat,
   auto const& dvec = ~vec;
 
   auto* context = dmat.context();
-  auto handle = context->get_cublas_context(dmat.allocator()._device_id);
+  auto handle = context->get_cublas_context(dmat.device_id());
 
   MGCPP_ASSERT(dmat.shape()[1] == dvec.size(),
                "Matrix.shape[1] != Vector.shape");
@@ -96,7 +96,7 @@ decltype(auto) strict::mult(ScalarType scalar,
   auto const& original_vec = ~vec;
 
   auto* context = original_vec.context();
-  auto handle = context->get_cublas_context(original_vec.allocator()._device_id);
+  auto handle = context->get_cublas_context(original_vec.device_id());
 
   auto size = original_vec.size();
 
@@ -123,7 +123,7 @@ inline decltype(auto) strict::mult(
   auto const& original_mat = ~mat;
 
   auto* context = original_mat.context();
-  auto handle = context->get_cublas_context(original_mat.allocator()._device_id);
+  auto handle = context->get_cublas_context(original_mat.device_id());
 
   auto size = original_mat.shape();
 

@@ -28,8 +28,8 @@ struct default_allocator {
   typedef std::allocator<value_type> Alloc;
   typedef std::allocator_traits<Alloc> _alloc_tr;
 
-  Alloc _alloc;
-  size_t _device_id = 0;
+  default_allocator() = default;
+  default_allocator(size_t device_id);
 
   inline pointer allocate(size_t n);
 
@@ -46,6 +46,12 @@ struct default_allocator {
   inline void copy_to_host(device_pointer host,
                            const_device_pointer device,
                            size_t n) const;
+
+  inline size_t device_id() const noexcept;
+
+ private:
+  Alloc _alloc{};
+  size_t _device_id = 0;
 };
 }  // namespace mgcpp
 

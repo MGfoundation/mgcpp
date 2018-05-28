@@ -130,6 +130,8 @@ class device_matrix : public dense_matrix<device_matrix<Type, Alloc>, Type> {
 
   inline Alloc allocator() const noexcept;
 
+  inline size_t device_id() const noexcept;
+
   inline shape_type const& shape() const noexcept;
 };
 }  // namespace mgcpp

@@ -93,7 +93,7 @@ inline decltype(auto) strict::gemm(
                    C_mat.shape()[1] == B_shape_after_trans[1],
                "added matrix' dimension doesn't match");
 
-  auto device_id = A_mat.allocator()._device_id;
+  auto device_id = A_mat.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
@@ -162,7 +162,7 @@ inline decltype(auto) strict::gemm(
                    C_mat.shape()[1] == B_mat.shape()[1],
                "added matrix' dimension doesn't match");
 
-  auto device_id = A_mat.allocator()._device_id;
+  auto device_id = A_mat.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());

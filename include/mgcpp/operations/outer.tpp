@@ -14,7 +14,7 @@ inline decltype(auto) strict::outer(
   using allocator_type = typename LhsDenseVec::allocator_type;
 
   auto* context = (~lhs).context();
-  auto handle = context->get_cublas_context((~lhs).allocator()._device_id);
+  auto handle = context->get_cublas_context((~lhs).device_id());
 
   auto shape = mgcpp::make_shape((~lhs).size(), (~rhs).size());
 

@@ -312,7 +312,7 @@ device_vector<Type, Alloc>::check_value(size_t i) const {
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }
 
-  auto set_device_stat = cuda_set_device(_allocator._device_id);
+  auto set_device_stat = cuda_set_device(device_id());
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -331,7 +331,7 @@ void device_vector<Type, Alloc>::set_value(size_t i,
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }
 
-  auto set_device_stat = cuda_set_device(_allocator._device_id);
+  auto set_device_stat = cuda_set_device(device_id());
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -386,6 +386,11 @@ device_vector<Type, Alloc>::shape() const noexcept {
 template <typename Type, typename Alloc>
 Alloc device_vector<Type, Alloc>::allocator() const noexcept {
   return _allocator;
+}
+
+template <typename Type, typename Alloc>
+size_t device_vector<Type, Alloc>::device_id() const noexcept {
+  return _allocator.device_id();
 }
 
 template <typename Type, typename Alloc>

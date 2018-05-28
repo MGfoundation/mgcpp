@@ -25,8 +25,7 @@ inline device_vector<Type, typename DenseVec::allocator_type> map(
 
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
-          typename DenseMat,
-          size_t DeviceId>
+          typename DenseMat>
 inline device_matrix<Type, typename DenseMat::allocator_type> map(
     dense_matrix<DenseMat, Type> const& mat);
 

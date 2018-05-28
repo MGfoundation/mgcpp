@@ -24,7 +24,7 @@ decltype(auto) strict::sub(
                "vector dimensions didn't match");
 
   auto* thread_context = lhs_vec.context();
-  auto device_id = lhs_vec.allocator()._device_id;
+  auto device_id = lhs_vec.device_id();
   auto handle = thread_context->get_cublas_context(device_id);
 
   auto size = lhs_vec.size();
@@ -56,13 +56,13 @@ decltype(auto) strict::sub(
   MGCPP_ASSERT(lhs_mat.shape() == rhs_mat.shape(),
                "matrix dimensions didn't match");
 
-  auto set_device_status = cuda_set_device(lhs_mat.allocator()._device_id);
+  auto set_device_status = cuda_set_device(lhs_mat.device_id());
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* thread_context = lhs_mat.context();
-  auto device_id = lhs_mat.allocator()._device_id;
+  auto device_id = lhs_mat.device_id();
   auto handle = thread_context->get_cublas_context(device_id);
 
   auto shape = lhs_mat.shape();

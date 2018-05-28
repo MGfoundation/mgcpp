@@ -25,7 +25,7 @@ decltype(auto) strict::add(
   MGCPP_ASSERT(lhs_mat.shape() == rhs_mat.shape(),
                "matrix dimensions didn't match");
 
-  auto device_id = lhs_mat.allocator()._device_id;
+  auto device_id = lhs_mat.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
@@ -67,7 +67,7 @@ decltype(auto) strict::add(
 
   MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(), "vector size didn't match");
 
-  auto device_id = lhs_vec.allocator()._device_id;
+  auto device_id = lhs_vec.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());

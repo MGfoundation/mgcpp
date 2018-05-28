@@ -117,6 +117,8 @@ class device_vector : public dense_vector<device_vector<Type, Alloc>, Type> {
 
   inline Alloc allocator() const noexcept;
 
+  inline size_t device_id() const noexcept;
+
   inline size_t size() const noexcept;
 };
 }  // namespace mgcpp

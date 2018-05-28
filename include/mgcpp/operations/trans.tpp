@@ -17,7 +17,7 @@ decltype(auto) strict::trans(
 
   auto const& dmat = ~mat;
   auto* context = dmat.context();
-  auto handle = context->get_cublas_context(dmat.allocator()._device_id);
+  auto handle = context->get_cublas_context(dmat.device_id());
 
   auto shape = dmat.shape();
 

@@ -21,7 +21,7 @@ strict::map(dense_vector<DenseVec, Type> const& vec) {
 
   auto const& original_vec = ~vec;
 
-  auto device_id = original_vec.allocator()._device_id;
+  auto device_id = original_vec.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
@@ -47,7 +47,7 @@ strict::map(dense_matrix<DenseMat, Type> const& mat) {
 
   auto const& original_mat = ~mat;
 
-  auto device_id = original_mat.allocator()._device_id;
+  auto device_id = original_mat.device_id();
   auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
