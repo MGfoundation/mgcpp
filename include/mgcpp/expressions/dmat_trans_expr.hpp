@@ -13,16 +13,13 @@
 
 namespace mgcpp {
 
+struct dmat_trans_expr_type;
+
 template <typename Expr>
-struct dmat_trans_expr : unary_expr<dmat_trans_expr<Expr>,
-                                    dmat_expr,
-                                    typename Expr::result_type,
-                                    Expr> {
-  using unary_expr<dmat_trans_expr<Expr>,
-                   dmat_expr,
-                   typename Expr::result_type,
-                   Expr>::generic_expr;
-};
+using dmat_trans_expr = unary_expr<dmat_trans_expr_type,
+                                   dmat_expr,
+                                   typename Expr::result_type,
+                                   Expr>;
 
 template <typename Expr>
 inline dmat_trans_expr<Expr> trans(dmat_expr<Expr> const& expr) noexcept;

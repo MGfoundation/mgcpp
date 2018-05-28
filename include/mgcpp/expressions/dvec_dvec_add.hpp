@@ -12,21 +12,14 @@
 
 namespace mgcpp {
 
-template <typename LhsExpr, typename RhsExpr>
-struct dvec_dvec_add_expr : binary_expr<dvec_dvec_add_expr<LhsExpr, RhsExpr>,
-                                        dvec_expr,
-                                        typename LhsExpr::result_type,
-                                        LhsExpr,
-                                        RhsExpr> {
-  using binary_expr<dvec_dvec_add_expr<LhsExpr, RhsExpr>,
-                    dvec_expr,
-                    typename LhsExpr::result_type,
-                    LhsExpr,
-                    RhsExpr>::generic_expr;
+struct dvec_dvec_add_expr_type;
 
-  template <typename GradsType>
-  auto grad(dvec_expr<GradsType> const& grads) const;
-};
+template <typename LhsExpr, typename RhsExpr>
+using dvec_dvec_add_expr = binary_expr<dvec_dvec_add_expr_type,
+                                       dvec_expr,
+                                       typename LhsExpr::result_type,
+                                       LhsExpr,
+                                       RhsExpr>;
 
 /** Returns a dense vector addition expression.
  * \param lhs the left-hand side dense vector

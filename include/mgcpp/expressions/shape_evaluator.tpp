@@ -105,10 +105,10 @@ auto shape(symbolic_shape_expr<Expr> const& expr, eval_context const& ctx) {
 
 }  // namespace internal
 
-template <typename T>
-typename T::result_type::shape_type shape(const expression<T>& op,
+template <typename Op>
+typename Op::result_type::shape_type shape(const Op& op,
                                            const eval_context& ctx) {
-  return internal::shape(~op, ctx);
+  return internal::shape(op, ctx);
 }
 }  // namespace shape_evaluator
 }  // namespace mgcpp

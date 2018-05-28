@@ -9,13 +9,6 @@
 namespace mgcpp {
 
 template <typename LhsExpr, typename RhsExpr>
-template <typename GradsType>
-auto dvec_dvec_add_expr<LhsExpr, RhsExpr>::grad(
-    dvec_expr<GradsType> const& grads) const {
-  return std::make_tuple(~grads, ~grads);
-}
-
-template <typename LhsExpr, typename RhsExpr>
 dvec_dvec_add_expr<LhsExpr, RhsExpr> operator+(
     dvec_expr<LhsExpr> const& lhs,
     dvec_expr<RhsExpr> const& rhs) noexcept {

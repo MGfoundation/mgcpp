@@ -11,15 +11,6 @@
 #include <mgcpp/expressions/scalar_dmat_mult.hpp>
 
 namespace mgcpp {
-
-template <typename LhsExpr, typename RhsExpr>
-template <typename GradsType>
-inline auto dmat_dmat_add_expr<LhsExpr, RhsExpr>::grad(
-    dmat_expr<GradsType> const& grads) const {
-  // returns (dmat, dmat)
-  return std::make_tuple(~grads, ~grads);
-}
-
 namespace internal {
 template <typename LhsExpr, typename RhsExpr>
 auto dmat_dmat_add_impl(dmat_expr<LhsExpr> const& lhs,

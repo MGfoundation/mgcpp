@@ -79,14 +79,6 @@ dmat_dmat_mult_expr<LhsExpr, RhsExpr>::eval() const {
 */
 
 template <typename LhsExpr, typename RhsExpr>
-template <typename GradsType>
-auto dmat_dmat_mult_expr<LhsExpr, RhsExpr>::grad(
-    dmat_expr<GradsType> const& grads) const {
-  return std::make_tuple((~grads) * mgcpp::trans(this->second()),
-                         mgcpp::trans(this->first()) * (~grads));
-}
-
-template <typename LhsExpr, typename RhsExpr>
 dmat_dmat_mult_expr<LhsExpr, RhsExpr> operator*(
     dmat_expr<LhsExpr> const& lhs,
     dmat_expr<RhsExpr> const& rhs) noexcept {

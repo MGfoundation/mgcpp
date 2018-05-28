@@ -13,39 +13,30 @@
 
 namespace mgcpp {
 
-template <typename Expr>
-struct dvec_reduce_sum_expr
-    : generic_expr<dvec_reduce_sum_expr<Expr>,
-                   scalar_expr,
-                   typename Expr::result_type::value_type,
-                   0,
-                   Expr> {
-  using generic_expr<dvec_reduce_sum_expr<Expr>,
-                     scalar_expr,
-                     typename Expr::result_type::value_type,
-                     0,
-                     Expr>::generic_expr;
+struct dvec_reduce_sum_expr_type;
 
-  template <typename GradsType>
-  inline auto grad(scalar_expr<GradsType> const& grads) const;
-};
+template <typename Expr>
+using dvec_reduce_sum_expr =
+    generic_expr<dvec_reduce_sum_expr_type,
+                 0,
+                 scalar_expr,
+                 typename Expr::result_type::value_type,
+                 0,
+                 Expr>;
 
 template <typename Expr>
 inline decltype(auto) reduce_sum(dvec_expr<Expr> const& expr) noexcept;
 
+struct dvec_reduce_mean_expr_type;
+
 template <typename Expr>
-struct dvec_reduce_mean_expr
-    : generic_expr<dvec_reduce_mean_expr<Expr>,
-                   scalar_expr,
-                   typename Expr::result_type::value_type,
-                   0,
-                   Expr> {
-  using generic_expr<dvec_reduce_mean_expr<Expr>,
-                     scalar_expr,
-                     typename Expr::result_type::value_type,
-                     0,
-                     Expr>::generic_expr;
-};
+using dvec_reduce_mean_expr =
+    generic_expr<dvec_reduce_mean_expr_type,
+                 0,
+                 scalar_expr,
+                 typename Expr::result_type::value_type,
+                 0,
+                 Expr>;
 
 template <typename Expr>
 inline decltype(auto) reduce_mean(dvec_expr<Expr> const& expr) noexcept;

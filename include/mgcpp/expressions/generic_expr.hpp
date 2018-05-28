@@ -20,18 +20,24 @@
 namespace mgcpp {
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
-struct generic_expr : public ResultExprType<TagType> {
+struct generic_expr : public ResultExprType<generic_expr<TagType,
+                                                         Tag,
+                                                         ResultExprType,
+                                                         ResultType,
+                                                         NParameters,
+                                                         OperandTypes...>> {
   // Type of self
   using this_type = generic_expr<TagType,
+                                 Tag,
                                  ResultExprType,
                                  ResultType,
                                  NParameters,
                                  OperandTypes...>;
-  using tag_type = TagType;
 
   // The resulting type from eval()-ing this node (i.e. device_matrix<float>)
   using result_type = ResultType;
@@ -42,6 +48,7 @@ struct generic_expr : public ResultExprType<TagType> {
   // Is this node a terminal node (i.e. with no child nodes)
   static constexpr bool is_terminal = sizeof...(OperandTypes) == NParameters;
   static constexpr size_t n_parameters = NParameters;
+  static constexpr size_t tag = Tag;
 
   // Operand expressions (first NParameter elements are non-expression
   // parameters)
@@ -90,7 +97,7 @@ template <typename TagType,
           typename ResultType,
           typename Expr>
 using unary_expr =
-    generic_expr<TagType, ResultExprType, ResultType, 0, Expr>;
+    generic_expr<TagType, 0, ResultExprType, ResultType, 0, Expr>;
 
 // A binary operator with left and right operands (i.e. addition,
 // multiplication)
@@ -100,7 +107,7 @@ template <typename TagType,
           typename LhsExpr,
           typename RhsExpr>
 using binary_expr =
-    generic_expr<TagType, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
+    generic_expr<TagType, 0, ResultExprType, ResultType, 0, LhsExpr, RhsExpr>;
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/generic_expr.tpp>

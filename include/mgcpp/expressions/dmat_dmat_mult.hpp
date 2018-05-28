@@ -10,25 +10,16 @@
 #include <mgcpp/expressions/dmat_expr.hpp>
 #include <mgcpp/expressions/generic_expr.hpp>
 
-#include <mgcpp/expressions/dmat_trans_expr.hpp>
-
 namespace mgcpp {
 
-template <typename LhsExpr, typename RhsExpr>
-struct dmat_dmat_mult_expr : binary_expr<dmat_dmat_mult_expr<LhsExpr, RhsExpr>,
-                                         dmat_expr,
-                                         typename LhsExpr::result_type,
-                                         LhsExpr,
-                                         RhsExpr> {
-  using binary_expr<dmat_dmat_mult_expr<LhsExpr, RhsExpr>,
-                    dmat_expr,
-                    typename LhsExpr::result_type,
-                    LhsExpr,
-                    RhsExpr>::generic_expr;
+struct dmat_dmat_mult_expr_type;
 
-  template <typename GradsType>
-  auto grad(dmat_expr<GradsType> const& grads) const;
-};
+template <typename LhsExpr, typename RhsExpr>
+using dmat_dmat_mult_expr = binary_expr<dmat_dmat_mult_expr_type,
+                                        dmat_expr,
+                                        typename LhsExpr::result_type,
+                                        LhsExpr,
+                                        RhsExpr>;
 
 /** Returns a dense matrix product expression.
  * \param lhs the left-hand side dense matrix

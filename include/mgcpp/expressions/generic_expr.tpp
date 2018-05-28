@@ -16,12 +16,14 @@
 namespace mgcpp {
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 inline generic_expr<
     TagType,
+    Tag,
     ResultExprType,
     ResultType,
     NParameters,
@@ -29,11 +31,13 @@ inline generic_expr<
     : exprs(std::move(args)...) {}
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 void generic_expr<TagType,
+                  Tag,
                   ResultExprType,
                   ResultType,
                   NParameters,
@@ -44,11 +48,13 @@ void generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
+                                   Tag,
                                    ResultExprType,
                                    ResultType,
                                    NParameters,
@@ -57,11 +63,13 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
+                                   Tag,
                                    ResultExprType,
                                    ResultType,
                                    NParameters,
@@ -71,11 +79,13 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
+                                   Tag,
                                    ResultExprType,
                                    ResultType,
                                    NParameters,
@@ -84,11 +94,13 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 inline decltype(auto) generic_expr<TagType,
+                                   Tag,
                                    ResultExprType,
                                    ResultType,
                                    NParameters,
@@ -97,11 +109,13 @@ inline decltype(auto) generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 ResultType generic_expr<TagType,
+                        Tag,
                         ResultExprType,
                         ResultType,
                         NParameters,
@@ -111,11 +125,13 @@ ResultType generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
           typename... OperandTypes>
 ResultType generic_expr<TagType,
+                        Tag,
                         ResultExprType,
                         ResultType,
                         NParameters,
@@ -127,6 +143,7 @@ ResultType generic_expr<TagType,
 }
 
 template <typename TagType,
+          size_t Tag,
           template <typename> class ResultExprType,
           typename ResultType,
           size_t NParameters,
@@ -134,6 +151,7 @@ template <typename TagType,
 template <typename T, typename>
 typename T::shape_type
 generic_expr<TagType,
+             Tag,
              ResultExprType,
              ResultType,
              NParameters,

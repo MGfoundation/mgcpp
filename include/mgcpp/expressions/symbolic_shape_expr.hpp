@@ -8,19 +8,15 @@ namespace mgcpp {
 template <typename Expr>
 struct shape_expr : expression<Expr> {};
 
+struct symbolic_shape_expr_type;
+
 template <typename Expr>
-struct symbolic_shape_expr
-    : generic_expr<symbolic_shape_expr<Expr>,
-                   shape_expr,
-                   typename Expr::result_type::shape_type,
-                   1,
-                   Expr> {
-  using generic_expr<symbolic_shape_expr<Expr>,
-                     shape_expr,
-                     typename Expr::result_type::shape_type,
-                     1,
-                     Expr>::generic_expr;
-};
+using symbolic_shape_expr = generic_expr<symbolic_shape_expr_type,
+                                         0,
+                                         shape_expr,
+                                         typename Expr::result_type::shape_type,
+                                         1,
+                                         Expr>;
 
 /*
  * Obtain the dynamic shape of this expression

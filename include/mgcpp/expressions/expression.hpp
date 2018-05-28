@@ -20,9 +20,8 @@ class expression {
   inline Type& operator~() noexcept;
   inline Type const& operator~() const noexcept;
 
-protected:
+ protected:
   size_t id = make_id();
-  expression() = default;
 };
 
 }  // namespace mgcpp

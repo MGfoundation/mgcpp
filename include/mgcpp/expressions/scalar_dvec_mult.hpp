@@ -15,19 +15,14 @@
 
 namespace mgcpp {
 
+struct scalar_dvec_mult_expr_type;
+
 template <typename ScalExpr, typename DVecExpr>
-struct scalar_dvec_mult_expr
-    : binary_expr<scalar_dvec_mult_expr<ScalExpr, DVecExpr>,
-                  dvec_expr,
-                  typename DVecExpr::result_type,
-                  ScalExpr,
-                  DVecExpr> {
-  using binary_expr<scalar_dvec_mult_expr<ScalExpr, DVecExpr>,
-                    dvec_expr,
-                    typename DVecExpr::result_type,
-                    ScalExpr,
-                    DVecExpr>::generic_expr;
-};
+using scalar_dvec_mult_expr = binary_expr<scalar_dvec_mult_expr_type,
+                                          dvec_expr,
+                                          typename DVecExpr::result_type,
+                                          ScalExpr,
+                                          DVecExpr>;
 
 /** Returns a scalar, dense vector product expression.
  * \param lhs the left-hand side scalar variable

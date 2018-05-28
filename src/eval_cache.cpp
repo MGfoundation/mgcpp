@@ -49,8 +49,6 @@ struct cache_lock_guard {
                    "Cache counter is not empty after evaluation");
       MGCPP_ASSERT(cache.map.empty(),
                    "Cache map is not empty after evaluation");
-      cache.cnt.clear();
-      cache.map.clear();
     }
   }
 };

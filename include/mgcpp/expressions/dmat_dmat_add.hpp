@@ -13,21 +13,14 @@
 
 namespace mgcpp {
 
-template <typename LhsExpr, typename RhsExpr>
-struct dmat_dmat_add_expr : binary_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>,
-                                        dmat_expr,
-                                        typename LhsExpr::result_type,
-                                        LhsExpr,
-                                        RhsExpr> {
-  using binary_expr<dmat_dmat_add_expr<LhsExpr, RhsExpr>,
-                    dmat_expr,
-                    typename LhsExpr::result_type,
-                    LhsExpr,
-                    RhsExpr>::generic_expr;
+struct dmat_dmat_add_expr_type;
 
-  template<typename GradsType>
-  auto grad(dmat_expr<GradsType> const& grads) const;
-};
+template <typename LhsExpr, typename RhsExpr>
+using dmat_dmat_add_expr = binary_expr<dmat_dmat_add_expr_type,
+                                       dmat_expr,
+                                       typename LhsExpr::result_type,
+                                       LhsExpr,
+                                       RhsExpr>;
 
 template <typename LhsExpr, typename RhsExpr>
 inline auto operator+(dmat_expr<LhsExpr> const& lhs,

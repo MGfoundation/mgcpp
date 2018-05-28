@@ -15,19 +15,14 @@
 
 namespace mgcpp {
 
+struct scalar_dmat_mult_expr_type;
+
 template <typename ScalExpr, typename DMatExpr>
-struct scalar_dmat_mult_expr
-    : binary_expr<scalar_dmat_mult_expr<ScalExpr, DMatExpr>,
-                  dmat_expr,
-                  typename DMatExpr::result_type,
-                  ScalExpr,
-                  DMatExpr> {
-  using binary_expr<scalar_dmat_mult_expr<ScalExpr, DMatExpr>,
-                    dmat_expr,
-                    typename DMatExpr::result_type,
-                    ScalExpr,
-                    DMatExpr>::generic_expr;
-};
+using scalar_dmat_mult_expr = binary_expr<scalar_dmat_mult_expr_type,
+                                          dmat_expr,
+                                          typename DMatExpr::result_type,
+                                          ScalExpr,
+                                          DMatExpr>;
 
 /** Returns a scalar, dense matrix product expression.
  * \param lhs the left-hand side scalar variable

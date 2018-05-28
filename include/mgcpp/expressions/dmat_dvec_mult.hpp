@@ -13,21 +13,14 @@
 
 namespace mgcpp {
 
-template <typename LhsExpr, typename RhsExpr>
-struct dmat_dvec_mult_expr : binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
-                                         dvec_expr,
-                                         typename RhsExpr::result_type,
-                                         LhsExpr,
-                                         RhsExpr> {
-  using binary_expr<dmat_dvec_mult_expr<LhsExpr, RhsExpr>,
-                    dvec_expr,
-                    typename RhsExpr::result_type,
-                    LhsExpr,
-                    RhsExpr>::generic_expr;
+struct dmat_dvec_mult_expr_type;
 
-  template <typename GradsType>
-  auto grad(dvec_expr<GradsType> const& grads) const;
-};
+template <typename MatExpr, typename VecExpr>
+using dmat_dvec_mult_expr = binary_expr<dmat_dvec_mult_expr_type,
+                                        dvec_expr,
+                                        typename VecExpr::result_type,
+                                        MatExpr,
+                                        VecExpr>;
 
 /** Returns a dense matrix vector product expression.
  * \param lhs the left-hand side dense matrix
