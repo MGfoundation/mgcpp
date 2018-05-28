@@ -7,14 +7,14 @@
 #include <mgcpp/matrix/matrix_base.hpp>
 
 namespace mgcpp {
-template <typename MatrixType, typename Type, size_t DeviceId>
-MatrixType const& matrix_base<MatrixType, Type, DeviceId>::operator~() const
+template <typename MatrixType, typename Type>
+MatrixType const& matrix_base<MatrixType, Type>::operator~() const
     noexcept {
   return *static_cast<MatrixType const*>(this);
 };
 
-template <typename MatrixType, typename Type, size_t DeviceId>
-MatrixType& matrix_base<MatrixType, Type, DeviceId>::operator~() noexcept {
+template <typename MatrixType, typename Type>
+MatrixType& matrix_base<MatrixType, Type>::operator~() noexcept {
   return *static_cast<MatrixType*>(this);
 };
 }  // namespace mgcpp

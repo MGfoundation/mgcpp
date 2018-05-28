@@ -19,71 +19,70 @@ namespace strict {
 
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
-          typename DenseVec,
-          size_t DeviceId>
-inline device_vector<Type, DeviceId, typename DenseVec::allocator_type> map(
-    dense_vector<DenseVec, Type, DeviceId> const& vec);
+          typename DenseVec>
+inline device_vector<Type, typename DenseVec::allocator_type> map(
+    dense_vector<DenseVec, Type> const& vec);
 
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseMat,
           size_t DeviceId>
-inline device_matrix<Type, DeviceId, typename DenseMat::allocator_type> map(
-    dense_matrix<DenseMat, Type, DeviceId> const& mat);
+inline device_matrix<Type, typename DenseMat::allocator_type> map(
+    dense_matrix<DenseMat, Type> const& mat);
 
 /** Computes the absolute value of each element.
  * \param vec vector to calculate the absolute value of.
  */
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) abs(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) abs(dense_vector<DenseVec, Type> const& vec);
 
 /** Computes the absolute value of each element.
  * \param mat matrix to calculate the absolute value of.
  */
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) abs(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) abs(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) sin(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) sin(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) sin(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) sin(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) cos(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) cos(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) cos(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) cos(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) tan(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) tan(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) tan(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) tan(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) sinh(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) sinh(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) sinh(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) sinh(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) cosh(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) cosh(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) cosh(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) cosh(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) tanh(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) tanh(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) tanh(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) tanh(dense_matrix<DenseMat, Type> const& mat);
 
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) relu(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) relu(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) relu(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) relu(dense_matrix<DenseMat, Type> const& mat);
 }  // namespace strict
 }  // namespace mgcpp
 

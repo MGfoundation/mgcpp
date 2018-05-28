@@ -10,13 +10,14 @@
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp {
-template <typename DenseVec, typename Type, size_t DeviceId>
-decltype(auto) strict::mean(dense_vector<DenseVec, Type, DeviceId> const& vec) {
+template <typename DenseVec, typename Type>
+decltype(auto) strict::mean(dense_vector<DenseVec, Type> const& vec) {
   using value_type = typename DenseVec::value_type;
 
   auto const& original_vec = ~vec;
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = original_vec.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
@@ -32,13 +33,14 @@ decltype(auto) strict::mean(dense_vector<DenseVec, Type, DeviceId> const& vec) {
   return result / size;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-decltype(auto) strict::mean(dense_matrix<DenseMat, Type, DeviceId> const& mat) {
+template <typename DenseMat, typename Type>
+decltype(auto) strict::mean(dense_matrix<DenseMat, Type> const& mat) {
   using value_type = typename DenseMat::value_type;
 
   auto const& original_mat = ~mat;
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = original_mat.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }

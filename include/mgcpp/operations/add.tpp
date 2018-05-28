@@ -12,11 +12,10 @@
 namespace mgcpp {
 template <typename LhsDenseMat,
           typename RhsDenseMat,
-          typename Type,
-          size_t DeviceId>
+          typename Type>
 decltype(auto) strict::add(
-    dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-    dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs) {
+    dense_matrix<LhsDenseMat, Type> const& lhs,
+    dense_matrix<RhsDenseMat, Type> const& rhs) {
   using allocator_type = typename LhsDenseMat::allocator_type;
   using value_type = typename LhsDenseMat::value_type;
 
@@ -26,13 +25,14 @@ decltype(auto) strict::add(
   MGCPP_ASSERT(lhs_mat.shape() == rhs_mat.shape(),
                "matrix dimensions didn't match");
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = lhs_mat.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* thread_context = lhs_mat.context();
-  auto handle = thread_context->get_cublas_context(DeviceId);
+  auto handle = thread_context->get_cublas_context(device_id);
 
   auto shape = lhs_mat.shape();
 
@@ -42,7 +42,7 @@ decltype(auto) strict::add(
   value_type const alpha = 1;
   value_type const beta = 1;
 
-  auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
+  auto result = device_matrix<Type, allocator_type>({m, n});
   auto status = cublas::geam(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, &alpha,
                              lhs_mat.data(), m, &beta, rhs_mat.data(), m,
                              result.data_mutable(), m);
@@ -55,11 +55,10 @@ decltype(auto) strict::add(
 
 template <typename LhsDenseVec,
           typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
+          typename Type>
 decltype(auto) strict::add(
-    dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-    dense_vector<RhsDenseVec, Type, DeviceId> const& rhs) {
+    dense_vector<LhsDenseVec, Type> const& lhs,
+    dense_vector<RhsDenseVec, Type> const& rhs) {
   using allocator_type = typename LhsDenseVec::allocator_type;
   using value_type = typename LhsDenseVec::value_type;
 
@@ -68,19 +67,20 @@ decltype(auto) strict::add(
 
   MGCPP_ASSERT(lhs_vec.shape() == rhs_vec.shape(), "vector size didn't match");
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = lhs_vec.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* thread_context = lhs_vec.context();
-  auto handle = thread_context->get_cublas_context(DeviceId);
+  auto handle = thread_context->get_cublas_context(device_id);
 
   auto size = lhs_vec.size();
 
   value_type const alpha = 1;
 
-  auto result = device_vector<Type, DeviceId, allocator_type>(lhs_vec);
+  auto result = device_vector<Type, allocator_type>(lhs_vec);
   auto status = cublas::axpy(handle, size, &alpha, rhs_vec.data(), 1,
                              result.data_mutable(), 1);
   if (!status) {

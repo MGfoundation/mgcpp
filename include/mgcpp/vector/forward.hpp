@@ -10,13 +10,13 @@
 #include <cstddef>
 
 namespace mgcpp {
-template <typename VectorType, typename Type, size_t DeviceId>
+template <typename VectorType, typename Type>
 struct vector_base;
 
-template <typename DenseVecType, typename Type, size_t DeviceId>
+template <typename DenseVecType, typename Type>
 class dense_vector;
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 class device_vector;
 }  // namespace mgcpp
 

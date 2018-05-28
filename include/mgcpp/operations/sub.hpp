@@ -24,10 +24,9 @@ namespace strict {
  */
 template <typename LhsDenseVec,
           typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
-inline decltype(auto) sub(dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-                          dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
+          typename Type>
+inline decltype(auto) sub(dense_vector<LhsDenseVec, Type> const& lhs,
+                          dense_vector<RhsDenseVec, Type> const& rhs);
 
 /**
  * Matrix Subtraction.
@@ -37,10 +36,9 @@ inline decltype(auto) sub(dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
  */
 template <typename LhsDenseMat,
           typename RhsDenseMat,
-          typename Type,
-          size_t DeviceId>
-inline decltype(auto) sub(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-                          dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
+          typename Type>
+inline decltype(auto) sub(dense_matrix<LhsDenseMat, Type> const& lhs,
+                          dense_matrix<RhsDenseMat, Type> const& rhs);
 }  // namespace strict
 }  // namespace mgcpp
 

@@ -17,24 +17,24 @@
 #include <algorithm>
 
 namespace mgcpp {
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector() noexcept
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector() noexcept
     : _context(&global_context::get_thread_context()),
       _shape(0),
       _allocator(),
       _data(nullptr),
       _capacity(0) {}
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(Alloc const& alloc) noexcept
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(Alloc const& alloc) noexcept
     : _context(&global_context::get_thread_context()),
       _shape(0),
       _allocator(alloc),
       _data(nullptr),
       _capacity(0) {}
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(size_t size,
                                                     Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(size),
@@ -42,8 +42,8 @@ device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
       _data(_allocator.device_allocate(_shape)),
       _capacity(_shape) {}
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(size_t size,
                                                     value_type init,
                                                     Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
@@ -58,8 +58,8 @@ device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(size_t size,
                                                     const_pointer data,
                                                     Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
@@ -76,8 +76,8 @@ device_vector<Type, DeviceId, Alloc>::device_vector(size_t size,
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(
     std::initializer_list<value_type> const& array,
     Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
@@ -96,9 +96,9 @@ device_vector<Type, DeviceId, Alloc>::device_vector(
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 template <typename HostVec, typename>
-device_vector<Type, DeviceId, Alloc>::device_vector(HostVec const& host_mat,
+device_vector<Type, Alloc>::device_vector(HostVec const& host_mat,
                                                     Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(0),
@@ -121,9 +121,9 @@ device_vector<Type, DeviceId, Alloc>::device_vector(HostVec const& host_mat,
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(
-    device_vector<Type, DeviceId, Alloc> const& other)
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(
+    device_vector<Type, Alloc> const& other)
     : _context(&global_context::get_thread_context()),
       _shape(other._shape),
       _allocator(),
@@ -138,10 +138,10 @@ device_vector<Type, DeviceId, Alloc>::device_vector(
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 template <typename DenseVec>
-device_vector<Type, DeviceId, Alloc>::device_vector(
-    dense_vector<DenseVec, Type, DeviceId> const& other)
+device_vector<Type, Alloc>::device_vector(
+    dense_vector<DenseVec, Type> const& other)
     : _context(&global_context::get_thread_context()),
       _shape((~other)._shape),
       _allocator(),
@@ -156,9 +156,9 @@ device_vector<Type, DeviceId, Alloc>::device_vector(
   }
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::device_vector(
-    device_vector<Type, DeviceId, Alloc>&& other) noexcept
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(
+    device_vector<Type, Alloc>&& other) noexcept
     : _context(&global_context::get_thread_context()),
       _shape(std::move(other._shape)),
       _allocator(std::move(other._allocator)),
@@ -168,18 +168,18 @@ device_vector<Type, DeviceId, Alloc>::device_vector(
   other._capacity = 0;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 template <size_t S>
-inline device_vector<Type, DeviceId, Alloc>
-device_vector<Type, DeviceId, Alloc>::from_c_array(Type (&arr)[S],
+inline device_vector<Type, Alloc>
+device_vector<Type, Alloc>::from_c_array(Type (&arr)[S],
                                                    Alloc const& alloc) {
-  return device_vector<Type, DeviceId, Alloc>(S, arr, alloc);
+  return device_vector<Type, Alloc>(S, arr, alloc);
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 template <typename DenseVec>
-device_vector<Type, DeviceId, Alloc>& device_vector<Type, DeviceId, Alloc>::
-operator=(dense_vector<DenseVec, Type, DeviceId> const& other) {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::
+operator=(dense_vector<DenseVec, Type> const& other) {
   auto const& other_densevec = ~other;
 
   if (other_densevec._shape > _capacity) {
@@ -203,9 +203,9 @@ operator=(dense_vector<DenseVec, Type, DeviceId> const& other) {
   return *this;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>& device_vector<Type, DeviceId, Alloc>::
-operator=(device_vector<Type, DeviceId, Alloc> const& other) {
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::
+operator=(device_vector<Type, Alloc> const& other) {
   if (other._shape > _capacity) {
     if (_data) {
       _allocator.device_deallocate(_data, _capacity);
@@ -226,9 +226,9 @@ operator=(device_vector<Type, DeviceId, Alloc> const& other) {
   return *this;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>& device_vector<Type, DeviceId, Alloc>::
-operator=(device_vector<Type, DeviceId, Alloc>&& other) noexcept {
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::
+operator=(device_vector<Type, Alloc>&& other) noexcept {
   if (_data) {
     try {
       _allocator.device_deallocate(_data, _shape);
@@ -246,9 +246,9 @@ operator=(device_vector<Type, DeviceId, Alloc>&& other) noexcept {
   return *this;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>&
-device_vector<Type, DeviceId, Alloc>::resize(size_t size,
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>&
+device_vector<Type, Alloc>::resize(size_t size,
                                              value_type pad_value) {
   if (size > _capacity) {
     auto new_data = _allocator.device_allocate(size);
@@ -277,14 +277,14 @@ device_vector<Type, DeviceId, Alloc>::resize(size_t size,
   return *this;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>&
-device_vector<Type, DeviceId, Alloc>::zero() {
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>&
+device_vector<Type, Alloc>::zero() {
   if (!_data) {
     MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
   }
 
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_allocator._device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -297,22 +297,22 @@ device_vector<Type, DeviceId, Alloc>::zero() {
   return *this;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-void device_vector<Type, DeviceId, Alloc>::copy_to_host(pointer host_p) const {
+template <typename Type, typename Alloc>
+void device_vector<Type, Alloc>::copy_to_host(pointer host_p) const {
   if (!host_p) {
     MGCPP_THROW_RUNTIME_ERROR("provided pointer is null");
   }
   _allocator.copy_to_host(pun_cast<device_pointer>(host_p), _data, _shape);
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-typename device_vector<Type, DeviceId, Alloc>::value_type
-device_vector<Type, DeviceId, Alloc>::check_value(size_t i) const {
+template <typename Type, typename Alloc>
+typename device_vector<Type, Alloc>::value_type
+device_vector<Type, Alloc>::check_value(size_t i) const {
   if (i >= _shape) {
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }
 
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_allocator._device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -324,14 +324,14 @@ device_vector<Type, DeviceId, Alloc>::check_value(size_t i) const {
   return to;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-void device_vector<Type, DeviceId, Alloc>::set_value(size_t i,
+template <typename Type, typename Alloc>
+void device_vector<Type, Alloc>::set_value(size_t i,
                                                      value_type value) {
   if (i >= _shape) {
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }
 
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_allocator._device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -341,55 +341,55 @@ void device_vector<Type, DeviceId, Alloc>::set_value(size_t i,
   _allocator.copy_from_host(to, pun_cast<device_pointer>(&from), 1);
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-typename device_vector<Type, DeviceId, Alloc>::device_pointer
-device_vector<Type, DeviceId, Alloc>::release_data() noexcept {
+template <typename Type, typename Alloc>
+typename device_vector<Type, Alloc>::device_pointer
+device_vector<Type, Alloc>::release_data() noexcept {
   device_pointer temp = _data;
   _data = nullptr;
   _capacity = 0;
   return temp;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-thread_context* device_vector<Type, DeviceId, Alloc>::context() const noexcept {
+template <typename Type, typename Alloc>
+thread_context* device_vector<Type, Alloc>::context() const noexcept {
   return _context;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-size_t device_vector<Type, DeviceId, Alloc>::capacity() const noexcept {
+template <typename Type, typename Alloc>
+size_t device_vector<Type, Alloc>::capacity() const noexcept {
   return _capacity;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-typename device_vector<Type, DeviceId, Alloc>::const_device_pointer
-device_vector<Type, DeviceId, Alloc>::data() const noexcept {
+template <typename Type, typename Alloc>
+typename device_vector<Type, Alloc>::const_device_pointer
+device_vector<Type, Alloc>::data() const noexcept {
   return _data;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-typename device_vector<Type, DeviceId, Alloc>::device_pointer
-device_vector<Type, DeviceId, Alloc>::data_mutable() noexcept {
+template <typename Type, typename Alloc>
+typename device_vector<Type, Alloc>::device_pointer
+device_vector<Type, Alloc>::data_mutable() noexcept {
   return _data;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-size_t device_vector<Type, DeviceId, Alloc>::size() const noexcept {
+template <typename Type, typename Alloc>
+size_t device_vector<Type, Alloc>::size() const noexcept {
   return _shape;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-typename device_vector<Type, DeviceId, Alloc>::shape_type
-device_vector<Type, DeviceId, Alloc>::shape() const noexcept {
+template <typename Type, typename Alloc>
+typename device_vector<Type, Alloc>::shape_type
+device_vector<Type, Alloc>::shape() const noexcept {
   return mgcpp::make_shape(_shape);
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-Alloc& device_vector<Type, DeviceId, Alloc>::allocator() noexcept {
+template <typename Type, typename Alloc>
+Alloc device_vector<Type, Alloc>::allocator() const noexcept {
   return _allocator;
 }
 
-template <typename Type, size_t DeviceId, typename Alloc>
-device_vector<Type, DeviceId, Alloc>::~device_vector() noexcept {
+template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::~device_vector() noexcept {
   if (_data) {
     try {
       _allocator.device_deallocate(_data, _capacity);

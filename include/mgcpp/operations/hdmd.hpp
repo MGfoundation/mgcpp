@@ -22,13 +22,9 @@ namespace strict {
  * \param rhs right-hand side
  * \returns the element-wise multiplication of lhs and rhs
  */
-template <typename LhsDenseVec,
-          typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
-inline decltype(auto) hdmd(
-    dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-    dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
+template <typename LhsDenseVec, typename RhsDenseVec, typename Type>
+inline decltype(auto) hdmd(dense_vector<LhsDenseVec, Type> const& lhs,
+                           dense_vector<RhsDenseVec, Type> const& rhs);
 }  // namespace strict
 }  // namespace mgcpp
 

@@ -28,8 +28,8 @@ namespace strict {
  * \param pad_constant the value of the padding cells. If not specified, the
  * default padding is zero. \return the padded result
  */
-template <typename DenseVec, typename Type, size_t Device>
-inline decltype(auto) pad(dense_vector<DenseVec, Type, Device> const& vec,
+template <typename DenseVec, typename Type>
+inline decltype(auto) pad(dense_vector<DenseVec, Type> const& vec,
                           pad_size_t pad,
                           typename value_type<Type>::type pad_constant =
                               typename value_type<Type>::type{});

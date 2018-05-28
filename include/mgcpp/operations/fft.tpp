@@ -12,9 +12,8 @@
 #include <mgcpp/vector/device_vector.hpp>
 
 namespace mgcpp {
-template <typename DeviceVec, typename Type, size_t DeviceId>
-decltype(auto) strict::rfft(
-    dense_vector<DeviceVec, Type, DeviceId> const& vec) {
+template <typename DeviceVec, typename Type>
+decltype(auto) strict::rfft(dense_vector<DeviceVec, Type> const& vec) {
   using allocator_type = typename DeviceVec::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<complex<Type>>;
@@ -24,8 +23,8 @@ decltype(auto) strict::rfft(
   size_t fft_size = dev_vec.size();
   size_t output_size = fft_size / 2 + 1;
 
-  auto result = device_vector<complex<Type>, DeviceId, result_allocator_type>(
-      output_size);
+  auto result =
+      device_vector<complex<Type>, result_allocator_type>(output_size);
 
   auto status =
       mgcpp::cufft::rfft(fft_size, dev_vec.data(), result.data_mutable());
@@ -36,10 +35,9 @@ decltype(auto) strict::rfft(
   return result;
 }
 
-template <typename DeviceVec, typename Type, size_t DeviceId>
-decltype(auto) strict::irfft(
-    dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
-    int n) {
+template <typename DeviceVec, typename Type>
+decltype(auto) strict::irfft(dense_vector<DeviceVec, complex<Type>> const& vec,
+                             int n) {
   using allocator_type = typename DeviceVec::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<Type>;
@@ -57,8 +55,7 @@ decltype(auto) strict::irfft(
   }
   size_t output_size = fft_size;
 
-  auto result =
-      device_vector<Type, DeviceId, result_allocator_type>(output_size);
+  auto result = device_vector<Type, result_allocator_type>(output_size);
 
   auto status =
       mgcpp::cufft::irfft(fft_size, dev_vec.data(), result.data_mutable());
@@ -71,10 +68,9 @@ decltype(auto) strict::irfft(
   return result;
 }
 
-template <typename DeviceVec, typename Type, size_t DeviceId>
-decltype(auto) strict::cfft(
-    dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
-    fft_direction direction) {
+template <typename DeviceVec, typename Type>
+decltype(auto) strict::cfft(dense_vector<DeviceVec, complex<Type>> const& vec,
+                            fft_direction direction) {
   using allocator_type = typename DeviceVec::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<complex<Type>>;
@@ -84,8 +80,8 @@ decltype(auto) strict::cfft(
   size_t fft_size = dev_vec.size();
   size_t output_size = fft_size;
 
-  auto result = device_vector<complex<Type>, DeviceId, result_allocator_type>(
-      output_size);
+  auto result =
+      device_vector<complex<Type>, result_allocator_type>(output_size);
 
   cufft::fft_direction dir;
   if (direction == fft_direction::forward)
@@ -106,9 +102,8 @@ decltype(auto) strict::cfft(
   return result;
 }
 
-template <typename DeviceMat, typename Type, size_t DeviceId>
-decltype(auto) strict::rfft(
-    dense_matrix<DeviceMat, Type, DeviceId> const& mat) {
+template <typename DeviceMat, typename Type>
+decltype(auto) strict::rfft(dense_matrix<DeviceMat, Type> const& mat) {
   using allocator_type = typename DeviceMat::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<complex<Type>>;
@@ -118,8 +113,8 @@ decltype(auto) strict::rfft(
   auto fft_size = dev_mat.shape();
   auto output_size = make_shape(fft_size[0] / 2 + 1, fft_size[1]);
 
-  auto result = device_matrix<complex<Type>, DeviceId, result_allocator_type>(
-      output_size);
+  auto result =
+      device_matrix<complex<Type>, result_allocator_type>(output_size);
 
   auto status = mgcpp::cufft::rfft2(fft_size[0], fft_size[1], dev_mat.data(),
                                     result.data_mutable());
@@ -130,10 +125,9 @@ decltype(auto) strict::rfft(
   return result;
 }
 
-template <typename DeviceMat, typename Type, size_t DeviceId>
-decltype(auto) strict::irfft(
-    dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
-    int n) {
+template <typename DeviceMat, typename Type>
+decltype(auto) strict::irfft(dense_matrix<DeviceMat, complex<Type>> const& mat,
+                             int n) {
   using allocator_type = typename DeviceMat::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<Type>;
@@ -149,8 +143,7 @@ decltype(auto) strict::irfft(
   }
   auto output_size = fft_size;
 
-  auto result =
-      device_matrix<Type, DeviceId, result_allocator_type>(output_size);
+  auto result = device_matrix<Type, result_allocator_type>(output_size);
 
   auto status = mgcpp::cufft::irfft2(fft_size[0], fft_size[1], dev_mat.data(),
                                      result.data_mutable());
@@ -164,10 +157,9 @@ decltype(auto) strict::irfft(
   return result;
 }
 
-template <typename DeviceMat, typename Type, size_t DeviceId>
-decltype(auto) strict::cfft(
-    dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
-    fft_direction direction) {
+template <typename DeviceMat, typename Type>
+decltype(auto) strict::cfft(dense_matrix<DeviceMat, complex<Type>> const& mat,
+                            fft_direction direction) {
   using allocator_type = typename DeviceMat::allocator_type;
   using result_allocator_type =
       typename allocator_type::template rebind_alloc<complex<Type>>;
@@ -177,8 +169,8 @@ decltype(auto) strict::cfft(
   auto fft_size = dev_mat.shape();
   auto output_size = fft_size;
 
-  auto result = device_matrix<complex<Type>, DeviceId, result_allocator_type>(
-      output_size);
+  auto result =
+      device_matrix<complex<Type>, result_allocator_type>(output_size);
 
   cufft::fft_direction dir;
   if (direction == fft_direction::forward)

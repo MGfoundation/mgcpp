@@ -12,13 +12,9 @@
 #include <mgcpp/system/pun_cast.hpp>
 
 namespace mgcpp {
-template <typename LhsDenseMat,
-          typename RhsDenseMat,
-          typename Type,
-          size_t DeviceId>
-decltype(auto) strict::mult(
-    dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-    dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs) {
+template <typename LhsDenseMat, typename RhsDenseMat, typename Type>
+decltype(auto) strict::mult(dense_matrix<LhsDenseMat, Type> const& lhs,
+                            dense_matrix<RhsDenseMat, Type> const& rhs) {
   using allocator_type = typename LhsDenseMat::allocator_type;
 
   auto const& lhs_mat = ~lhs;
@@ -27,13 +23,14 @@ decltype(auto) strict::mult(
   MGCPP_ASSERT(lhs_mat.shape()[1] == rhs_mat.shape()[0],
                "matrix dimensions didn't match");
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = lhs_mat.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* context = lhs_mat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(device_id);
 
   auto lhs_shape = lhs_mat.shape();
   auto rhs_shape = rhs_mat.shape();
@@ -45,7 +42,7 @@ decltype(auto) strict::mult(
   Type const alpha = 1;
   Type const beta = 0;
 
-  auto result = device_matrix<Type, DeviceId, allocator_type>({m, n});
+  auto result = device_matrix<Type, allocator_type>({m, n});
 
   auto status = cublas::gemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha,
                              lhs_mat.data(), m, rhs_mat.data(), k, &beta,
@@ -58,17 +55,16 @@ decltype(auto) strict::mult(
   return result;
 }
 
-template <typename DenseMat, typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) strict::mult(
-    dense_matrix<DenseMat, Type, DeviceId> const& mat,
-    dense_vector<DenseVec, Type, DeviceId> const& vec) {
+template <typename DenseMat, typename DenseVec, typename Type>
+inline decltype(auto) strict::mult(dense_matrix<DenseMat, Type> const& mat,
+                                   dense_vector<DenseVec, Type> const& vec) {
   using allocator_type = typename DenseVec::allocator_type;
 
   auto const& dmat = ~mat;
   auto const& dvec = ~vec;
 
   auto* context = dmat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(dmat.allocator()._device_id);
 
   MGCPP_ASSERT(dmat.shape()[1] == dvec.size(),
                "Matrix.shape[1] != Vector.shape");
@@ -76,7 +72,7 @@ inline decltype(auto) strict::mult(
   auto n = dmat.shape()[0];
   auto k = dmat.shape()[1];
 
-  auto result = device_vector<Type, DeviceId, allocator_type>(n);
+  auto result = device_vector<Type, allocator_type>(n);
 
   Type const alpha = 1;
   Type const beta = 0;
@@ -91,28 +87,22 @@ inline decltype(auto) strict::mult(
   return result;
 }
 
-template <typename DenseVec,
-          typename ScalarType,
-          typename VectorType,
-          size_t DeviceId,
-          typename>
-decltype(auto) strict::mult(
-    ScalarType scalar,
-    dense_vector<DenseVec, VectorType, DeviceId> const& vec) {
+template <typename DenseVec, typename ScalarType, typename VectorType, typename>
+decltype(auto) strict::mult(ScalarType scalar,
+                            dense_vector<DenseVec, VectorType> const& vec) {
   using allocator_type = typename DenseVec::allocator_type;
   using device_pointer = typename DenseVec::device_pointer;
 
   auto const& original_vec = ~vec;
 
   auto* context = original_vec.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(original_vec.allocator()._device_id);
 
   auto size = original_vec.size();
 
   // complex scalar x real vector will need something
   auto casted_scalar = VectorType(scalar);
-  auto result =
-      device_vector<VectorType, DeviceId, allocator_type>(original_vec);
+  auto result = device_vector<VectorType, allocator_type>(original_vec);
   auto status =
       cublas::scal(handle, size, pun_cast<device_pointer>(&casted_scalar),
                    result.data_mutable(), 1);
@@ -123,28 +113,23 @@ decltype(auto) strict::mult(
   return result;
 }
 
-template <typename DenseMat,
-          typename MatrixType,
-          size_t DeviceId,
-          typename ScalarType,
-          typename>
+template <typename DenseMat, typename MatrixType, typename ScalarType, typename>
 inline decltype(auto) strict::mult(
     ScalarType scalar,
-    dense_matrix<DenseMat, MatrixType, DeviceId> const& mat) {
+    dense_matrix<DenseMat, MatrixType> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
   using device_pointer = typename DenseMat::device_pointer;
 
   auto const& original_mat = ~mat;
 
   auto* context = original_mat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(original_mat.allocator()._device_id);
 
   auto size = original_mat.shape();
 
   // complex scalar x real matrix will need something
   auto casted_scalar = MatrixType(scalar);
-  auto result =
-      device_matrix<MatrixType, DeviceId, allocator_type>(original_mat);
+  auto result = device_matrix<MatrixType, allocator_type>(original_mat);
   auto status = cublas::scal(handle, size[0] * size[1],
                              pun_cast<device_pointer>(&casted_scalar),
                              result.data_mutable(), 1);

@@ -16,11 +16,11 @@
 
 namespace mgcpp {
 namespace strict {
-template <typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) mean(dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseVec, typename Type>
+inline decltype(auto) mean(dense_vector<DenseVec, Type> const& vec);
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline decltype(auto) mean(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+inline decltype(auto) mean(dense_matrix<DenseMat, Type> const& mat);
 }  // namespace strict
 }  // namespace mgcpp
 

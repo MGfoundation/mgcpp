@@ -25,11 +25,10 @@ namespace strict {
 template <typename ADense,
           typename BDense,
           typename CDense,
-          typename Type,
-          size_t DeviceId>
-inline decltype(auto) gemm(dense_matrix<ADense, Type, DeviceId> const& A,
-                           dense_matrix<BDense, Type, DeviceId> const& B,
-                           dense_matrix<CDense, Type, DeviceId> const& C);
+          typename Type>
+inline decltype(auto) gemm(dense_matrix<ADense, Type> const& A,
+                           dense_matrix<BDense, Type> const& B,
+                           dense_matrix<CDense, Type> const& C);
 
 /**
  * General Matrix-matrix Multiplication.
@@ -45,16 +44,15 @@ template <
     typename BDense,
     typename CDense,
     typename Type,
-    size_t DeviceId,
     typename ScalarAlpha,
     typename ScalarBeta,
     typename = typename std::enable_if<is_scalar<ScalarAlpha>::value &&
                                        is_scalar<ScalarBeta>::value>::type>
 inline decltype(auto) gemm(ScalarAlpha alpha,
-                           dense_matrix<ADense, Type, DeviceId> const& A,
-                           dense_matrix<BDense, Type, DeviceId> const& B,
+                           dense_matrix<ADense, Type> const& A,
+                           dense_matrix<BDense, Type> const& B,
                            ScalarBeta beta,
-                           dense_matrix<CDense, Type, DeviceId> const& C);
+                           dense_matrix<CDense, Type> const& C);
 
 /**
  * General Matrix-matrix Multiplication.
@@ -71,16 +69,15 @@ template <
     typename BDense,
     typename CDense,
     typename Type,
-    size_t DeviceId,
     typename ScalarAlpha,
     typename ScalarBeta,
     typename = typename std::enable_if<is_scalar<ScalarAlpha>::value &&
                                        is_scalar<ScalarBeta>::value>::type>
 inline decltype(auto) gemm(ScalarAlpha alpha,
-                           dense_matrix<ADense, Type, DeviceId> const& A,
-                           dense_matrix<BDense, Type, DeviceId> const& B,
+                           dense_matrix<ADense, Type> const& A,
+                           dense_matrix<BDense, Type> const& B,
                            ScalarBeta beta,
-                           dense_matrix<CDense, Type, DeviceId>&& C);
+                           dense_matrix<CDense, Type>&& C);
 
 enum class trans_mode {
   same = CUBLAS_OP_N,
@@ -107,7 +104,6 @@ template <
     typename BDense,
     typename CDense,
     typename Type,
-    size_t DeviceId,
     typename ScalarAlpha,
     typename ScalarBeta,
     typename = typename std::enable_if<is_scalar<ScalarAlpha>::value &&
@@ -115,10 +111,10 @@ template <
 inline decltype(auto) gemm(ScalarAlpha alpha,
                            trans_mode mode_A,
                            trans_mode mode_B,
-                           dense_matrix<ADense, Type, DeviceId> const& A,
-                           dense_matrix<BDense, Type, DeviceId> const& B,
+                           dense_matrix<ADense, Type> const& A,
+                           dense_matrix<BDense, Type> const& B,
                            ScalarBeta beta,
-                           dense_matrix<CDense, Type, DeviceId> const& C);
+                           dense_matrix<CDense, Type> const& C);
 
 /**
  * General Matrix-matrix Multiplication.
@@ -140,7 +136,6 @@ template <
     typename BDense,
     typename CDense,
     typename Type,
-    size_t DeviceId,
     typename ScalarAlpha,
     typename ScalarBeta,
     typename = typename std::enable_if<is_scalar<ScalarAlpha>::value &&
@@ -148,10 +143,10 @@ template <
 inline decltype(auto) gemm(ScalarAlpha alpha,
                            trans_mode mode_A,
                            trans_mode mode_B,
-                           dense_matrix<ADense, Type, DeviceId> const& A,
-                           dense_matrix<BDense, Type, DeviceId> const& B,
+                           dense_matrix<ADense, Type> const& A,
+                           dense_matrix<BDense, Type> const& B,
                            ScalarBeta beta,
-                           dense_matrix<CDense, Type, DeviceId>&& C);
+                           dense_matrix<CDense, Type>&& C);
 }  // namespace strict
 }  // namespace mgcpp
 

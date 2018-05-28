@@ -17,7 +17,7 @@ TEST(default_allocator, device_allocation_and_deallocation) {
   auto mem_info = mgcpp::cuda_mem_get_info();
   size_t before_memory = mem_info.value().first;
 
-  mgcpp::default_allocator<float, 0> allocator{};
+  mgcpp::default_allocator<float> allocator{};
 
   float* ptr = nullptr;
   EXPECT_NO_THROW({ ptr = allocator.device_allocate(10); });
@@ -40,7 +40,7 @@ TEST(default_allocator, copy_to_and_from_host) {
   auto stat = mgcpp::cuda_set_device(0);
   EXPECT_TRUE(bool(stat));
 
-  mgcpp::default_allocator<float, 0> allocator{};
+  mgcpp::default_allocator<float> allocator{};
 
   size_t size = 10;
 

@@ -24,16 +24,12 @@
 #include <type_traits>
 
 namespace mgcpp {
-template <typename Type,
-          size_t DeviceId = 0,
-          typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
-class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
-                                          Type,
-                                          DeviceId> {
+template <typename Type, typename Alloc = mgcpp::default_allocator<Type>>
+class device_matrix : public dense_matrix<device_matrix<Type, Alloc>, Type> {
   static_assert(is_supported_type<Type>::value, "Element type not supported.");
 
  public:
-  using this_type = device_matrix<Type, DeviceId, Alloc>;
+  using this_type = device_matrix<Type, Alloc>;
   using value_type = Type;
   using pointer = value_type*;
   using const_pointer = value_type const*;
@@ -45,7 +41,6 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
   using result_expr_type = dmat_expr<T>;
   using allocator_type = Alloc;
   using shape_type = mgcpp::shape<2>;
-  size_t const device_id = DeviceId;
 
  private:
   thread_context* _context;
@@ -87,34 +82,34 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
   inline explicit device_matrix(HostMat const& host_mat,
                                 Alloc const& alloc = Alloc());
 
-  inline device_matrix(device_matrix<Type, DeviceId, Alloc> const& other);
+  inline device_matrix(device_matrix<Type, Alloc> const& other);
 
   template <typename DenseMatrix>
   inline explicit device_matrix(
-      dense_matrix<DenseMatrix, Type, DeviceId> const& other);
+      dense_matrix<DenseMatrix, Type> const& other);
 
-  inline device_matrix(device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
+  inline device_matrix(device_matrix<Type, Alloc>&& other) noexcept;
 
-  inline device_matrix<Type, DeviceId, Alloc>& operator=(
-      device_matrix<Type, DeviceId, Alloc> const& other);
+  inline device_matrix<Type, Alloc>& operator=(
+      device_matrix<Type, Alloc> const& other);
 
   template <typename DenseMatrix>
-  inline device_matrix<Type, DeviceId, Alloc>& operator=(
-      dense_matrix<DenseMatrix, Type, DeviceId> const& other);
+  inline device_matrix<Type, Alloc>& operator=(
+      dense_matrix<DenseMatrix, Type> const& other);
 
-  inline device_matrix<Type, DeviceId, Alloc>& operator=(
-      device_matrix<Type, DeviceId, Alloc>&& other) noexcept;
+  inline device_matrix<Type, Alloc>& operator=(
+      device_matrix<Type, Alloc>&& other) noexcept;
 
-  inline device_matrix<Type, DeviceId, Alloc>& zero();
+  inline device_matrix<Type, Alloc>& zero();
 
-  inline device_matrix<Type, DeviceId, Alloc>& resize(shape_type new_shape);
+  inline device_matrix<Type, Alloc>& resize(shape_type new_shape);
 
-  inline device_matrix<Type, DeviceId, Alloc>& resize(shape_type new_shape,
+  inline device_matrix<Type, Alloc>& resize(shape_type new_shape,
                                                       value_type init);
 
-  inline column_view<this_type, Type, DeviceId> column(size_t i) noexcept;
+  inline column_view<this_type, Type> column(size_t i) noexcept;
 
-  // inline row_view<this_type, Type, DeviceId>
+  // inline row_view<this_type, Type>
   // row(size_t i) noexcept;
 
   inline void copy_to_host(pointer host_p) const;
@@ -133,7 +128,7 @@ class device_matrix : public dense_matrix<device_matrix<Type, DeviceId, Alloc>,
 
   inline device_pointer release_data() noexcept;
 
-  inline Alloc& allocator() noexcept;
+  inline Alloc allocator() const noexcept;
 
   inline shape_type const& shape() const noexcept;
 };

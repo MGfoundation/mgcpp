@@ -10,14 +10,14 @@
 
 namespace mgcpp {
 
-template <typename DenseMat, typename Type, size_t DeviceId>
+template <typename DenseMat, typename Type>
 decltype(auto) strict::trans(
-    dense_matrix<DenseMat, Type, DeviceId> const& mat) {
+    dense_matrix<DenseMat, Type> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
 
   auto const& dmat = ~mat;
   auto* context = dmat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(dmat.allocator()._device_id);
 
   auto shape = dmat.shape();
 
@@ -28,7 +28,7 @@ decltype(auto) strict::trans(
   Type beta = 0;
 
   // switch places
-  auto result = device_matrix<Type, DeviceId, allocator_type>({n, m});
+  auto result = device_matrix<Type, allocator_type>({n, m});
 
   Type* null = nullptr;
   auto status =

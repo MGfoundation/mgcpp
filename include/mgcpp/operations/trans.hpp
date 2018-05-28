@@ -11,8 +11,8 @@
 
 namespace mgcpp {
 namespace strict {
-template <typename DenseMat, typename Type, size_t DeviceId>
-decltype(auto) trans(dense_matrix<DenseMat, Type, DeviceId> const& mat);
+template <typename DenseMat, typename Type>
+decltype(auto) trans(dense_matrix<DenseMat, Type> const& mat);
 }
 }  // namespace mgcpp
 

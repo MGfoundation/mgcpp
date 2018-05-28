@@ -25,11 +25,10 @@ namespace strict {
  */
 template <typename LhsDenseMat,
           typename RhsDenseMat,
-          typename Type,
-          size_t DeviceId>
+          typename Type>
 inline decltype(auto) mult(
-    dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-    dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
+    dense_matrix<LhsDenseMat, Type> const& lhs,
+    dense_matrix<RhsDenseMat, Type> const& rhs);
 
 // template<typename LhsDenseVec,
 //          typename RhsDenseVec,
@@ -49,9 +48,9 @@ inline decltype(auto) mult(
  * \param vec right-hand side vector
  * \returns mat * vec
  */
-template <typename DenseMat, typename DenseVec, typename Type, size_t DeviceId>
-inline decltype(auto) mult(dense_matrix<DenseMat, Type, DeviceId> const& mat,
-                           dense_vector<DenseVec, Type, DeviceId> const& vec);
+template <typename DenseMat, typename DenseVec, typename Type>
+inline decltype(auto) mult(dense_matrix<DenseMat, Type> const& mat,
+                           dense_vector<DenseVec, Type> const& vec);
 
 /**
  * Scalar-vector multiplication.
@@ -63,11 +62,10 @@ template <
     typename DenseVec,
     typename ScalarType,
     typename VectorType,
-    size_t DeviceId,
     typename = typename std::enable_if<is_scalar<ScalarType>::value>::type>
 inline decltype(auto) mult(
     ScalarType scalar,
-    dense_vector<DenseVec, VectorType, DeviceId> const& vec);
+    dense_vector<DenseVec, VectorType> const& vec);
 
 /**
  * Scalar-matrix multiplication.
@@ -78,12 +76,11 @@ inline decltype(auto) mult(
 template <
     typename DenseMat,
     typename MatrixType,
-    size_t DeviceId,
     typename ScalarType,
     typename = typename std::enable_if<is_scalar<ScalarType>::value>::type>
 inline decltype(auto) mult(
     ScalarType scalar,
-    dense_matrix<DenseMat, MatrixType, DeviceId> const& mat);
+    dense_matrix<DenseMat, MatrixType> const& mat);
 
 // template<typename T, size_t Device, storage_order SO>
 // void

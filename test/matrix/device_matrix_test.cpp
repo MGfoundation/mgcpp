@@ -75,7 +75,7 @@ using half_type = device_matrix_test<mgcpp::half>;
 
 template <typename Type>
 void device_matrix_test<Type>::default_constructor() {
-  mgcpp::device_matrix<Type, 0> mat;
+  mgcpp::device_matrix<Type> mat;
 
   auto shape = mat.shape();
   EXPECT_EQ(shape[0], 0);
@@ -98,7 +98,7 @@ void device_matrix_test<Type>::dimension_constructor() {
 
   size_t row_dim = 10;
   size_t col_dim = 5;
-  mgcpp::device_matrix<Type, 0> mat({row_dim, col_dim});
+  mgcpp::device_matrix<Type> mat({row_dim, col_dim});
 
   auto after = mgcpp::cuda_mem_get_info();
   EXPECT_TRUE(after.has_value());

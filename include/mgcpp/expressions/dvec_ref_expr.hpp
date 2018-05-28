@@ -18,9 +18,9 @@ template <typename Vector>
 using dvec_ref_expr =
     generic_expr<dvec_ref_expr_type, 0, dvec_expr, Vector, 1, Vector const&>;
 
-template <typename DenseVector, typename Type, size_t DeviceId>
+template <typename DenseVector, typename Type>
 inline dvec_ref_expr<DenseVector> ref(
-    dense_vector<DenseVector, Type, DeviceId> const& mat);
+    dense_vector<DenseVector, Type> const& mat);
 }  // namespace mgcpp
 
 #include <mgcpp/expressions/dvec_ref_expr.tpp>

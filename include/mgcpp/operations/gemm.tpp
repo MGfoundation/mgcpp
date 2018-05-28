@@ -15,11 +15,10 @@ namespace mgcpp {
 template <typename ADense,
           typename BDense,
           typename CDense,
-          typename Type,
-          size_t DeviceId>
-decltype(auto) strict::gemm(dense_matrix<ADense, Type, DeviceId> const& A,
-                            dense_matrix<BDense, Type, DeviceId> const& B,
-                            dense_matrix<CDense, Type, DeviceId> const& C) {
+          typename Type>
+decltype(auto) strict::gemm(dense_matrix<ADense, Type> const& A,
+                            dense_matrix<BDense, Type> const& B,
+                            dense_matrix<CDense, Type> const& C) {
   return strict::gemm(Type(1), A, B, Type(1), C);
 }
 
@@ -27,15 +26,14 @@ template <typename ADense,
           typename BDense,
           typename CDense,
           typename Type,
-          size_t DeviceId,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
 decltype(auto) strict::gemm(ScalarAlpha alpha,
-                            dense_matrix<ADense, Type, DeviceId> const& A,
-                            dense_matrix<BDense, Type, DeviceId> const& B,
+                            dense_matrix<ADense, Type> const& A,
+                            dense_matrix<BDense, Type> const& B,
                             ScalarBeta beta,
-                            dense_matrix<CDense, Type, DeviceId> const& C) {
+                            dense_matrix<CDense, Type> const& C) {
   return strict::gemm(alpha, trans_mode::same, trans_mode::same, A, B, beta, C);
 }
 
@@ -43,15 +41,14 @@ template <typename ADense,
           typename BDense,
           typename CDense,
           typename Type,
-          size_t DeviceId,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
 decltype(auto) strict::gemm(ScalarAlpha alpha,
-                            dense_matrix<ADense, Type, DeviceId> const& A,
-                            dense_matrix<BDense, Type, DeviceId> const& B,
+                            dense_matrix<ADense, Type> const& A,
+                            dense_matrix<BDense, Type> const& B,
                             ScalarBeta beta,
-                            dense_matrix<CDense, Type, DeviceId>&& C) {
+                            dense_matrix<CDense, Type>&& C) {
   return strict::gemm(alpha, trans_mode::same, trans_mode::same, A, B, beta,
                       std::move(C));
 }
@@ -60,7 +57,6 @@ template <typename ADense,
           typename BDense,
           typename CDense,
           typename Type,
-          size_t DeviceId,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
@@ -68,10 +64,10 @@ inline decltype(auto) strict::gemm(
     ScalarAlpha alpha,
     trans_mode mode_A,
     trans_mode mode_B,
-    dense_matrix<ADense, Type, DeviceId> const& A,
-    dense_matrix<BDense, Type, DeviceId> const& B,
+    dense_matrix<ADense, Type> const& A,
+    dense_matrix<BDense, Type> const& B,
     ScalarBeta beta,
-    dense_matrix<CDense, Type, DeviceId> const& C) {
+    dense_matrix<CDense, Type> const& C) {
   using device_pointer = typename ADense::device_pointer;
   using allocator_type = typename ADense::allocator_type;
 
@@ -97,19 +93,20 @@ inline decltype(auto) strict::gemm(
                    C_mat.shape()[1] == B_shape_after_trans[1],
                "added matrix' dimension doesn't match");
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = A_mat.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* context = A_mat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(device_id);
 
   size_t m = A_shape_after_trans[0];
   size_t k = A_shape_after_trans[1];
   size_t n = B_shape_after_trans[1];
 
-  auto result = device_matrix<Type, DeviceId, allocator_type>(C_mat);
+  auto result = device_matrix<Type, allocator_type>(C_mat);
 
   auto casted_alpha = Type(alpha);
   auto casted_beta = Type(beta);
@@ -131,7 +128,6 @@ template <typename ADense,
           typename BDense,
           typename CDense,
           typename Type,
-          size_t DeviceId,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
@@ -139,10 +135,10 @@ inline decltype(auto) strict::gemm(
     ScalarAlpha alpha,
     trans_mode mode_A,
     trans_mode mode_B,
-    dense_matrix<ADense, Type, DeviceId> const& A,
-    dense_matrix<BDense, Type, DeviceId> const& B,
+    dense_matrix<ADense, Type> const& A,
+    dense_matrix<BDense, Type> const& B,
     ScalarBeta beta,
-    dense_matrix<CDense, Type, DeviceId>&& C) {
+    dense_matrix<CDense, Type>&& C) {
   using device_pointer = typename ADense::device_pointer;
 
   auto const& A_mat = ~A;
@@ -166,13 +162,14 @@ inline decltype(auto) strict::gemm(
                    C_mat.shape()[1] == B_mat.shape()[1],
                "added matrix' dimension doesn't match");
 
-  auto set_device_status = cuda_set_device(DeviceId);
+  auto device_id = A_mat.allocator()._device_id;
+  auto set_device_status = cuda_set_device(device_id);
   if (!set_device_status) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_status.error());
   }
 
   auto* context = A_mat.context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context(device_id);
 
   size_t m = A_shape_after_trans[0];
   size_t k = A_shape_after_trans[1];

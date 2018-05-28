@@ -8,11 +8,10 @@ namespace mgcpp {
 namespace strict {
 template <typename LhsDenseVec,
           typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
+          typename Type>
 inline decltype(auto) outer(
-    dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-    dense_vector<RhsDenseVec, Type, DeviceId> const& rhs);
+    dense_vector<LhsDenseVec, Type> const& lhs,
+    dense_vector<RhsDenseVec, Type> const& rhs);
 }
 }  // namespace mgcpp
 

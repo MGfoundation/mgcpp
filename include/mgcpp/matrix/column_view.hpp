@@ -15,12 +15,10 @@
 #include <initializer_list>
 
 namespace mgcpp {
-template <typename DenseMat, typename Type, size_t DeviceId>
-class column_view : public dense_vector<column_view<DenseMat, Type, DeviceId>,
-                                        Type,
-                                        DeviceId> {
+template <typename DenseMat, typename Type>
+class column_view : public dense_vector<column_view<DenseMat, Type>, Type> {
  public:
-  using this_type = column_view<DenseMat, Type, DeviceId>;
+  using this_type = column_view<DenseMat, Type>;
   using value_type = Type;
   using result_type = this_type;
   using allocator_type = typename DenseMat::allocator_type;
@@ -35,26 +33,26 @@ class column_view : public dense_vector<column_view<DenseMat, Type, DeviceId>,
 
   inline ~column_view() = default;
 
-  inline column_view(dense_matrix<DenseMat, Type, DeviceId>& mat,
+  inline column_view(dense_matrix<DenseMat, Type>& mat,
                      size_t i) noexcept;
 
-  inline column_view(column_view<DenseMat, Type, DeviceId> const& other) =
+  inline column_view(column_view<DenseMat, Type> const& other) =
       delete;
 
-  inline column_view(column_view<DenseMat, Type, DeviceId>&& other) noexcept;
+  inline column_view(column_view<DenseMat, Type>&& other) noexcept;
 
-  inline column_view<DenseMat, Type, DeviceId>& operator=(
-      column_view<DenseMat, Type, DeviceId> const& other);
+  inline column_view<DenseMat, Type>& operator=(
+      column_view<DenseMat, Type> const& other);
 
-  inline column_view<DenseMat, Type, DeviceId>& operator=(
-      column_view<DenseMat, Type, DeviceId>&& other) noexcept;
+  inline column_view<DenseMat, Type>& operator=(
+      column_view<DenseMat, Type>&& other) noexcept;
 
-  inline column_view<DenseMat, Type, DeviceId>& operator=(
+  inline column_view<DenseMat, Type>& operator=(
       std::initializer_list<Type> const& init);
 
   template <typename DenseVec>
-  inline column_view<DenseMat, Type, DeviceId>& operator=(
-      dense_vector<DenseVec, Type, DeviceId> const& vec);
+  inline column_view<DenseMat, Type>& operator=(
+      dense_vector<DenseVec, Type> const& vec);
 
   inline void copy_to_host(Type* host_p) const;
 

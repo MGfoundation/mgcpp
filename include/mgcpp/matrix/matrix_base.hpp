@@ -10,7 +10,7 @@
 #include <cstddef>
 
 namespace mgcpp {
-template <typename MatrixType, typename Type, size_t DeviceId>
+template <typename MatrixType, typename Type>
 struct matrix_base {
   inline MatrixType const& operator~() const noexcept;
 

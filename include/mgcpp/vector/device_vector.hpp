@@ -20,16 +20,12 @@
 #include <initializer_list>
 
 namespace mgcpp {
-template <typename Type,
-          size_t DeviceId = 0,
-          typename Alloc = mgcpp::default_allocator<Type, DeviceId>>
-class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
-                                          Type,
-                                          DeviceId> {
+template <typename Type, typename Alloc = mgcpp::default_allocator<Type>>
+class device_vector : public dense_vector<device_vector<Type, Alloc>, Type> {
   static_assert(is_supported_type<Type>::value, "Element type not supported.");
 
  public:
-  using this_type = device_vector<Type, DeviceId, Alloc>;
+  using this_type = device_vector<Type, Alloc>;
   using value_type = Type;
   using pointer = value_type*;
   using const_pointer = value_type const*;
@@ -41,9 +37,7 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   using result_expr_type = dvec_expr<T>;
   using allocator_type = Alloc;
   using shape_type = mgcpp::shape<1>;
-  using parent_type =
-      dense_vector<device_vector<Type, DeviceId, Alloc>, Type, DeviceId>;
-  size_t const device_id = DeviceId;
+  using parent_type = dense_vector<device_vector<Type, Alloc>, Type>;
 
  private:
   thread_context* _context;
@@ -76,31 +70,30 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
   inline explicit device_vector(HostVec const& host_mat,
                                 Alloc const& alloc = Alloc());
 
-  inline device_vector(device_vector<Type, DeviceId, Alloc> const& other);
+  inline device_vector(device_vector<Type, Alloc> const& other);
 
   template <typename DenseVec>
-  inline explicit device_vector(
-      dense_vector<DenseVec, Type, DeviceId> const& other);
+  inline explicit device_vector(dense_vector<DenseVec, Type> const& other);
 
-  inline device_vector(device_vector<Type, DeviceId, Alloc>&& other) noexcept;
+  inline device_vector(device_vector<Type, Alloc>&& other) noexcept;
 
   template <size_t S>
   static inline device_vector from_c_array(Type (&arr)[S],
                                            Alloc const& alloc = Alloc());
 
   template <typename DenseVec>
-  inline device_vector<Type, DeviceId, Alloc>& operator=(
-      dense_vector<DenseVec, Type, DeviceId> const& other);
+  inline device_vector<Type, Alloc>& operator=(
+      dense_vector<DenseVec, Type> const& other);
 
-  inline device_vector<Type, DeviceId, Alloc>& operator=(
-      device_vector<Type, DeviceId, Alloc> const& other);
+  inline device_vector<Type, Alloc>& operator=(
+      device_vector<Type, Alloc> const& other);
 
-  inline device_vector<Type, DeviceId, Alloc>& operator=(
-      device_vector<Type, DeviceId, Alloc>&& other) noexcept;
+  inline device_vector<Type, Alloc>& operator=(
+      device_vector<Type, Alloc>&& other) noexcept;
 
-  inline device_vector<Type, DeviceId, Alloc>& zero();
+  inline device_vector<Type, Alloc>& zero();
 
-  inline device_vector<Type, DeviceId, Alloc>& resize(
+  inline device_vector<Type, Alloc>& resize(
       size_t size,
       value_type pad_value = value_type{});
 
@@ -122,7 +115,7 @@ class device_vector : public dense_vector<device_vector<Type, DeviceId, Alloc>,
 
   inline shape_type shape() const noexcept;
 
-  inline Alloc& allocator() noexcept;
+  inline Alloc allocator() const noexcept;
 
   inline size_t size() const noexcept;
 };

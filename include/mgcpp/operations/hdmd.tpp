@@ -10,13 +10,9 @@
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp {
-template <typename LhsDenseVec,
-          typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
-decltype(auto) strict::hdmd(
-    dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-    dense_vector<RhsDenseVec, Type, DeviceId> const& rhs) {
+template <typename LhsDenseVec, typename RhsDenseVec, typename Type>
+decltype(auto) strict::hdmd(dense_vector<LhsDenseVec, Type> const& lhs,
+                            dense_vector<RhsDenseVec, Type> const& rhs) {
   using allocator_type = typename LhsDenseVec::allocator_type;
 
   auto const& lhs_vec = ~lhs;
@@ -27,7 +23,7 @@ decltype(auto) strict::hdmd(
 
   size_t size = lhs_vec.size();
 
-  auto result = device_vector<Type, DeviceId, allocator_type>(size);
+  auto result = device_vector<Type, allocator_type>(size);
   auto status =
       mgblas_vhp(lhs_vec.data(), rhs_vec.data(), result.data_mutable(), size);
   if (!status) {

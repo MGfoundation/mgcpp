@@ -10,13 +10,13 @@
 #include <cstddef>
 
 namespace mgcpp {
-template <typename MatrixType, typename Type, size_t DeviceId>
+template <typename MatrixType, typename Type>
 class matrix;
 
-template <typename DenseMatrixType, typename Type, size_t DeviceId>
+template <typename DenseMatrixType, typename Type>
 class dense_matrix;
 
-template <typename Type, size_t DeviceId, typename Alloc>
+template <typename Type, typename Alloc>
 class device_matrix;
 }  // namespace mgcpp
 

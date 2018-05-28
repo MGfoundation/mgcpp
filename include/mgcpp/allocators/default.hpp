@@ -13,7 +13,7 @@
 #include <mgcpp/type_traits/type_traits.hpp>
 
 namespace mgcpp {
-template <typename Type, size_t DeviceId>
+template <typename Type>
 struct default_allocator {
   using value_type = Type;
   using pointer = value_type*;
@@ -23,12 +23,13 @@ struct default_allocator {
   using const_device_pointer = device_value_type const*;
 
   template <typename NewType>
-  using rebind_alloc = default_allocator<NewType, DeviceId>;
+  using rebind_alloc = default_allocator<NewType>;
 
   typedef std::allocator<value_type> Alloc;
   typedef std::allocator_traits<Alloc> _alloc_tr;
 
   Alloc _alloc;
+  size_t _device_id = 0;
 
   inline pointer allocate(size_t n);
 

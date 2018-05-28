@@ -9,9 +9,9 @@
 #include <mgcpp/operations/pad.hpp>
 
 namespace mgcpp {
-template <typename DenseVec, typename Type, size_t Device>
+template <typename DenseVec, typename Type>
 inline decltype(auto) strict::pad(
-    dense_vector<DenseVec, Type, Device> const& vec,
+    dense_vector<DenseVec, Type> const& vec,
     pad_size_t pad,
     typename value_type<Type>::type pad_constant) {
   using allocator_type = typename DenseVec::allocator_type;
@@ -34,8 +34,7 @@ inline decltype(auto) strict::pad(
 
     return dvec;
   } else {
-    auto result =
-        device_vector<Type, Device, allocator_type>(new_size, pad_constant);
+    auto result = device_vector<Type, allocator_type>(new_size, pad_constant);
 
     auto cpy_status =
         cuda_memcpy(result.data_mutable() + pad.first, dvec.data(), dvec.size(),

@@ -7,19 +7,18 @@ namespace mgcpp {
 
 template <typename LhsDenseVec,
           typename RhsDenseVec,
-          typename Type,
-          size_t DeviceId>
+          typename Type>
 inline decltype(auto) strict::outer(
-    dense_vector<LhsDenseVec, Type, DeviceId> const& lhs,
-    dense_vector<RhsDenseVec, Type, DeviceId> const& rhs) {
+    dense_vector<LhsDenseVec, Type> const& lhs,
+    dense_vector<RhsDenseVec, Type> const& rhs) {
   using allocator_type = typename LhsDenseVec::allocator_type;
 
   auto* context = (~lhs).context();
-  auto handle = context->get_cublas_context(DeviceId);
+  auto handle = context->get_cublas_context((~lhs).allocator()._device_id);
 
   auto shape = mgcpp::make_shape((~lhs).size(), (~rhs).size());
 
-  device_matrix<Type, DeviceId, allocator_type> result(shape);
+  device_matrix<Type, allocator_type> result(shape);
 
   const Type alpha = static_cast<Type>(1);
 

@@ -8,9 +8,9 @@
 
 namespace mgcpp {
 
-template <typename DenseVector, typename Type, size_t DeviceId>
+template <typename DenseVector, typename Type>
 inline dvec_ref_expr<DenseVector> ref(
-    dense_vector<DenseVector, Type, DeviceId> const& vec) {
+    dense_vector<DenseVector, Type> const& vec) {
   return dvec_ref_expr<DenseVector>(~vec);
 }
 }  // namespace mgcpp

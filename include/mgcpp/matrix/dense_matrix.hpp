@@ -11,8 +11,8 @@
 #include <mgcpp/matrix/matrix_base.hpp>
 
 namespace mgcpp {
-template <typename DenseMatType, typename Type, size_t DeviceId>
-class dense_matrix : public matrix_base<DenseMatType, Type, DeviceId> {
+template <typename DenseMatType, typename Type>
+class dense_matrix : public matrix_base<DenseMatType, Type> {
   using result_type = DenseMatType;
 };
 }  // namespace mgcpp

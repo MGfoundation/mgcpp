@@ -27,8 +27,8 @@ namespace strict {
  *  \param vec the vector to perform the fft on.
  *  \returns the FFT result.
  */
-template <typename DeviceVec, typename Type, size_t DeviceId>
-inline decltype(auto) rfft(dense_vector<DeviceVec, Type, DeviceId> const& vec);
+template <typename DeviceVec, typename Type>
+inline decltype(auto) rfft(dense_vector<DeviceVec, Type> const& vec);
 
 /**
  *  Performs complex-to-real inverse normalized FFT.
@@ -36,10 +36,9 @@ inline decltype(auto) rfft(dense_vector<DeviceVec, Type, DeviceId> const& vec);
  *  \param n performs `((vec.size() - 1) * 2)` point inverse FFT if `n` equals
  * -1, otherwise performs an `n`-point inverse FFT. \returns the FFT result.
  */
-template <typename DeviceVec, typename Type, size_t DeviceId>
-inline decltype(auto) irfft(
-    dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
-    int n = -1);
+template <typename DeviceVec, typename Type>
+inline decltype(auto) irfft(dense_vector<DeviceVec, complex<Type>> const& vec,
+                            int n = -1);
 
 /**
  *  Performs complex-to-complex FFT.
@@ -47,18 +46,17 @@ inline decltype(auto) irfft(
  *  \param direction fft_direction::forward for forward fft,
  * fft_direction::inverse for inverse normalized fft. \returns the FFT result.
  */
-template <typename DeviceVec, typename Type, size_t DeviceId>
-inline decltype(auto) cfft(
-    dense_vector<DeviceVec, complex<Type>, DeviceId> const& vec,
-    fft_direction direction);
+template <typename DeviceVec, typename Type>
+inline decltype(auto) cfft(dense_vector<DeviceVec, complex<Type>> const& vec,
+                           fft_direction direction);
 
 /**
  *  Performs 2D real-to-complex forward FFT.
  *  \param mat the matrix to perform the fft on.
  *  \returns the FFT result.
  */
-template <typename DeviceMat, typename Type, size_t DeviceId>
-inline decltype(auto) rfft(dense_matrix<DeviceMat, Type, DeviceId> const& mat);
+template <typename DeviceMat, typename Type>
+inline decltype(auto) rfft(dense_matrix<DeviceMat, Type> const& mat);
 
 /**
  * Performs 2D complex-to-real inverse normalized FFT.
@@ -66,10 +64,9 @@ inline decltype(auto) rfft(dense_matrix<DeviceMat, Type, DeviceId> const& mat);
  * \param n the number of rows. if n == -1, the number is deduced from the size
  * of `mat`. \returns the FFT result.
  */
-template <typename DeviceMat, typename Type, size_t DeviceId>
-inline decltype(auto) irfft(
-    dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
-    int n = -1);
+template <typename DeviceMat, typename Type>
+inline decltype(auto) irfft(dense_matrix<DeviceMat, complex<Type>> const& mat,
+                            int n = -1);
 
 /**
  *  Performs 2D complex-to-complex FFT.
@@ -77,10 +74,9 @@ inline decltype(auto) irfft(
  *  \param direction fft_direction::forward for forward fft,
  * fft_direction::inverse for inverse normalized fft. \returns the FFT result.
  */
-template <typename DeviceMat, typename Type, size_t DeviceId>
-inline decltype(auto) cfft(
-    dense_matrix<DeviceMat, complex<Type>, DeviceId> const& mat,
-    fft_direction direction);
+template <typename DeviceMat, typename Type>
+inline decltype(auto) cfft(dense_matrix<DeviceMat, complex<Type>> const& mat,
+                           fft_direction direction);
 }  // namespace strict
 }  // namespace mgcpp
 

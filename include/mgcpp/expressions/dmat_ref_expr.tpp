@@ -8,9 +8,9 @@
 
 namespace mgcpp {
 
-template <typename DenseMatrix, typename Type, size_t DeviceId>
+template <typename DenseMatrix, typename Type>
 inline dmat_ref_expr<DenseMatrix> ref(
-    dense_matrix<DenseMatrix, Type, DeviceId> const& mat) {
+    dense_matrix<DenseMatrix, Type> const& mat) {
   return dmat_ref_expr<DenseMatrix>(~mat);
 }
 

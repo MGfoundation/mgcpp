@@ -10,7 +10,7 @@
 #include <cstdlib>
 
 namespace mgcpp {
-template <typename VectorType, typename Type, size_t DeviceId>
+template <typename VectorType, typename Type>
 struct vector_base {
   inline VectorType const& operator~() const noexcept;
 

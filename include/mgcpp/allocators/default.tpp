@@ -10,21 +10,21 @@
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp {
-template <typename T, size_t DeviceId>
-typename default_allocator<T, DeviceId>::pointer
-default_allocator<T, DeviceId>::allocate(size_t n) {
+template <typename T>
+typename default_allocator<T>::pointer
+default_allocator<T>::allocate(size_t n) {
   return _alloc_tr::allocate(_alloc, n);
 }
 
-template <typename T, size_t DeviceId>
-void default_allocator<T, DeviceId>::deallocate(pointer p, size_t n) {
+template <typename T>
+void default_allocator<T>::deallocate(pointer p, size_t n) {
   return _alloc_tr::deallocate(_alloc, p, n);
 }
 
-template <typename T, size_t DeviceId>
-typename default_allocator<T, DeviceId>::device_pointer
-default_allocator<T, DeviceId>::device_allocate(size_t n) const {
-  auto set_device_stat = cuda_set_device(DeviceId);
+template <typename T>
+typename default_allocator<T>::device_pointer
+default_allocator<T>::device_allocate(size_t n) const {
+  auto set_device_stat = cuda_set_device(_device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -36,11 +36,11 @@ default_allocator<T, DeviceId>::device_allocate(size_t n) const {
   return ptr.value();
 }
 
-template <typename T, size_t DeviceId>
-void default_allocator<T, DeviceId>::device_deallocate(device_pointer p,
+template <typename T>
+void default_allocator<T>::device_deallocate(device_pointer p,
                                                        size_t n) const {
   (void)n;
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -51,11 +51,11 @@ void default_allocator<T, DeviceId>::device_deallocate(device_pointer p,
   }
 }
 
-template <typename T, size_t DeviceId>
-void default_allocator<T, DeviceId>::copy_from_host(device_pointer device,
+template <typename T>
+void default_allocator<T>::copy_from_host(device_pointer device,
                                                     const_device_pointer host,
                                                     size_t n) const {
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }
@@ -68,11 +68,11 @@ void default_allocator<T, DeviceId>::copy_from_host(device_pointer device,
   }
 }
 
-template <typename T, size_t DeviceId>
-void default_allocator<T, DeviceId>::copy_to_host(device_pointer host,
+template <typename T>
+void default_allocator<T>::copy_to_host(device_pointer host,
                                                   const_device_pointer device,
                                                   size_t n) const {
-  auto set_device_stat = cuda_set_device(DeviceId);
+  auto set_device_stat = cuda_set_device(_device_id);
   if (!set_device_stat) {
     MGCPP_THROW_SYSTEM_ERROR(set_device_stat.error());
   }

@@ -22,10 +22,9 @@ namespace strict {
  */
 template <typename LhsDenseMat,
           typename RhsDenseMat,
-          typename Type,
-          size_t DeviceId>
-inline decltype(auto) add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
-                          dense_matrix<RhsDenseMat, Type, DeviceId> const& rhs);
+          typename Type>
+inline decltype(auto) add(dense_matrix<LhsDenseMat, Type> const& lhs,
+                          dense_matrix<RhsDenseMat, Type> const& rhs);
 
 /** Adds two same-sized vectors together.
  * \param first the left-hand side
@@ -33,11 +32,10 @@ inline decltype(auto) add(dense_matrix<LhsDenseMat, Type, DeviceId> const& lhs,
  */
 template <typename LhsDenseVec,
           typename RhsDenseVec,
-          typename Type,
-          size_t Device>
+          typename Type>
 inline decltype(auto) add(
-    dense_vector<LhsDenseVec, Type, Device> const& first,
-    dense_vector<RhsDenseVec, Type, Device> const& second);
+    dense_vector<LhsDenseVec, Type> const& first,
+    dense_vector<RhsDenseVec, Type> const& second);
 }  // namespace strict
 }  // namespace mgcpp
 

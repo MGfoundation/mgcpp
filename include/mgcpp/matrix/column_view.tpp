@@ -13,9 +13,9 @@
 #include <algorithm>
 
 namespace mgcpp {
-template <typename DenseMat, typename Type, size_t DeviceId>
-column_view<DenseMat, Type, DeviceId>::column_view(
-    dense_matrix<DenseMat, Type, DeviceId>& mat,
+template <typename DenseMat, typename Type>
+column_view<DenseMat, Type>::column_view(
+    dense_matrix<DenseMat, Type>& mat,
     size_t i) noexcept
     : _matrix(&(~mat)),
       _column_idx(i),
@@ -23,14 +23,14 @@ column_view<DenseMat, Type, DeviceId>::column_view(
           _matrix->allocator()) { /*static_assert(); IS DENSE MATRIX CHECK */
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-column_view<DenseMat, Type, DeviceId>::column_view(
-    column_view<DenseMat, Type, DeviceId>&& other) noexcept
+template <typename DenseMat, typename Type>
+column_view<DenseMat, Type>::column_view(
+    column_view<DenseMat, Type>&& other) noexcept
     : _matrix(other._matrix), _column_idx(other._column_idx) {}
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-column_view<DenseMat, Type, DeviceId>& column_view<DenseMat, Type, DeviceId>::
-operator=(column_view<DenseMat, Type, DeviceId>&& other) noexcept {
+template <typename DenseMat, typename Type>
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::
+operator=(column_view<DenseMat, Type>&& other) noexcept {
   _matrix = other._matrix;
   _column_idx = other._column_idx;
   _allocator = std::move(other._allocator);
@@ -40,8 +40,8 @@ operator=(column_view<DenseMat, Type, DeviceId>&& other) noexcept {
   return *this;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-column_view<DenseMat, Type, DeviceId>& column_view<DenseMat, Type, DeviceId>::
+template <typename DenseMat, typename Type>
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::
 operator=(std::initializer_list<Type> const& init) {
   size_t size = _matrix->shape()[0];
   MGCPP_ASSERT(size == init.size(),
@@ -60,10 +60,10 @@ operator=(std::initializer_list<Type> const& init) {
   return *this;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
+template <typename DenseMat, typename Type>
 template <typename DenseVec>
-column_view<DenseMat, Type, DeviceId>& column_view<DenseMat, Type, DeviceId>::
-operator=(dense_vector<DenseVec, Type, DeviceId> const& vec) {
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::
+operator=(dense_vector<DenseVec, Type> const& vec) {
   auto const& dense_vec = ~vec;
 
   size_t size = _matrix->shape()[0];
@@ -79,8 +79,8 @@ operator=(dense_vector<DenseVec, Type, DeviceId> const& vec) {
   return *this;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-void column_view<DenseMat, Type, DeviceId>::copy_to_host(Type* host_p) const {
+template <typename DenseMat, typename Type>
+void column_view<DenseMat, Type>::copy_to_host(Type* host_p) const {
   if (!host_p) {
     MGCPP_THROW_INVALID_ARGUMENT("provided pointer is null");
   }
@@ -93,8 +93,8 @@ void column_view<DenseMat, Type, DeviceId>::copy_to_host(Type* host_p) const {
   }
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-Type column_view<DenseMat, Type, DeviceId>::check_value(size_t i) const {
+template <typename DenseMat, typename Type>
+Type column_view<DenseMat, Type>::check_value(size_t i) const {
   if (i >= _matrix->shape()[0]) {
     MGCPP_THROW_OUT_OF_RANGE("index out of range");
   }
@@ -109,8 +109,8 @@ Type column_view<DenseMat, Type, DeviceId>::check_value(size_t i) const {
   return return_value;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline Type const* column_view<DenseMat, Type, DeviceId>::data() const
+template <typename DenseMat, typename Type>
+inline Type const* column_view<DenseMat, Type>::data() const
     noexcept {
   auto shape = _matrix->shape();
   size_t idx = _column_idx * shape[0];
@@ -120,8 +120,8 @@ inline Type const* column_view<DenseMat, Type, DeviceId>::data() const
   return ptr;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-inline Type* column_view<DenseMat, Type, DeviceId>::data_mutable() noexcept {
+template <typename DenseMat, typename Type>
+inline Type* column_view<DenseMat, Type>::data_mutable() noexcept {
   auto shape = _matrix->shape();
   size_t idx = _column_idx * shape[0];
 
@@ -130,14 +130,14 @@ inline Type* column_view<DenseMat, Type, DeviceId>::data_mutable() noexcept {
   return ptr;
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-thread_context* column_view<DenseMat, Type, DeviceId>::context() const
+template <typename DenseMat, typename Type>
+thread_context* column_view<DenseMat, Type>::context() const
     noexcept {
   return _matrix->context();
 }
 
-template <typename DenseMat, typename Type, size_t DeviceId>
-size_t column_view<DenseMat, Type, DeviceId>::shape() const noexcept {
+template <typename DenseMat, typename Type>
+size_t column_view<DenseMat, Type>::shape() const noexcept {
   return _matrix->shape()[0];
 }
 }  // namespace mgcpp
