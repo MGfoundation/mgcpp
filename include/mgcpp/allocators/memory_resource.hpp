@@ -10,11 +10,6 @@ enum class byte : unsigned char {};
 
 // Taken & modified from https://github.com/phalpern/CppCon2017Code
 class memory_resource {
-  static std::atomic<memory_resource*> s_default_resource;
-
-  friend memory_resource* set_default_resource(memory_resource*);
-  friend memory_resource* get_default_resource();
-
  public:
   virtual ~memory_resource() = default;
 

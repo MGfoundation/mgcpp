@@ -1,6 +1,6 @@
 #include <mgcpp/allocators/cudamalloc_resource.hpp>
 #include <mgcpp/system/assert.hpp>
-#include <unordered_map>
+#include <vector>
 
 namespace mgcpp {
 
@@ -8,17 +8,23 @@ cudamalloc_resource::cudamalloc_resource(size_t device_id)
     : device_memory_resource(device_id) {}
 
 cudamalloc_resource* cudamalloc_resource::instance(size_t device_id) {
-  static std::unordered_map<size_t, cudamalloc_resource> map{};
-  auto it = map.find(device_id);
-  if (it != map.end()) {
-    return &it->second;
-  } else {
-    auto result =
-        map.emplace(std::make_pair(device_id, cudamalloc_resource(device_id)));
-    MGCPP_ASSERT(result.second,
-                 "Could not emplace cuda_resource into internal map");
-    return &result.first->second;
+  static std::vector<std::unique_ptr<cudamalloc_resource>> resources([] {
+    int device_number = 0;
+    std::error_code status = cudaGetDeviceCount(&device_number);
+    if (status != status_t::success) {
+      MGCPP_THROW_SYSTEM_ERROR(status);
+    }
+    std::vector<std::unique_ptr<cudamalloc_resource>> vec;
+    for (size_t i = 0; i < static_cast<size_t>(device_number); ++i) {
+        vec.emplace_back(new cudamalloc_resource(i));
+    }
+    return vec;
+  }());
+
+  if (device_id >= resources.size()) {
+    MGCPP_THROW_OUT_OF_RANGE("Invalid device id.");
   }
+  return resources[device_id].get();
 }
 
 void* cudamalloc_resource::do_allocate(size_t bytes) {
@@ -31,6 +37,7 @@ void* cudamalloc_resource::do_allocate(size_t bytes) {
   if (!ptr) {
     MGCPP_THROW_SYSTEM_ERROR(ptr.error());
   }
+  _allocated_bytes += bytes;
   return ptr.value();
 }
 
@@ -45,16 +52,24 @@ void cudamalloc_resource::do_deallocate(void* p, size_t bytes) {
   if (!p) {
     MGCPP_THROW_SYSTEM_ERROR(free_stat.error());
   }
+
+  _allocated_bytes -= bytes;
 }
 
-bool cudamalloc_resource::do_is_equal(const memory_resource& other) const noexcept {
-  const cudamalloc_resource* other_p = dynamic_cast<const cudamalloc_resource*>(&other);
+bool cudamalloc_resource::do_is_equal(const memory_resource& other) const
+    noexcept {
+  const cudamalloc_resource* other_p =
+      dynamic_cast<const cudamalloc_resource*>(&other);
   // compare if it has the same device id
   if (other_p) {
     return device_id() == other_p->device_id();
   } else {
     return false;
   }
+}
+
+size_t cudamalloc_resource::allocated_bytes() const noexcept {
+  return _allocated_bytes;
 }
 
 }  // namespace mgcpp

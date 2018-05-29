@@ -11,6 +11,7 @@ class cudamalloc_resource final : public device_memory_resource {
 
 public:
   static cudamalloc_resource* instance(size_t device_id);
+  size_t allocated_bytes() const noexcept;
 
  protected:
   void* do_allocate(size_t bytes) override;
@@ -21,6 +22,8 @@ public:
 
  private:
   explicit cudamalloc_resource(size_t device_id);
+
+  std::atomic<size_t> _allocated_bytes{0};
 };
 
 }  // namespace mgcpp
