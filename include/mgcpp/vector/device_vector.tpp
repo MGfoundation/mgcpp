@@ -39,7 +39,7 @@ device_vector<Type, Alloc>::device_vector(size_t size,
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape)),
+      _data(_allocator.allocate_device(_shape)),
       _capacity(_shape) {}
 
 template <typename Type, typename Alloc>
@@ -49,7 +49,7 @@ device_vector<Type, Alloc>::device_vector(size_t size,
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape)),
+      _data(_allocator.allocate_device(_shape)),
       _capacity(_shape) {
   auto status =
       mgblas_fill(_data, *mgcpp::pun_cast<device_pointer>(&init), _shape);
@@ -65,13 +65,13 @@ device_vector<Type, Alloc>::device_vector(size_t size,
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape)),
+      _data(_allocator.allocate_device(_shape)),
       _capacity(size) {
   try {
     _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(data),
                               _shape);
   } catch (std::system_error const& err) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(err);
   }
 }
@@ -83,7 +83,7 @@ device_vector<Type, Alloc>::device_vector(
     : _context(&global_context::get_thread_context()),
       _shape(array.size()),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape)),
+      _data(_allocator.allocate_device(_shape)),
       _capacity(_shape) {
   try {
     // std::initializer_list's members are guaranteed to be
@@ -91,7 +91,7 @@ device_vector<Type, Alloc>::device_vector(
     _allocator.copy_from_host(
         _data, pun_cast<const_device_pointer>(array.begin()), _shape);
   } catch (std::system_error const& err) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(err);
   }
 }
@@ -110,13 +110,13 @@ device_vector<Type, Alloc>::device_vector(HostVec const& host_mat,
   pointer host_p;
   adapt(host_mat, &host_p, &_shape);
   _capacity = _shape;
-  _data = _allocator.device_allocate(_shape);
+  _data = _allocator.allocate_device(_shape);
 
   try {
     _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(host_p),
                               _shape);
   } catch (std::system_error const& err) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(err);
   }
 }
@@ -127,13 +127,13 @@ device_vector<Type, Alloc>::device_vector(
     : _context(&global_context::get_thread_context()),
       _shape(other._shape),
       _allocator(),
-      _data(_allocator.device_allocate(_shape)),
+      _data(_allocator.allocate_device(_shape)),
       _capacity(_shape) {
   auto cpy_result = cuda_memcpy(_data, other._data, _shape,
                                 cuda_memcpy_kind::device_to_device);
 
   if (!cpy_result) {
-    _allocator.device_deallocate(_data, _shape);
+    _allocator.deallocate_device(_data, _shape);
     MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
   }
 }
@@ -208,10 +208,10 @@ device_vector<Type, Alloc>& device_vector<Type, Alloc>::
 operator=(device_vector<Type, Alloc> const& other) {
   if (other._shape > _capacity) {
     if (_data) {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
-    _data = _allocator.device_allocate(other._shape);
+    _data = _allocator.allocate_device(other._shape);
     _capacity = other._shape;
   }
 
@@ -231,7 +231,7 @@ device_vector<Type, Alloc>& device_vector<Type, Alloc>::
 operator=(device_vector<Type, Alloc>&& other) noexcept {
   if (_data) {
     try {
-      _allocator.device_deallocate(_data, _shape);
+      _allocator.deallocate_device(_data, _shape);
     } catch (...) {
     };
     _data = nullptr;
@@ -251,14 +251,14 @@ device_vector<Type, Alloc>&
 device_vector<Type, Alloc>::resize(size_t size,
                                              value_type pad_value) {
   if (size > _capacity) {
-    auto new_data = _allocator.device_allocate(size);
+    auto new_data = _allocator.allocate_device(size);
     if (_data) {
       auto cpy_result = cuda_memcpy(new_data, _data, _shape,
                                     cuda_memcpy_kind::device_to_device);
       if (!cpy_result) {
         MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
       }
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
     _data = new_data;
@@ -397,7 +397,7 @@ template <typename Type, typename Alloc>
 device_vector<Type, Alloc>::~device_vector() noexcept {
   if (_data) {
     try {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
     } catch (...) {
     };
   }

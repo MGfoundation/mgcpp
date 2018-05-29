@@ -47,12 +47,12 @@ operator=(std::initializer_list<Type> const& init) {
   MGCPP_ASSERT(size == init.size(),
                "column view and assigned vector size doesn't match");
 
-  Type* buffer = _allocator.allocate(init.size());
+  Type* buffer = _allocator.allocate_host(init.size());
   std::copy(init.begin(), init.end(), buffer);
 
   auto status = cuda_memcpy(data_mutable(), buffer, size,
                             cuda_memcpy_kind::host_to_device);
-  _allocator.deallocate(buffer, init.size());
+  _allocator.deallocate_host(buffer, init.size());
   if (!status) {
     MGCPP_THROW_SYSTEM_ERROR(status.error());
   }

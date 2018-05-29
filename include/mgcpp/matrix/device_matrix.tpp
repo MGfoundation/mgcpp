@@ -37,7 +37,7 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape[0] * _shape[1])),
+      _data(_allocator.allocate_device(_shape[0] * _shape[1])),
       _capacity(_shape[0] * _shape[1]) {}
 
 template <typename Type, typename Alloc>
@@ -47,7 +47,7 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape[0] * _shape[1])),
+      _data(_allocator.allocate_device(_shape[0] * _shape[1])),
       _capacity(_shape[0] * _shape[1]) {
   size_t total_size = _shape[0] * _shape[1];
 
@@ -65,7 +65,7 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
-      _data(_allocator.device_allocate(_shape[0] * _shape[1])),
+      _data(_allocator.allocate_device(_shape[0] * _shape[1])),
       _capacity(_shape[0] * _shape[1]) {
   size_t total_size = _shape[0] * _shape[1];
 
@@ -73,7 +73,7 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
     _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(data),
                               total_size);
   } catch (std::system_error const& err) {
-    _allocator.device_deallocate(_data, total_size);
+    _allocator.deallocate_device(_data, total_size);
     MGCPP_THROW_SYSTEM_ERROR(err);
   }
 }
@@ -103,7 +103,7 @@ device_matrix<Type, Alloc>::from_list(
   size_t total_size = shape[0] * shape[1];
 
   Alloc allocator = alloc;
-  pointer buffer = allocator.allocate(total_size);
+  pointer buffer = allocator.allocate_host(total_size);
 
   size_t i = 0;
   for (const auto& row : init_list) {
@@ -123,7 +123,7 @@ device_matrix<Type, Alloc>::from_list(
 
   device_matrix mat(shape, buffer, alloc);
 
-  allocator.deallocate(buffer, total_size);
+  allocator.deallocate_host(buffer, total_size);
 
   return mat;
 }
@@ -138,7 +138,7 @@ device_matrix<Type, Alloc>::from_c_array(Type (&arr)[S1][S2],
   size_t total_size = shape[0] * shape[1];
 
   Alloc allocator = alloc;
-  pointer buffer = allocator.allocate(total_size);
+  pointer buffer = allocator.allocate_host(total_size);
 
   for (size_t i = 0; i < S1; ++i) {
     for (size_t j = 0; j < S2; ++j) {
@@ -147,7 +147,7 @@ device_matrix<Type, Alloc>::from_c_array(Type (&arr)[S1][S2],
   }
   device_matrix mat(shape, buffer, alloc);
 
-  allocator.deallocate(buffer, total_size);
+  allocator.deallocate_host(buffer, total_size);
 
   return mat;
 }
@@ -167,14 +167,14 @@ device_matrix<Type, Alloc>::device_matrix(HostMat const& host_mat,
   adapt(host_mat, &host_p, &_shape[0], &_shape[1]);
 
   size_t total_size = _shape[0] * _shape[1];
-  _data = _allocator.device_allocate(total_size);
+  _data = _allocator.allocate_device(total_size);
   _capacity = total_size;
 
   try {
     _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(host_p),
                               total_size);
   } catch (std::system_error const& err) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(err);
   }
 }
@@ -185,13 +185,13 @@ device_matrix<Type, Alloc>::device_matrix(
     : _context(&global_context::get_thread_context()),
       _shape(other._shape),
       _allocator(),
-      _data(_allocator.device_allocate(_shape[0] * _shape[1])),
+      _data(_allocator.allocate_device(_shape[0] * _shape[1])),
       _capacity(_shape[0] * _shape[1]) {
   auto cpy_result = cuda_memcpy(_data, other._data, _shape[0] * _shape[1],
                                 cuda_memcpy_kind::device_to_device);
 
   if (!cpy_result) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
   }
 }
@@ -203,13 +203,13 @@ device_matrix<Type, Alloc>::device_matrix(
     : _context(&global_context::get_thread_context()),
       _shape((~other)._shape),
       _allocator(),
-      _data(_allocator.device_allocate(_shape[0] * _shape[1])),
+      _data(_allocator.allocate_device(_shape[0] * _shape[1])),
       _capacity(_shape[0] * _shape[1]) {
   auto cpy_result = cuda_memcpy(_data, (~other)._data, _shape[0] * _shape[1],
                                 cuda_memcpy_kind::device_to_device);
 
   if (!cpy_result) {
-    _allocator.device_deallocate(_data, _capacity);
+    _allocator.deallocate_device(_data, _capacity);
     MGCPP_THROW_SYSTEM_ERROR(cpy_result.error());
   }
 }
@@ -233,10 +233,10 @@ operator=(device_matrix<Type, Alloc> const& other) {
   size_t other_size = shape[0] * shape[1];
   if (other_size > _capacity) {
     if (_data) {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
-    _data = _allocator.device_allocate(other_size);
+    _data = _allocator.allocate_device(other_size);
     _capacity = other_size;
   }
   auto cpy_result = cuda_memcpy(_data, other._data, other_size,
@@ -260,10 +260,10 @@ operator=(dense_matrix<DenseMatrix, Type> const& other) {
   size_t other_size = shape[0] * shape[1];
   if (other_size > _capacity) {
     if (_data) {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
-    _data = _allocator.device_allocate(other_size);
+    _data = _allocator.allocate_device(other_size);
     _capacity = other_size;
   }
   auto cpy_result = cuda_memcpy(_data, other_densemat._data, other_size,
@@ -282,7 +282,7 @@ device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::
 operator=(device_matrix<Type, Alloc>&& other) noexcept {
   if (_data) {
     try {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
     } catch (...) {
     };
     _data = nullptr;
@@ -303,10 +303,10 @@ device_matrix<Type, Alloc>::resize(shape_type shape) {
   size_t total_size = shape[0] * shape[1];
   if (total_size > _capacity) {
     if (_data) {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
-    _data = _allocator.device_allocate(total_size);
+    _data = _allocator.allocate_device(total_size);
     _capacity = total_size;
   }
 
@@ -322,10 +322,10 @@ device_matrix<Type, Alloc>::resize(shape_type shape,
   size_t total_size = shape[0] * shape[1];
   if (total_size > _capacity) {
     if (_data) {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
       _capacity = 0;
     }
-    _data = _allocator.device_allocate(total_size);
+    _data = _allocator.allocate_device(total_size);
     _capacity = total_size;
   }
 
@@ -471,7 +471,7 @@ template <typename Type, typename Alloc>
 device_matrix<Type, Alloc>::~device_matrix() noexcept {
   if (_data) {
     try {
-      _allocator.device_deallocate(_data, _capacity);
+      _allocator.deallocate_device(_data, _capacity);
     } catch (...) {
     };
   }

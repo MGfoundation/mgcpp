@@ -64,6 +64,7 @@ inline outcome::result<void> cuda_memcpy(std::complex<double>* to,
                                   size_t count,
                                   cuda_memcpy_kind kind) noexcept;
 
+#ifdef USE_HALF
 inline outcome::result<void> cuda_memcpy(__half* to,
                                   float const* from,
                                   size_t count,
@@ -73,6 +74,7 @@ inline outcome::result<void> cuda_memcpy(float* to,
                                   __half const* from,
                                   size_t count,
                                   cuda_memcpy_kind kind) noexcept;
+#endif
 
 using free_mem_t = size_t;
 using total_mem_t = size_t;

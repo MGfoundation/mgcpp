@@ -8,7 +8,7 @@
 #define _MGCPP_VECTOR_DEVICE_VECTOR_HPP_
 
 #include <mgcpp/adapters/adapters.hpp>
-#include <mgcpp/allocators/default.hpp>
+#include <mgcpp/allocators/allocator.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/global/shape.hpp>
 #include <mgcpp/system/concept.hpp>
@@ -20,7 +20,7 @@
 #include <initializer_list>
 
 namespace mgcpp {
-template <typename Type, typename Alloc = mgcpp::default_allocator<Type>>
+template <typename Type, typename Alloc = mgcpp::allocator<Type>>
 class device_vector : public dense_vector<device_vector<Type, Alloc>, Type> {
   static_assert(is_supported_type<Type>::value, "Element type not supported.");
 

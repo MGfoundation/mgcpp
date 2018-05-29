@@ -79,6 +79,10 @@ set(MAIN_SOURCE_FILES
     ${SOURCE_DIR}/thread_context.cpp
     ${SOURCE_DIR}/expression.cpp
     ${SOURCE_DIR}/eval_cache.cpp
+    ${SOURCE_DIR}/new_delete_resource.cpp
+    ${SOURCE_DIR}/cudamalloc_resource.cpp
+    ${SOURCE_DIR}/new_delete_resource.cpp
+    ${SOURCE_DIR}/device_memory_resource.cpp
     ${SOURCE_DIR}/cuda_libs/cublas.cpp
     ${SOURCE_DIR}/cuda_libs/cufft_fft.cpp
     ${SOURCE_DIR}/cuda/device.cpp)

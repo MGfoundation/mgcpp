@@ -8,7 +8,7 @@
 #define _MGCPP_MATRIX_DEVICE_MATRIX_HPP_
 
 #include <mgcpp/adapters/adapters.hpp>
-#include <mgcpp/allocators/default.hpp>
+#include <mgcpp/allocators/allocator.hpp>
 #include <mgcpp/context/global_context.hpp>
 #include <mgcpp/context/thread_context.hpp>
 #include <mgcpp/global/shape.hpp>
@@ -24,7 +24,7 @@
 #include <type_traits>
 
 namespace mgcpp {
-template <typename Type, typename Alloc = mgcpp::default_allocator<Type>>
+template <typename Type, typename Alloc = mgcpp::allocator<Type>>
 class device_matrix : public dense_matrix<device_matrix<Type, Alloc>, Type> {
   static_assert(is_supported_type<Type>::value, "Element type not supported.");
 
