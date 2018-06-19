@@ -21,18 +21,14 @@
 ## Introduction
 
 mgcpp is a CUDA based C++ linear algebra library. <br />
-It provides a standard C++ interface without any CUDA specific syntax. <br />
+It provides a standard C++ interface without any CUDA specific syntax. <br /> <br />
 
-
-### Disclaimer 
-
-This library is heavily under development and in pre-alpha state.<br />
-msvc support is not properly tested and guarenteed to work. <br />
-For contribution, please contact us personally or join our [discord server](https://discord.gg/k5bxQT) <br />
+This library is heavily under development and in pre-alpha state.<br /> <br />
 
 If our library lacks a feature that you need, please leave an issue. <br />
-We can raise the priority for most needed features.
+We can raise the priority for most needed features. <br /> <br />
 
+For contribution, please contact us personally or join our [discord server](https://discord.gg/k5bxQT) <br />
 
 <a id="orga8a25a1"></a>
 
@@ -112,7 +108,7 @@ make install
 ```
 
 
-*DISCLAIMER* <br />
+*-DISCLAIMER-* <br />
 Windows build is currently not supported because CUDA 9.1 doesn't support latest version of Visual Studio 15. <br />
 Windows support should be back when this issue is resolved. <br /> <br />
 On Windows, after installing all dependencies, execute the following on the Developer Command Prompt for VS 2017:
