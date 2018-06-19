@@ -57,6 +57,14 @@ All mgcpp expressions are lazily computed and optimized using C++ expression tem
 
 <a id="org0bb6aa9"></a>
 
+## Notable Features
+
+- cuBLAS backend for efficient BLAS computation.
+- Expression templates notation for efficient, expressive code
+- Half precision operation for extra performance on modern Nvidia GPU architectures.
+- Automatic GPU memory management.
+- Fill, reduce, outer-product and more custom BLAS extensions.
+
 ## Build
 
 ```shell
@@ -103,7 +111,12 @@ make -j4
 make install
 ```
 
+
+*DISCLAIMER* <br />
+Windows build is currently not supported because CUDA 9.1 doesn't support latest version of Visual Studio 15. <br />
+Windows support should be back when this issue is resolved. <br /> <br />
 On Windows, after installing all dependencies, execute the following on the Developer Command Prompt for VS 2017:
+
 ```shell
 git clone --recursive https://github.com/Red-Portal/mgcpp.git
 cd mgcpp
@@ -118,27 +131,27 @@ msbuild ALL_BUILD.vcxproj
 ## Dependencies
 
 -   cmake 3.8 or later
--   gcc 6, clang 3.9, Visual Studio 14.0 (2015) or later
+-   gcc 6, clang 3.9, ~~Visual Studio 14.0 (2015) or later~~(currently not supported)
 -   [boost-outcome](https://github.com/ned14/boost-outcome)
 -   boost
 -   cuda 8.0 or later
 -   [half](http://half.sourceforge.net/index.html)(optional)
 -   [magma](http://icl.cs.utk.edu/magma/)(optional)
--   gtest (optional)
+-   google test (optional)
+-   google benchmark (optional)
 
 
 <a id="org6fefac1"></a>
 
 ## Planned Features
 
-- Fully tested msvc support.
+- Various GPU memory allocators.
 - Expression template optimization for all operations.
-- Tensor type and tensor operations.
+- Convolution operation.
 - sparse matrix, sparse vector, sparse tensor types.
 - Batch matrix type and batch matrix operations.
+- Tensor type and tensor operations.
 - cuSPARSE support.
-- Convolution operation.
-- half precision type support.
 - Full compatibility with [uBLAS](http://www.boost.org/doc/libs/1_59_0/libs/numeric/ublas/doc/), [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page), [blaze](https://bitbucket.org/blaze-lib/blaze)
 
 
