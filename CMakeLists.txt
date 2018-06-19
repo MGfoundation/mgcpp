@@ -28,6 +28,7 @@ option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_HALF "compile mgcpp with half precision floating point features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 option(BUILD_DOC "Build documentation" ON)
+option(BUILD_BENCHMARK "Build library performance benchmark" ON)
 option(BUILD_EXAMPLES "Build API example code" OFF)
 
 # cuda dependency
@@ -215,6 +216,17 @@ if(BUILD_TESTING)
     add_subdirectory(${TEST_DIR})
 
     set(MGCPP_BINARIES ${MGCPP_BINARIES} ${TEST_DIR}/${PROJECT_NAME}_test)
+endif()
+
+# Tests
+if(BUILD_BENCHMARK)
+    # find google benchmark dependency
+    find_package(benchmark REQUIRED)
+
+    set(BENCHMARK_DIR ${PROJECT_SOURCE_DIR}/benchmark)
+    add_subdirectory(${BENCHMARK_DIR})
+
+    set(MGCPP_BINARIES ${MGCPP_BINARIES} ${TEST_DIR}/${PROJECT_NAME}_bench)
 endif()
 
 # Build Doxygen
