@@ -77,9 +77,6 @@ mgcpp_display_elements("Source files for ${PROJECT_NAME} tests"
 # add test target
 add_executable(${PROJECT_NAME}_test ${TEST_SOURCE_FILES})
 
-set(MGCPP_TARGETS ${MGCPP_TARGETS}
-    "${PROJECT_NAME}_test")
-
 target_include_directories(${PROJECT_NAME}_test
     PUBLIC
     ${PROJECT_SOURCE_DIR}/include
