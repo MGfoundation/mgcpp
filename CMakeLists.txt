@@ -28,7 +28,7 @@ option(USE_MAGMA "compile mgcpp with magma features" ON)
 option(USE_HALF "compile mgcpp with half precision floating point features" ON)
 option(BUILD_TESTING "compile mgcpp with tests" ON)
 option(BUILD_DOC "Build documentation" ON)
-option(BUILD_BENCHMARK "Build library performance benchmark" ON)
+option(BUILD_BENCHMARK "Build library performance benchmark" OFF)
 option(BUILD_EXAMPLES "Build API example code" OFF)
 
 # cuda dependency
