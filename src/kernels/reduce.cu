@@ -67,7 +67,7 @@ namespace mgcpp
             running_error -= difference;
             sum = temp;
         }
-        return static_cast<__half>(sum);
+        return __float2half(sum);
     }
 
     __global__ void
@@ -133,7 +133,7 @@ namespace mgcpp
         size_t const id = blockIdx.x * blockDim.x + threadIdx.x;
 
         if(id >= n)
-            shared[tid] = 0;
+            shared[tid] = __float2half(0.0f);
         else
             shared[tid] = x[id];
         __syncthreads();
@@ -153,44 +153,44 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Svpr(float const* x, float* y, size_t size)
     {
-    if(size == 0)
-        return invalid_range;
+        if(size == 0)
+            return invalid_range;
 
 
-    int grid_size =
-        static_cast<int>(
-            ceil(static_cast<float>(size)/ BLK ));
+        int grid_size =
+            static_cast<int>(
+                ceil(static_cast<float>(size)/ BLK ));
 
-    float host_buffer[THRES];
-    float* device_buffer = nullptr; 
-    cudaError_t alloc_status =
-        cudaMalloc((void**)&device_buffer, sizeof(float) * grid_size);
-    if(alloc_status != cudaSuccess)
-        return memory_allocation_failure;
+        float host_buffer[THRES];
+        float* device_buffer; 
+        cudaError_t alloc_status =
+            cudaMalloc((void**)&device_buffer, sizeof(float) * grid_size);
+        if(alloc_status != cudaSuccess)
+            return memory_allocation_failure;
 
-    mgblas_Svpr_impl<<<grid_size, BLK>>>(x, device_buffer, size);
+        mgblas_Svpr_impl<<<grid_size, BLK>>>(x, device_buffer, size);
 
-    if(grid_size >= THRES)
-    {
-        grid_size = static_cast<int>(
+        if(grid_size >= THRES)
+        {
+            grid_size = static_cast<int>(
             ceil(static_cast<float>(grid_size)/ BLK ));
-        mgblas_Svpr_impl<<<grid_size, BLK>>>(device_buffer, device_buffer, size);
+            mgblas_Svpr_impl<<<grid_size, BLK>>>(device_buffer, device_buffer, size);
+        }
+
+        cudaError_t copy_status =
+            cudaMemcpy((void*)host_buffer,
+                       (void*)device_buffer,
+                       sizeof(float) * grid_size,
+                       cudaMemcpyDeviceToHost);
+
+        if(copy_status != cudaSuccess)
+            return device_to_host_memcpy_failure;
+
+        *y = kahan_reduce(&host_buffer[0], &host_buffer[grid_size], 0.0);
+
+        cudaFree(device_buffer);
+        return success;
     }
-
-    cudaError_t copy_status =
-        cudaMemcpy((void*)host_buffer,
-                   (void*)device_buffer,
-                   sizeof(float) * grid_size,
-                   cudaMemcpyDeviceToHost);
-
-    if(copy_status != cudaSuccess)
-        return device_to_host_memcpy_failure;
-
-    *y = kahan_reduce(&host_buffer[0], &host_buffer[grid_size], 0.0);
-
-    cudaFree(device_buffer);
-    return success;
-}
 
     mgblas_error_t
     mgblas_Dvpr(double const* x, double* y, size_t size)
@@ -203,7 +203,7 @@ namespace mgcpp
                 ceil(static_cast<float>(size)/ BLK ));
 
         double host_buffer[THRES];
-        double* device_buffer = nullptr; 
+        double* device_buffer; 
         cudaError_t alloc_status =
             cudaMalloc((void**)&device_buffer, sizeof(double) * grid_size);
         if(alloc_status != cudaSuccess)
@@ -245,7 +245,7 @@ namespace mgcpp
                 ceil(static_cast<float>(size)/ BLK ));
 
         __half host_buffer[THRES];
-        __half* device_buffer = nullptr; 
+        __half* device_buffer; 
         cudaError_t alloc_status =
             cudaMalloc((void**)&device_buffer, sizeof(__half) * grid_size);
         if(alloc_status != cudaSuccess)

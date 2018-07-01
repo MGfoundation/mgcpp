@@ -79,6 +79,7 @@ inline outcome::result<void> mgblas_vpr(double const* x, double* y, size_t n) {
     return outcome::success();
 }
 
+#ifdef USE_HALF
 template <>
 inline outcome::result<void> mgblas_vpr(__half const* x, __half* y, size_t n) {
   std::error_code status = mgblas_Hvpr(x, y, n);
@@ -88,6 +89,7 @@ inline outcome::result<void> mgblas_vpr(__half const* x, __half* y, size_t n) {
   else
     return outcome::success();
 }
+#endif
 
 template <>
 inline outcome::result<void> mgblas_vsin(float* x, size_t n) {
