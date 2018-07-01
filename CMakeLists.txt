@@ -51,9 +51,10 @@ else()
     set(CUDA_NVCC_FLAGS "-Xcompiler -fPIC")
 endif()
 
-if(USE_HALF AND (CUDA_ARCH LESS 53))
-    message(FATAL_ERROR "cuda devices lower than 5.3 do not support half precision type")
-elseif(USE_HALF)
+if(USE_HALF)
+    if(CUDA_ARCH LESS "53")
+	message(FATAL_ERROR "cuda devices lower than 5.3 do not support half precision type")
+    endif()
     add_definitions(-DUSE_HALF)
 endif()
 

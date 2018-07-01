@@ -99,7 +99,9 @@ using fft_complex_double_type = fft_operation_test<std::complex<double>>;
 using fft_complex_type = fft_operation_test<std::complex<float>>;
 using fft_double_type = fft_operation_test<double>;
 using fft_float_type = fft_operation_test<float>;
+#ifdef USE_HALF
 using fft_half_type = fft_operation_test<mgcpp::half>;
+#endif
 
 template <typename Type>
 void fft_operation_test<Type>::real_to_complex_fwd_fft() {

@@ -48,6 +48,7 @@ namespace mgcpp
         return sum;
     }
 
+#ifdef USE_HALF
     inline __half kahan_reduce(__half* begin,
                                __half* end,
                                float init)
@@ -69,6 +70,7 @@ namespace mgcpp
         }
         return __float2half(sum);
     }
+#endif
 
     __global__ void
     mgblas_Svpr_impl(float const* x, float* y, size_t n)
@@ -141,8 +143,8 @@ namespace mgcpp
         for(size_t stride = blockDim.x / 2; stride > 0u; stride >>= 1)
         {
             if(tid < stride)
-                shared[tid] = __hadd(shared[tid], shared[tid + stride]);
-            __syncthreads();
+                shared[tid] = __hadd(shared[tid], shared[tid + stride])
+                    __syncthreads();
         }
               
         if(tid == 0u)

@@ -68,7 +68,9 @@ using complex_double_type = device_matrix_test<std::complex<double>>;
 using complex_type = device_matrix_test<std::complex<float>>;
 using double_type = device_matrix_test<double>;
 using float_type = device_matrix_test<float>;
+#ifdef USE_HALF
 using half_type = device_matrix_test<mgcpp::half>;
+#endif
 
 /* like this we can automatically generate test code for a certain type      */
 /* by specializing templates, we can also specialize tests for certain types */
@@ -88,7 +90,9 @@ MGCPP_TEST(complex_double_type, default_constructor)
 MGCPP_TEST(complex_type, default_constructor)
 MGCPP_TEST(double_type, default_constructor)
 MGCPP_TEST(float_type, default_constructor)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, default_constructor)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::dimension_constructor() {
@@ -116,7 +120,9 @@ MGCPP_TEST(complex_double_type, dimension_constructor)
 MGCPP_TEST(complex_type, dimension_constructor)
 MGCPP_TEST(double_type, dimension_constructor)
 MGCPP_TEST(float_type, dimension_constructor)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, dimension_constructor)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::dimension_initializing_constructor() {
@@ -149,6 +155,7 @@ void device_matrix_test<Type>::dimension_initializing_constructor() {
   } while (false););
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::dimension_initializing_constructor() {
   using half_float::half_cast;
@@ -182,12 +189,15 @@ void device_matrix_test<mgcpp::half>::dimension_initializing_constructor() {
     }
   } while (false););
 }
+#endif
 
 MGCPP_TEST(complex_double_type, dimension_initializing_constructor)
 MGCPP_TEST(complex_type, dimension_initializing_constructor)
 MGCPP_TEST(double_type, dimension_initializing_constructor)
 MGCPP_TEST(float_type, dimension_initializing_constructor)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, dimension_initializing_constructor)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::third_party_matrix_construction() {
@@ -217,6 +227,7 @@ void device_matrix_test<Type>::third_party_matrix_construction() {
   } while (false));
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::third_party_matrix_construction() {
   using half_float::half_cast;
@@ -247,12 +258,15 @@ void device_matrix_test<mgcpp::half>::third_party_matrix_construction() {
     EXPECT_EQ(device.shape(), host.shape());
   } while (false));
 }
+#endif
 
 // MGCPP_TEST(complex_double_type, third_party_matrix_construction)
 // MGCPP_TEST(complex_type, third_party_matrix_construction)
 MGCPP_TEST(double_type, third_party_matrix_construction)
 MGCPP_TEST(float_type, third_party_matrix_construction)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, third_party_matrix_construction)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::matrix_init_from_host_data() {
@@ -294,6 +308,7 @@ void device_matrix_test<Type>::matrix_init_from_host_data() {
   free(data);
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::matrix_init_from_host_data() {
   using half_float::half_cast;
@@ -338,12 +353,15 @@ void device_matrix_test<mgcpp::half>::matrix_init_from_host_data() {
   } while (false););
   free(data);
 }
+#endif
 
 // MGCPP_TEST(complex_double_type, matrix_init_from_host_data)
 // MGCPP_TEST(complex_type, matrix_init_from_host_data)
 MGCPP_TEST(double_type, matrix_init_from_host_data)
 MGCPP_TEST(float_type, matrix_init_from_host_data)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, matrix_init_from_host_data)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::matrix_init_from_init_list() {
@@ -403,6 +421,7 @@ void device_matrix_test<Type>::copy_construction() {
   EXPECT_EQ(original.shape(), copied.shape());
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::copy_construction() {
   using half_float::half_cast;
@@ -425,12 +444,15 @@ void device_matrix_test<mgcpp::half>::copy_construction() {
 
   EXPECT_EQ(original.shape(), copied.shape());
 }
+#endif
 
 MGCPP_TEST(complex_double_type, copy_construction)
 MGCPP_TEST(complex_type, copy_construction)
 MGCPP_TEST(double_type, copy_construction)
 MGCPP_TEST(float_type, copy_construction)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, copy_construction)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::reallocation_during_copy_assign() {
@@ -451,6 +473,7 @@ void device_matrix_test<Type>::reallocation_during_copy_assign() {
   EXPECT_LT(before_capacity, copied.capacity());
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::reallocation_during_copy_assign() {
   using half_float::half_cast;
@@ -471,12 +494,15 @@ void device_matrix_test<mgcpp::half>::reallocation_during_copy_assign() {
   EXPECT_EQ(original.capacity(), copied.capacity());
   EXPECT_LT(before_capacity, copied.capacity());
 }
+#endif
 
 MGCPP_TEST(complex_double_type, reallocation_during_copy_assign)
 MGCPP_TEST(complex_type, reallocation_during_copy_assign)
 MGCPP_TEST(double_type, reallocation_during_copy_assign)
 MGCPP_TEST(float_type, reallocation_during_copy_assign)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, reallocation_during_copy_assign)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::no_reallocation_during_copy_assign() {
@@ -504,6 +530,7 @@ void device_matrix_test<Type>::no_reallocation_during_copy_assign() {
   EXPECT_LT(original.capacity(), copied.capacity());
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::no_reallocation_during_copy_assign() {
   using half_float::half_cast;
@@ -531,12 +558,15 @@ void device_matrix_test<mgcpp::half>::no_reallocation_during_copy_assign() {
   EXPECT_EQ(original.shape(), copied.shape());
   EXPECT_LT(original.capacity(), copied.capacity());
 }
+#endif
 
 MGCPP_TEST(complex_double_type, no_reallocation_during_copy_assign)
 MGCPP_TEST(complex_type, no_reallocation_during_copy_assign)
 MGCPP_TEST(double_type, no_reallocation_during_copy_assign)
 MGCPP_TEST(float_type, no_reallocation_during_copy_assign)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, no_reallocation_during_copy_assign)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::copy_to_host() {
@@ -556,6 +586,7 @@ void device_matrix_test<Type>::copy_to_host() {
   free(host);
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::copy_to_host() {
   using half_float::half_cast;
@@ -576,12 +607,15 @@ void device_matrix_test<mgcpp::half>::copy_to_host() {
   }
   free(host);
 }
+#endif
 
 MGCPP_TEST(complex_double_type, copy_to_host)
 MGCPP_TEST(complex_type, copy_to_host)
 MGCPP_TEST(double_type, copy_to_host)
 MGCPP_TEST(float_type, copy_to_host)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, copy_to_host)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::move_constructor() {
@@ -616,6 +650,7 @@ void device_matrix_test<Type>::move_constructor() {
   EXPECT_EQ(moved.shape()[1], col_dim);
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::move_constructor() {
   using half_float::half_cast;
@@ -649,12 +684,15 @@ void device_matrix_test<mgcpp::half>::move_constructor() {
   EXPECT_EQ(moved.shape()[0], row_dim);
   EXPECT_EQ(moved.shape()[1], col_dim);
 }
+#endif
 
 MGCPP_TEST(complex_double_type, move_constructor)
 MGCPP_TEST(complex_type, move_constructor)
 MGCPP_TEST(double_type, move_constructor)
 MGCPP_TEST(float_type, move_constructor)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, move_constructor)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::move_assign_operator() {
@@ -683,6 +721,7 @@ void device_matrix_test<Type>::move_assign_operator() {
   EXPECT_EQ(moved.shape()[1], col_dim);
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::move_assign_operator() {
   using half_float::half_cast;
@@ -711,12 +750,15 @@ void device_matrix_test<mgcpp::half>::move_assign_operator() {
   EXPECT_EQ(moved.shape()[0], row_dim);
   EXPECT_EQ(moved.shape()[1], col_dim);
 }
+#endif
 
 MGCPP_TEST(complex_double_type, move_assign_operator)
 MGCPP_TEST(complex_type, move_assign_operator)
 MGCPP_TEST(double_type, move_assign_operator)
 MGCPP_TEST(float_type, move_assign_operator)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, move_assign_operator)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::matrix_resize() {
@@ -734,7 +776,9 @@ MGCPP_TEST(complex_double_type, matrix_resize)
 MGCPP_TEST(complex_type, matrix_resize)
 MGCPP_TEST(double_type, matrix_resize)
 MGCPP_TEST(float_type, matrix_resize)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, matrix_resize)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::matrix_resize_init() {
@@ -759,6 +803,7 @@ void device_matrix_test<Type>::matrix_resize_init() {
   } while (false););
 }
 
+#ifdef USE_HALF
 template <>
 void device_matrix_test<mgcpp::half>::matrix_resize_init() {
   using half_float::half_cast;
@@ -783,12 +828,15 @@ void device_matrix_test<mgcpp::half>::matrix_resize_init() {
     }
   } while (false););
 }
+#endif
 
 MGCPP_TEST(complex_double_type, matrix_resize_init)
 MGCPP_TEST(complex_type, matrix_resize_init)
 MGCPP_TEST(double_type, matrix_resize_init)
 MGCPP_TEST(float_type, matrix_resize_init)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, matrix_resize_init)
+#endif
 
 template <typename Type>
 void device_matrix_test<Type>::matrix_zero_after_allocation() {
@@ -844,4 +892,6 @@ MGCPP_TEST(complex_double_type, matrix_zero_without_allocation_failure)
 MGCPP_TEST(complex_type, matrix_zero_without_allocation_failure)
 MGCPP_TEST(double_type, matrix_zero_without_allocation_failure)
 MGCPP_TEST(float_type, matrix_zero_without_allocation_failure)
+#ifdef USE_HALF
 MGCPP_TEST(half_type, matrix_zero_without_allocation_failure)
+#endif
