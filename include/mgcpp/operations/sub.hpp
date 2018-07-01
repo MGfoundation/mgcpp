@@ -22,9 +22,7 @@ namespace strict {
  * \param rhs the right-hand side
  * \returns lhs - rhs
  */
-template <typename LhsDenseVec,
-          typename RhsDenseVec,
-          typename Type>
+template <typename LhsDenseVec, typename RhsDenseVec, typename Type>
 inline decltype(auto) sub(dense_vector<LhsDenseVec, Type> const& lhs,
                           dense_vector<RhsDenseVec, Type> const& rhs);
 
@@ -34,9 +32,7 @@ inline decltype(auto) sub(dense_vector<LhsDenseVec, Type> const& lhs,
  * \param rhs the right-hand side
  * \returns lhs - rhs
  */
-template <typename LhsDenseMat,
-          typename RhsDenseMat,
-          typename Type>
+template <typename LhsDenseMat, typename RhsDenseMat, typename Type>
 inline decltype(auto) sub(dense_matrix<LhsDenseMat, Type> const& lhs,
                           dense_matrix<RhsDenseMat, Type> const& rhs);
 }  // namespace strict

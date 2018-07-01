@@ -8,12 +8,9 @@
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp {
-template <typename LhsDeviceVec,
-          typename RhsDeviceVec,
-          typename Type>
-decltype(auto) strict::sub(
-    dense_vector<LhsDeviceVec, Type> const& lhs,
-    dense_vector<RhsDeviceVec, Type> const& rhs) {
+template <typename LhsDeviceVec, typename RhsDeviceVec, typename Type>
+decltype(auto) strict::sub(dense_vector<LhsDeviceVec, Type> const& lhs,
+                           dense_vector<RhsDeviceVec, Type> const& rhs) {
   using allocator_type = typename LhsDeviceVec::allocator_type;
   using value_type = typename LhsDeviceVec::value_type;
 
@@ -41,12 +38,9 @@ decltype(auto) strict::sub(
   return result;
 }
 
-template <typename LhsDenseMat,
-          typename RhsDenseMat,
-          typename Type>
-decltype(auto) strict::sub(
-    dense_matrix<LhsDenseMat, Type> const& lhs,
-    dense_matrix<RhsDenseMat, Type> const& rhs) {
+template <typename LhsDenseMat, typename RhsDenseMat, typename Type>
+decltype(auto) strict::sub(dense_matrix<LhsDenseMat, Type> const& lhs,
+                           dense_matrix<RhsDenseMat, Type> const& rhs) {
   using allocator_type = typename LhsDenseMat::allocator_type;
   using value_type = typename LhsDenseMat::value_type;
 

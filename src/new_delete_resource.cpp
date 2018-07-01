@@ -14,13 +14,12 @@ void new_delete_resource::do_deallocate(void* p, size_t bytes) {
 bool new_delete_resource::do_is_equal(const memory_resource& other) const
     noexcept {
   (void)other;
-    return true;
+  return true;
 }
 
-new_delete_resource* new_delete_resource::instance()
-{
-    static new_delete_resource resource{};
-    return &resource;
+new_delete_resource* new_delete_resource::instance() {
+  static new_delete_resource resource{};
+  return &resource;
 }
 
 }  // namespace mgcpp

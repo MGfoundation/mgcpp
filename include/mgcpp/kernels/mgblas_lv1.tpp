@@ -4,6 +4,7 @@
 //    (See accompanying file LICENSE or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <mgcpp/global/half_precision.hpp>
 #include <mgcpp/kernels/bits/hadamard.cuh>
 #include <mgcpp/kernels/bits/map.cuh>
 #include <mgcpp/kernels/bits/reduce.cuh>
@@ -71,6 +72,16 @@ inline outcome::result<void> mgblas_vpr(float const* x, float* y, size_t n) {
 template <>
 inline outcome::result<void> mgblas_vpr(double const* x, double* y, size_t n) {
   std::error_code status = mgblas_Dvpr(x, y, n);
+
+  if (status != status_t::success)
+    return status;
+  else
+    return outcome::success();
+}
+
+template <>
+inline outcome::result<void> mgblas_vpr(__half const* x, __half* y, size_t n) {
+  std::error_code status = mgblas_Hvpr(x, y, n);
 
   if (status != status_t::success)
     return status;

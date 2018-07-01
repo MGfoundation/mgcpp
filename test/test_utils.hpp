@@ -22,7 +22,8 @@
 
 namespace internal {
 double uniform_rand();
-}
+double normal_rand();
+}  // namespace internal
 
 template <typename Type>
 struct complex_value_type;
@@ -35,7 +36,7 @@ struct complex_value_type<std::complex<Type>> {
 template <typename Iter, typename Type>
 void random_fill_impl(Iter begin, Iter end) {
   for (Iter it = begin; it != end; ++it)
-    *it = internal::uniform_rand();
+    *it = internal::normal_rand();
 }
 
 template <typename Iter,
@@ -44,8 +45,8 @@ template <typename Iter,
 void random_fill_impl(Iter begin, Iter end) {
   using value_type = typename complex_value_type<Type>::type;
   for (Iter it = begin; it != end; ++it)
-    *it = std::complex<value_type>(internal::uniform_rand(),
-                                   internal::uniform_rand());
+    *it = std::complex<value_type>(internal::normal_rand(),
+                                   internal::normal_rand());
 }
 
 template <typename Iter>

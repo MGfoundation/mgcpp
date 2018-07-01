@@ -33,11 +33,9 @@ class column_view : public dense_vector<column_view<DenseMat, Type>, Type> {
 
   inline ~column_view() = default;
 
-  inline column_view(dense_matrix<DenseMat, Type>& mat,
-                     size_t i) noexcept;
+  inline column_view(dense_matrix<DenseMat, Type>& mat, size_t i) noexcept;
 
-  inline column_view(column_view<DenseMat, Type> const& other) =
-      delete;
+  inline column_view(column_view<DenseMat, Type> const& other) = delete;
 
   inline column_view(column_view<DenseMat, Type>&& other) noexcept;
 

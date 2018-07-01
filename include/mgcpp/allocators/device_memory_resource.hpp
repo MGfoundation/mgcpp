@@ -6,12 +6,12 @@
 namespace mgcpp {
 
 class device_memory_resource : public memory_resource {
-    size_t _device_id;
+  size_t _device_id;
 
-public:
-    device_memory_resource(size_t device_id);
+ public:
+  device_memory_resource(size_t device_id);
 
-    size_t device_id() const;
+  size_t device_id() const;
 };
 
 }  // namespace mgcpp

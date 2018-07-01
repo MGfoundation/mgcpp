@@ -13,12 +13,8 @@ class memory_resource {
  public:
   virtual ~memory_resource() = default;
 
-  void* allocate(size_t bytes) {
-    return do_allocate(bytes);
-  }
-  void deallocate(void* p, size_t bytes) {
-    return do_deallocate(p, bytes);
-  }
+  void* allocate(size_t bytes) { return do_allocate(bytes); }
+  void deallocate(void* p, size_t bytes) { return do_deallocate(p, bytes); }
 
   // `is_equal` is needed because polymorphic allocators are sometimes
   // produced as a result of type erasure.  In that case, two different

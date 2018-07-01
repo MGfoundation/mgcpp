@@ -32,6 +32,14 @@ std::string mgblas_error_category_t::message(int ev) const {
     case invalid_range:
       return "operation range is invalid";
       break;
+
+    case memory_allocation_failure:
+      return "failed to allocate device memory";
+      break;
+
+    case device_to_host_memcpy_failure:
+      return "failed to copy memory from device to host";
+      break;
   }
   return "";
 }

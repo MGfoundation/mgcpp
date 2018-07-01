@@ -14,9 +14,8 @@
 
 namespace mgcpp {
 template <typename DenseMat, typename Type>
-column_view<DenseMat, Type>::column_view(
-    dense_matrix<DenseMat, Type>& mat,
-    size_t i) noexcept
+column_view<DenseMat, Type>::column_view(dense_matrix<DenseMat, Type>& mat,
+                                         size_t i) noexcept
     : _matrix(&(~mat)),
       _column_idx(i),
       _allocator(
@@ -29,8 +28,8 @@ column_view<DenseMat, Type>::column_view(
     : _matrix(other._matrix), _column_idx(other._column_idx) {}
 
 template <typename DenseMat, typename Type>
-column_view<DenseMat, Type>& column_view<DenseMat, Type>::
-operator=(column_view<DenseMat, Type>&& other) noexcept {
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::operator=(
+    column_view<DenseMat, Type>&& other) noexcept {
   _matrix = other._matrix;
   _column_idx = other._column_idx;
   _allocator = std::move(other._allocator);
@@ -41,8 +40,8 @@ operator=(column_view<DenseMat, Type>&& other) noexcept {
 }
 
 template <typename DenseMat, typename Type>
-column_view<DenseMat, Type>& column_view<DenseMat, Type>::
-operator=(std::initializer_list<Type> const& init) {
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::operator=(
+    std::initializer_list<Type> const& init) {
   size_t size = _matrix->shape()[0];
   MGCPP_ASSERT(size == init.size(),
                "column view and assigned vector size doesn't match");
@@ -62,8 +61,8 @@ operator=(std::initializer_list<Type> const& init) {
 
 template <typename DenseMat, typename Type>
 template <typename DenseVec>
-column_view<DenseMat, Type>& column_view<DenseMat, Type>::
-operator=(dense_vector<DenseVec, Type> const& vec) {
+column_view<DenseMat, Type>& column_view<DenseMat, Type>::operator=(
+    dense_vector<DenseVec, Type> const& vec) {
   auto const& dense_vec = ~vec;
 
   size_t size = _matrix->shape()[0];
@@ -110,8 +109,7 @@ Type column_view<DenseMat, Type>::check_value(size_t i) const {
 }
 
 template <typename DenseMat, typename Type>
-inline Type const* column_view<DenseMat, Type>::data() const
-    noexcept {
+inline Type const* column_view<DenseMat, Type>::data() const noexcept {
   auto shape = _matrix->shape();
   size_t idx = _column_idx * shape[0];
 
@@ -131,8 +129,7 @@ inline Type* column_view<DenseMat, Type>::data_mutable() noexcept {
 }
 
 template <typename DenseMat, typename Type>
-thread_context* column_view<DenseMat, Type>::context() const
-    noexcept {
+thread_context* column_view<DenseMat, Type>::context() const noexcept {
   return _matrix->context();
 }
 

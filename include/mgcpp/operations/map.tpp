@@ -15,8 +15,8 @@ namespace mgcpp {
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseVec>
-inline device_vector<Type, typename DenseVec::allocator_type>
-strict::map(dense_vector<DenseVec, Type> const& vec) {
+inline device_vector<Type, typename DenseVec::allocator_type> strict::map(
+    dense_vector<DenseVec, Type> const& vec) {
   using allocator_type = typename DenseVec::allocator_type;
 
   auto const& original_vec = ~vec;
@@ -41,8 +41,8 @@ strict::map(dense_vector<DenseVec, Type> const& vec) {
 template <typename Type,
           outcome::result<void> (*Function)(Type*, size_t),
           typename DenseMat>
-inline device_matrix<Type, typename DenseMat::allocator_type>
-strict::map(dense_matrix<DenseMat, Type> const& mat) {
+inline device_matrix<Type, typename DenseMat::allocator_type> strict::map(
+    dense_matrix<DenseMat, Type> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
 
   auto const& original_mat = ~mat;

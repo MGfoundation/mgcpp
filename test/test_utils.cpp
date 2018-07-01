@@ -11,10 +11,15 @@
 // according to this benchmark, boost mt is the fastest
 // but anything fast will just be fine
 boost::random::mt19937 rng(MGCPP_RAND_SEED);
-std::uniform_real_distribution<double> dist(0.0, 1.0);
+std::normal_distribution<double> normal(0.0, 1.0);
+std::uniform_real_distribution<double> uniform(-1.0, 1.0);
 
 namespace internal {
 double uniform_rand() {
-  return dist(rng);
+  return uniform(rng);
+}
+
+double normal_rand() {
+  return normal(rng);
 }
 }  // namespace internal

@@ -19,9 +19,8 @@ namespace mgcpp
     mgblas_error_t
     mgblas_Dvpr(double const* x, double* y, size_t size); 
 
-    // mgblas_error_t
-    // mgblas_Hvpr(__half const* x, __half const* y,
-    // 		__half* z, size_t size);
+    mgblas_error_t
+    mgblas_Hvpr(__half const* x, __half* y, size_t size);
 }
 
 #endif

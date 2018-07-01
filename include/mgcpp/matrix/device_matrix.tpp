@@ -32,8 +32,7 @@ device_matrix<Type, Alloc>::device_matrix(Alloc const& alloc)
       _capacity(0) {}
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>::device_matrix(shape_type shape,
-                                                    Alloc const& alloc)
+device_matrix<Type, Alloc>::device_matrix(shape_type shape, Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
@@ -42,8 +41,8 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
 
 template <typename Type, typename Alloc>
 device_matrix<Type, Alloc>::device_matrix(shape_type shape,
-                                                    value_type init,
-                                                    Alloc const& alloc)
+                                          value_type init,
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
@@ -60,8 +59,8 @@ device_matrix<Type, Alloc>::device_matrix(shape_type shape,
 
 template <typename Type, typename Alloc>
 device_matrix<Type, Alloc>::device_matrix(shape_type shape,
-                                                    const_pointer data,
-                                                    Alloc const& alloc)
+                                          const_pointer data,
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(shape),
       _allocator(alloc),
@@ -94,8 +93,7 @@ size_t device_matrix<Type, Alloc>::determine_ndim(
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>
-device_matrix<Type, Alloc>::from_list(
+device_matrix<Type, Alloc> device_matrix<Type, Alloc>::from_list(
     std::initializer_list<std::initializer_list<value_type>> const& init_list,
     Alloc const& alloc) {
   auto shape = make_shape(init_list.size(), determine_ndim(init_list));
@@ -130,9 +128,9 @@ device_matrix<Type, Alloc>::from_list(
 
 template <typename Type, typename Alloc>
 template <size_t S1, size_t S2>
-inline device_matrix<Type, Alloc>
-device_matrix<Type, Alloc>::from_c_array(Type (&arr)[S1][S2],
-                                                   Alloc const& alloc) {
+inline device_matrix<Type, Alloc> device_matrix<Type, Alloc>::from_c_array(
+    Type (&arr)[S1][S2],
+    Alloc const& alloc) {
   auto shape = make_shape(S1, S2);
 
   size_t total_size = shape[0] * shape[1];
@@ -155,7 +153,7 @@ device_matrix<Type, Alloc>::from_c_array(Type (&arr)[S1][S2],
 template <typename Type, typename Alloc>
 template <typename HostMat, typename>
 device_matrix<Type, Alloc>::device_matrix(HostMat const& host_mat,
-                                                    Alloc const& alloc)
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape{0, 0},
       _allocator(alloc),
@@ -227,8 +225,8 @@ device_matrix<Type, Alloc>::device_matrix(
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::
-operator=(device_matrix<Type, Alloc> const& other) {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::operator=(
+    device_matrix<Type, Alloc> const& other) {
   auto shape = other._shape;
   size_t other_size = shape[0] * shape[1];
   if (other_size > _capacity) {
@@ -252,8 +250,8 @@ operator=(device_matrix<Type, Alloc> const& other) {
 
 template <typename Type, typename Alloc>
 template <typename DenseMatrix>
-device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::
-operator=(dense_matrix<DenseMatrix, Type> const& other) {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::operator=(
+    dense_matrix<DenseMatrix, Type> const& other) {
   auto const& other_densemat = ~other;
 
   auto shape = other_densemat._shape;
@@ -278,8 +276,8 @@ operator=(dense_matrix<DenseMatrix, Type> const& other) {
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::
-operator=(device_matrix<Type, Alloc>&& other) noexcept {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::operator=(
+    device_matrix<Type, Alloc>&& other) noexcept {
   if (_data) {
     try {
       _allocator.deallocate_device(_data, _capacity);
@@ -298,8 +296,8 @@ operator=(device_matrix<Type, Alloc>&& other) noexcept {
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>&
-device_matrix<Type, Alloc>::resize(shape_type shape) {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::resize(
+    shape_type shape) {
   size_t total_size = shape[0] * shape[1];
   if (total_size > _capacity) {
     if (_data) {
@@ -316,9 +314,9 @@ device_matrix<Type, Alloc>::resize(shape_type shape) {
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>&
-device_matrix<Type, Alloc>::resize(shape_type shape,
-                                             value_type init) {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::resize(
+    shape_type shape,
+    value_type init) {
   size_t total_size = shape[0] * shape[1];
   if (total_size > _capacity) {
     if (_data) {
@@ -342,8 +340,7 @@ device_matrix<Type, Alloc>::resize(shape_type shape,
 }
 
 template <typename Type, typename Alloc>
-device_matrix<Type, Alloc>&
-device_matrix<Type, Alloc>::zero() {
+device_matrix<Type, Alloc>& device_matrix<Type, Alloc>::zero() {
   if (!_data) {
     MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
   }
@@ -396,8 +393,8 @@ device_matrix<Type, Alloc>::check_value(size_t i, size_t j) const {
 
 template <typename Type, typename Alloc>
 void device_matrix<Type, Alloc>::set_value(size_t i,
-                                                     size_t j,
-                                                     value_type value) {
+                                           size_t j,
+                                           value_type value) {
   if (i >= _shape[0] || j >= _shape[1]) {
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }

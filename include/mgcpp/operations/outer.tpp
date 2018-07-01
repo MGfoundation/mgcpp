@@ -5,9 +5,7 @@
 
 namespace mgcpp {
 
-template <typename LhsDenseVec,
-          typename RhsDenseVec,
-          typename Type>
+template <typename LhsDenseVec, typename RhsDenseVec, typename Type>
 inline decltype(auto) strict::outer(
     dense_vector<LhsDenseVec, Type> const& lhs,
     dense_vector<RhsDenseVec, Type> const& rhs) {

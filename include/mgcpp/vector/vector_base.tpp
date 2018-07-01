@@ -8,8 +8,7 @@
 
 namespace mgcpp {
 template <typename VectorType, typename Type>
-VectorType const& vector_base<VectorType, Type>::operator~() const
-    noexcept {
+VectorType const& vector_base<VectorType, Type>::operator~() const noexcept {
   return *static_cast<VectorType const*>(this);
 };
 

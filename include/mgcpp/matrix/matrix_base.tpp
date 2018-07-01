@@ -8,8 +8,7 @@
 
 namespace mgcpp {
 template <typename MatrixType, typename Type>
-MatrixType const& matrix_base<MatrixType, Type>::operator~() const
-    noexcept {
+MatrixType const& matrix_base<MatrixType, Type>::operator~() const noexcept {
   return *static_cast<MatrixType const*>(this);
 };
 

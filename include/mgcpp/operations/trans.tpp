@@ -11,8 +11,7 @@
 namespace mgcpp {
 
 template <typename DenseMat, typename Type>
-decltype(auto) strict::trans(
-    dense_matrix<DenseMat, Type> const& mat) {
+decltype(auto) strict::trans(dense_matrix<DenseMat, Type> const& mat) {
   using allocator_type = typename DenseMat::allocator_type;
 
   auto const& dmat = ~mat;

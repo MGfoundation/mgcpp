@@ -18,6 +18,7 @@
 
 #include <cstdlib>
 #include <initializer_list>
+#include <vector>
 
 namespace mgcpp {
 template <typename Type, typename Alloc = mgcpp::allocator<Type>>
@@ -64,6 +65,9 @@ class device_vector : public dense_vector<device_vector<Type, Alloc>, Type> {
                                 Alloc const& alloc = Alloc());
 
   inline explicit device_vector(std::initializer_list<value_type> const& array,
+                                Alloc const& alloc = Alloc());
+
+  inline explicit device_vector(std::vector<value_type> const& vec,
                                 Alloc const& alloc = Alloc());
 
   template <typename HostVec, MGCPP_CONCEPT(adapter<HostVec>::value)>

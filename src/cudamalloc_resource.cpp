@@ -16,7 +16,7 @@ cudamalloc_resource* cudamalloc_resource::instance(size_t device_id) {
     }
     std::vector<std::unique_ptr<cudamalloc_resource>> vec;
     for (size_t i = 0; i < static_cast<size_t>(device_number); ++i) {
-        vec.emplace_back(new cudamalloc_resource(i));
+      vec.emplace_back(new cudamalloc_resource(i));
     }
     return vec;
   }());

@@ -1,7 +1,7 @@
 #include <mgcpp/allocators/allocator.hpp>
 #include <mgcpp/allocators/cudamalloc_resource.hpp>
-#include <mgcpp/allocators/new_delete_resource.hpp>
 #include <mgcpp/allocators/device_memory_resource.hpp>
+#include <mgcpp/allocators/new_delete_resource.hpp>
 
 namespace mgcpp {
 

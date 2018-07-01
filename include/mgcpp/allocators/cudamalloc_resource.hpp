@@ -8,8 +8,7 @@
 namespace mgcpp {
 
 class cudamalloc_resource final : public device_memory_resource {
-
-public:
+ public:
   static cudamalloc_resource* instance(size_t device_id);
   size_t allocated_bytes() const noexcept;
 

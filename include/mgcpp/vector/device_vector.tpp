@@ -34,8 +34,7 @@ device_vector<Type, Alloc>::device_vector(Alloc const& alloc) noexcept
       _capacity(0) {}
 
 template <typename Type, typename Alloc>
-device_vector<Type, Alloc>::device_vector(size_t size,
-                                                    Alloc const& alloc)
+device_vector<Type, Alloc>::device_vector(size_t size, Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
@@ -44,8 +43,8 @@ device_vector<Type, Alloc>::device_vector(size_t size,
 
 template <typename Type, typename Alloc>
 device_vector<Type, Alloc>::device_vector(size_t size,
-                                                    value_type init,
-                                                    Alloc const& alloc)
+                                          value_type init,
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
@@ -60,8 +59,8 @@ device_vector<Type, Alloc>::device_vector(size_t size,
 
 template <typename Type, typename Alloc>
 device_vector<Type, Alloc>::device_vector(size_t size,
-                                                    const_pointer data,
-                                                    Alloc const& alloc)
+                                          const_pointer data,
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(size),
       _allocator(alloc),
@@ -97,9 +96,28 @@ device_vector<Type, Alloc>::device_vector(
 }
 
 template <typename Type, typename Alloc>
+device_vector<Type, Alloc>::device_vector(std::vector<value_type> const& vec,
+                                          Alloc const& alloc)
+    : _context(&global_context::get_thread_context()),
+      _shape(vec.size()),
+      _allocator(alloc),
+      _data(_allocator.allocate_device(_shape)),
+      _capacity(_shape) {
+  try {
+    // std::initializer_list's members are guaranteed to be
+    // contiguous in memory: from C++11 § [support.initlist] 18.9/1
+    _allocator.copy_from_host(_data, pun_cast<const_device_pointer>(vec.data()),
+                              _shape);
+  } catch (std::system_error const& err) {
+    _allocator.deallocate_device(_data, _capacity);
+    MGCPP_THROW_SYSTEM_ERROR(err);
+  }
+}
+
+template <typename Type, typename Alloc>
 template <typename HostVec, typename>
 device_vector<Type, Alloc>::device_vector(HostVec const& host_mat,
-                                                    Alloc const& alloc)
+                                          Alloc const& alloc)
     : _context(&global_context::get_thread_context()),
       _shape(0),
       _allocator(alloc),
@@ -170,16 +188,16 @@ device_vector<Type, Alloc>::device_vector(
 
 template <typename Type, typename Alloc>
 template <size_t S>
-inline device_vector<Type, Alloc>
-device_vector<Type, Alloc>::from_c_array(Type (&arr)[S],
-                                                   Alloc const& alloc) {
+inline device_vector<Type, Alloc> device_vector<Type, Alloc>::from_c_array(
+    Type (&arr)[S],
+    Alloc const& alloc) {
   return device_vector<Type, Alloc>(S, arr, alloc);
 }
 
 template <typename Type, typename Alloc>
 template <typename DenseVec>
-device_vector<Type, Alloc>& device_vector<Type, Alloc>::
-operator=(dense_vector<DenseVec, Type> const& other) {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::operator=(
+    dense_vector<DenseVec, Type> const& other) {
   auto const& other_densevec = ~other;
 
   if (other_densevec._shape > _capacity) {
@@ -204,8 +222,8 @@ operator=(dense_vector<DenseVec, Type> const& other) {
 }
 
 template <typename Type, typename Alloc>
-device_vector<Type, Alloc>& device_vector<Type, Alloc>::
-operator=(device_vector<Type, Alloc> const& other) {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::operator=(
+    device_vector<Type, Alloc> const& other) {
   if (other._shape > _capacity) {
     if (_data) {
       _allocator.deallocate_device(_data, _capacity);
@@ -227,8 +245,8 @@ operator=(device_vector<Type, Alloc> const& other) {
 }
 
 template <typename Type, typename Alloc>
-device_vector<Type, Alloc>& device_vector<Type, Alloc>::
-operator=(device_vector<Type, Alloc>&& other) noexcept {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::operator=(
+    device_vector<Type, Alloc>&& other) noexcept {
   if (_data) {
     try {
       _allocator.deallocate_device(_data, _shape);
@@ -247,9 +265,9 @@ operator=(device_vector<Type, Alloc>&& other) noexcept {
 }
 
 template <typename Type, typename Alloc>
-device_vector<Type, Alloc>&
-device_vector<Type, Alloc>::resize(size_t size,
-                                             value_type pad_value) {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::resize(
+    size_t size,
+    value_type pad_value) {
   if (size > _capacity) {
     auto new_data = _allocator.allocate_device(size);
     if (_data) {
@@ -278,8 +296,7 @@ device_vector<Type, Alloc>::resize(size_t size,
 }
 
 template <typename Type, typename Alloc>
-device_vector<Type, Alloc>&
-device_vector<Type, Alloc>::zero() {
+device_vector<Type, Alloc>& device_vector<Type, Alloc>::zero() {
   if (!_data) {
     MGCPP_THROW_RUNTIME_ERROR("gpu memory wasn't allocated");
   }
@@ -325,8 +342,7 @@ device_vector<Type, Alloc>::check_value(size_t i) const {
 }
 
 template <typename Type, typename Alloc>
-void device_vector<Type, Alloc>::set_value(size_t i,
-                                                     value_type value) {
+void device_vector<Type, Alloc>::set_value(size_t i, value_type value) {
   if (i >= _shape) {
     MGCPP_THROW_OUT_OF_RANGE("index out of range.");
   }

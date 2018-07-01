@@ -10,12 +10,9 @@
 #include <mgcpp/system/exception.hpp>
 
 namespace mgcpp {
-template <typename LhsDenseMat,
-          typename RhsDenseMat,
-          typename Type>
-decltype(auto) strict::add(
-    dense_matrix<LhsDenseMat, Type> const& lhs,
-    dense_matrix<RhsDenseMat, Type> const& rhs) {
+template <typename LhsDenseMat, typename RhsDenseMat, typename Type>
+decltype(auto) strict::add(dense_matrix<LhsDenseMat, Type> const& lhs,
+                           dense_matrix<RhsDenseMat, Type> const& rhs) {
   using allocator_type = typename LhsDenseMat::allocator_type;
   using value_type = typename LhsDenseMat::value_type;
 
@@ -53,12 +50,9 @@ decltype(auto) strict::add(
   return result;
 }
 
-template <typename LhsDenseVec,
-          typename RhsDenseVec,
-          typename Type>
-decltype(auto) strict::add(
-    dense_vector<LhsDenseVec, Type> const& lhs,
-    dense_vector<RhsDenseVec, Type> const& rhs) {
+template <typename LhsDenseVec, typename RhsDenseVec, typename Type>
+decltype(auto) strict::add(dense_vector<LhsDenseVec, Type> const& lhs,
+                           dense_vector<RhsDenseVec, Type> const& rhs) {
   using allocator_type = typename LhsDenseVec::allocator_type;
   using value_type = typename LhsDenseVec::value_type;
 

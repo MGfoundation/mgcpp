@@ -12,10 +12,7 @@
 #include <mgcpp/system/pun_cast.hpp>
 
 namespace mgcpp {
-template <typename ADense,
-          typename BDense,
-          typename CDense,
-          typename Type>
+template <typename ADense, typename BDense, typename CDense, typename Type>
 decltype(auto) strict::gemm(dense_matrix<ADense, Type> const& A,
                             dense_matrix<BDense, Type> const& B,
                             dense_matrix<CDense, Type> const& C) {
@@ -60,14 +57,13 @@ template <typename ADense,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
-inline decltype(auto) strict::gemm(
-    ScalarAlpha alpha,
-    trans_mode mode_A,
-    trans_mode mode_B,
-    dense_matrix<ADense, Type> const& A,
-    dense_matrix<BDense, Type> const& B,
-    ScalarBeta beta,
-    dense_matrix<CDense, Type> const& C) {
+inline decltype(auto) strict::gemm(ScalarAlpha alpha,
+                                   trans_mode mode_A,
+                                   trans_mode mode_B,
+                                   dense_matrix<ADense, Type> const& A,
+                                   dense_matrix<BDense, Type> const& B,
+                                   ScalarBeta beta,
+                                   dense_matrix<CDense, Type> const& C) {
   using device_pointer = typename ADense::device_pointer;
   using allocator_type = typename ADense::allocator_type;
 
@@ -131,14 +127,13 @@ template <typename ADense,
           typename ScalarAlpha,
           typename ScalarBeta,
           typename>
-inline decltype(auto) strict::gemm(
-    ScalarAlpha alpha,
-    trans_mode mode_A,
-    trans_mode mode_B,
-    dense_matrix<ADense, Type> const& A,
-    dense_matrix<BDense, Type> const& B,
-    ScalarBeta beta,
-    dense_matrix<CDense, Type>&& C) {
+inline decltype(auto) strict::gemm(ScalarAlpha alpha,
+                                   trans_mode mode_A,
+                                   trans_mode mode_B,
+                                   dense_matrix<ADense, Type> const& A,
+                                   dense_matrix<BDense, Type> const& B,
+                                   ScalarBeta beta,
+                                   dense_matrix<CDense, Type>&& C) {
   using device_pointer = typename ADense::device_pointer;
 
   auto const& A_mat = ~A;

@@ -85,8 +85,7 @@ class device_matrix : public dense_matrix<device_matrix<Type, Alloc>, Type> {
   inline device_matrix(device_matrix<Type, Alloc> const& other);
 
   template <typename DenseMatrix>
-  inline explicit device_matrix(
-      dense_matrix<DenseMatrix, Type> const& other);
+  inline explicit device_matrix(dense_matrix<DenseMatrix, Type> const& other);
 
   inline device_matrix(device_matrix<Type, Alloc>&& other) noexcept;
 
@@ -105,7 +104,7 @@ class device_matrix : public dense_matrix<device_matrix<Type, Alloc>, Type> {
   inline device_matrix<Type, Alloc>& resize(shape_type new_shape);
 
   inline device_matrix<Type, Alloc>& resize(shape_type new_shape,
-                                                      value_type init);
+                                            value_type init);
 
   inline column_view<this_type, Type> column(size_t i) noexcept;
 

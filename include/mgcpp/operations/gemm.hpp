@@ -22,10 +22,7 @@ namespace strict {
  * \param C matrix to add after the multiplication
  * \returns A * B + C
  */
-template <typename ADense,
-          typename BDense,
-          typename CDense,
-          typename Type>
+template <typename ADense, typename BDense, typename CDense, typename Type>
 inline decltype(auto) gemm(dense_matrix<ADense, Type> const& A,
                            dense_matrix<BDense, Type> const& B,
                            dense_matrix<CDense, Type> const& C);
