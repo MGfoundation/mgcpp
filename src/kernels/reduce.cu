@@ -122,6 +122,7 @@ namespace mgcpp
             y[bid] = shared[0]; 
     }
 
+#ifdef USE_HALF
     __global__ void
     mgblas_Hvpr_impl(__half const* x, __half* y, size_t n)
     {
@@ -147,48 +148,49 @@ namespace mgcpp
         if(tid == 0u)
             y[bid] = shared[0]; 
     }
+#endif
 
     mgblas_error_t
     mgblas_Svpr(float const* x, float* y, size_t size)
     {
-        if(size == 0)
-            return invalid_range;
+    if(size == 0)
+        return invalid_range;
 
 
-        int grid_size =
-            static_cast<int>(
-                ceil(static_cast<float>(size)/ BLK ));
+    int grid_size =
+        static_cast<int>(
+            ceil(static_cast<float>(size)/ BLK ));
 
-        float host_buffer[THRES];
-        float* device_buffer = nullptr; 
-        cudaError_t alloc_status =
-            cudaMalloc((void**)&device_buffer, sizeof(float) * grid_size);
-        if(alloc_status != cudaSuccess)
-            return memory_allocation_failure;
+    float host_buffer[THRES];
+    float* device_buffer = nullptr; 
+    cudaError_t alloc_status =
+        cudaMalloc((void**)&device_buffer, sizeof(float) * grid_size);
+    if(alloc_status != cudaSuccess)
+        return memory_allocation_failure;
 
-        mgblas_Svpr_impl<<<grid_size, BLK>>>(x, device_buffer, size);
+    mgblas_Svpr_impl<<<grid_size, BLK>>>(x, device_buffer, size);
 
-        if(grid_size >= THRES)
-        {
-            grid_size = static_cast<int>(
-                ceil(static_cast<float>(grid_size)/ BLK ));
-            mgblas_Svpr_impl<<<grid_size, BLK>>>(device_buffer, device_buffer, size);
-        }
-
-        cudaError_t copy_status =
-            cudaMemcpy((void*)host_buffer,
-                       (void*)device_buffer,
-                       sizeof(float) * grid_size,
-                       cudaMemcpyDeviceToHost);
-
-        if(copy_status != cudaSuccess)
-            return device_to_host_memcpy_failure;
-
-        *y = kahan_reduce(&host_buffer[0], &host_buffer[grid_size], 0.0);
-
-        cudaFree(device_buffer);
-        return success;
+    if(grid_size >= THRES)
+    {
+        grid_size = static_cast<int>(
+            ceil(static_cast<float>(grid_size)/ BLK ));
+        mgblas_Svpr_impl<<<grid_size, BLK>>>(device_buffer, device_buffer, size);
     }
+
+    cudaError_t copy_status =
+        cudaMemcpy((void*)host_buffer,
+                   (void*)device_buffer,
+                   sizeof(float) * grid_size,
+                   cudaMemcpyDeviceToHost);
+
+    if(copy_status != cudaSuccess)
+        return device_to_host_memcpy_failure;
+
+    *y = kahan_reduce(&host_buffer[0], &host_buffer[grid_size], 0.0);
+
+    cudaFree(device_buffer);
+    return success;
+}
 
     mgblas_error_t
     mgblas_Dvpr(double const* x, double* y, size_t size)
@@ -231,6 +233,7 @@ namespace mgcpp
         return success;
     }
 
+#ifdef USE_HALF
     mgblas_error_t
     mgblas_Hvpr(__half const* x, __half* y, size_t size)
     {
@@ -271,4 +274,5 @@ namespace mgcpp
         cudaFree(device_buffer);
         return success;
     }
+#endif
 }
